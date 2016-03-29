@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">NanodegreeCapstone</string>
+    <string name="comments_button_text">comments</string>
+    <string name="read_button_text">read</string>
 </resources>
