@@ -50,7 +50,7 @@ captures/
 .idea/sqlDataSources.xml
 .idea/dynamic.xml
 .idea/uiDesigner.xml
-
+.idea/misc.xml
 .idea/libraries/
 
 .idea/modules.xml
