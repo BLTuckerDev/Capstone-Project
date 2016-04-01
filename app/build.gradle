@@ -42,4 +42,7 @@ dependencies {
     compile 'com.squareup.retrofit:adapter-rxjava:2.0.0-beta2'
     compile 'com.squareup.retrofit:converter-gson:2.0.0-beta2'
 
+    apt 'net.simonvt.schematic:schematic-compiler:0.6.4'
+    compile 'net.simonvt.schematic:schematic:0.6.4'
+
 }
