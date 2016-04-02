@@ -5,12 +5,14 @@ import android.accounts.AccountManager;
 import android.app.Application;
 
 import dev.bltucker.nanodegreecapstone.sync.StorySyncAdapter;
+import timber.log.Timber;
 
 public class CapstoneApplication extends Application {
 
     @Override
     public void onCreate() {
         super.onCreate();
+        Timber.plant(new Timber.DebugTree());
         createSyncAdapterAccount();
     }
 
