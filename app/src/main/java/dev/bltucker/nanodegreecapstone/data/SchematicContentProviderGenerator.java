@@ -30,7 +30,8 @@ public final class SchematicContentProviderGenerator {
     @TableEndpoint(table = DatabaseGenerator.COMMENT_REFS)
     public static class CommentRefs{
 
-        public static final Uri Comments = Uri.parse("content://" + AUTHORITY + "/" + COMMENTS_PATH);
+        @ContentUri(path = COMMENTS_PATH, type = "vnd.android.cursor.dir/list")
+        public static final Uri ALL_COMMENTS = Uri.parse("content://" + AUTHORITY + "/" + COMMENTS_PATH);
 
         @InexactContentUri(path = COMMENTS_PATH + "/*",
         name = "STORY_ID",

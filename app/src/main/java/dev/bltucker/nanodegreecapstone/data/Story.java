@@ -1,8 +1,25 @@
 package dev.bltucker.nanodegreecapstone.data;
 
+import android.content.ContentValues;
+
 import java.util.Arrays;
 
 public final class Story {
+
+    public static ContentValues mapToContentValues(Story aStory){
+
+        ContentValues  cv = new ContentValues();
+
+        cv.put(StoryColumns._ID, aStory.getId());
+        cv.put(StoryColumns.AUTHOR_NAME, aStory.getAuthorName());
+        cv.put(StoryColumns.SCORE, aStory.getScore());
+        cv.put(StoryColumns.TITLE, aStory.getTitle());
+        cv.put(StoryColumns.UNIX_TIME, aStory.getUnixTime());
+        cv.put(StoryColumns.URL, aStory.getUrl());
+
+        return cv;
+    }
+
 
     private final long id;
     private final String authorName;
