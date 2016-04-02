@@ -2,6 +2,8 @@ package dev.bltucker.nanodegreecapstone.data;
 
 import android.content.ContentValues;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.Arrays;
 
 public final class Story {
@@ -22,14 +24,17 @@ public final class Story {
 
 
     private final long id;
+    @SerializedName("by")
     private final String authorName;
     private final long score;
+    @SerializedName("time")
     private final long unixTime;
     private final String title;
     private final String url;
+    @SerializedName("kids")
     private final long[] commentIds;
 
-    public Story(long id, String authorName, long score, long unixTime, String title, String url, long[] commentIds){
+    public Story(long id, String authorName, long score, long unixTime, String title, String url, long[] commentIdsParam){
 
         this.id = id;
         this.authorName = authorName;
@@ -37,7 +42,7 @@ public final class Story {
         this.unixTime = unixTime;
         this.title = title;
         this.url = url;
-        this.commentIds = commentIds;
+        this.commentIds = Arrays.copyOf(commentIdsParam, commentIdsParam.length);
     }
 
     public long getId() {
@@ -65,6 +70,10 @@ public final class Story {
     }
 
     public long[] getCommentIds() {
-        return Arrays.copyOf(commentIds, commentIds.length);
+        if(null == commentIds){
+            return new long[0];
+        } else {
+            return Arrays.copyOf(commentIds, commentIds.length);
+        }
     }
 }
