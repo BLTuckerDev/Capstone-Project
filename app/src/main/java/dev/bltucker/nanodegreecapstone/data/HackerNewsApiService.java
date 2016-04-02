@@ -1,13 +1,15 @@
 package dev.bltucker.nanodegreecapstone.data;
 
-import retrofit.http.GET;
+import java.util.List;
+
+import retrofit2.http.GET;
 import retrofit2.http.Path;
 import rx.Observable;
 
 public interface HackerNewsApiService {
 
     @GET("topstories.json")
-    Observable<Long[]> getTopStoryIds();
+    Observable<List<Long>> getTopStoryIds();
 
     @GET("item/{storyId}.json")
     Observable<Story> getStory(@Path("storyId") long storyId);
