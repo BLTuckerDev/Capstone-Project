@@ -1,4 +1,4 @@
-package dev.bltucker.nanodegreecapstone;
+package dev.bltucker.nanodegreecapstone.data;
 
 import android.content.Context;
 import android.database.ContentObserver;

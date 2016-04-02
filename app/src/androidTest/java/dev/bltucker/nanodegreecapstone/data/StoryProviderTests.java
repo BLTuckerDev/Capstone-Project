@@ -15,8 +15,6 @@ import java.util.Set;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
-import dev.bltucker.nanodegreecapstone.TestContentObserver;
-
 public class StoryProviderTests extends AndroidTestCase {
 
     @Override
@@ -108,5 +106,45 @@ public class StoryProviderTests extends AndroidTestCase {
 
         storyCursor.close();
     }
+
+    public void testCommentInsert(){
+        final long storyId = Long.MAX_VALUE;
+        final Long[] commentIds = new Long[]{1L,2L,3L,4L,5L};
+        final CountDownLatch countDownLatch = new CountDownLatch(1);
+
+        mContext.getContentResolver().registerContentObserver(SchematicContentProviderGenerator.CommentRefs.ALL_COMMENTS,
+                true,
+                TestContentObserver.createInstance(countDownLatch, mContext));
+
+        final ContentValues[] contentValues = new ContentValues[commentIds.length];
+        for(int i = 0; i < commentIds.length; i++){
+            ContentValues cv = new ContentValues();
+            cv.put(CommentRefsColumns._ID, commentIds[i]);
+            cv.put(CommentRefsColumns.STORY_ID, storyId);
+            contentValues[i] = cv;
+        }
+
+        int insertCount = mContext.getContentResolver().bulkInsert(SchematicContentProviderGenerator.CommentRefs.ALL_COMMENTS, contentValues);
+
+        try{
+            countDownLatch.await(15_000, TimeUnit.MILLISECONDS);
+        } catch (InterruptedException ex){
+            fail();
+        }
+
+        assertEquals(commentIds.length, insertCount);
+
+        Cursor commentsCursor = mContext.getContentResolver().query(SchematicContentProviderGenerator.CommentRefs.withStoryId(String.valueOf(storyId)),
+                null,
+                null,
+                null,
+                null);
+
+        assertTrue(commentsCursor.moveToFirst());
+        assertEquals(commentIds.length, commentsCursor.getCount());
+
+        commentsCursor.close();
+    }
+
 }
 

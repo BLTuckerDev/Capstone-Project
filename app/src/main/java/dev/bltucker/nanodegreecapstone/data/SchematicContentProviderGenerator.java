@@ -39,7 +39,7 @@ public final class SchematicContentProviderGenerator {
         whereColumn = CommentRefsColumns.STORY_ID,
         pathSegment = 1)
         public static Uri withStoryId(String id){
-            return Uri.withAppendedPath(null, id);
+            return Uri.withAppendedPath(ALL_COMMENTS, id);
         }
 
     }
