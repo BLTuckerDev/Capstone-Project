@@ -1,0 +1,54 @@
+package dev.bltucker.nanodegreecapstone;
+
+import android.content.Context;
+
+import com.google.gson.Gson;
+
+import dagger.Module;
+import dagger.Provides;
+import dev.bltucker.nanodegreecapstone.data.HackerNewsApiService;
+import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
+import retrofit2.converter.gson.GsonConverterFactory;
+
+@Module
+@ApplicationScope
+public class ApplicationResourcesModule {
+
+    private final CapstoneApplication application;
+
+    public ApplicationResourcesModule(CapstoneApplication application){
+        this.application = application;
+    }
+
+    @Provides
+    @ApplicationScope
+    public Gson provideGson(){
+        return new Gson();
+    }
+
+
+    @Provides
+    @ApplicationScope
+    public Context provideApplicationContext(){
+        return application;
+    }
+
+    @Provides
+    @ApplicationScope
+    public Retrofit provideRetrofitClient(Gson gson){
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://hacker-news.firebaseio.com/v0/")
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                .build();
+
+        return retrofit;
+    }
+
+    @Provides
+    @ApplicationScope
+    public HackerNewsApiService provideApiService(Retrofit retrofit){
+        return retrofit.create(HackerNewsApiService.class);
+    }
+}

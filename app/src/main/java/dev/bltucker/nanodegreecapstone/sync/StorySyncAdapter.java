@@ -15,6 +15,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import dev.bltucker.nanodegreecapstone.CapstoneApplication;
 import dev.bltucker.nanodegreecapstone.data.CommentRefsColumns;
 import dev.bltucker.nanodegreecapstone.data.HackerNewsApiService;
 import dev.bltucker.nanodegreecapstone.data.SchematicContentProviderGenerator;
@@ -36,32 +37,23 @@ public final class StorySyncAdapter extends AbstractThreadedSyncAdapter {
 
     private final ContentResolver contentResolver;
 
-//    @Inject
-//    HackerNewsApiService apiService;
+    @Inject
+    HackerNewsApiService apiService;
 
     public StorySyncAdapter(Context context, boolean autoInitialize){
         super(context, autoInitialize);
         contentResolver = context.getContentResolver();
-        //TODO inject
+        CapstoneApplication.getApplication().getApplicationComponent().inject(this);
     }
 
     public StorySyncAdapter(Context context, boolean autoInitialize, boolean allowParallelSyncs) {
         super(context, autoInitialize, allowParallelSyncs);
         contentResolver = context.getContentResolver();
-        //TODO inject
+        CapstoneApplication.getApplication().getApplicationComponent().inject(this);
     }
 
     @Override
     public void onPerformSync(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult) {
-
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://hacker-news.firebaseio.com/v0/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-                .build();
-
-        final HackerNewsApiService apiService = retrofit.create(HackerNewsApiService.class);
-
 
         Timber.d("Syncing....");
 
@@ -98,12 +90,12 @@ public final class StorySyncAdapter extends AbstractThreadedSyncAdapter {
                         }
 
                         ContentValues[] contentValues = new ContentValues[storyContentValues.size()];
-                        int insertedStoryCount = getContext().getContentResolver().bulkInsert(SchematicContentProviderGenerator.StoryPaths.ALL_STORIES, storyContentValues.toArray(contentValues));
+                        int insertedStoryCount = contentResolver.bulkInsert(SchematicContentProviderGenerator.StoryPaths.ALL_STORIES, storyContentValues.toArray(contentValues));
 
                         Timber.d("Inserted %d stories", insertedStoryCount);
 
                         ContentValues[] commentRefsContentValuesArray = new ContentValues[commentRefsContentValuesList.size()];
-                        int commentRefInsertCount = getContext().getContentResolver().bulkInsert(SchematicContentProviderGenerator.CommentRefs.ALL_COMMENTS, commentRefsContentValuesList.toArray(commentRefsContentValuesArray));
+                        int commentRefInsertCount = contentResolver.bulkInsert(SchematicContentProviderGenerator.CommentRefs.ALL_COMMENTS, commentRefsContentValuesList.toArray(commentRefsContentValuesArray));
 
                         Timber.d("Inserted %d comment references", commentRefInsertCount);
 
