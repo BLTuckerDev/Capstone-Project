@@ -7,8 +7,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import dev.bltucker.nanodegreecapstone.data.Comment;
-import dev.bltucker.nanodegreecapstone.data.Story;
+import dev.bltucker.nanodegreecapstone.models.Comment;
+import dev.bltucker.nanodegreecapstone.models.ReadingSession;
+import dev.bltucker.nanodegreecapstone.models.Story;
 
 import static org.junit.Assert.*;
 

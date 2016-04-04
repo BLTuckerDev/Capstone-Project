@@ -2,6 +2,8 @@ package dev.bltucker.nanodegreecapstone.data;
 
 import java.util.List;
 
+import dev.bltucker.nanodegreecapstone.models.Comment;
+import dev.bltucker.nanodegreecapstone.models.Story;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
 import rx.Observable;

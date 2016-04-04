@@ -1,11 +1,11 @@
-package dev.bltucker.nanodegreecapstone;
+package dev.bltucker.nanodegreecapstone.models;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import dev.bltucker.nanodegreecapstone.data.Comment;
-import dev.bltucker.nanodegreecapstone.data.Story;
+import dev.bltucker.nanodegreecapstone.models.Comment;
+import dev.bltucker.nanodegreecapstone.models.Story;
 
 public class ReadingSession {
     //todo collect analytics on the average number of comments a read story has

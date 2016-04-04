@@ -18,7 +18,7 @@ import dev.bltucker.nanodegreecapstone.CapstoneApplication;
 import dev.bltucker.nanodegreecapstone.data.CommentRefsColumns;
 import dev.bltucker.nanodegreecapstone.data.HackerNewsApiService;
 import dev.bltucker.nanodegreecapstone.data.SchematicContentProviderGenerator;
-import dev.bltucker.nanodegreecapstone.data.Story;
+import dev.bltucker.nanodegreecapstone.models.Story;
 import rx.Observable;
 import rx.Subscriber;
 import rx.functions.Func1;

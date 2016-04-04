@@ -1,10 +1,12 @@
-package dev.bltucker.nanodegreecapstone.data;
+package dev.bltucker.nanodegreecapstone.models;
 
 import android.content.ContentValues;
 
 import com.google.gson.annotations.SerializedName;
 
 import java.util.Arrays;
+
+import dev.bltucker.nanodegreecapstone.data.StoryColumns;
 
 public final class Story {
 

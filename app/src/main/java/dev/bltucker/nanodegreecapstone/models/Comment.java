@@ -1,4 +1,4 @@
-package dev.bltucker.nanodegreecapstone.data;
+package dev.bltucker.nanodegreecapstone.models;
 
 import com.google.gson.annotations.SerializedName;
 
