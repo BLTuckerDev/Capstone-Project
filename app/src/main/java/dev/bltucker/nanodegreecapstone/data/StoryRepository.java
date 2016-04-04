@@ -12,4 +12,5 @@ public interface StoryRepository {
     //TODO remember to clear caches when we add the add methods
     List<Story> getAllStories();
     List<Comment> getStoryComments(Story story);
+    void saveStories(List<Story> stories);
 }

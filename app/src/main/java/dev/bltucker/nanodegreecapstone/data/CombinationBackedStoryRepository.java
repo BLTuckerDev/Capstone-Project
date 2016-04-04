@@ -1,5 +1,7 @@
 package dev.bltucker.nanodegreecapstone.data;
 
+import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.util.LruCache;
@@ -13,9 +15,10 @@ import dev.bltucker.nanodegreecapstone.models.Comment;
 import dev.bltucker.nanodegreecapstone.models.Story;
 import rx.Observable;
 import rx.functions.Func1;
+import timber.log.Timber;
 
 public class CombinationBackedStoryRepository implements StoryRepository {
-
+//TODO test this class!
     public static final int CACHE_SIZE = 2 * 1024 * 1024; // 2MiB
 
     private final Context context;
@@ -52,6 +55,7 @@ public class CombinationBackedStoryRepository implements StoryRepository {
             storyList.add(new Story(storyId, storyAuthor, score, unixTime, title,storyUrl, commentIds));
         }
 
+        query.close();
         return storyList;
     }
 
@@ -64,6 +68,8 @@ public class CombinationBackedStoryRepository implements StoryRepository {
             commentIds[index] = query.getLong(query.getColumnIndex(CommentRefsColumns._ID));
             index++;
         }
+
+        query.close();
 
         return commentIds;
     }
@@ -94,5 +100,48 @@ public class CombinationBackedStoryRepository implements StoryRepository {
         commentLruCache.put(story.getId(), commentList);
 
         return commentList;
+    }
+
+    @Override
+    public void saveStories(List<Story> stories) {
+        final ContentResolver contentResolver = context.getContentResolver();
+
+        commentLruCache.evictAll();
+        contentResolver.delete(SchematicContentProviderGenerator.StoryPaths.ALL_STORIES, null, null);
+        contentResolver.delete(SchematicContentProviderGenerator.CommentRefs.ALL_COMMENTS, null, null);
+
+
+        List<ContentValues> storyContentValues = new ArrayList<>(stories.size());
+        List<ContentValues> commentRefsContentValuesList = new ArrayList<>();
+
+        for (int i = 0; i < stories.size(); i++) {
+            Story story = stories.get(i);
+            storyContentValues.add(Story.mapToContentValues(story));
+            commentRefsContentValuesList.addAll(getCommentRefList(story));
+        }
+
+        ContentValues[] contentValues = new ContentValues[storyContentValues.size()];
+        int insertedStoryCount = contentResolver.bulkInsert(SchematicContentProviderGenerator.StoryPaths.ALL_STORIES, storyContentValues.toArray(contentValues));
+
+        Timber.d("Inserted %d stories", insertedStoryCount);
+
+        ContentValues[] commentRefsContentValuesArray = new ContentValues[commentRefsContentValuesList.size()];
+        int commentRefInsertCount = contentResolver.bulkInsert(SchematicContentProviderGenerator.CommentRefs.ALL_COMMENTS, commentRefsContentValuesList.toArray(commentRefsContentValuesArray));
+
+        Timber.d("Inserted %d comment references", commentRefInsertCount);
+    }
+
+    private List<ContentValues> getCommentRefList(Story story) {
+        long[] commentIds = story.getCommentIds();
+        List<ContentValues> contentValues = new ArrayList<>(commentIds.length);
+
+        for (int i = 0; i < commentIds.length; i++) {
+            ContentValues aContentValue = new ContentValues();
+            aContentValue.put(CommentRefsColumns._ID, commentIds[i]);
+            aContentValue.put(CommentRefsColumns.STORY_ID, story.getId());
+            contentValues.add(aContentValue);
+        }
+
+        return contentValues;
     }
 }
