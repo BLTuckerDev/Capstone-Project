@@ -6,7 +6,9 @@ import com.google.gson.Gson;
 
 import dagger.Module;
 import dagger.Provides;
+import dev.bltucker.nanodegreecapstone.data.CombinationBackedStoryRepository;
 import dev.bltucker.nanodegreecapstone.data.HackerNewsApiService;
+import dev.bltucker.nanodegreecapstone.data.StoryRepository;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -50,5 +52,11 @@ public class ApplicationResourcesModule {
     @ApplicationScope
     public HackerNewsApiService provideApiService(Retrofit retrofit){
         return retrofit.create(HackerNewsApiService.class);
+    }
+
+    @Provides
+    @ApplicationScope
+    public StoryRepository provideStoryRepository(CombinationBackedStoryRepository repository){
+        return repository;
     }
 }

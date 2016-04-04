@@ -2,6 +2,7 @@ package dev.bltucker.nanodegreecapstone.data;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.util.LruCache;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,15 +14,20 @@ import dev.bltucker.nanodegreecapstone.models.Story;
 import rx.Observable;
 import rx.functions.Func1;
 
-public class ContentProviderStoryRepository implements StoryRepository {
+public class CombinationBackedStoryRepository implements StoryRepository {
+
+    public static final int CACHE_SIZE = 2 * 1024 * 1024; // 2MiB
 
     private final Context context;
     private final HackerNewsApiService hackerNewsApiService;
 
+    private LruCache<Long, List<Comment>> commentLruCache;
+
     @Inject
-    public ContentProviderStoryRepository(Context context, HackerNewsApiService hackerNewsApiService){
+    public CombinationBackedStoryRepository(Context context, HackerNewsApiService hackerNewsApiService){
         this.context = context;
         this.hackerNewsApiService = hackerNewsApiService;
+        commentLruCache = new LruCache<>(CACHE_SIZE);
     }
 
     @Override
@@ -64,9 +70,14 @@ public class ContentProviderStoryRepository implements StoryRepository {
 
     @Override
     public List<Comment> getStoryComments(Story story) {
-        long[] commentIds = getCommentIds(story.getId());
+        List<Comment> cachedComments = commentLruCache.get(story.getId());
 
-        return Observable.just(commentIds)
+        if(cachedComments != null){
+            return cachedComments;
+        }
+
+        long[] commentIds = getCommentIds(story.getId());
+        List<Comment> commentList = Observable.just(commentIds)
               .concatMap(new Func1<long[], Observable<List<Comment>>>() {
                   @Override
                   public Observable<List<Comment>> call(long[] commentIds) {
@@ -79,5 +90,9 @@ public class ContentProviderStoryRepository implements StoryRepository {
                       return Observable.just(commentObservables);
                   }
               }).toBlocking().first();
+
+        commentLruCache.put(story.getId(), commentList);
+
+        return commentList;
     }
 }
