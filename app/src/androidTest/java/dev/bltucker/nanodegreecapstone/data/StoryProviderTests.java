@@ -112,7 +112,7 @@ public class StoryProviderTests extends AndroidTestCase {
     public void testCommentInsert(){
         final long storyId = Long.MAX_VALUE;
         final Long[] commentIds = new Long[]{1L,2L,3L,4L,5L};
-        final CountDownLatch countDownLatch = new CountDownLatch(1);
+        final CountDownLatch countDownLatch = new CountDownLatch(2);
 
         mContext.getContentResolver().registerContentObserver(SchematicContentProviderGenerator.CommentRefs.ALL_COMMENTS,
                 true,
@@ -127,6 +127,13 @@ public class StoryProviderTests extends AndroidTestCase {
         }
 
         int insertCount = mContext.getContentResolver().bulkInsert(SchematicContentProviderGenerator.CommentRefs.ALL_COMMENTS, contentValues);
+
+        ContentValues separateStoryComment = new ContentValues();
+
+        separateStoryComment.put(CommentRefsColumns.STORY_ID, Long.MIN_VALUE);
+        separateStoryComment.put(CommentRefsColumns._ID, 100l);
+
+        mContext.getContentResolver().insert(SchematicContentProviderGenerator.CommentRefs.ALL_COMMENTS, separateStoryComment);
 
         try{
             countDownLatch.await(15_000, TimeUnit.MILLISECONDS);
