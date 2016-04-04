@@ -76,4 +76,19 @@ public final class Story {
             return Arrays.copyOf(commentIds, commentIds.length);
         }
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Story story = (Story) o;
+
+        return id == story.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return (int) (id ^ (id >>> 32));
+    }
 }
