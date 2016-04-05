@@ -52,7 +52,7 @@ public class ReadingSessionTest {
 
         assertEquals(1, objectUnderTest.getStories().size());
         assertEquals(storyList, objectUnderTest.getStories());
-        assertEquals(0, objectUnderTest.getLargestStoryListIndexViewed());
+        assertEquals(0, objectUnderTest.getCurrentPositionInList());
 
     }
 }

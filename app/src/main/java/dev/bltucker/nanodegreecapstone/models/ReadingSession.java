@@ -4,9 +4,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import dev.bltucker.nanodegreecapstone.models.Comment;
-import dev.bltucker.nanodegreecapstone.models.Story;
-
 public class ReadingSession {
     //todo collect analytics on the average number of comments a read story has
     public static final int INITIAL_COMMENT_CAPACITY = 50;
@@ -17,21 +14,21 @@ public class ReadingSession {
 
     private List<Story> storyList;
 
-    private int largestStoryListIndexViewed;
+    private int currentPositionInList;
 
     public ReadingSession(){
         currentStory = null;
         currentStoryComments = new ArrayList<>(INITIAL_COMMENT_CAPACITY);
         storyList = new ArrayList<>(INITIAL_STORY_CAPACITY);
-        largestStoryListIndexViewed = 0;
+        currentPositionInList = 0;
     }
 
-    public void setLargestStoryListIndexViewed(int index){
-        largestStoryListIndexViewed = index;
+    public void setCurrentPositionInList(int index){
+        currentPositionInList = index;
     }
 
-    public int getLargestStoryListIndexViewed(){
-        return largestStoryListIndexViewed;
+    public int getCurrentPositionInList(){
+        return currentPositionInList;
     }
 
     public void read(Story selectedStory, List<Comment> selectedStoryComments){
@@ -42,7 +39,7 @@ public class ReadingSession {
 
     public void setStories(List<Story> stories){
         storyList.clear();
-        largestStoryListIndexViewed = 0;
+        currentPositionInList = 0;
         storyList.addAll(stories);
     }
 
