@@ -7,4 +7,5 @@ import dev.bltucker.nanodegreecapstone.sync.StorySyncAdapter;
 @Component(modules = { ApplicationResourcesModule.class})
 public interface ApplicationComponent {
     void inject(StorySyncAdapter syncAdapter);
+    void inject(StoryListFragment fragment);
 }

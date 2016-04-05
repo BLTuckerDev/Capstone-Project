@@ -9,6 +9,7 @@ import dagger.Provides;
 import dev.bltucker.nanodegreecapstone.data.CombinationBackedStoryRepository;
 import dev.bltucker.nanodegreecapstone.data.HackerNewsApiService;
 import dev.bltucker.nanodegreecapstone.data.StoryRepository;
+import dev.bltucker.nanodegreecapstone.models.ReadingSession;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -58,5 +59,17 @@ public class ApplicationResourcesModule {
     @ApplicationScope
     public StoryRepository provideStoryRepository(CombinationBackedStoryRepository repository){
         return repository;
+    }
+
+    @Provides
+    @ApplicationScope
+    public StoryListFragmentPresenter provideStoryListFragmentPresenter(StoryRepository repo, ReadingSession readingSession){
+        return new StoryListFragmentPresenter(repo, readingSession);
+    }
+
+    @Provides
+    @ApplicationScope
+    public ReadingSession provideReadingSession(){
+        return new ReadingSession();
     }
 }
