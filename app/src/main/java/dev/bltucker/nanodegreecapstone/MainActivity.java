@@ -19,6 +19,9 @@ public class MainActivity extends AppCompatActivity {
         bundle.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
         bundle.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
         ContentResolver.requestSync(new Account(StorySyncAdapter.ACCOUNT, StorySyncAdapter.ACCOUNT_TYPE),
-                SchematicContentProviderGenerator.AUTHORITY, bundle);
+              SchematicContentProviderGenerator.AUTHORITY, bundle);
+
+
+        getSupportFragmentManager().beginTransaction().add(StoryListFragment.newInstance(), "Fragment").commit();
     }
 }
