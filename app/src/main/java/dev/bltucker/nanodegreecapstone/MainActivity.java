@@ -21,7 +21,7 @@ public class MainActivity extends AppCompatActivity {
         ContentResolver.requestSync(new Account(StorySyncAdapter.ACCOUNT, StorySyncAdapter.ACCOUNT_TYPE),
               SchematicContentProviderGenerator.AUTHORITY, bundle);
 
-
-        getSupportFragmentManager().beginTransaction().add(StoryListFragment.newInstance(), "Fragment").commit();
+        getSupportFragmentManager()
+              .beginTransaction().replace(R.id.placeholder, StoryListFragment.newInstance(), "Fragment").commit();
     }
 }

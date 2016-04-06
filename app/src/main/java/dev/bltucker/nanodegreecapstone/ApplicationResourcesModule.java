@@ -72,4 +72,10 @@ public class ApplicationResourcesModule {
     public ReadingSession provideReadingSession(){
         return new ReadingSession();
     }
+
+    @Provides
+    @ApplicationScope
+    public StoryListAdapter provideStoryListAdapter(StoryListFragmentPresenter presenter){
+        return new StoryListAdapter(presenter);
+    }
 }

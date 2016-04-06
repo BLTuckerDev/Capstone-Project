@@ -1,7 +1,5 @@
 package dev.bltucker.nanodegreecapstone;
 
-import android.os.Looper;
-
 import java.util.List;
 
 import javax.inject.Inject;
@@ -13,7 +11,6 @@ import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
-import timber.log.Timber;
 
 public class StoryListFragmentPresenter {
 
@@ -42,12 +39,10 @@ public class StoryListFragmentPresenter {
           .observeOn(AndroidSchedulers.mainThread())
           .subscribe(new Subscriber<List<Story>>() {
               @Override
-              public void onCompleted() {
-              }
+              public void onCompleted() {     }
 
               @Override
-              public void onError(Throwable e) {
-              }
+              public void onError(Throwable e) {     }
 
               @Override
               public void onNext(List<Story> stories) {

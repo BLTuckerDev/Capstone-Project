@@ -107,9 +107,11 @@ public class CombinationBackedStoryRepository implements StoryRepository {
         final ContentResolver contentResolver = context.getContentResolver();
 
         commentLruCache.evictAll();
-        contentResolver.delete(SchematicContentProviderGenerator.StoryPaths.ALL_STORIES, null, null);
-        contentResolver.delete(SchematicContentProviderGenerator.CommentRefs.ALL_COMMENTS, null, null);
+        int deletedStories = contentResolver.delete(SchematicContentProviderGenerator.StoryPaths.ALL_STORIES, null, null);
+        int deletedComments = contentResolver.delete(SchematicContentProviderGenerator.CommentRefs.ALL_COMMENTS, null, null);
 
+        Timber.d("Deleted %d stories", deletedStories);
+        Timber.d("Deleted %d comments", deletedComments);
 
         List<ContentValues> storyContentValues = new ArrayList<>(stories.size());
         List<ContentValues> commentRefsContentValuesList = new ArrayList<>();

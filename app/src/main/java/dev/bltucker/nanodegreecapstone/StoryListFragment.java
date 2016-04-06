@@ -1,12 +1,13 @@
 package dev.bltucker.nanodegreecapstone;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
 
 import java.util.List;
 
@@ -15,19 +16,18 @@ import javax.inject.Inject;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import dev.bltucker.nanodegreecapstone.models.Story;
-import timber.log.Timber;
 
 
 public class StoryListFragment extends Fragment implements StoryListView {
-
-    @Bind(R.id.story_list_progressbar)
-    ProgressBar progressBar;
 
     @Bind(R.id.story_list_recyclerview)
     RecyclerView recyclerView;
 
     @Inject
     StoryListFragmentPresenter presenter;
+
+    @Inject
+    StoryListAdapter adapter;
 
     public StoryListFragment() {
         // Required empty public constructor
@@ -53,13 +53,19 @@ public class StoryListFragment extends Fragment implements StoryListView {
     }
 
     @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView.setAdapter(adapter);
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
-        progressBar.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void showStories(List<Story> stories) {
-        Timber.d("Stories! , " + stories.size());
+        adapter.setData(stories);
     }
 }
