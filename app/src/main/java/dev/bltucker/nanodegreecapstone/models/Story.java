@@ -20,6 +20,7 @@ public final class Story {
         cv.put(StoryColumns.TITLE, aStory.getTitle());
         cv.put(StoryColumns.UNIX_TIME, aStory.getUnixTime());
         cv.put(StoryColumns.URL, aStory.getUrl());
+        cv.put(StoryColumns.RANK, aStory.getStoryRank());
 
         return cv;
     }
@@ -36,8 +37,9 @@ public final class Story {
     @SerializedName("kids")
     private final long[] commentIds;
 
-    public Story(long id, String authorName, long score, long unixTime, String title, String url, long[] commentIdsParam){
+    private int storyRank = 0;
 
+    public Story(long id, String authorName, long score, long unixTime, String title, String url, long[] commentIdsParam){
         this.id = id;
         this.authorName = authorName;
         this.score = score;
@@ -77,6 +79,14 @@ public final class Story {
         } else {
             return Arrays.copyOf(commentIds, commentIds.length);
         }
+    }
+
+    public void setStoryRank(int rank){
+        this.storyRank = rank;
+    }
+
+    public int getStoryRank(){
+        return this.storyRank;
     }
 
     @Override

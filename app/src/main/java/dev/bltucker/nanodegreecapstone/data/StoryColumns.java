@@ -17,4 +17,6 @@ public interface StoryColumns {
 
     @DataType(DataType.Type.TEXT) String URL = "url";
 
+    @DataType(DataType.Type.INTEGER) String RANK = "rank";
+
 }

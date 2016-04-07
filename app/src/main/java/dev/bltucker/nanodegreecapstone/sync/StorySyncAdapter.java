@@ -61,7 +61,9 @@ public final class StorySyncAdapter extends AbstractThreadedSyncAdapter {
                       final int maxStories = Math.min(storyIds.size(), MAX_STORY_COUNT);
 
                       for (int i = 0; i < maxStories; i++) {
-                          storyList.add(apiService.getStory(storyIds.get(i)).toBlocking().first());
+                          Story story = apiService.getStory(storyIds.get(i)).toBlocking().first();
+                          story.setStoryRank(i);
+                          storyList.add(story);
                       }
 
                       return Observable.just(storyList);

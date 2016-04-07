@@ -23,7 +23,7 @@ public final class SchematicContentProviderGenerator {
     @TableEndpoint(table = DatabaseGenerator.STORIES)
     public static class StoryPaths{
 
-        @ContentUri(path = STORY_PATH, type = "vnd.android.cursor.dir/list", defaultSort = StoryColumns.SCORE)
+        @ContentUri(path = STORY_PATH, type = "vnd.android.cursor.dir/list", defaultSort = StoryColumns.RANK)
         public static final Uri ALL_STORIES = Uri.parse("content://" + AUTHORITY + "/" + STORY_PATH);
     }
 

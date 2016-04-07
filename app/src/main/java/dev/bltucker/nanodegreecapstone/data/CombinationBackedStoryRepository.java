@@ -60,7 +60,7 @@ public class CombinationBackedStoryRepository implements StoryRepository {
 
         query.close();
         //TODO we should match the front page's sort
-        Collections.sort(storyList, storyComparator);
+//        Collections.sort(storyList, storyComparator);
         return storyList;
     }
 
