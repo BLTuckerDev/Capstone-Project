@@ -78,4 +78,10 @@ public class ApplicationResourcesModule {
     public StoryListAdapter provideStoryListAdapter(StoryListFragmentPresenter presenter){
         return new StoryListAdapter(presenter);
     }
+
+    @Provides
+    @ApplicationScope
+    public HomeViewPresenter provideHomeViewPresenter(){
+        return new HomeViewPresenter();
+    }
 }

@@ -1,6 +1,5 @@
 package dev.bltucker.nanodegreecapstone;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -17,7 +16,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import dev.bltucker.nanodegreecapstone.models.Story;
 
-
+//TODO while the adapter is empty show a spinner so the user knows stories are loading.
 public class StoryListFragment extends Fragment implements StoryListView {
 
     @Bind(R.id.story_list_recyclerview)

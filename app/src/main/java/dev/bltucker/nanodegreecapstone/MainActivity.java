@@ -1,27 +1,40 @@
 package dev.bltucker.nanodegreecapstone;
 
-import android.accounts.Account;
-import android.content.ContentResolver;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 
-import dev.bltucker.nanodegreecapstone.data.SchematicContentProviderGenerator;
-import dev.bltucker.nanodegreecapstone.sync.StorySyncAdapter;
+import javax.inject.Inject;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements HomeView {
+
+    public static final String STORY_LIST_FRAGMENT_TAG = "storyListFragment";
+
+    @Inject
+    HomeViewPresenter homeViewPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        CapstoneApplication.getApplication().getApplicationComponent().inject(this);
+        if(null == savedInstanceState){
+            homeViewPresenter.onViewCreated(this);
+        } else {
+            homeViewPresenter.onViewRestored(this);
+        }
+    }
 
-        Bundle bundle = new Bundle();
-        bundle.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
-        bundle.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
-        ContentResolver.requestSync(new Account(StorySyncAdapter.ACCOUNT, StorySyncAdapter.ACCOUNT_TYPE),
-              SchematicContentProviderGenerator.AUTHORITY, bundle);
+    @Override
+    protected void onDestroy() {
+        homeViewPresenter.onViewDestroyed(this);
+        super.onDestroy();
+    }
 
+    @Override
+    public void showStoryList() {
         getSupportFragmentManager()
-              .beginTransaction().replace(R.id.placeholder, StoryListFragment.newInstance(), "Fragment").commit();
+              .beginTransaction()
+              .add(R.id.main_activity_coordinator_layout, StoryListFragment.newInstance(), STORY_LIST_FRAGMENT_TAG)
+              .commit();
     }
 }
