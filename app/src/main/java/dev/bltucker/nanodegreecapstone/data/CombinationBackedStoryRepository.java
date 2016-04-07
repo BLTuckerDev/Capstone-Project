@@ -7,6 +7,7 @@ import android.database.Cursor;
 import android.util.LruCache;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -23,13 +24,15 @@ public class CombinationBackedStoryRepository implements StoryRepository {
 
     private final Context context;
     private final HackerNewsApiService hackerNewsApiService;
+    private final DescendingScoreStoryComparator storyComparator;
 
     private LruCache<Long, List<Comment>> commentLruCache;
 
     @Inject
-    public CombinationBackedStoryRepository(Context context, HackerNewsApiService hackerNewsApiService){
+    public CombinationBackedStoryRepository(Context context, HackerNewsApiService hackerNewsApiService, DescendingScoreStoryComparator storyComparator){
         this.context = context;
         this.hackerNewsApiService = hackerNewsApiService;
+        this.storyComparator = storyComparator;
         commentLruCache = new LruCache<>(CACHE_SIZE);
     }
 
@@ -56,6 +59,8 @@ public class CombinationBackedStoryRepository implements StoryRepository {
         }
 
         query.close();
+        //TODO we should match the front page's sort
+        Collections.sort(storyList, storyComparator);
         return storyList;
     }
 
