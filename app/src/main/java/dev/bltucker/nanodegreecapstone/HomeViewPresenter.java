@@ -4,6 +4,8 @@ import android.accounts.Account;
 import android.content.ContentResolver;
 import android.os.Bundle;
 
+import javax.inject.Inject;
+
 import dev.bltucker.nanodegreecapstone.data.SchematicContentProviderGenerator;
 import dev.bltucker.nanodegreecapstone.sync.StorySyncAdapter;
 
@@ -12,6 +14,11 @@ public class HomeViewPresenter {
     private static final long SYNC_INTERVAL_SECONDS = 1800;
 
     private HomeView view;
+
+    @Inject
+    public HomeViewPresenter(){
+
+    }
 
     public void onViewCreated(HomeView createdView){
         view = createdView;

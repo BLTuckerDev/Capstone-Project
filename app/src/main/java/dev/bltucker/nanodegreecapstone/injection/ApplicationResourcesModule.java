@@ -1,4 +1,4 @@
-package dev.bltucker.nanodegreecapstone;
+package dev.bltucker.nanodegreecapstone.injection;
 
 import android.content.Context;
 
@@ -6,6 +6,11 @@ import com.google.gson.Gson;
 
 import dagger.Module;
 import dagger.Provides;
+import dev.bltucker.nanodegreecapstone.CapstoneApplication;
+import dev.bltucker.nanodegreecapstone.HomeViewPresenter;
+import dev.bltucker.nanodegreecapstone.R;
+import dev.bltucker.nanodegreecapstone.StoryListAdapter;
+import dev.bltucker.nanodegreecapstone.StoryListFragmentPresenter;
 import dev.bltucker.nanodegreecapstone.data.CombinationBackedStoryRepository;
 import dev.bltucker.nanodegreecapstone.data.HackerNewsApiService;
 import dev.bltucker.nanodegreecapstone.data.StoryRepository;
@@ -22,6 +27,13 @@ public class ApplicationResourcesModule {
 
     public ApplicationResourcesModule(CapstoneApplication application){
         this.application = application;
+    }
+
+    @Provides
+    @ApplicationScope
+    @StoryMax
+    public int provideMaxStoryInt(Context context){
+        return context.getResources().getInteger(R.integer.reading_session_story_max);
     }
 
     @Provides
@@ -63,25 +75,8 @@ public class ApplicationResourcesModule {
 
     @Provides
     @ApplicationScope
-    public StoryListFragmentPresenter provideStoryListFragmentPresenter(StoryRepository repo, ReadingSession readingSession){
-        return new StoryListFragmentPresenter(repo, readingSession);
+    public StoryListAdapter provideStoryListAdapter(StoryListFragmentPresenter presenter, @StoryMax int storyMax){
+        return new StoryListAdapter(presenter, storyMax);
     }
 
-    @Provides
-    @ApplicationScope
-    public ReadingSession provideReadingSession(){
-        return new ReadingSession();
-    }
-
-    @Provides
-    @ApplicationScope
-    public StoryListAdapter provideStoryListAdapter(StoryListFragmentPresenter presenter){
-        return new StoryListAdapter(presenter);
-    }
-
-    @Provides
-    @ApplicationScope
-    public HomeViewPresenter provideHomeViewPresenter(){
-        return new HomeViewPresenter();
-    }
 }

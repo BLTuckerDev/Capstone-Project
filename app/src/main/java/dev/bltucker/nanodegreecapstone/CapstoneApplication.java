@@ -4,6 +4,9 @@ import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.app.Application;
 
+import dev.bltucker.nanodegreecapstone.injection.ApplicationComponent;
+import dev.bltucker.nanodegreecapstone.injection.ApplicationResourcesModule;
+import dev.bltucker.nanodegreecapstone.injection.DaggerApplicationComponent;
 import dev.bltucker.nanodegreecapstone.sync.StorySyncAdapter;
 import timber.log.Timber;
 

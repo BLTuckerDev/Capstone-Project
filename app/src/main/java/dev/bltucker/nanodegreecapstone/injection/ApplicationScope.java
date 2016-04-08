@@ -1,4 +1,4 @@
-package dev.bltucker.nanodegreecapstone;
+package dev.bltucker.nanodegreecapstone.injection;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;

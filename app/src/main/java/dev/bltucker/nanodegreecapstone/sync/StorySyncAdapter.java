@@ -19,6 +19,7 @@ import dev.bltucker.nanodegreecapstone.data.CommentRefsColumns;
 import dev.bltucker.nanodegreecapstone.data.HackerNewsApiService;
 import dev.bltucker.nanodegreecapstone.data.SchematicContentProviderGenerator;
 import dev.bltucker.nanodegreecapstone.data.StoryRepository;
+import dev.bltucker.nanodegreecapstone.injection.StoryMax;
 import dev.bltucker.nanodegreecapstone.models.Story;
 import rx.Observable;
 import rx.Subscriber;
@@ -30,13 +31,16 @@ public final class StorySyncAdapter extends AbstractThreadedSyncAdapter {
     public static final String ACCOUNT = "storySyncAccount";
 
     public static final String ACCOUNT_TYPE = "bltucker.dev";
-    public static final int MAX_STORY_COUNT = 150;
 
     @Inject
     HackerNewsApiService apiService;
 
     @Inject
     StoryRepository storyRepository;
+
+    @Inject
+    @StoryMax
+    int maximumStoryCount;
 
     public StorySyncAdapter(Context context, boolean autoInitialize) {
         super(context, autoInitialize);
@@ -52,13 +56,14 @@ public final class StorySyncAdapter extends AbstractThreadedSyncAdapter {
     public void onPerformSync(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult) {
 
         Timber.d("Syncing....");
+        final long startTime = System.currentTimeMillis();
 
         apiService.getTopStoryIds()
               .concatMap(new Func1<List<Long>, Observable<List<Story>>>() {
                   @Override
                   public Observable<List<Story>> call(List<Long> storyIds) {
                       List<Story> storyList = new ArrayList<>(storyIds.size());
-                      final int maxStories = Math.min(storyIds.size(), MAX_STORY_COUNT);
+                      final int maxStories = Math.min(storyIds.size(), maximumStoryCount);
 
                       for (int i = 0; i < maxStories; i++) {
                           Story story = apiService.getStory(storyIds.get(i)).toBlocking().first();
@@ -71,7 +76,10 @@ public final class StorySyncAdapter extends AbstractThreadedSyncAdapter {
               })
               .subscribe(new Subscriber<List<Story>>() {
                   @Override
-                  public void onCompleted() {  }
+                  public void onCompleted() {
+                      final long stopTime = System.currentTimeMillis();
+                      Timber.d("Sync completed in %d milliseconds", stopTime - startTime);
+                  }
 
                   @Override
                   public void onError(Throwable e) {

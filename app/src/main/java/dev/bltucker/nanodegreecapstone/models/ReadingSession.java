@@ -4,10 +4,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import javax.inject.Inject;
+
+import dev.bltucker.nanodegreecapstone.injection.StoryMax;
+
 public class ReadingSession {
     //todo collect analytics on the average number of comments a read story has
-    public static final int INITIAL_COMMENT_CAPACITY = 50;
-    public static final int INITIAL_STORY_CAPACITY = 150;
+    private static final int INITIAL_COMMENT_CAPACITY = 50;
     //TODO convert to arrays where we can
     private Story currentStory;
     private List<Comment> currentStoryComments;
@@ -16,10 +19,11 @@ public class ReadingSession {
 
     private int currentPositionInList;
 
-    public ReadingSession(){
+    @Inject
+    public ReadingSession(@StoryMax int maximumStoryCount){
         currentStory = null;
         currentStoryComments = new ArrayList<>(INITIAL_COMMENT_CAPACITY);
-        storyList = new ArrayList<>(INITIAL_STORY_CAPACITY);
+        storyList = new ArrayList<>(maximumStoryCount);
         currentPositionInList = 0;
     }
 

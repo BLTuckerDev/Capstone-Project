@@ -14,6 +14,7 @@ import javax.inject.Inject;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import dev.bltucker.nanodegreecapstone.injection.StoryMax;
 import dev.bltucker.nanodegreecapstone.models.Story;
 
 public class StoryListAdapter extends RecyclerView.Adapter<StoryListAdapter.StoryHeadlineViewHolder> {
@@ -23,9 +24,9 @@ public class StoryListAdapter extends RecyclerView.Adapter<StoryListAdapter.Stor
     private final List<Story> storyList;
 
     @Inject
-    public StoryListAdapter(StoryListFragmentPresenter presenter){
+    public StoryListAdapter(StoryListFragmentPresenter presenter, @StoryMax int maximumStoryCount){
         this.presenter = presenter;
-        storyList = new ArrayList<>(150);
+        storyList = new ArrayList<>(maximumStoryCount);
     }
 
 
