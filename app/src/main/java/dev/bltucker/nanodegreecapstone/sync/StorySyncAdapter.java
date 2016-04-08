@@ -19,6 +19,8 @@ import dev.bltucker.nanodegreecapstone.data.CommentRefsColumns;
 import dev.bltucker.nanodegreecapstone.data.HackerNewsApiService;
 import dev.bltucker.nanodegreecapstone.data.SchematicContentProviderGenerator;
 import dev.bltucker.nanodegreecapstone.data.StoryRepository;
+import dev.bltucker.nanodegreecapstone.events.EventBus;
+import dev.bltucker.nanodegreecapstone.events.SyncCompletedEvent;
 import dev.bltucker.nanodegreecapstone.injection.StoryMax;
 import dev.bltucker.nanodegreecapstone.models.Story;
 import rx.Observable;
@@ -41,6 +43,9 @@ public final class StorySyncAdapter extends AbstractThreadedSyncAdapter {
     @Inject
     @StoryMax
     int maximumStoryCount;
+
+    @Inject
+    EventBus eventBus;
 
     public StorySyncAdapter(Context context, boolean autoInitialize) {
         super(context, autoInitialize);
@@ -79,6 +84,7 @@ public final class StorySyncAdapter extends AbstractThreadedSyncAdapter {
                   public void onCompleted() {
                       final long stopTime = System.currentTimeMillis();
                       Timber.d("Sync completed in %d milliseconds", stopTime - startTime);
+                      eventBus.publish(new SyncCompletedEvent());
                   }
 
                   @Override
