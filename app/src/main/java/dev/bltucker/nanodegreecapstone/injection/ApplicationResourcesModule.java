@@ -14,6 +14,7 @@ import dev.bltucker.nanodegreecapstone.StoryListFragmentPresenter;
 import dev.bltucker.nanodegreecapstone.data.CombinationBackedStoryRepository;
 import dev.bltucker.nanodegreecapstone.data.HackerNewsApiService;
 import dev.bltucker.nanodegreecapstone.data.StoryRepository;
+import dev.bltucker.nanodegreecapstone.events.EventBus;
 import dev.bltucker.nanodegreecapstone.models.ReadingSession;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
@@ -86,4 +87,21 @@ public class ApplicationResourcesModule {
         return new StoryListAdapter(presenter, storyMax);
     }
 
+    @Provides
+    @ApplicationScope
+    public EventBus provideEventBus(){
+        return new EventBus();
+    }
+
+    @Provides
+    @ApplicationScope
+    public HomeViewPresenter provideHomeViewPresenter(@SyncIntervalSeconds int syncInterval){
+        return new HomeViewPresenter(syncInterval);
+    }
+
+    @Provides
+    @ApplicationScope
+    public ReadingSession provideReadingSession(@StoryMax int storyMax){
+        return new ReadingSession(storyMax);
+    }
 }
