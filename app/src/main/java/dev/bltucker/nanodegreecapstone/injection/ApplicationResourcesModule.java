@@ -38,6 +38,13 @@ public class ApplicationResourcesModule {
 
     @Provides
     @ApplicationScope
+    @SyncIntervalSeconds
+    public int provideSyncIntervalInSeconds(Context context){
+        return context.getResources().getInteger(R.integer.sync_interval_seconds);
+    }
+
+    @Provides
+    @ApplicationScope
     public Gson provideGson(){
         return new Gson();
     }

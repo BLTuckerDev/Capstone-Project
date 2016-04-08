@@ -7,17 +7,17 @@ import android.os.Bundle;
 import javax.inject.Inject;
 
 import dev.bltucker.nanodegreecapstone.data.SchematicContentProviderGenerator;
+import dev.bltucker.nanodegreecapstone.injection.SyncIntervalSeconds;
 import dev.bltucker.nanodegreecapstone.sync.StorySyncAdapter;
 
 public class HomeViewPresenter {
 
-    private static final long SYNC_INTERVAL_SECONDS = 1800;
-
+    private final int syncInterval;
     private HomeView view;
 
     @Inject
-    public HomeViewPresenter(){
-
+    public HomeViewPresenter(@SyncIntervalSeconds int syncInterval){
+        this.syncInterval = syncInterval;
     }
 
     public void onViewCreated(HomeView createdView){
@@ -49,6 +49,6 @@ public class HomeViewPresenter {
               new Account(StorySyncAdapter.ACCOUNT, StorySyncAdapter.ACCOUNT_TYPE),
               SchematicContentProviderGenerator.AUTHORITY,
               Bundle.EMPTY,
-              SYNC_INTERVAL_SECONDS);
+              syncInterval);
     }
 }
