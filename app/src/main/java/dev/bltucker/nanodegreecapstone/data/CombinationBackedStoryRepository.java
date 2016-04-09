@@ -84,31 +84,37 @@ public class CombinationBackedStoryRepository implements StoryRepository {
     }
 
     @Override
-    public List<Comment> getStoryComments(Story story) {
+    public Observable<List<Comment>> getStoryComments(final Story story) {
         List<Comment> cachedComments = commentLruCache.get(story.getId());
 
         if(cachedComments != null){
-            return cachedComments;
+            return Observable.just(cachedComments);
         }
 
-        long[] commentIds = getCommentIds(story.getId());
-        List<Comment> commentList = Observable.just(commentIds)
-              .concatMap(new Func1<long[], Observable<List<Comment>>>() {
-                  @Override
-                  public Observable<List<Comment>> call(long[] commentIds) {
-                      List<Comment> commentObservables = new ArrayList<>(commentIds.length);
+        return Observable.create(new Observable.OnSubscribe<List<Comment>>() {
+            @Override
+            public void call(Subscriber<? super List<Comment>> subscriber) {
+                long[] commentIds = getCommentIds(story.getId());
+                List<Comment> commentList = Observable.just(commentIds)
+                        .concatMap(new Func1<long[], Observable<List<Comment>>>() {
+                            @Override
+                            public Observable<List<Comment>> call(long[] commentIds) {
+                                List<Comment> commentObservables = new ArrayList<>(commentIds.length);
 
-                      for (int i = 0; i < commentIds.length; i++) {
-                          commentObservables.add(hackerNewsApiService.getComment(commentIds[i]).toBlocking().first());
-                      }
+                                for (int i = 0; i < commentIds.length; i++) {
+                                    commentObservables.add(hackerNewsApiService.getComment(commentIds[i]).toBlocking().first());
+                                }
 
-                      return Observable.just(commentObservables);
-                  }
-              }).toBlocking().first();
+                                return Observable.just(commentObservables);
+                            }
+                        }).toBlocking().first();
 
-        commentLruCache.put(story.getId(), commentList);
+                commentLruCache.put(story.getId(), commentList);
 
-        return commentList;
+                subscriber.onNext(commentList);
+                subscriber.onCompleted();
+            }
+        });
     }
 
     @Override

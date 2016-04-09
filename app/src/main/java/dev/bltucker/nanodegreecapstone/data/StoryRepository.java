@@ -12,6 +12,6 @@ public interface StoryRepository {
     //TODO consider just returning cursors and using cursor adapters + cursor loaders, might make life lots easier
     //TODO remember to clear caches when we add the add methods
     Observable<List<Story>> getAllStories();
-    List<Comment> getStoryComments(Story story);
+    Observable<List<Comment>> getStoryComments(Story story);
     void saveStories(List<Story> stories);
 }
