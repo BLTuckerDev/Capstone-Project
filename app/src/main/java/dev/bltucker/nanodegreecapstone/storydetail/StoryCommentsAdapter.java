@@ -9,6 +9,8 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import dev.bltucker.nanodegreecapstone.R;
@@ -18,6 +20,7 @@ public class StoryCommentsAdapter extends RecyclerView.Adapter<StoryCommentsAdap
 
     private List<Comment> commentList;
 
+    @Inject
     public StoryCommentsAdapter(){
         commentList = new ArrayList<>();
     }
