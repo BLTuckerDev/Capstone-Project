@@ -39,9 +39,7 @@ public class StoryListAdapter extends RecyclerView.Adapter<StoryListAdapter.Stor
     @Override
     public void onBindViewHolder(StoryListAdapter.StoryHeadlineViewHolder holder, int position) {
         Story story = storyList.get(position);
-        holder.titleTextView.setText(story.getTitle());
-        holder.posterNameTextView.setText(story.getAuthorName());
-        holder.pointsTextView.setText(String.valueOf(story.getScore()));
+        holder.setStory(story);
     }
 
     @Override
@@ -56,7 +54,7 @@ public class StoryListAdapter extends RecyclerView.Adapter<StoryListAdapter.Stor
     }
 
 
-    public static class StoryHeadlineViewHolder extends RecyclerView.ViewHolder{
+    class StoryHeadlineViewHolder extends RecyclerView.ViewHolder{
 
         @Bind(R.id.story_title_textview)
         TextView titleTextView;
@@ -67,19 +65,28 @@ public class StoryListAdapter extends RecyclerView.Adapter<StoryListAdapter.Stor
         @Bind(R.id.points_textview)
         TextView pointsTextView;
 
+        Story story;
+
         public StoryHeadlineViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
         }
 
+        public void setStory(Story story){
+            this.story = story;
+            titleTextView.setText(story.getTitle());
+            posterNameTextView.setText(story.getAuthorName());
+            pointsTextView.setText(String.valueOf(story.getScore()));
+        }
+
         @OnClick(R.id.comments_button)
         public void onCommentsButtonClick(View v){
-
+            presenter.onCommentsButtonClick(story);
         }
 
         @OnClick(R.id.read_button)
         public void onReadButtonClick(View v){
-
+            presenter.onReadStoryButtonClick(story);
         }
     }
 }

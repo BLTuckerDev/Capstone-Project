@@ -1,5 +1,7 @@
 package dev.bltucker.nanodegreecapstone.topstories;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -43,7 +45,11 @@ public class StoryListFragment extends Fragment implements StoryListView {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         CapstoneApplication.getApplication().getApplicationComponent().inject(this);
-        presenter.onViewCreated(this);
+        if(null == savedInstanceState){
+            presenter.onViewCreated(this);
+        } else {
+            presenter.onViewRestored(this);
+        }
     }
 
     @Override
@@ -75,5 +81,16 @@ public class StoryListFragment extends Fragment implements StoryListView {
     @Override
     public void showStories(List<Story> stories) {
         adapter.setData(stories);
+    }
+
+    @Override
+    public void showStoryDetails(Story story) {
+
+    }
+
+    @Override
+    public void showStoryPostUrl(String url) {
+        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+        startActivity(browserIntent);
     }
 }

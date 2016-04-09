@@ -7,6 +7,7 @@ import javax.inject.Inject;
 import dev.bltucker.nanodegreecapstone.data.StoryRepository;
 import dev.bltucker.nanodegreecapstone.events.EventBus;
 import dev.bltucker.nanodegreecapstone.events.SyncCompletedEvent;
+import dev.bltucker.nanodegreecapstone.models.Comment;
 import dev.bltucker.nanodegreecapstone.models.ReadingSession;
 import dev.bltucker.nanodegreecapstone.models.Story;
 import rx.Subscriber;
@@ -34,11 +35,20 @@ public class StoryListViewPresenter {
 
     public void onViewCreated(StoryListView view) {
         storyListView = view;
-        loadStories();
+        if(readingSession.getStories().isEmpty()){
+            loadStories();
+        } else {
+            view.showStories(readingSession.getStories());
+        }
     }
 
     public void onViewRestored(StoryListView view) {
         storyListView = view;
+        if(readingSession.getStories().isEmpty()){
+            loadStories();
+        } else {
+            view.showStories(readingSession.getStories());
+        }
     }
 
     public void onViewResumed(StoryListView view) {
@@ -64,7 +74,7 @@ public class StoryListViewPresenter {
     }
 
     public void onViewPaused(StoryListView view) {
-        storyListView = view;
+        storyListView = null;
         syncCompletedEventSubscription.unsubscribe();
     }
 
@@ -87,8 +97,40 @@ public class StoryListViewPresenter {
 
                     @Override
                     public void onNext(List<Story> stories) {
+                        readingSession.setStories(stories);
                         storyListView.showStories(stories);
                     }
                 });
+    }
+
+    private void loadComments(final Story selectedStory){
+        storyRepository.getStoryComments(selectedStory)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<List<Comment>>() {
+                    @Override
+                    public void onCompleted() {}
+
+                    @Override
+                    public void onError(Throwable e) {}
+
+                    @Override
+                    public void onNext(List<Comment> comments) {
+                        readingSession.read(selectedStory, comments);
+                    }
+                });
+    }
+
+    public void onCommentsButtonClick(Story story) {
+        if(storyListView != null){
+            //TODO first load the comments and place the story in the reading session
+            storyListView.showStoryDetails(story);
+        }
+    }
+
+    public void onReadStoryButtonClick(Story story) {
+        if(storyListView != null){
+            storyListView.showStoryPostUrl(story.getUrl());
+        }
     }
 }

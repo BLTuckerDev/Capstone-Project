@@ -83,6 +83,12 @@ public class ApplicationResourcesModule {
 
     @Provides
     @ApplicationScope
+    public StoryListViewPresenter provideStoryListViewPresenter(StoryRepository repo, ReadingSession readingSession, EventBus eventBus){
+        return new StoryListViewPresenter(repo, readingSession, eventBus);
+    }
+
+    @Provides
+    @ApplicationScope
     public StoryListAdapter provideStoryListAdapter(StoryListViewPresenter presenter, @StoryMax int storyMax){
         return new StoryListAdapter(presenter, storyMax);
     }
