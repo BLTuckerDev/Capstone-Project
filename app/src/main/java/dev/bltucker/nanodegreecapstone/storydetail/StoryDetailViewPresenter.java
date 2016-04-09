@@ -20,11 +20,15 @@ public class StoryDetailViewPresenter {
 
 
     public void onViewCreated(StoryDetailView detailView) {
-
+        view = detailView;
+        view.showStory(readingSession.getCurrentStory());
+        view.showComments(readingSession.getCurrentStoryComments());
     }
 
     public void onViewRestored(StoryDetailView detailView) {
-
+        view = detailView;
+        view.showStory(readingSession.getCurrentStory());
+        view.showComments(readingSession.getCurrentStoryComments());
     }
 
     public void onViewResumed(StoryDetailView detailView) {
