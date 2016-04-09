@@ -7,10 +7,10 @@ import com.google.gson.Gson;
 import dagger.Module;
 import dagger.Provides;
 import dev.bltucker.nanodegreecapstone.CapstoneApplication;
-import dev.bltucker.nanodegreecapstone.HomeViewPresenter;
+import dev.bltucker.nanodegreecapstone.home.HomeViewPresenter;
 import dev.bltucker.nanodegreecapstone.R;
-import dev.bltucker.nanodegreecapstone.StoryListAdapter;
-import dev.bltucker.nanodegreecapstone.StoryListFragmentPresenter;
+import dev.bltucker.nanodegreecapstone.topstories.StoryListAdapter;
+import dev.bltucker.nanodegreecapstone.topstories.StoryListViewPresenter;
 import dev.bltucker.nanodegreecapstone.data.CombinationBackedStoryRepository;
 import dev.bltucker.nanodegreecapstone.data.HackerNewsApiService;
 import dev.bltucker.nanodegreecapstone.data.StoryRepository;
@@ -83,7 +83,7 @@ public class ApplicationResourcesModule {
 
     @Provides
     @ApplicationScope
-    public StoryListAdapter provideStoryListAdapter(StoryListFragmentPresenter presenter, @StoryMax int storyMax){
+    public StoryListAdapter provideStoryListAdapter(StoryListViewPresenter presenter, @StoryMax int storyMax){
         return new StoryListAdapter(presenter, storyMax);
     }
 

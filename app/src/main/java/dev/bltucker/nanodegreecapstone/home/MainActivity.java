@@ -1,9 +1,13 @@
-package dev.bltucker.nanodegreecapstone;
+package dev.bltucker.nanodegreecapstone.home;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
 import javax.inject.Inject;
+
+import dev.bltucker.nanodegreecapstone.CapstoneApplication;
+import dev.bltucker.nanodegreecapstone.R;
+import dev.bltucker.nanodegreecapstone.topstories.StoryListFragment;
 
 public class MainActivity extends AppCompatActivity implements HomeView {
 

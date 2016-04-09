@@ -1,4 +1,4 @@
-package dev.bltucker.nanodegreecapstone;
+package dev.bltucker.nanodegreecapstone.topstories;
 
 import java.util.List;
 
@@ -9,13 +9,12 @@ import dev.bltucker.nanodegreecapstone.events.EventBus;
 import dev.bltucker.nanodegreecapstone.events.SyncCompletedEvent;
 import dev.bltucker.nanodegreecapstone.models.ReadingSession;
 import dev.bltucker.nanodegreecapstone.models.Story;
-import rx.Observable;
 import rx.Subscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
-public class StoryListFragmentPresenter {
+public class StoryListViewPresenter {
 
     private final StoryRepository storyRepository;
     //TODO make use of the reading session
@@ -26,7 +25,7 @@ public class StoryListFragmentPresenter {
     private Subscription syncCompletedEventSubscription;
 
     @Inject
-    public StoryListFragmentPresenter(StoryRepository storyRepository, ReadingSession readingSession, EventBus eventBus) {
+    public StoryListViewPresenter(StoryRepository storyRepository, ReadingSession readingSession, EventBus eventBus) {
         this.storyRepository = storyRepository;
         this.readingSession = readingSession;
         this.eventBus = eventBus;

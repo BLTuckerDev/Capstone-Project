@@ -1,4 +1,4 @@
-package dev.bltucker.nanodegreecapstone;
+package dev.bltucker.nanodegreecapstone.topstories;
 
 import java.util.List;
 

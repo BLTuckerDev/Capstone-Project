@@ -1,8 +1,8 @@
 package dev.bltucker.nanodegreecapstone.injection;
 
 import dagger.Component;
-import dev.bltucker.nanodegreecapstone.MainActivity;
-import dev.bltucker.nanodegreecapstone.StoryListFragment;
+import dev.bltucker.nanodegreecapstone.home.MainActivity;
+import dev.bltucker.nanodegreecapstone.topstories.StoryListFragment;
 import dev.bltucker.nanodegreecapstone.sync.StorySyncAdapter;
 
 @ApplicationScope

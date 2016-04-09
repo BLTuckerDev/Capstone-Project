@@ -1,4 +1,4 @@
-package dev.bltucker.nanodegreecapstone;
+package dev.bltucker.nanodegreecapstone.topstories;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -14,17 +14,18 @@ import javax.inject.Inject;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import dev.bltucker.nanodegreecapstone.R;
 import dev.bltucker.nanodegreecapstone.injection.StoryMax;
 import dev.bltucker.nanodegreecapstone.models.Story;
 
 public class StoryListAdapter extends RecyclerView.Adapter<StoryListAdapter.StoryHeadlineViewHolder> {
 
-    private final StoryListFragmentPresenter presenter;
+    private final StoryListViewPresenter presenter;
 
     private final List<Story> storyList;
 
     @Inject
-    public StoryListAdapter(StoryListFragmentPresenter presenter, @StoryMax int maximumStoryCount){
+    public StoryListAdapter(StoryListViewPresenter presenter, @StoryMax int maximumStoryCount){
         this.presenter = presenter;
         storyList = new ArrayList<>(maximumStoryCount);
     }

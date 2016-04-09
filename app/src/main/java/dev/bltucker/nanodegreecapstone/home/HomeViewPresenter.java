@@ -1,4 +1,4 @@
-package dev.bltucker.nanodegreecapstone;
+package dev.bltucker.nanodegreecapstone.home;
 
 import android.accounts.Account;
 import android.content.ContentResolver;
