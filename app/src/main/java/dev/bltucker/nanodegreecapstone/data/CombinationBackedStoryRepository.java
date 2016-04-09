@@ -7,7 +7,6 @@ import android.database.Cursor;
 import android.util.LruCache;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -15,6 +14,7 @@ import javax.inject.Inject;
 import dev.bltucker.nanodegreecapstone.models.Comment;
 import dev.bltucker.nanodegreecapstone.models.Story;
 import rx.Observable;
+import rx.Subscriber;
 import rx.functions.Func1;
 import timber.log.Timber;
 
@@ -37,31 +37,35 @@ public class CombinationBackedStoryRepository implements StoryRepository {
     }
 
     @Override
-    public List<Story> getAllStories() {
-        Cursor query = context.getContentResolver().query(SchematicContentProviderGenerator.StoryPaths.ALL_STORIES,
-              null,
-              null,
-              null,
-              null);
+    public Observable<List<Story>> getAllStories() {
+        return Observable.create(new Observable.OnSubscribe<List<Story>>() {
+            @Override
+            public void call(Subscriber<? super List<Story>> subscriber) {
+                Cursor query = context.getContentResolver().query(SchematicContentProviderGenerator.StoryPaths.ALL_STORIES,
+                        null,
+                        null,
+                        null,
+                        null);
 
-        List<Story> storyList = new ArrayList<>(query.getCount());
+                List<Story> storyList = new ArrayList<>(query.getCount());
 
-        while(query.moveToNext()){
-            long storyId = query.getLong(query.getColumnIndex(StoryColumns._ID));
-            String storyAuthor = query.getString(query.getColumnIndex(StoryColumns.AUTHOR_NAME));
-            long score = query.getLong(query.getColumnIndex(StoryColumns.SCORE));
-            String title = query.getString(query.getColumnIndex(StoryColumns.TITLE));
-            long unixTime = query.getLong(query.getColumnIndex(StoryColumns.UNIX_TIME));
-            String storyUrl = query.getString(query.getColumnIndex(StoryColumns.URL));
-            long[] commentIds = getCommentIds(storyId);
+                while(query.moveToNext()){
+                    long storyId = query.getLong(query.getColumnIndex(StoryColumns._ID));
+                    String storyAuthor = query.getString(query.getColumnIndex(StoryColumns.AUTHOR_NAME));
+                    long score = query.getLong(query.getColumnIndex(StoryColumns.SCORE));
+                    String title = query.getString(query.getColumnIndex(StoryColumns.TITLE));
+                    long unixTime = query.getLong(query.getColumnIndex(StoryColumns.UNIX_TIME));
+                    String storyUrl = query.getString(query.getColumnIndex(StoryColumns.URL));
+                    long[] commentIds = getCommentIds(storyId);
 
-            storyList.add(new Story(storyId, storyAuthor, score, unixTime, title,storyUrl, commentIds));
-        }
+                    storyList.add(new Story(storyId, storyAuthor, score, unixTime, title,storyUrl, commentIds));
+                }
 
-        query.close();
-        //TODO we should match the front page's sort
-//        Collections.sort(storyList, storyComparator);
-        return storyList;
+                query.close();
+                subscriber.onNext(storyList);
+                subscriber.onCompleted();
+            }
+        });
     }
 
     private long[] getCommentIds(long storyId) {

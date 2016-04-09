@@ -18,6 +18,7 @@ import rx.schedulers.Schedulers;
 public class StoryListFragmentPresenter {
 
     private final StoryRepository storyRepository;
+    //TODO make use of the reading session
     private final ReadingSession readingSession;
     private final EventBus eventBus;
 
@@ -34,27 +35,7 @@ public class StoryListFragmentPresenter {
 
     public void onViewCreated(StoryListView view) {
         storyListView = view;
-//TODO move this to the repository, make it so the repo just returns observables
-        Observable.create(new Observable.OnSubscribe<List<Story>>() {
-            @Override
-            public void call(Subscriber<? super List<Story>> subscriber) {
-                subscriber.onNext(storyRepository.getAllStories());
-                subscriber.onCompleted();
-            }
-        }).subscribeOn(Schedulers.io())
-          .observeOn(AndroidSchedulers.mainThread())
-          .subscribe(new Subscriber<List<Story>>() {
-              @Override
-              public void onCompleted() {     }
-
-              @Override
-              public void onError(Throwable e) {     }
-
-              @Override
-              public void onNext(List<Story> stories) {
-                  storyListView.showStories(stories);
-              }
-          });
+        loadStories();
     }
 
     public void onViewRestored(StoryListView view) {
@@ -78,7 +59,7 @@ public class StoryListFragmentPresenter {
 
                     @Override
                     public void onNext(Object o) {
-                        onSyncCompletedEvent();
+                        handleOnSyncCompleteEvent();
                     }
                 });
     }
@@ -88,7 +69,27 @@ public class StoryListFragmentPresenter {
         syncCompletedEventSubscription.unsubscribe();
     }
 
-    private void onSyncCompletedEvent(){
-        //TODO handle sync complete
+    private void handleOnSyncCompleteEvent() {
+        loadStories();
+    }
+
+    private void loadStories() {
+        storyRepository.getAllStories()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<List<Story>>() {
+                    @Override
+                    public void onCompleted() {
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                    }
+
+                    @Override
+                    public void onNext(List<Story> stories) {
+                        storyListView.showStories(stories);
+                    }
+                });
     }
 }
