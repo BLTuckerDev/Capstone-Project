@@ -11,12 +11,14 @@
         android:orientation="vertical">
 
         <TextView
+            android:id="@+id/story_title_textview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             style="@style/Base.TextAppearance.AppCompat.Title"
             tools:text="Lorem Ipsum Title"/>
 
         <TextView
+            android:id="@+id/story_url_textview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ellipsize="end"

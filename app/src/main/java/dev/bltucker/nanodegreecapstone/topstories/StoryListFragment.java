@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.transition.Transition;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,7 +33,7 @@ public class StoryListFragment extends Fragment implements StoryListView {
     @Inject
     StoryListAdapter adapter;
 
-    private Callback callbackDelegate;
+    private Delegate delegate;
 
     public StoryListFragment() {
         // Required empty public constructor
@@ -66,14 +65,14 @@ public class StoryListFragment extends Fragment implements StoryListView {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if(context instanceof Callback){
-            this.callbackDelegate = (Callback) context;
+        if(context instanceof Delegate){
+            this.delegate = (Delegate) context;
         }
     }
 
     @Override
     public void onDetach() {
-        this.callbackDelegate = null;
+        this.delegate = null;
         super.onDetach();
     }
 
@@ -103,8 +102,8 @@ public class StoryListFragment extends Fragment implements StoryListView {
 
     @Override
     public void showCommentsView() {
-        if(callbackDelegate != null){
-            callbackDelegate.showCommentsView();
+        if(delegate != null){
+            delegate.showCommentsView();
         }
     }
 
@@ -124,8 +123,7 @@ public class StoryListFragment extends Fragment implements StoryListView {
 
     }
 
-    public interface Callback{
+    public interface Delegate {
         void showCommentsView();
     }
-
 }

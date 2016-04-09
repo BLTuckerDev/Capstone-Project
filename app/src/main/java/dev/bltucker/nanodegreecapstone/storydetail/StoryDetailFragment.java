@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import java.util.List;
 
@@ -16,12 +17,25 @@ import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import dev.bltucker.nanodegreecapstone.CapstoneApplication;
 import dev.bltucker.nanodegreecapstone.R;
 import dev.bltucker.nanodegreecapstone.models.Comment;
 import dev.bltucker.nanodegreecapstone.models.Story;
 
 public class StoryDetailFragment extends Fragment implements StoryDetailView {
+
+    @Bind(R.id.story_title_textview)
+    TextView storyTitleTextView;
+
+    @Bind(R.id.story_url_textview)
+    TextView storyUrlTextView;
+
+    @Bind(R.id.poster_name_textview)
+    TextView authorNameTextView;
+
+    @Bind(R.id.points_textview)
+    TextView pointsTextView;
 
     @Bind(R.id.comment_list_recyclerview)
     RecyclerView recyclerView;
@@ -45,12 +59,6 @@ public class StoryDetailFragment extends Fragment implements StoryDetailView {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         CapstoneApplication.getApplication().getApplicationComponent().inject(this);
-
-        if(null == savedInstanceState){
-            presenter.onViewCreated(this);
-        } else {
-            presenter.onViewRestored(this);
-        }
     }
 
     @Override
@@ -65,6 +73,11 @@ public class StoryDetailFragment extends Fragment implements StoryDetailView {
         super.onActivityCreated(savedInstanceState);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(commentsAdapter);
+        if(null == savedInstanceState){
+            presenter.onViewCreated(this);
+        } else {
+            presenter.onViewRestored(this);
+        }
     }
 
     @Override
@@ -81,11 +94,17 @@ public class StoryDetailFragment extends Fragment implements StoryDetailView {
 
     @Override
     public void showStory(Story story) {
+        storyTitleTextView.setText(story.getTitle());
 
     }
 
     @Override
     public void showComments(List<Comment> commentList) {
+
+    }
+
+    @OnClick(R.id.read_button)
+    public void onReadButtonClick(View v){
 
     }
 }
