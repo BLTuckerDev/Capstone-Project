@@ -103,28 +103,31 @@ public class StoryListViewPresenter {
                 });
     }
 
-    private void loadComments(final Story selectedStory){
-        storyRepository.getStoryComments(selectedStory)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<List<Comment>>() {
-                    @Override
-                    public void onCompleted() {}
-
-                    @Override
-                    public void onError(Throwable e) {}
-
-                    @Override
-                    public void onNext(List<Comment> comments) {
-                        readingSession.read(selectedStory, comments);
-                    }
-                });
-    }
-
-    public void onCommentsButtonClick(Story story) {
+    public void onCommentsButtonClick(final Story selectedStory) {
         if(storyListView != null){
-            //TODO first load the comments and place the story in the reading session
-            storyListView.showStoryDetails(story);
+
+            storyListView.showLoadingView();
+
+            storyRepository.getStoryComments(selectedStory)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Subscriber<List<Comment>>() {
+                        @Override
+                        public void onCompleted() {
+                            storyListView.hideLoadingView();
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+                            storyListView.hideLoadingView();
+                        }
+
+                        @Override
+                        public void onNext(List<Comment> comments) {
+                            readingSession.read(selectedStory, comments);
+                            storyListView.showCommentsView();
+                        }
+                    });
         }
     }
 

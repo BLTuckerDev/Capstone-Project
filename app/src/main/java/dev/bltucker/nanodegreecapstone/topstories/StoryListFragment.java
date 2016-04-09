@@ -1,11 +1,13 @@
 package dev.bltucker.nanodegreecapstone.topstories;
 
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.transition.Transition;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,6 +33,8 @@ public class StoryListFragment extends Fragment implements StoryListView {
 
     @Inject
     StoryListAdapter adapter;
+
+    private Callback callbackDelegate;
 
     public StoryListFragment() {
         // Required empty public constructor
@@ -60,6 +64,20 @@ public class StoryListFragment extends Fragment implements StoryListView {
     }
 
     @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if(context instanceof Callback){
+            this.callbackDelegate = (Callback) context;
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        this.callbackDelegate = null;
+        super.onDetach();
+    }
+
+    @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -84,8 +102,10 @@ public class StoryListFragment extends Fragment implements StoryListView {
     }
 
     @Override
-    public void showStoryDetails(Story story) {
-
+    public void showCommentsView() {
+        if(callbackDelegate != null){
+            callbackDelegate.showCommentsView();
+        }
     }
 
     @Override
@@ -93,4 +113,19 @@ public class StoryListFragment extends Fragment implements StoryListView {
         Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
         startActivity(browserIntent);
     }
+
+    @Override
+    public void showLoadingView() {
+
+    }
+
+    @Override
+    public void hideLoadingView() {
+
+    }
+
+    public interface Callback{
+        void showCommentsView();
+    }
+
 }
