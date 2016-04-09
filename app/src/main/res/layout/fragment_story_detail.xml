@@ -1,0 +1,16 @@
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="dev.bltucker.nanodegreecapstone.storydetail.StoryDetailFragment">
+
+    <include layout="@layout/story_header_item"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/comment_list_recyclerview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"></android.support.v7.widget.RecyclerView>
+
+</android.support.design.widget.CoordinatorLayout>

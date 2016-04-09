@@ -30,7 +30,6 @@ public class StoryListAdapter extends RecyclerView.Adapter<StoryListAdapter.Stor
         storyList = new ArrayList<>(maximumStoryCount);
     }
 
-
     @Override
     public StoryListAdapter.StoryHeadlineViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.headline_item_layout, parent, false);
