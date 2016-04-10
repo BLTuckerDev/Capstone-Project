@@ -1,6 +1,7 @@
 package dev.bltucker.nanodegreecapstone.home;
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 
@@ -51,9 +52,14 @@ public class MainActivity extends AppCompatActivity implements HomeView, StoryLi
 
     @Override
     public void showCommentsView() {
-        getSupportFragmentManager()
-                .beginTransaction()
-                .add(R.id.main_activity_coordinator_layout, StoryDetailFragment.newInstance(), STORY_COMMENTS_FRAGMENT_TAG)
+
+        Fragment storyListFragment = getSupportFragmentManager().findFragmentByTag(STORY_LIST_FRAGMENT_TAG);
+        Fragment storyDetailFragment = StoryDetailFragment.newInstance();
+
+        getSupportFragmentManager().beginTransaction()
+                .remove(storyListFragment)
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE)
+                .add(R.id.main_activity_coordinator_layout, storyDetailFragment)
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                 .addToBackStack(COMMENTS_BACK_STACK_STATE)
                 .commit();
