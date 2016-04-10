@@ -1,5 +1,6 @@
 package dev.bltucker.nanodegreecapstone.topstories;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -62,8 +63,8 @@ public class StoryListAdapter extends RecyclerView.Adapter<StoryListAdapter.Stor
         @Bind(R.id.poster_name_textview)
         TextView posterNameTextView;
 
-        @Bind(R.id.points_textview)
-        TextView pointsTextView;
+        @Bind(R.id.score_textview)
+        TextView scoreTextView;
 
         Story story;
 
@@ -74,9 +75,10 @@ public class StoryListAdapter extends RecyclerView.Adapter<StoryListAdapter.Stor
 
         public void setStory(Story story){
             this.story = story;
+            Context viewContext = itemView.getContext();
             titleTextView.setText(story.getTitle());
-            posterNameTextView.setText(story.getAuthorName());
-            pointsTextView.setText(String.valueOf(story.getScore()));
+            posterNameTextView.setText(String.format(viewContext.getString(R.string.by_poster), story.getAuthorName()));
+            scoreTextView.setText(String.valueOf(story.getScore()));
         }
 
         @OnClick(R.id.comments_button)
