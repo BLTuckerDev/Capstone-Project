@@ -98,7 +98,9 @@ public class StoryListViewPresenter {
                     @Override
                     public void onNext(List<Story> stories) {
                         readingSession.setStories(stories);
-                        storyListView.showStories(stories);
+                        if(storyListView != null){
+                            storyListView.showStories(stories);
+                        }
                     }
                 });
     }
@@ -114,7 +116,6 @@ public class StoryListViewPresenter {
                     .subscribe(new Subscriber<List<Comment>>() {
                         @Override
                         public void onCompleted() {
-                            storyListView.hideLoadingView();
                         }
 
                         @Override
@@ -125,7 +126,11 @@ public class StoryListViewPresenter {
                         @Override
                         public void onNext(List<Comment> comments) {
                             readingSession.read(selectedStory, comments);
-                            storyListView.showCommentsView();
+                            if(storyListView != null){
+                                storyListView.hideLoadingView();
+                                storyListView.showCommentsView();
+
+                            }
                         }
                     });
         }
