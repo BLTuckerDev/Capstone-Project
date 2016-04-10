@@ -38,4 +38,10 @@ public class StoryDetailViewPresenter {
     public void onViewPaused(StoryDetailView detailView) {
 
     }
+
+    public void onReadButtonClicked() {
+        if(view != null){
+            view.showStoryPostUrl(readingSession.getCurrentStory().getUrl());
+        }
+    }
 }

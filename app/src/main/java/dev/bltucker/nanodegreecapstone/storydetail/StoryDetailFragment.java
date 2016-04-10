@@ -1,6 +1,7 @@
 package dev.bltucker.nanodegreecapstone.storydetail;
 
-
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -32,10 +33,10 @@ public class StoryDetailFragment extends Fragment implements StoryDetailView {
     TextView storyUrlTextView;
 
     @Bind(R.id.poster_name_textview)
-    TextView authorNameTextView;
+    TextView storyPosterTextView;
 
-    @Bind(R.id.points_textview)
-    TextView pointsTextView;
+    @Bind(R.id.score_textview)
+    TextView storyScoreTextView;
 
     @Bind(R.id.comment_list_recyclerview)
     RecyclerView recyclerView;
@@ -51,8 +52,7 @@ public class StoryDetailFragment extends Fragment implements StoryDetailView {
     }
 
     public static StoryDetailFragment newInstance() {
-        StoryDetailFragment fragment = new StoryDetailFragment();
-        return fragment;
+        return new StoryDetailFragment();
     }
 
     @Override
@@ -95,7 +95,9 @@ public class StoryDetailFragment extends Fragment implements StoryDetailView {
     @Override
     public void showStory(Story story) {
         storyTitleTextView.setText(story.getTitle());
-
+        storyUrlTextView.setText(story.getUrl());
+        storyPosterTextView.setText(String.format(getString(R.string.by_poster), story.getAuthorName()));
+        storyScoreTextView.setText(String.format(getString(R.string.story_score), story.getScore()));
     }
 
     @Override
@@ -105,6 +107,12 @@ public class StoryDetailFragment extends Fragment implements StoryDetailView {
 
     @OnClick(R.id.read_button)
     public void onReadButtonClick(View v){
+        presenter.onReadButtonClicked();
+    }
 
+    @Override
+    public void showStoryPostUrl(String url) {
+        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+        startActivity(browserIntent);
     }
 }

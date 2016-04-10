@@ -34,7 +34,7 @@
                 tools:text="by Brett Tucker"/>
 
             <TextView
-                android:id="@+id/points_textview"
+                android:id="@+id/score_textview"
                 android:layout_gravity="end"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
