@@ -19,7 +19,7 @@ public class ReadingSessionTest {
 
     @Before
     public void setup(){
-        objectUnderTest = new ReadingSession();
+        objectUnderTest = new ReadingSession(150);
     }
 
     @Test

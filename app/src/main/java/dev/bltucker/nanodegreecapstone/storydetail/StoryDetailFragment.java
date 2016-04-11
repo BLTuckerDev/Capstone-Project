@@ -102,7 +102,7 @@ public class StoryDetailFragment extends Fragment implements StoryDetailView {
 
     @Override
     public void showComments(List<Comment> commentList) {
-
+        commentsAdapter.addComments(commentList);
     }
 
     @OnClick(R.id.read_button)

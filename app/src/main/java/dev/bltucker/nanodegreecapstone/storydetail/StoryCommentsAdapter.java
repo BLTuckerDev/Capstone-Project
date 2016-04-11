@@ -1,6 +1,7 @@
 package dev.bltucker.nanodegreecapstone.storydetail;
 
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +26,12 @@ public class StoryCommentsAdapter extends RecyclerView.Adapter<StoryCommentsAdap
         commentList = new ArrayList<>();
     }
 
+    public void addComments(List<Comment> comments){
+        int oldSize = this.commentList.size();
+        this.commentList.addAll(comments);
+        this.notifyItemRangeInserted(oldSize, comments.size());
+    }
+
     @Override
     public CommentViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
@@ -37,8 +44,8 @@ public class StoryCommentsAdapter extends RecyclerView.Adapter<StoryCommentsAdap
         Comment comment = commentList.get(position);
         holder.authorNameTextView.setText(comment.getAuthorName());
         //TODO format the post time
-        holder.postTimeTextView.setText("" +comment.getUnixPostTime());
-        holder.commentBodyTextView.setText(comment.getCommentText());
+//        holder.postTimeTextView.setText("" +comment.getUnixPostTime());
+        holder.commentBodyTextView.setText(Html.fromHtml(comment.getCommentText()));
     }
 
     @Override
