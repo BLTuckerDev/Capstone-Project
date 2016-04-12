@@ -102,12 +102,17 @@ public class CombinationBackedStoryRepository implements StoryRepository {
                                 List<Comment> commentObservables = new ArrayList<>(commentIds.length);
 
                                 for (int i = 0; i < commentIds.length; i++) {
-                                    commentObservables.add(hackerNewsApiService.getComment(commentIds[i]).toBlocking().first());
+                                    Comment comment = hackerNewsApiService.getComment(commentIds[i]).toBlocking().first();
+                                    if(comment.getAuthorName() != null && comment.getCommentText() != null){
+                                        commentObservables.add(comment);
+                                    }
                                 }
 
                                 return Observable.just(commentObservables);
                             }
                         }).toBlocking().first();
+
+
 
                 commentLruCache.put(story.getId(), commentList);
 
