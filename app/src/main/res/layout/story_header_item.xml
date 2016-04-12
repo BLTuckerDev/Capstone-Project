@@ -26,6 +26,7 @@
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:maxLines="2"
+            android:autoLink="web"
             style="@style/Base.TextAppearance.AppCompat.Caption"
             tools:text="http://google.com/"/>
 

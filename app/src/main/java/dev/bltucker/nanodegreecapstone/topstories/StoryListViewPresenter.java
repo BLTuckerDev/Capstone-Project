@@ -83,6 +83,11 @@ public class StoryListViewPresenter {
     }
 
     private void loadStories() {
+
+        if(storyListView != null){
+            storyListView.showLoadingView();
+        }
+
         storyRepository.getAllStories()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -99,6 +104,7 @@ public class StoryListViewPresenter {
                     public void onNext(List<Story> stories) {
                         readingSession.setStories(stories);
                         if(storyListView != null){
+                            storyListView.hideLoadingView();
                             storyListView.showStories(stories);
                         }
                     }

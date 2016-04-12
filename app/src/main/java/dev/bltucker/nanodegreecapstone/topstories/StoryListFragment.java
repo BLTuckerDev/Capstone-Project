@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import java.util.List;
 
@@ -26,6 +27,9 @@ public class StoryListFragment extends Fragment implements StoryListView {
 
     @Bind(R.id.story_list_recyclerview)
     RecyclerView recyclerView;
+
+    @Bind(R.id.loading_spinner)
+    ProgressBar loadingSpinner;
 
     @Inject
     StoryListViewPresenter presenter;
@@ -48,11 +52,6 @@ public class StoryListFragment extends Fragment implements StoryListView {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         CapstoneApplication.getApplication().getApplicationComponent().inject(this);
-        if(null == savedInstanceState){
-            presenter.onViewCreated(this);
-        } else {
-            presenter.onViewRestored(this);
-        }
     }
 
     @Override
@@ -81,6 +80,11 @@ public class StoryListFragment extends Fragment implements StoryListView {
         super.onActivityCreated(savedInstanceState);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(adapter);
+        if(null == savedInstanceState){
+            presenter.onViewCreated(this);
+        } else {
+            presenter.onViewRestored(this);
+        }
     }
 
     @Override
@@ -115,12 +119,14 @@ public class StoryListFragment extends Fragment implements StoryListView {
 
     @Override
     public void showLoadingView() {
-
+        loadingSpinner.setVisibility(View.VISIBLE);
+        recyclerView.setVisibility(View.INVISIBLE);
     }
 
     @Override
     public void hideLoadingView() {
-
+        loadingSpinner.setVisibility(View.INVISIBLE);
+        recyclerView.setVisibility(View.VISIBLE);
     }
 
     public interface Delegate {
