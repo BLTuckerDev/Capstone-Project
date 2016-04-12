@@ -19,7 +19,7 @@ import rx.functions.Func1;
 import timber.log.Timber;
 
 public class CombinationBackedStoryRepository implements StoryRepository {
-//TODO test this class!
+    //TODO test this class!
     public static final int CACHE_SIZE = 2 * 1024 * 1024; // 2MiB
 
     private final Context context;
@@ -29,7 +29,7 @@ public class CombinationBackedStoryRepository implements StoryRepository {
     private LruCache<Long, List<Comment>> commentLruCache;
 
     @Inject
-    public CombinationBackedStoryRepository(Context context, HackerNewsApiService hackerNewsApiService, DescendingScoreStoryComparator storyComparator){
+    public CombinationBackedStoryRepository(Context context, HackerNewsApiService hackerNewsApiService, DescendingScoreStoryComparator storyComparator) {
         this.context = context;
         this.hackerNewsApiService = hackerNewsApiService;
         this.storyComparator = storyComparator;
@@ -49,7 +49,7 @@ public class CombinationBackedStoryRepository implements StoryRepository {
 
                 List<Story> storyList = new ArrayList<>(query.getCount());
 
-                while(query.moveToNext()){
+                while (query.moveToNext()) {
                     long storyId = query.getLong(query.getColumnIndex(StoryColumns._ID));
                     String storyAuthor = query.getString(query.getColumnIndex(StoryColumns.AUTHOR_NAME));
                     long score = query.getLong(query.getColumnIndex(StoryColumns.SCORE));
@@ -58,7 +58,7 @@ public class CombinationBackedStoryRepository implements StoryRepository {
                     String storyUrl = query.getString(query.getColumnIndex(StoryColumns.URL));
                     long[] commentIds = getCommentIds(storyId);
 
-                    storyList.add(new Story(storyId, storyAuthor, score, unixTime, title,storyUrl, commentIds));
+                    storyList.add(new Story(storyId, storyAuthor, score, unixTime, title, storyUrl, commentIds));
                 }
 
                 query.close();
@@ -73,7 +73,7 @@ public class CombinationBackedStoryRepository implements StoryRepository {
 
         long[] commentIds = new long[query.getCount()];
         int index = 0;
-        while(query.moveToNext()){
+        while (query.moveToNext()) {
             commentIds[index] = query.getLong(query.getColumnIndex(CommentRefsColumns._ID));
             index++;
         }
@@ -87,7 +87,7 @@ public class CombinationBackedStoryRepository implements StoryRepository {
     public Observable<List<Comment>> getStoryComments(final Story story) {
         List<Comment> cachedComments = commentLruCache.get(story.getId());
 
-        if(cachedComments != null){
+        if (cachedComments != null) {
             return Observable.just(cachedComments);
         }
 
@@ -103,7 +103,7 @@ public class CombinationBackedStoryRepository implements StoryRepository {
 
                                 for (int i = 0; i < commentIds.length; i++) {
                                     Comment comment = hackerNewsApiService.getComment(commentIds[i]).toBlocking().first();
-                                    if(comment.getAuthorName() != null && comment.getCommentText() != null){
+                                    if (comment.getAuthorName() != null && comment.getCommentText() != null) {
                                         commentObservables.add(comment);
                                     }
                                 }
@@ -111,7 +111,6 @@ public class CombinationBackedStoryRepository implements StoryRepository {
                                 return Observable.just(commentObservables);
                             }
                         }).toBlocking().first();
-
 
 
                 commentLruCache.put(story.getId(), commentList);
