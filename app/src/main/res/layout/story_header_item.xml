@@ -17,7 +17,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             style="@style/Base.TextAppearance.AppCompat.Title"
-            tools:text="Lorem Ipsum Title"/>
+            tools:text="Lorem Ipsum Title"
+            android:layout_marginBottom="8dp"/>
 
         <TextView
             android:id="@+id/story_url_textview"
@@ -38,6 +39,7 @@
                 android:layout_weight="1"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginRight="8dp"
                 style="@style/Base.TextAppearance.AppCompat.Subhead"
                 tools:text="by Brett Tucker"/>
 
