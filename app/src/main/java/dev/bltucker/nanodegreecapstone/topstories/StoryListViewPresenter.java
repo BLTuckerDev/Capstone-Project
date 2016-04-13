@@ -1,9 +1,14 @@
 package dev.bltucker.nanodegreecapstone.topstories;
 
+import android.os.Bundle;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
+
 import java.util.List;
 
 import javax.inject.Inject;
 
+import dev.bltucker.nanodegreecapstone.data.StoryListLoader;
 import dev.bltucker.nanodegreecapstone.data.StoryRepository;
 import dev.bltucker.nanodegreecapstone.events.EventBus;
 import dev.bltucker.nanodegreecapstone.events.SyncCompletedEvent;
@@ -15,7 +20,7 @@ import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
-public class StoryListViewPresenter {
+public class StoryListViewPresenter implements LoaderManager.LoaderCallbacks<List<Story>> {
 
     private final StoryRepository storyRepository;
     //TODO make use of the reading session
@@ -25,27 +30,30 @@ public class StoryListViewPresenter {
     private StoryListView storyListView;
     private Subscription syncCompletedEventSubscription;
 
+    private final Loader storyListLoader;
+
     @Inject
-    public StoryListViewPresenter(StoryRepository storyRepository, ReadingSession readingSession, EventBus eventBus) {
+    public StoryListViewPresenter(StoryRepository storyRepository, ReadingSession readingSession, EventBus eventBus, StoryListLoader storyListLoader) {
         this.storyRepository = storyRepository;
         this.readingSession = readingSession;
         this.eventBus = eventBus;
+        this.storyListLoader = storyListLoader;
     }
 
 
-    public void onViewCreated(StoryListView view) {
+    public void onViewCreated(StoryListView view, LoaderManager loaderManager) {
         storyListView = view;
         if(readingSession.getStories().isEmpty()){
-            loadStories();
+            loaderManager.initLoader(StoryListLoader.STORY_LIST_LOADER, null, this).forceLoad();
         } else {
             view.showStories(readingSession.getStories());
         }
     }
 
-    public void onViewRestored(StoryListView view) {
+    public void onViewRestored(StoryListView view, LoaderManager loaderManager) {
         storyListView = view;
         if(readingSession.getStories().isEmpty()){
-            loadStories();
+            loaderManager.initLoader(StoryListLoader.STORY_LIST_LOADER, null, this).forceLoad();
         } else {
             view.showStories(readingSession.getStories());
         }
@@ -79,41 +87,12 @@ public class StoryListViewPresenter {
     }
 
     private void handleOnSyncCompleteEvent() {
-        loadStories();
-    }
-
-    private void loadStories() {
-
-        if(storyListView != null){
-            storyListView.showLoadingView();
-        }
-
-        storyRepository.getAllStories()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<List<Story>>() {
-                    @Override
-                    public void onCompleted() {
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                    }
-
-                    @Override
-                    public void onNext(List<Story> stories) {
-                        readingSession.setStories(stories);
-                        if(storyListView != null){
-                            storyListView.hideLoadingView();
-                            storyListView.showStories(stories);
-                        }
-                    }
-                });
+        //TODO restart the loader
     }
 
     public void onCommentsButtonClick(final Story selectedStory) {
         if(storyListView != null){
-
+//TODO convert to a loader
             storyListView.showLoadingView();
 
             storyRepository.getStoryComments(selectedStory)
@@ -147,4 +126,25 @@ public class StoryListViewPresenter {
             storyListView.showStoryPostUrl(story.getUrl());
         }
     }
+
+    @Override
+    public Loader<List<Story>> onCreateLoader(int id, Bundle args) {
+        if(storyListView != null){
+            storyListView.showLoadingView();
+        }
+
+        return storyListLoader;
+    }
+
+    @Override
+    public void onLoadFinished(Loader<List<Story>> loader, List<Story> data) {
+        if(storyListView != null){
+            readingSession.setStories(data);
+            storyListView.showStories(data);
+            storyListView.hideLoadingView();
+        }
+    }
+
+    @Override
+    public void onLoaderReset(Loader<List<Story>> loader) {   }
 }

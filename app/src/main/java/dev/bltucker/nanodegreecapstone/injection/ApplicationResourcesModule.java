@@ -7,6 +7,7 @@ import com.google.gson.Gson;
 import dagger.Module;
 import dagger.Provides;
 import dev.bltucker.nanodegreecapstone.CapstoneApplication;
+import dev.bltucker.nanodegreecapstone.data.StoryListLoader;
 import dev.bltucker.nanodegreecapstone.home.HomeViewPresenter;
 import dev.bltucker.nanodegreecapstone.R;
 import dev.bltucker.nanodegreecapstone.topstories.StoryListAdapter;
@@ -83,8 +84,8 @@ public class ApplicationResourcesModule {
 
     @Provides
     @ApplicationScope
-    public StoryListViewPresenter provideStoryListViewPresenter(StoryRepository repo, ReadingSession readingSession, EventBus eventBus){
-        return new StoryListViewPresenter(repo, readingSession, eventBus);
+    public StoryListViewPresenter provideStoryListViewPresenter(StoryRepository repo, ReadingSession readingSession, EventBus eventBus, StoryListLoader loader){
+        return new StoryListViewPresenter(repo, readingSession, eventBus, loader);
     }
 
     @Provides

@@ -81,9 +81,9 @@ public class StoryListFragment extends Fragment implements StoryListView {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(adapter);
         if(null == savedInstanceState){
-            presenter.onViewCreated(this);
+            presenter.onViewCreated(this, getLoaderManager());
         } else {
-            presenter.onViewRestored(this);
+            presenter.onViewRestored(this, getLoaderManager());
         }
     }
 

@@ -8,4 +8,4 @@ location
 notifications
 color theme
 preferences for disbaling notifications
-
+need an empty view for story list and comments instead of just a blank screen
