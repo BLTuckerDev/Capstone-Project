@@ -11,7 +11,7 @@ import dev.bltucker.nanodegreecapstone.models.Story;
 
 public class StoryListLoader extends AsyncTaskLoader<List<Story>> {
 
-    public static final int STORY_LIST_LOADER = 1;
+    public static final int STORY_LIST_LOADER = StoryListLoader.class.hashCode();
 
     private final StoryRepository storyRepository;
 
@@ -20,7 +20,6 @@ public class StoryListLoader extends AsyncTaskLoader<List<Story>> {
         super(context);
         this.storyRepository = storyRepository;
     }
-
 
     @Override
     public List<Story> loadInBackground() {

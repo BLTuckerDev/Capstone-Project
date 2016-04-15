@@ -1,6 +1,8 @@
 package dev.bltucker.nanodegreecapstone.models;
 
 import android.content.ContentValues;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -8,7 +10,7 @@ import java.util.Arrays;
 
 import dev.bltucker.nanodegreecapstone.data.StoryColumns;
 
-public final class Story {
+public final class Story implements Parcelable {
 
     public static ContentValues mapToContentValues(Story aStory){
 
@@ -102,5 +104,15 @@ public final class Story {
     @Override
     public int hashCode() {
         return (int) (id ^ (id >>> 32));
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+
     }
 }

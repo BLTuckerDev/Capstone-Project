@@ -4,47 +4,50 @@ import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 
-import java.util.List;
-
 import javax.inject.Inject;
 
+import dev.bltucker.nanodegreecapstone.data.StoryCommentsLoader;
 import dev.bltucker.nanodegreecapstone.data.StoryListLoader;
 import dev.bltucker.nanodegreecapstone.data.StoryRepository;
 import dev.bltucker.nanodegreecapstone.events.EventBus;
 import dev.bltucker.nanodegreecapstone.events.SyncCompletedEvent;
-import dev.bltucker.nanodegreecapstone.models.Comment;
 import dev.bltucker.nanodegreecapstone.models.ReadingSession;
 import dev.bltucker.nanodegreecapstone.models.Story;
 import rx.Subscriber;
 import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 
-public class StoryListViewPresenter implements LoaderManager.LoaderCallbacks<List<Story>> {
+public class StoryListViewPresenter {
+
+    static final String SELECTED_STORY_BUNDLE_KEY = "story";
 
     private final StoryRepository storyRepository;
-    //TODO make use of the reading session
     private final ReadingSession readingSession;
     private final EventBus eventBus;
+    private final StoryListLoaderCallbackDelegate storyListLoaderCallbackDelegate = new StoryListLoaderCallbackDelegate(this);
+    private final StoryCommentLoaderCallbackDelegate storyCommentLoaderCallbackDelegate = new StoryCommentLoaderCallbackDelegate(this);
 
     private StoryListView storyListView;
     private Subscription syncCompletedEventSubscription;
 
     private final Loader storyListLoader;
+    private final StoryCommentsLoader commentsLoader;
+    private LoaderManager loaderManager;
 
     @Inject
-    public StoryListViewPresenter(StoryRepository storyRepository, ReadingSession readingSession, EventBus eventBus, StoryListLoader storyListLoader) {
+    public StoryListViewPresenter(StoryRepository storyRepository, ReadingSession readingSession, EventBus eventBus, StoryListLoader storyListLoader, StoryCommentsLoader commentsLoader) {
         this.storyRepository = storyRepository;
         this.readingSession = readingSession;
         this.eventBus = eventBus;
         this.storyListLoader = storyListLoader;
+        this.commentsLoader = commentsLoader;
     }
 
 
     public void onViewCreated(StoryListView view, LoaderManager loaderManager) {
         storyListView = view;
+        this.loaderManager = loaderManager;
         if(readingSession.getStories().isEmpty()){
-            loaderManager.initLoader(StoryListLoader.STORY_LIST_LOADER, null, this).forceLoad();
+            this.loaderManager.initLoader(StoryListLoader.STORY_LIST_LOADER, null, storyListLoaderCallbackDelegate).forceLoad();
         } else {
             view.showStories(readingSession.getStories());
         }
@@ -52,8 +55,10 @@ public class StoryListViewPresenter implements LoaderManager.LoaderCallbacks<Lis
 
     public void onViewRestored(StoryListView view, LoaderManager loaderManager) {
         storyListView = view;
+        this.loaderManager = loaderManager;
+
         if(readingSession.getStories().isEmpty()){
-            loaderManager.initLoader(StoryListLoader.STORY_LIST_LOADER, null, this).forceLoad();
+            this.loaderManager.initLoader(StoryListLoader.STORY_LIST_LOADER, null, storyListLoaderCallbackDelegate).forceLoad();
         } else {
             view.showStories(readingSession.getStories());
         }
@@ -67,8 +72,7 @@ public class StoryListViewPresenter implements LoaderManager.LoaderCallbacks<Lis
         syncCompletedEventSubscription = eventBus.subscribeTo(SyncCompletedEvent.class)
                 .subscribe(new Subscriber<Object>() {
                     @Override
-                    public void onCompleted() {
-                    }
+                    public void onCompleted() {  }
 
                     @Override
                     public void onError(Throwable e) {
@@ -86,38 +90,21 @@ public class StoryListViewPresenter implements LoaderManager.LoaderCallbacks<Lis
         syncCompletedEventSubscription.unsubscribe();
     }
 
+    public void onViewDestroyed(StoryListView view){
+        loaderManager = null;
+    }
+
     private void handleOnSyncCompleteEvent() {
         //TODO restart the loader
     }
 
     public void onCommentsButtonClick(final Story selectedStory) {
-        if(storyListView != null){
-//TODO convert to a loader
+        if(storyListView != null && this.loaderManager != null){
             storyListView.showLoadingView();
 
-            storyRepository.getStoryComments(selectedStory)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new Subscriber<List<Comment>>() {
-                        @Override
-                        public void onCompleted() {
-                        }
-
-                        @Override
-                        public void onError(Throwable e) {
-                            storyListView.hideLoadingView();
-                        }
-
-                        @Override
-                        public void onNext(List<Comment> comments) {
-                            readingSession.read(selectedStory, comments);
-                            if(storyListView != null){
-                                storyListView.hideLoadingView();
-                                storyListView.showCommentsView();
-
-                            }
-                        }
-                    });
+            Bundle argBundle = new Bundle();
+            argBundle.putParcelable(SELECTED_STORY_BUNDLE_KEY, selectedStory);
+            this.loaderManager.initLoader(StoryCommentsLoader.STORY_COMMENT_LOADER, argBundle, storyCommentLoaderCallbackDelegate).forceLoad();
         }
     }
 
@@ -127,24 +114,19 @@ public class StoryListViewPresenter implements LoaderManager.LoaderCallbacks<Lis
         }
     }
 
-    @Override
-    public Loader<List<Story>> onCreateLoader(int id, Bundle args) {
-        if(storyListView != null){
-            storyListView.showLoadingView();
-        }
+    StoryListView getStoryListView() {
+        return storyListView;
+    }
 
+    Loader getStoryListLoader() {
         return storyListLoader;
     }
 
-    @Override
-    public void onLoadFinished(Loader<List<Story>> loader, List<Story> data) {
-        if(storyListView != null){
-            readingSession.setStories(data);
-            storyListView.showStories(data);
-            storyListView.hideLoadingView();
-        }
+    ReadingSession getReadingSession() {
+        return readingSession;
     }
 
-    @Override
-    public void onLoaderReset(Loader<List<Story>> loader) {   }
+    StoryCommentsLoader getCommentsLoader() {
+        return commentsLoader;
+    }
 }
