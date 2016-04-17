@@ -2,7 +2,6 @@
 
 Shared element transition on story title perhaps?
 Loading spinners
-code naming clean up, (poster vs author, story vs article)
 analytics
 location
 notifications

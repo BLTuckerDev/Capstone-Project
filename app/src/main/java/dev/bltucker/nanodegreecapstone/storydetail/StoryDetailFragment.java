@@ -102,7 +102,7 @@ public class StoryDetailFragment extends Fragment implements StoryDetailView {
     public void showStory(Story story) {
         storyTitleTextView.setText(story.getTitle());
         storyUrlTextView.setText(story.getUrl());
-        storyPosterTextView.setText(String.format(getString(R.string.by_poster), story.getAuthorName()));
+        storyPosterTextView.setText(String.format(getString(R.string.by_poster), story.getPosterName()));
         storyScoreTextView.setText(String.format(getString(R.string.story_score), story.getScore()));
     }
 

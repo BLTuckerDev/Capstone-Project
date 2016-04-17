@@ -17,7 +17,7 @@ public final class Story implements Parcelable {
         ContentValues  cv = new ContentValues();
 
         cv.put(StoryColumns._ID, aStory.getId());
-        cv.put(StoryColumns.AUTHOR_NAME, aStory.getAuthorName());
+        cv.put(StoryColumns.POSTER_NAME, aStory.getPosterName());
         cv.put(StoryColumns.SCORE, aStory.getScore());
         cv.put(StoryColumns.TITLE, aStory.getTitle());
         cv.put(StoryColumns.UNIX_TIME, aStory.getUnixTime());
@@ -30,7 +30,7 @@ public final class Story implements Parcelable {
 
     private final long id;
     @SerializedName("by")
-    private final String authorName;
+    private final String posterName;
     private final long score;
     @SerializedName("time")
     private final long unixTime;
@@ -41,9 +41,9 @@ public final class Story implements Parcelable {
 
     private int storyRank = 0;
 
-    public Story(long id, String authorName, long score, long unixTime, String title, String url, long[] commentIdsParam){
+    public Story(long id, String posterName, long score, long unixTime, String title, String url, long[] commentIdsParam){
         this.id = id;
-        this.authorName = authorName;
+        this.posterName = posterName;
         this.score = score;
         this.unixTime = unixTime;
         this.title = title;
@@ -55,8 +55,8 @@ public final class Story implements Parcelable {
         return id;
     }
 
-    public String getAuthorName() {
-        return authorName;
+    public String getPosterName() {
+        return posterName;
     }
 
     public long getScore() {

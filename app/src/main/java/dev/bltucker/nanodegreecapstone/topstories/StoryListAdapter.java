@@ -77,7 +77,7 @@ public class StoryListAdapter extends RecyclerView.Adapter<StoryListAdapter.Stor
             this.story = story;
             Context viewContext = itemView.getContext();
             titleTextView.setText(story.getTitle());
-            posterNameTextView.setText(String.format(viewContext.getString(R.string.by_poster), story.getAuthorName()));
+            posterNameTextView.setText(String.format(viewContext.getString(R.string.by_poster), story.getPosterName()));
             scoreTextView.setText(String.valueOf(story.getScore()));
         }
 

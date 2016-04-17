@@ -51,14 +51,14 @@ public class CombinationBackedStoryRepository implements StoryRepository {
 
                 while (query.moveToNext()) {
                     long storyId = query.getLong(query.getColumnIndex(StoryColumns._ID));
-                    String storyAuthor = query.getString(query.getColumnIndex(StoryColumns.AUTHOR_NAME));
+                    String storyPoster = query.getString(query.getColumnIndex(StoryColumns.POSTER_NAME));
                     long score = query.getLong(query.getColumnIndex(StoryColumns.SCORE));
                     String title = query.getString(query.getColumnIndex(StoryColumns.TITLE));
                     long unixTime = query.getLong(query.getColumnIndex(StoryColumns.UNIX_TIME));
                     String storyUrl = query.getString(query.getColumnIndex(StoryColumns.URL));
                     long[] commentIds = getCommentIds(storyId);
 
-                    storyList.add(new Story(storyId, storyAuthor, score, unixTime, title, storyUrl, commentIds));
+                    storyList.add(new Story(storyId, storyPoster, score, unixTime, title, storyUrl, commentIds));
                 }
 
                 query.close();

@@ -7,7 +7,7 @@ public interface StoryColumns {
 
     @DataType(DataType.Type.INTEGER) @PrimaryKey String _ID = "_id";
 
-    @DataType(DataType.Type.TEXT) String AUTHOR_NAME = "authorName";
+    @DataType(DataType.Type.TEXT) String POSTER_NAME = "authorName";
 
     @DataType(DataType.Type.INTEGER) String SCORE = "score";
 

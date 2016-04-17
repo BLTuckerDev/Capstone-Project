@@ -84,7 +84,7 @@ public class StoryProviderTests extends AndroidTestCase {
                     assertEquals(values.getValue(), storyCursor.getLong(cursorColumnIndex));
                     break;
 
-                case StoryColumns.AUTHOR_NAME:
+                case StoryColumns.POSTER_NAME:
                     assertEquals(values.getValue(), storyCursor.getString(cursorColumnIndex));
                     break;
 

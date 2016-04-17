@@ -56,9 +56,6 @@ public class StoryListViewPresenter {
     public void onViewResumed(StoryListView view) {
         setStoryListView(view);
         this.storyListView.showStories(readingSession.getStories());
-        //TODO consider moiving this to create/restore
-        //and remembering to update the view after it is resumed if an update occurred while it was
-        //"paused"
     }
 
     public void onViewPaused(StoryListView view) {
@@ -108,9 +105,7 @@ public class StoryListViewPresenter {
                     public void onCompleted() {  }
 
                     @Override
-                    public void onError(Throwable e) {
-
-                    }
+                    public void onError(Throwable e) {  }
 
                     @Override
                     public void onNext(Object o) {
