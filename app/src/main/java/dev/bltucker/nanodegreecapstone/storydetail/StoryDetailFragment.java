@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import java.util.List;
@@ -40,6 +41,9 @@ public class StoryDetailFragment extends Fragment implements StoryDetailView {
 
     @Bind(R.id.comment_list_recyclerview)
     RecyclerView recyclerView;
+
+    @Bind(R.id.read_button)
+    Button readButton;
 
     @Inject
     StoryCommentsAdapter commentsAdapter;
@@ -104,6 +108,11 @@ public class StoryDetailFragment extends Fragment implements StoryDetailView {
         storyUrlTextView.setText(story.getUrl());
         storyPosterTextView.setText(String.format(getString(R.string.by_poster), story.getPosterName()));
         storyScoreTextView.setText(String.format(getString(R.string.story_score), story.getScore()));
+        if(null == story.getUrl()){
+            readButton.setVisibility(View.INVISIBLE);
+        } else {
+            readButton.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override

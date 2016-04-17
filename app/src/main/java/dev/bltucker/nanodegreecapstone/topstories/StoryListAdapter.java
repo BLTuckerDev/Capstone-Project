@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -66,6 +67,9 @@ public class StoryListAdapter extends RecyclerView.Adapter<StoryListAdapter.Stor
         @Bind(R.id.score_textview)
         TextView scoreTextView;
 
+        @Bind(R.id.read_button)
+        Button readButton;
+
         Story story;
 
         public StoryHeadlineViewHolder(View itemView) {
@@ -79,6 +83,11 @@ public class StoryListAdapter extends RecyclerView.Adapter<StoryListAdapter.Stor
             titleTextView.setText(story.getTitle());
             posterNameTextView.setText(String.format(viewContext.getString(R.string.by_poster), story.getPosterName()));
             scoreTextView.setText(String.valueOf(story.getScore()));
+            if(null == story.getUrl()){
+                readButton.setVisibility(View.INVISIBLE);
+            } else {
+                readButton.setVisibility(View.VISIBLE);
+            }
         }
 
         @OnClick(R.id.comments_button)
