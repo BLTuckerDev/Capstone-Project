@@ -8,31 +8,41 @@ import android.support.v4.content.Loader;
 
 import java.util.List;
 
+import dev.bltucker.nanodegreecapstone.data.StoryCommentsLoader;
 import dev.bltucker.nanodegreecapstone.models.Comment;
+import dev.bltucker.nanodegreecapstone.models.ReadingSession;
 import dev.bltucker.nanodegreecapstone.models.Story;
 
 class StoryCommentLoaderCallbackDelegate implements LoaderManager.LoaderCallbacks {
-    private final StoryListViewPresenter storyListViewPresenter;
 
-    public StoryCommentLoaderCallbackDelegate(StoryListViewPresenter storyListViewPresenter) {
-        this.storyListViewPresenter = storyListViewPresenter;
+    private final StoryCommentsLoader commentsLoader;
+    private final ReadingSession readingSession;
+    private StoryListView storyListView;
+
+    public StoryCommentLoaderCallbackDelegate(ReadingSession readingSession, StoryCommentsLoader commentsLoader) {
+        this.commentsLoader = commentsLoader;
+        this.readingSession = readingSession;
+    }
+
+    public void setStoryListView(StoryListView view){
+        this.storyListView = view;
     }
 
     @Override
     public Loader onCreateLoader(int id, Bundle args) {
-        storyListViewPresenter.getCommentsLoader().setStory((Story) args.getParcelable(StoryListViewPresenter.SELECTED_STORY_BUNDLE_KEY));
-        return storyListViewPresenter.getCommentsLoader();
+        commentsLoader.setStory((Story) args.getParcelable(StoryListViewPresenter.SELECTED_STORY_BUNDLE_KEY));
+        return commentsLoader;
     }
 
     @Override
     public void onLoadFinished(Loader loader, Object data) {
-        storyListViewPresenter.getReadingSession().read(storyListViewPresenter.getCommentsLoader().getStory(), (List<Comment>) data);
+        readingSession.read(commentsLoader.getStory(), (List<Comment>) data);
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
-                if (storyListViewPresenter.getStoryListView() != null) {
-                    storyListViewPresenter.getStoryListView().hideLoadingView();
-                    storyListViewPresenter.getStoryListView().showCommentsView();
+                if (storyListView != null) {
+                    storyListView.hideLoadingView();
+                    storyListView.showCommentsView();
                 }
             }
         });

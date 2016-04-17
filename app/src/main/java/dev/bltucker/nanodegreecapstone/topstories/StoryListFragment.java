@@ -95,8 +95,8 @@ public class StoryListFragment extends Fragment implements StoryListView {
 
     @Override
     public void onPause() {
-        super.onPause();
         presenter.onViewPaused(this);
+        super.onPause();
     }
 
     @Override
