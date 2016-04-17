@@ -26,11 +26,15 @@ public class StoryDetailViewPresenter {
     }
 
     public void onViewResumed(StoryDetailView detailView) {
-
+        view = detailView;
     }
 
-    public void onViewPaused(StoryDetailView detailView) {
+    public void onViewPaused() {
         view = null;
+    }
+
+    public void onViewDestroyed() {
+        
     }
 
     public void onReadButtonClicked() {

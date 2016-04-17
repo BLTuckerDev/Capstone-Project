@@ -6,6 +6,8 @@ import android.support.v4.content.Loader;
 
 import java.util.List;
 
+import javax.inject.Provider;
+
 import dev.bltucker.nanodegreecapstone.data.StoryListLoader;
 import dev.bltucker.nanodegreecapstone.models.ReadingSession;
 import dev.bltucker.nanodegreecapstone.models.Story;
@@ -13,12 +15,12 @@ import dev.bltucker.nanodegreecapstone.models.Story;
 class StoryListLoaderCallbackDelegate implements LoaderManager.LoaderCallbacks {
 
     private final ReadingSession readingSession;
-    private final StoryListLoader loader;
+    private final Provider<StoryListLoader> storyListLoaderProvider;
     private StoryListView storyListView;
 
-    public StoryListLoaderCallbackDelegate(ReadingSession readingSession, StoryListLoader loader) {
+    public StoryListLoaderCallbackDelegate(ReadingSession readingSession, Provider<StoryListLoader> loaderProvider) {
         this.readingSession = readingSession;
-        this.loader = loader;
+        this.storyListLoaderProvider = loaderProvider;
     }
 
     public void setStoryListView(StoryListView view){
@@ -31,7 +33,7 @@ class StoryListLoaderCallbackDelegate implements LoaderManager.LoaderCallbacks {
             storyListView.showLoadingView();
         }
 
-        return loader;
+        return storyListLoaderProvider.get();
     }
 
     @Override

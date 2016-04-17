@@ -96,7 +96,7 @@ public class StoryListViewPresenter {
 
             Bundle argBundle = new Bundle();
             argBundle.putParcelable(SELECTED_STORY_BUNDLE_KEY, selectedStory);
-            this.loaderManager.initLoader(StoryCommentsLoader.STORY_COMMENT_LOADER, argBundle, storyCommentLoaderCallbackDelegate).forceLoad();
+            this.loaderManager.restartLoader(StoryCommentsLoader.STORY_COMMENT_LOADER, argBundle, storyCommentLoaderCallbackDelegate).forceLoad();
         }
     }
 
@@ -113,6 +113,6 @@ public class StoryListViewPresenter {
     }
 
     private void forceStoryListReload() {
-        this.loaderManager.initLoader(StoryListLoader.STORY_LIST_LOADER, null, storyListLoaderCallbackDelegate).forceLoad();
+        this.loaderManager.restartLoader(StoryListLoader.STORY_LIST_LOADER, null, storyListLoaderCallbackDelegate).forceLoad();
     }
 }

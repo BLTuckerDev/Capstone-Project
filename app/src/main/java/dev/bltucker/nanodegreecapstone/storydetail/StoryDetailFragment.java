@@ -89,7 +89,13 @@ public class StoryDetailFragment extends Fragment implements StoryDetailView {
     @Override
     public void onPause() {
         super.onPause();
-        presenter.onViewPaused(this);
+        presenter.onViewPaused();
+    }
+
+    @Override
+    public void onDestroy() {
+        presenter.onViewDestroyed();
+        super.onDestroy();
     }
 
     @Override

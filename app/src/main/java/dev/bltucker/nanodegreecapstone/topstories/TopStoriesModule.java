@@ -1,5 +1,7 @@
 package dev.bltucker.nanodegreecapstone.topstories;
 
+import javax.inject.Provider;
+
 import dagger.Module;
 import dagger.Provides;
 import dev.bltucker.nanodegreecapstone.data.StoryCommentsLoader;
@@ -36,14 +38,14 @@ public class TopStoriesModule {
 
     @Provides
     @ApplicationScope
-    public StoryListLoaderCallbackDelegate provideStoryListLoaderCallbackDelegate(ReadingSession readingSession, StoryListLoader loader){
-        return new StoryListLoaderCallbackDelegate(readingSession, loader);
+    public StoryListLoaderCallbackDelegate provideStoryListLoaderCallbackDelegate(ReadingSession readingSession, Provider<StoryListLoader> storyListLoaderProvider){
+        return new StoryListLoaderCallbackDelegate(readingSession, storyListLoaderProvider);
     }
 
     @Provides
     @ApplicationScope
-    public StoryCommentLoaderCallbackDelegate provideStoryCommentLoaderCallbackDelegate(ReadingSession readingSession, StoryCommentsLoader loader){
-        return new StoryCommentLoaderCallbackDelegate(readingSession, loader);
+    public StoryCommentLoaderCallbackDelegate provideStoryCommentLoaderCallbackDelegate(ReadingSession readingSession, Provider<StoryCommentsLoader> storyCommentsLoaderProvider){
+        return new StoryCommentLoaderCallbackDelegate(readingSession, storyCommentsLoaderProvider);
     }
 
 }
