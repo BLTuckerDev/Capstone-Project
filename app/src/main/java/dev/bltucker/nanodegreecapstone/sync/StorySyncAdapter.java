@@ -6,6 +6,7 @@ import android.content.ContentProviderClient;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SyncResult;
 import android.os.Bundle;
 
@@ -44,9 +45,6 @@ public final class StorySyncAdapter extends AbstractThreadedSyncAdapter {
     @StoryMax
     int maximumStoryCount;
 
-    @Inject
-    EventBus eventBus;
-
     public StorySyncAdapter(Context context, boolean autoInitialize) {
         super(context, autoInitialize);
         CapstoneApplication.getApplication().getApplicationComponent().inject(this);
@@ -84,7 +82,9 @@ public final class StorySyncAdapter extends AbstractThreadedSyncAdapter {
                   public void onCompleted() {
                       final long stopTime = System.currentTimeMillis();
                       Timber.d("Sync completed in %d milliseconds", stopTime - startTime);
-                      eventBus.publish(new SyncCompletedEvent());
+                      Intent syncCompletedIntent = new Intent();
+                      syncCompletedIntent.setAction("dev.bltucker.nanodegreecapstone.SYNC_COMPLETED");
+                      getContext().sendBroadcast(syncCompletedIntent);
                   }
 
                   @Override

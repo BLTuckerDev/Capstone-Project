@@ -45,11 +45,25 @@
             android:enabled="true"
             android:exported="true">
             <intent-filter>
-                <action android:name="android.accounts.AccountAuthenticator"/>
+                <action android:name="android.accounts.AccountAuthenticator" />
             </intent-filter>
+
             <meta-data
                 android:name="android.accounts.AccountAuthenticator"
-                android:resource="@xml/authenticator" /></service>
+                android:resource="@xml/authenticator" />
+        </service>
+
+        <receiver
+            android:name=".topstories.SyncCompletedBroadCastReceiver"
+            android:enabled="true"
+            android:exported="true">
+
+            <intent-filter>
+                <action android:name="dev.bltucker.nanodegreecapstone.SYNC_COMPLETED">
+                </action>
+            </intent-filter>
+
+        </receiver>
     </application>
 
 </manifest>

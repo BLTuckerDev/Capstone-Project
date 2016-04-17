@@ -11,6 +11,7 @@ import dev.bltucker.nanodegreecapstone.models.ReadingSession;
 import dev.bltucker.nanodegreecapstone.models.Story;
 import rx.Subscriber;
 import rx.Subscription;
+import timber.log.Timber;
 
 public class StoryListViewPresenter {
 
@@ -32,6 +33,7 @@ public class StoryListViewPresenter {
         this.eventBus = eventBus;
         this.storyListLoaderCallbackDelegate = storyListLoaderCallbackDelegate;
         this.storyCommentLoaderCallbackDelegate = commentLoaderCallbackDelegate;
+        subscribeToSyncAdapterEvents();
     }
 
 
@@ -40,45 +42,27 @@ public class StoryListViewPresenter {
         this.loaderManager = loaderManager;
         if(readingSession.getStories().isEmpty()){
             forceStoryListReload();
-        } else {
-            view.showStories(readingSession.getStories());
         }
     }
 
     public void onViewRestored(StoryListView view, LoaderManager loaderManager) {
         setStoryListView(view);
         this.loaderManager = loaderManager;
-
         if(readingSession.getStories().isEmpty()){
             forceStoryListReload();
-        } else {
-            view.showStories(readingSession.getStories());
         }
     }
 
     public void onViewResumed(StoryListView view) {
         setStoryListView(view);
+        this.storyListView.showStories(readingSession.getStories());
         //TODO consider moiving this to create/restore
         //and remembering to update the view after it is resumed if an update occurred while it was
         //"paused"
-        syncCompletedEventSubscription = eventBus.subscribeTo(SyncCompletedEvent.class)
-                .subscribe(new Subscriber<Object>() {
-                    @Override
-                    public void onCompleted() {  }
-
-                    @Override
-                    public void onError(Throwable e) {  }
-
-                    @Override
-                    public void onNext(Object o) {
-                        handleOnSyncCompleteEvent();
-                    }
-                });
     }
 
     public void onViewPaused(StoryListView view) {
         setStoryListView(null);
-        syncCompletedEventSubscription.unsubscribe();
     }
 
     public void onViewDestroyed(StoryListView view){
@@ -87,6 +71,7 @@ public class StoryListViewPresenter {
     }
 
     private void handleOnSyncCompleteEvent() {
+        Timber.d("StoryListViewPresenter syncCompleteHandler");
         forceStoryListReload();
     }
 
@@ -114,5 +99,23 @@ public class StoryListViewPresenter {
 
     private void forceStoryListReload() {
         this.loaderManager.restartLoader(StoryListLoader.STORY_LIST_LOADER, null, storyListLoaderCallbackDelegate).forceLoad();
+    }
+
+    private void subscribeToSyncAdapterEvents() {
+        syncCompletedEventSubscription = eventBus.subscribeTo(SyncCompletedEvent.class)
+                .subscribe(new Subscriber<Object>() {
+                    @Override
+                    public void onCompleted() {  }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(Object o) {
+                        handleOnSyncCompleteEvent();
+                    }
+                });
     }
 }
