@@ -17,8 +17,6 @@ public class MainActivity extends AppCompatActivity implements HomeView, StoryLi
     private static final String STORY_LIST_FRAGMENT_TAG = "storyListFragment";
     private static final String STORY_COMMENTS_FRAGMENT_TAG = "storyListComments";
 
-    private static final String COMMENTS_BACK_STACK_STATE = "comments";
-
     @Inject
     HomeViewPresenter homeViewPresenter;
 
@@ -47,21 +45,20 @@ public class MainActivity extends AppCompatActivity implements HomeView, StoryLi
                 .beginTransaction()
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                 .add(R.id.main_activity_coordinator_layout, storyListFragment, STORY_LIST_FRAGMENT_TAG)
+                .addToBackStack(null)
                 .commit();
     }
 
     @Override
     public void showCommentsView() {
-
         Fragment storyListFragment = getSupportFragmentManager().findFragmentByTag(STORY_LIST_FRAGMENT_TAG);
         Fragment storyDetailFragment = StoryDetailFragment.newInstance();
 
         getSupportFragmentManager().beginTransaction()
-                .remove(storyListFragment)
-                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE)
-                .add(R.id.main_activity_coordinator_layout, storyDetailFragment)
+                .hide(storyListFragment)
+                .add(R.id.main_activity_coordinator_layout, storyDetailFragment, STORY_COMMENTS_FRAGMENT_TAG)
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                .addToBackStack(COMMENTS_BACK_STACK_STATE)
+                .addToBackStack(null)
                 .commit();
     }
 }

@@ -3,8 +3,6 @@ package dev.bltucker.nanodegreecapstone.topstories;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 
-import javax.inject.Inject;
-
 import dev.bltucker.nanodegreecapstone.data.StoryCommentsLoader;
 import dev.bltucker.nanodegreecapstone.data.StoryListLoader;
 import dev.bltucker.nanodegreecapstone.events.EventBus;
@@ -29,7 +27,6 @@ public class StoryListViewPresenter {
 
     private LoaderManager loaderManager;
 
-    @Inject
     public StoryListViewPresenter(ReadingSession readingSession, EventBus eventBus, StoryListLoaderCallbackDelegate storyListLoaderCallbackDelegate, StoryCommentLoaderCallbackDelegate commentLoaderCallbackDelegate) {
         this.readingSession = readingSession;
         this.eventBus = eventBus;

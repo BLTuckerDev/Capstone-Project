@@ -1,20 +1,14 @@
 package dev.bltucker.nanodegreecapstone.storydetail;
 
-import javax.inject.Inject;
-
-import dev.bltucker.nanodegreecapstone.data.StoryRepository;
 import dev.bltucker.nanodegreecapstone.models.ReadingSession;
 
 public class StoryDetailViewPresenter {
 
-    private final StoryRepository repository;
     private final ReadingSession readingSession;
 
     private StoryDetailView view;
 
-    @Inject
-    public StoryDetailViewPresenter(StoryRepository repository, ReadingSession readingSession){
-        this.repository = repository;
+    public StoryDetailViewPresenter(ReadingSession readingSession){
         this.readingSession = readingSession;
     }
 
@@ -36,7 +30,7 @@ public class StoryDetailViewPresenter {
     }
 
     public void onViewPaused(StoryDetailView detailView) {
-
+        view = null;
     }
 
     public void onReadButtonClicked() {
