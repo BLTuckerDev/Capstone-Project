@@ -7,12 +7,7 @@ import com.google.gson.Gson;
 import dagger.Module;
 import dagger.Provides;
 import dev.bltucker.nanodegreecapstone.CapstoneApplication;
-import dev.bltucker.nanodegreecapstone.data.StoryCommentsLoader;
-import dev.bltucker.nanodegreecapstone.data.StoryListLoader;
-import dev.bltucker.nanodegreecapstone.home.HomeViewPresenter;
 import dev.bltucker.nanodegreecapstone.R;
-import dev.bltucker.nanodegreecapstone.topstories.StoryListAdapter;
-import dev.bltucker.nanodegreecapstone.topstories.StoryListViewPresenter;
 import dev.bltucker.nanodegreecapstone.data.CombinationBackedStoryRepository;
 import dev.bltucker.nanodegreecapstone.data.HackerNewsApiService;
 import dev.bltucker.nanodegreecapstone.data.StoryRepository;
@@ -83,17 +78,6 @@ public class ApplicationResourcesModule {
         return repository;
     }
 
-    @Provides
-    @ApplicationScope
-    public StoryListViewPresenter provideStoryListViewPresenter(StoryRepository repo, ReadingSession readingSession, EventBus eventBus, StoryListLoader storyListLoader, StoryCommentsLoader commentsLoader){
-        return new StoryListViewPresenter(repo, readingSession, eventBus, storyListLoader, commentsLoader);
-    }
-
-    @Provides
-    @ApplicationScope
-    public StoryListAdapter provideStoryListAdapter(StoryListViewPresenter presenter, @StoryMax int storyMax){
-        return new StoryListAdapter(presenter, storyMax);
-    }
 
     @Provides
     @ApplicationScope
@@ -101,11 +85,7 @@ public class ApplicationResourcesModule {
         return new EventBus();
     }
 
-    @Provides
-    @ApplicationScope
-    public HomeViewPresenter provideHomeViewPresenter(@SyncIntervalSeconds int syncInterval){
-        return new HomeViewPresenter(syncInterval);
-    }
+
 
     @Provides
     @ApplicationScope
