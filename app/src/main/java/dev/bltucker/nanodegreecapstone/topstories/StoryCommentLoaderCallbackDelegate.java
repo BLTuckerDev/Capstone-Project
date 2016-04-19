@@ -33,11 +33,9 @@ class StoryCommentLoaderCallbackDelegate implements LoaderManager.LoaderCallback
 
     @Override
     public Loader onCreateLoader(int id, Bundle args) {
-
         StoryCommentsLoader commentsLoader = commentsLoaderProvider.get();
         commentsLoader.setStory((Story) args.getParcelable(StoryListViewPresenter.SELECTED_STORY_BUNDLE_KEY));
         return commentsLoader;
-//        return commentsLoaderProvider;
     }
 
     @Override

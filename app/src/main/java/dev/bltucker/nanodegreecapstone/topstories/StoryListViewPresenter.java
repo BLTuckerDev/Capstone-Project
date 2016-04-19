@@ -11,6 +11,7 @@ import dev.bltucker.nanodegreecapstone.models.ReadingSession;
 import dev.bltucker.nanodegreecapstone.models.Story;
 import rx.Subscriber;
 import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
 import timber.log.Timber;
 
 public class StoryListViewPresenter {
@@ -100,6 +101,7 @@ public class StoryListViewPresenter {
 
     private void subscribeToSyncAdapterEvents() {
         syncCompletedEventSubscription = eventBus.subscribeTo(SyncCompletedEvent.class)
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<Object>() {
                     @Override
                     public void onCompleted() {  }

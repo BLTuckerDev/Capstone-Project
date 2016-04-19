@@ -7,6 +7,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import dev.bltucker.nanodegreecapstone.injection.StoryMax;
+import timber.log.Timber;
 
 public class ReadingSession {
     //todo collect analytics on the average number of comments a read story has
@@ -17,22 +18,11 @@ public class ReadingSession {
 
     private List<Story> storyList;
 
-    private int currentPositionInList;
-
     @Inject
     public ReadingSession(@StoryMax int maximumStoryCount){
         currentStory = null;
         currentStoryComments = new ArrayList<>(INITIAL_COMMENT_CAPACITY);
         storyList = new ArrayList<>(maximumStoryCount);
-        currentPositionInList = 0;
-    }
-
-    public void setCurrentPositionInList(int index){
-        currentPositionInList = index;
-    }
-
-    public int getCurrentPositionInList(){
-        return currentPositionInList;
     }
 
     public void read(Story selectedStory, List<Comment> selectedStoryComments){
@@ -42,8 +32,8 @@ public class ReadingSession {
     }
 
     public void setStories(List<Story> stories){
+        Timber.d("ReadingSessions stories are being updated");
         storyList.clear();
-        currentPositionInList = 0;
         storyList.addAll(stories);
     }
 

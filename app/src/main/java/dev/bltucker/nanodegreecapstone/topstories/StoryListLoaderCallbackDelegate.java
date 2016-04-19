@@ -13,6 +13,7 @@ import javax.inject.Provider;
 import dev.bltucker.nanodegreecapstone.data.StoryListLoader;
 import dev.bltucker.nanodegreecapstone.models.ReadingSession;
 import dev.bltucker.nanodegreecapstone.models.Story;
+import timber.log.Timber;
 
 class StoryListLoaderCallbackDelegate implements LoaderManager.LoaderCallbacks {
 
@@ -31,21 +32,27 @@ class StoryListLoaderCallbackDelegate implements LoaderManager.LoaderCallbacks {
 
     @Override
     public Loader<List<Story>> onCreateLoader(int id, Bundle args) {
+        Timber.d("StoryListLoaderCallbackDelegate.onCreateLoader");
         if (storyListView != null) {
             storyListView.showLoadingView();
         }
 
-        return storyListLoaderProvider.get();
+        StoryListLoader storyListLoader = storyListLoaderProvider.get();
+        Timber.d("Returning an instance of story list loader %d", storyListLoader.hashCode());
+        return storyListLoader;
     }
 
     @Override
-    public void onLoadFinished(Loader loader, final Object data) {
+    public void onLoadFinished(Loader loader, Object data) {
+        final List<Story> newStories = (List<Story>)data;
+        Timber.d("StoryListLoader finished, first story title in new data set is: %s", newStories.get(0).getTitle());
         readingSession.setStories((List<Story>) data);
         new Handler(Looper.getMainLooper()).post(new Runnable(){
             @Override
             public void run() {
                 if(storyListView != null){
-                    storyListView.showStories((List<Story>) data);
+                    Timber.d("StoryListView is available to the loader. View is being updated");
+                    storyListView.showStories(readingSession.getStories());
                     storyListView.hideLoadingView();
                 }
             }
@@ -54,5 +61,6 @@ class StoryListLoaderCallbackDelegate implements LoaderManager.LoaderCallbacks {
 
     @Override
     public void onLoaderReset(Loader loader) {
+        Timber.d("storyListLoaderCallback.onLoaderReset");
     }
 }
