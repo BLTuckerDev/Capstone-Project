@@ -1,6 +1,8 @@
 package dev.bltucker.nanodegreecapstone.topstories;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 
@@ -37,12 +39,17 @@ class StoryListLoaderCallbackDelegate implements LoaderManager.LoaderCallbacks {
     }
 
     @Override
-    public void onLoadFinished(Loader loader, Object data) {
-        if (storyListView != null) {
-            readingSession.setStories((List<Story>) data);
-            storyListView.showStories((List<Story>) data);
-            storyListView.hideLoadingView();
-        }
+    public void onLoadFinished(Loader loader, final Object data) {
+        readingSession.setStories((List<Story>) data);
+        new Handler(Looper.getMainLooper()).post(new Runnable(){
+            @Override
+            public void run() {
+                if(storyListView != null){
+                    storyListView.showStories((List<Story>) data);
+                    storyListView.hideLoadingView();
+                }
+            }
+        });
     }
 
     @Override
