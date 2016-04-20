@@ -25,6 +25,7 @@
         <provider
             android:name=".data.StoryProvider"
             android:authorities="dev.bltucker.nanodegreecapstone.data"
+            android:label="Hacker News Reader"
             android:exported="false"
             android:syncable="true" />
 

@@ -15,6 +15,8 @@ public class HomeViewPresenter {
     private final int syncInterval;
     private HomeView view;
 
+    private final Account storySyncAccount = new Account(StorySyncAdapter.ACCOUNT, StorySyncAdapter.ACCOUNT_TYPE);
+
     @Inject
     public HomeViewPresenter(@SyncIntervalSeconds int syncInterval){
         this.syncInterval = syncInterval;
@@ -40,13 +42,14 @@ public class HomeViewPresenter {
         Bundle bundle = new Bundle();
         bundle.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
         bundle.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
-        ContentResolver.requestSync(new Account(StorySyncAdapter.ACCOUNT, StorySyncAdapter.ACCOUNT_TYPE),
+        ContentResolver.requestSync(storySyncAccount,
               SchematicContentProviderGenerator.AUTHORITY, bundle);
     }
 
     private void setupPeriodicSync(){
+        ContentResolver.setSyncAutomatically(storySyncAccount, SchematicContentProviderGenerator.AUTHORITY, true);
         ContentResolver.addPeriodicSync(
-              new Account(StorySyncAdapter.ACCOUNT, StorySyncAdapter.ACCOUNT_TYPE),
+              storySyncAccount,
               SchematicContentProviderGenerator.AUTHORITY,
               Bundle.EMPTY,
               syncInterval);
