@@ -28,6 +28,7 @@ public class StoryListViewPresenter {
     private Subscription syncCompletedEventSubscription;
 
     private LoaderManager loaderManager;
+    private boolean shouldReloadData = false;
 
     public StoryListViewPresenter(ReadingSession readingSession, EventBus eventBus, StoryListLoaderCallbackDelegate storyListLoaderCallbackDelegate, StoryCommentLoaderCallbackDelegate commentLoaderCallbackDelegate) {
         this.readingSession = readingSession;
@@ -57,6 +58,9 @@ public class StoryListViewPresenter {
     public void onViewResumed(StoryListView view) {
         setStoryListView(view);
         this.storyListView.showStories(readingSession.getStories());
+        if(shouldReloadData){
+            forceStoryListReload();
+        }
     }
 
     public void onViewPaused(StoryListView view) {
@@ -66,11 +70,6 @@ public class StoryListViewPresenter {
     public void onViewDestroyed(StoryListView view){
         setStoryListView(null);
         loaderManager = null;
-    }
-
-    private void handleOnSyncCompleteEvent() {
-        Timber.d("StoryListViewPresenter syncCompleteHandler");
-        forceStoryListReload();
     }
 
     public void onCommentsButtonClick(final Story selectedStory) {
@@ -96,7 +95,9 @@ public class StoryListViewPresenter {
     }
 
     private void forceStoryListReload() {
+        Timber.d("forceStoryListReload");
         this.loaderManager.restartLoader(StoryListLoader.STORY_LIST_LOADER, null, storyListLoaderCallbackDelegate).forceLoad();
+        shouldReloadData = false;
     }
 
     private void subscribeToSyncAdapterEvents() {
@@ -107,11 +108,18 @@ public class StoryListViewPresenter {
                     public void onCompleted() {  }
 
                     @Override
-                    public void onError(Throwable e) {  }
+                    public void onError(Throwable e) {
+                        Timber.e(e, "Error thrown after a sync complete event handler");
+                    }
 
                     @Override
                     public void onNext(Object o) {
-                        handleOnSyncCompleteEvent();
+                        Timber.d("StoryListViewPresenter syncCompleteHandler");
+                        if(storyListView != null){
+                            forceStoryListReload();
+                        } else {
+                            shouldReloadData = true;
+                        }
                     }
                 });
     }

@@ -44,6 +44,7 @@ class StoryListLoaderCallbackDelegate implements LoaderManager.LoaderCallbacks {
 
     @Override
     public void onLoadFinished(Loader loader, Object data) {
+        Timber.d("onLoadFinished");
         final List<Story> newStories = (List<Story>)data;
         if(!newStories.isEmpty()){
             Timber.d("StoryListLoader finished, first story title in new data set is: %s", newStories.get(0).getTitle());
