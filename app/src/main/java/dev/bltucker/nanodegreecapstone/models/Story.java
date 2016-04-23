@@ -37,11 +37,11 @@ public final class Story implements Parcelable {
     private final String title;
     private final String url;
     @SerializedName("kids")
-    private final long[] commentIds;
+    private final Long[] commentIds;
 
     private int storyRank = 0;
 
-    public Story(long id, String posterName, long score, long unixTime, String title, String url, long[] commentIdsParam){
+    public Story(long id, String posterName, long score, long unixTime, String title, String url, Long[] commentIdsParam){
         this.id = id;
         this.posterName = posterName;
         this.score = score;
@@ -75,9 +75,9 @@ public final class Story implements Parcelable {
         return url;
     }
 
-    public long[] getCommentIds() {
+    public Long[] getCommentIds() {
         if(null == commentIds){
-            return new long[0];
+            return new Long[0];
         } else {
             return Arrays.copyOf(commentIds, commentIds.length);
         }

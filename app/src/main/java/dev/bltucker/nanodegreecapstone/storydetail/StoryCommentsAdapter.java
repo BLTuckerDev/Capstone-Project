@@ -1,5 +1,6 @@
 package dev.bltucker.nanodegreecapstone.storydetail;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.view.LayoutInflater;
@@ -48,10 +49,29 @@ public class StoryCommentsAdapter extends RecyclerView.Adapter<StoryCommentsAdap
     public void onBindViewHolder(CommentViewHolder holder, int position) {
         Comment comment = commentList.get(position);
         holder.authorNameTextView.setText(comment.getAuthorName());
+        holder.postTimeTextView.setText(getFormattedCommentTime(comment, holder.itemView.getContext()));
+        holder.commentBodyTextView.setText(Html.fromHtml(comment.getCommentText()));
+    }
+
+    private String getFormattedCommentTime(Comment comment, Context context){
         long elapsedSeconds = (calendar.getTimeInMillis() / 1000) - comment.getUnixPostTime();
         long elapsedMinutes = elapsedSeconds / 60;
-        holder.postTimeTextView.setText(String.format("%d minutes ago", elapsedMinutes));
-        holder.commentBodyTextView.setText(Html.fromHtml(comment.getCommentText()));
+        long elapsedHours = elapsedMinutes / 60;
+        long elapsedDays = elapsedHours / 24;
+
+        if(elapsedDays > 0){
+            return String.format(context.getString(R.string.days_ago), elapsedDays);
+        }
+
+        if(elapsedHours > 0){
+            return String.format(context.getString(R.string.hours_ago), elapsedHours);
+        }
+
+        if(elapsedMinutes > 0){
+            String.format(context.getString(R.string.minutes_ago), elapsedMinutes);
+        }
+
+        return context.getString(R.string.less_than_a_minute);
     }
 
     @Override

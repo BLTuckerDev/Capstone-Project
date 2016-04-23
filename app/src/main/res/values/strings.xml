@@ -4,4 +4,8 @@
     <string name="read_button_text">read</string>
     <string name="by_poster">by %1$s</string>
     <string name="story_score">%1$d points</string>
+    <string name="days_ago">%1$d days ago</string>
+    <string name="hours_ago">%1$d hours ago</string>
+    <string name="minutes_ago">%1$d minutes ago</string>
+    <string name="less_than_a_minute">less than a minute ago</string>
 </resources>

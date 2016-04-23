@@ -8,4 +8,6 @@ public interface CommentRefsColumns {
     @DataType(DataType.Type.INTEGER) @PrimaryKey String _ID = "_id";
 
     @DataType(DataType.Type.INTEGER) String STORY_ID = "storyId";
+
+    @DataType(DataType.Type.INTEGER) String READ_RANK = "readRank";
 }

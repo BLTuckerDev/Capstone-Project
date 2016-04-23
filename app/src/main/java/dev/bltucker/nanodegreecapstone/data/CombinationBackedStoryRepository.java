@@ -7,6 +7,7 @@ import android.database.Cursor;
 import android.util.LruCache;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -56,7 +57,7 @@ public class CombinationBackedStoryRepository implements StoryRepository {
                     String title = query.getString(query.getColumnIndex(StoryColumns.TITLE));
                     long unixTime = query.getLong(query.getColumnIndex(StoryColumns.UNIX_TIME));
                     String storyUrl = query.getString(query.getColumnIndex(StoryColumns.URL));
-                    long[] commentIds = getCommentIds(storyId);
+                    Long[] commentIds = getCommentIds(storyId);
 
                     storyList.add(new Story(storyId, storyPoster, score, unixTime, title, storyUrl, commentIds));
                 }
@@ -68,10 +69,9 @@ public class CombinationBackedStoryRepository implements StoryRepository {
         });
     }
 
-    private long[] getCommentIds(long storyId) {
+    private Long[] getCommentIds(long storyId) {
         Cursor query = context.getContentResolver().query(SchematicContentProviderGenerator.CommentRefs.withStoryId(String.valueOf(storyId)), null, null, null, null);
-
-        long[] commentIds = new long[query.getCount()];
+        Long[] commentIds = new Long[query.getCount()];
         int index = 0;
         while (query.moveToNext()) {
             commentIds[index] = query.getLong(query.getColumnIndex(CommentRefsColumns._ID));
@@ -79,7 +79,6 @@ public class CombinationBackedStoryRepository implements StoryRepository {
         }
 
         query.close();
-
         return commentIds;
     }
 
@@ -91,34 +90,33 @@ public class CombinationBackedStoryRepository implements StoryRepository {
             return Observable.just(cachedComments);
         }
 
-        return Observable.create(new Observable.OnSubscribe<List<Comment>>() {
-            @Override
-            public void call(Subscriber<? super List<Comment>> subscriber) {
-                long[] commentIds = getCommentIds(story.getId());
-                List<Comment> commentList = Observable.just(commentIds)
-                        .concatMap(new Func1<long[], Observable<List<Comment>>>() {
-                            @Override
-                            public Observable<List<Comment>> call(long[] commentIds) {
-                                List<Comment> commentObservables = new ArrayList<>(commentIds.length);
+        Long[] commentIds = getCommentIds(story.getId());
+        Observable<List<Comment>> listObservable = Observable.from(commentIds)
+                .concatMap(new Func1<Long, Observable<Comment>>() {
+                    @Override
+                    public Observable<Comment> call(Long commentId) {
+                        return Observable.from(addCommentToList(commentId));
+                    }
+                })
+                .toList();
 
-                                for (int i = 0; i < commentIds.length; i++) {
-                                    Comment comment = hackerNewsApiService.getComment(commentIds[i]).toBlocking().first();
-                                    if (comment.getAuthorName() != null && comment.getCommentText() != null) {
-                                        commentObservables.add(comment);
-                                    }
-                                }
+        return listObservable;
+    }
 
-                                return Observable.just(commentObservables);
-                            }
-                        }).toBlocking().first();
+    public List<Comment> addCommentToList(long commentId){
 
+        List<Comment> commentList = new ArrayList<>();
+        Comment comment = hackerNewsApiService.getComment(commentId).toBlocking().first();
 
-                commentLruCache.put(story.getId(), commentList);
-
-                subscriber.onNext(commentList);
-                subscriber.onCompleted();
+        if (comment.getAuthorName() != null && comment.getCommentText() != null) {
+            commentList.add(comment);
+            if(comment.getReplyIds().length > 0){
+                for (int i = 0; i < comment.getReplyIds().length; i++) {
+                    commentList.addAll(addCommentToList(comment.getReplyIds()[i]));
+                }
             }
-        });
+        }
+        return commentList;
     }
 
     @Override
@@ -153,13 +151,14 @@ public class CombinationBackedStoryRepository implements StoryRepository {
     }
 
     private List<ContentValues> getCommentRefList(Story story) {
-        long[] commentIds = story.getCommentIds();
+        Long[] commentIds = story.getCommentIds();
         List<ContentValues> contentValues = new ArrayList<>(commentIds.length);
 
         for (int i = 0; i < commentIds.length; i++) {
             ContentValues aContentValue = new ContentValues();
             aContentValue.put(CommentRefsColumns._ID, commentIds[i]);
             aContentValue.put(CommentRefsColumns.STORY_ID, story.getId());
+            aContentValue.put(CommentRefsColumns.READ_RANK, i);
             contentValues.add(aContentValue);
         }
 
