@@ -25,8 +25,8 @@
         <provider
             android:name=".data.StoryProvider"
             android:authorities="dev.bltucker.nanodegreecapstone.data"
-            android:label="Hacker News Reader"
             android:exported="false"
+            android:label="Hacker News Reader"
             android:syncable="true" />
 
         <service
@@ -58,13 +58,12 @@
             android:name=".topstories.SyncCompletedBroadCastReceiver"
             android:enabled="true"
             android:exported="true">
-
             <intent-filter>
-                <action android:name="dev.bltucker.nanodegreecapstone.SYNC_COMPLETED">
-                </action>
+                <action android:name="dev.bltucker.nanodegreecapstone.SYNC_COMPLETED"></action>
             </intent-filter>
-
         </receiver>
+
+        <activity android:name=".storydetail.StoryDetailActivity"></activity>
     </application>
 
 </manifest>

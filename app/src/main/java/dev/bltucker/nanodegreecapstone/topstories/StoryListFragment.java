@@ -42,6 +42,7 @@ public class StoryListFragment extends Fragment implements StoryListView {
     StoryListAdapter adapter;
 
     private Delegate delegate;
+    private boolean launchingStoryDetailsView = false;
 
     public StoryListFragment() {
         // Required empty public constructor
@@ -105,6 +106,15 @@ public class StoryListFragment extends Fragment implements StoryListView {
     }
 
     @Override
+    public void onStop() {
+        if(launchingStoryDetailsView){
+            hideLoadingView();
+            launchingStoryDetailsView = false;
+        }
+        super.onStop();
+    }
+
+    @Override
     public void onDestroy() {
         presenter.onViewDestroyed(this);
         super.onDestroy();
@@ -121,6 +131,7 @@ public class StoryListFragment extends Fragment implements StoryListView {
     @Override
     public void showCommentsView() {
         if(delegate != null){
+            launchingStoryDetailsView = true;
             delegate.showCommentsView();
         }
     }

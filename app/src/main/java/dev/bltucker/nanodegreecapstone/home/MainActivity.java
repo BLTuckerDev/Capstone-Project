@@ -1,7 +1,7 @@
 package dev.bltucker.nanodegreecapstone.home;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 
@@ -9,13 +9,12 @@ import javax.inject.Inject;
 
 import dev.bltucker.nanodegreecapstone.CapstoneApplication;
 import dev.bltucker.nanodegreecapstone.R;
-import dev.bltucker.nanodegreecapstone.storydetail.StoryDetailFragment;
+import dev.bltucker.nanodegreecapstone.storydetail.StoryDetailActivity;
 import dev.bltucker.nanodegreecapstone.topstories.StoryListFragment;
 
 public class MainActivity extends AppCompatActivity implements HomeView, StoryListFragment.Delegate {
 
     private static final String STORY_LIST_FRAGMENT_TAG = "storyListFragment";
-    private static final String STORY_COMMENTS_FRAGMENT_TAG = "storyListComments";
 
     @Inject
     HomeViewPresenter homeViewPresenter;
@@ -45,20 +44,14 @@ public class MainActivity extends AppCompatActivity implements HomeView, StoryLi
                 .beginTransaction()
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                 .add(R.id.main_activity_coordinator_layout, storyListFragment, STORY_LIST_FRAGMENT_TAG)
-                .addToBackStack(null)
                 .commit();
     }
 
     @Override
     public void showCommentsView() {
-        Fragment storyListFragment = getSupportFragmentManager().findFragmentByTag(STORY_LIST_FRAGMENT_TAG);
-        Fragment storyDetailFragment = StoryDetailFragment.newInstance();
-
-        getSupportFragmentManager().beginTransaction()
-                .hide(storyListFragment)
-                .add(R.id.main_activity_coordinator_layout, storyDetailFragment, STORY_COMMENTS_FRAGMENT_TAG)
-                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                .addToBackStack(null)
-                .commit();
+        //TODO in tablet mode we will just show a different story in the details fragment here.
+        //.updateStory() since the model will already be changed
+        //TODO use a shared element transition here
+        startActivity(new Intent(this, StoryDetailActivity.class));
     }
 }

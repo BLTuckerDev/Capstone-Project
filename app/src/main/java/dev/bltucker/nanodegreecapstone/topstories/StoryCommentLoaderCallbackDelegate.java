@@ -46,7 +46,6 @@ class StoryCommentLoaderCallbackDelegate implements LoaderManager.LoaderCallback
             @Override
             public void run() {
                 if (storyListView != null) {
-                    storyListView.hideLoadingView();
                     storyListView.showCommentsView();
                 }
             }
