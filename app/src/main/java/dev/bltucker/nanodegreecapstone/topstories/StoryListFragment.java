@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -24,6 +25,9 @@ import dev.bltucker.nanodegreecapstone.models.Story;
 
 //TODO while the adapter is empty show a spinner so the user knows stories are loading.
 public class StoryListFragment extends Fragment implements StoryListView {
+
+    @Bind(R.id.swipe_to_refresh_layout)
+    SwipeRefreshLayout swipeRefreshLayout;
 
     @Bind(R.id.story_list_recyclerview)
     RecyclerView recyclerView;
@@ -58,6 +62,7 @@ public class StoryListFragment extends Fragment implements StoryListView {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_story_list, container, false);
         ButterKnife.bind(this, rootView);
+        swipeRefreshLayout.setOnRefreshListener(presenter);
         return rootView;
     }
 
@@ -107,6 +112,9 @@ public class StoryListFragment extends Fragment implements StoryListView {
 
     @Override
     public void showStories(List<Story> stories) {
+        if(swipeRefreshLayout.isRefreshing()){
+            swipeRefreshLayout.setRefreshing(false);
+        }
         adapter.setData(stories);
     }
 

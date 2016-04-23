@@ -2,6 +2,7 @@ package dev.bltucker.nanodegreecapstone.topstories;
 
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
+import android.support.v4.widget.SwipeRefreshLayout;
 
 import dev.bltucker.nanodegreecapstone.data.StoryCommentsLoader;
 import dev.bltucker.nanodegreecapstone.data.StoryListLoader;
@@ -14,7 +15,7 @@ import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import timber.log.Timber;
 
-public class StoryListViewPresenter {
+public class StoryListViewPresenter implements SwipeRefreshLayout.OnRefreshListener {
 
     static final String SELECTED_STORY_BUNDLE_KEY = "story";
 
@@ -121,5 +122,10 @@ public class StoryListViewPresenter {
                         }
                     }
                 });
+    }
+
+    @Override
+    public void onRefresh() {
+        forceStoryListReload();
     }
 }
