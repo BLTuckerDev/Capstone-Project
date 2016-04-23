@@ -5,11 +5,16 @@ import android.content.Context;
 
 import com.google.gson.Gson;
 
+import java.util.Calendar;
+import java.util.SimpleTimeZone;
+import java.util.TimeZone;
+
 import dagger.Module;
 import dagger.Provides;
 import dev.bltucker.nanodegreecapstone.CapstoneApplication;
 import dev.bltucker.nanodegreecapstone.R;
 import dev.bltucker.nanodegreecapstone.data.CombinationBackedStoryRepository;
+import dev.bltucker.nanodegreecapstone.data.DescendingScoreStoryComparator;
 import dev.bltucker.nanodegreecapstone.data.HackerNewsApiService;
 import dev.bltucker.nanodegreecapstone.data.StoryRepository;
 import dev.bltucker.nanodegreecapstone.events.EventBus;
@@ -51,6 +56,13 @@ public class ApplicationResourcesModule {
 
     @Provides
     @ApplicationScope
+    @GregorianUTC
+    public Calendar provideCalendar(){
+        return Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+    }
+
+    @Provides
+    @ApplicationScope
     public Gson provideGson(){
         return new Gson();
     }
@@ -82,8 +94,8 @@ public class ApplicationResourcesModule {
 
     @Provides
     @ApplicationScope
-    public StoryRepository provideStoryRepository(CombinationBackedStoryRepository repository){
-        return repository;
+    public StoryRepository provideStoryRepository(Context context, HackerNewsApiService hackerNewsApiService, DescendingScoreStoryComparator comparator){
+        return new CombinationBackedStoryRepository(context, hackerNewsApiService, comparator);
     }
 
 

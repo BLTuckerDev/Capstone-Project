@@ -7,7 +7,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -15,15 +17,18 @@ import javax.inject.Inject;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import dev.bltucker.nanodegreecapstone.R;
+import dev.bltucker.nanodegreecapstone.injection.GregorianUTC;
 import dev.bltucker.nanodegreecapstone.models.Comment;
 
 public class StoryCommentsAdapter extends RecyclerView.Adapter<StoryCommentsAdapter.CommentViewHolder> {
 
     private List<Comment> commentList;
+    private final Calendar calendar;
 
     @Inject
-    public StoryCommentsAdapter(){
+    public StoryCommentsAdapter(@GregorianUTC Calendar utcCalendar){
         commentList = new ArrayList<>();
+        calendar = utcCalendar;
     }
 
     public void addComments(List<Comment> comments){
@@ -43,8 +48,9 @@ public class StoryCommentsAdapter extends RecyclerView.Adapter<StoryCommentsAdap
     public void onBindViewHolder(CommentViewHolder holder, int position) {
         Comment comment = commentList.get(position);
         holder.authorNameTextView.setText(comment.getAuthorName());
-        //TODO format the post time
-//        holder.postTimeTextView.setText("" +comment.getUnixPostTime());
+        long elapsedSeconds = (calendar.getTimeInMillis() / 1000) - comment.getUnixPostTime();
+        long elapsedMinutes = elapsedSeconds / 60;
+        holder.postTimeTextView.setText(String.format("%d minutes ago", elapsedMinutes));
         holder.commentBodyTextView.setText(Html.fromHtml(comment.getCommentText()));
     }
 
