@@ -1,5 +1,6 @@
 package dev.bltucker.nanodegreecapstone.injection;
 
+import android.accounts.Account;
 import android.content.Context;
 
 import com.google.gson.Gson;
@@ -13,6 +14,7 @@ import dev.bltucker.nanodegreecapstone.data.HackerNewsApiService;
 import dev.bltucker.nanodegreecapstone.data.StoryRepository;
 import dev.bltucker.nanodegreecapstone.events.EventBus;
 import dev.bltucker.nanodegreecapstone.models.ReadingSession;
+import dev.bltucker.nanodegreecapstone.sync.StorySyncAdapter;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -39,6 +41,12 @@ public class ApplicationResourcesModule {
     @SyncIntervalSeconds
     public int provideSyncIntervalInSeconds(Context context){
         return context.getResources().getInteger(R.integer.sync_interval_seconds);
+    }
+
+    @Provides
+    @ApplicationScope
+    public Account provideAccount(){
+        return new Account(StorySyncAdapter.ACCOUNT, StorySyncAdapter.ACCOUNT_TYPE);
     }
 
     @Provides

@@ -1,5 +1,7 @@
 package dev.bltucker.nanodegreecapstone.topstories;
 
+import android.accounts.Account;
+
 import javax.inject.Provider;
 
 import dagger.Module;
@@ -19,8 +21,10 @@ public class TopStoriesModule {
 
     @Provides
     @ApplicationScope
-    public StoryListViewPresenter provideStoryListViewPresenter(ReadingSession readingSession, EventBus eventBus, StoryListLoaderCallbackDelegate storyListLoaderCallbackDelegate, StoryCommentLoaderCallbackDelegate storyCommentLoaderCallbackDelegate){
-        return new StoryListViewPresenter(readingSession, eventBus, storyListLoaderCallbackDelegate, storyCommentLoaderCallbackDelegate);
+    public StoryListViewPresenter provideStoryListViewPresenter(ReadingSession readingSession, EventBus eventBus,
+                                                                StoryListLoaderCallbackDelegate storyListLoaderCallbackDelegate, StoryCommentLoaderCallbackDelegate storyCommentLoaderCallbackDelegate,
+                                                                Account account){
+        return new StoryListViewPresenter(readingSession, eventBus, storyListLoaderCallbackDelegate, storyCommentLoaderCallbackDelegate, account);
     }
 
 
@@ -32,8 +36,8 @@ public class TopStoriesModule {
 
     @Provides
     @ApplicationScope
-    public HomeViewPresenter provideHomeViewPresenter(@SyncIntervalSeconds int syncInterval){
-        return new HomeViewPresenter(syncInterval);
+    public HomeViewPresenter provideHomeViewPresenter(@SyncIntervalSeconds int syncInterval, Account account){
+        return new HomeViewPresenter(syncInterval, account);
     }
 
     @Provides

@@ -15,11 +15,12 @@ public class HomeViewPresenter {
     private final int syncInterval;
     private HomeView view;
 
-    private final Account storySyncAccount = new Account(StorySyncAdapter.ACCOUNT, StorySyncAdapter.ACCOUNT_TYPE);
+    private final Account storySyncAccount;
 
     @Inject
-    public HomeViewPresenter(@SyncIntervalSeconds int syncInterval){
+    public HomeViewPresenter(@SyncIntervalSeconds int syncInterval, Account providedAccount){
         this.syncInterval = syncInterval;
+        this.storySyncAccount = providedAccount;
     }
 
     public void onViewCreated(HomeView createdView){

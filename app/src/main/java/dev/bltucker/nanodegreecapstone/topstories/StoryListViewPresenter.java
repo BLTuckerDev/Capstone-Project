@@ -1,9 +1,12 @@
 package dev.bltucker.nanodegreecapstone.topstories;
 
+import android.accounts.Account;
+import android.content.ContentResolver;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 
+import dev.bltucker.nanodegreecapstone.data.SchematicContentProviderGenerator;
 import dev.bltucker.nanodegreecapstone.data.StoryCommentsLoader;
 import dev.bltucker.nanodegreecapstone.data.StoryListLoader;
 import dev.bltucker.nanodegreecapstone.events.EventBus;
@@ -24,17 +27,20 @@ public class StoryListViewPresenter implements SwipeRefreshLayout.OnRefreshListe
 
     private final StoryListLoaderCallbackDelegate storyListLoaderCallbackDelegate;
     private final StoryCommentLoaderCallbackDelegate storyCommentLoaderCallbackDelegate;
+    private final Account account;
 
     private StoryListView storyListView;
     private Subscription syncCompletedEventSubscription;
 
     private LoaderManager loaderManager;
 
-    public StoryListViewPresenter(ReadingSession readingSession, EventBus eventBus, StoryListLoaderCallbackDelegate storyListLoaderCallbackDelegate, StoryCommentLoaderCallbackDelegate commentLoaderCallbackDelegate) {
+    public StoryListViewPresenter(ReadingSession readingSession, EventBus eventBus, StoryListLoaderCallbackDelegate storyListLoaderCallbackDelegate,
+                                  StoryCommentLoaderCallbackDelegate commentLoaderCallbackDelegate, Account account) {
         this.readingSession = readingSession;
         this.eventBus = eventBus;
         this.storyListLoaderCallbackDelegate = storyListLoaderCallbackDelegate;
         this.storyCommentLoaderCallbackDelegate = commentLoaderCallbackDelegate;
+        this.account = account;
         subscribeToSyncAdapterEvents();
     }
 
@@ -126,6 +132,9 @@ public class StoryListViewPresenter implements SwipeRefreshLayout.OnRefreshListe
 
     @Override
     public void onRefresh() {
-        forceStoryListReload();
+        Bundle bundle = new Bundle();
+        bundle.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
+        bundle.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
+        ContentResolver.requestSync(account, SchematicContentProviderGenerator.AUTHORITY, bundle);
     }
 }
