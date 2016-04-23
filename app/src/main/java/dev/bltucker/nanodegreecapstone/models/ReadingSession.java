@@ -17,6 +17,7 @@ public class ReadingSession {
     private List<Comment> currentStoryComments;
 
     private List<Story> storyList;
+    private boolean storyListIsDirty = false;
 
     @Inject
     public ReadingSession(@StoryMax int maximumStoryCount){
@@ -47,5 +48,13 @@ public class ReadingSession {
 
     public List<Comment> getCurrentStoryComments(){
         return Collections.unmodifiableList(currentStoryComments);
+    }
+
+    public boolean isStoryListIsDirty() {
+        return storyListIsDirty;
+    }
+
+    public void setStoryListIsDirty(boolean storyListIsDirty) {
+        this.storyListIsDirty = storyListIsDirty;
     }
 }
