@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'com.neenbedankt.android-apt'
 
+
 android {
     compileSdkVersion 23
     buildToolsVersion "23.0.2"
@@ -56,3 +57,6 @@ dependencies {
     compile 'io.reactivex:rxandroid:1.1.0'
     compile 'io.reactivex:rxjava:1.1.0'
 }
+
+
+apply plugin: 'com.google.gms.google-services'

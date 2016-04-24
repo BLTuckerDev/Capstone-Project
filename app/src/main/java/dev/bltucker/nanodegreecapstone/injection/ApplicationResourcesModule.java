@@ -4,6 +4,8 @@ import android.accounts.Account;
 import android.content.Context;
 import android.content.res.Resources;
 
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.Tracker;
 import com.google.gson.Gson;
 
 import java.util.Calendar;
@@ -33,6 +35,12 @@ public class ApplicationResourcesModule {
 
     public ApplicationResourcesModule(CapstoneApplication application){
         this.application = application;
+    }
+
+    @Provides
+    @ApplicationScope
+    public Tracker provideTracker(){
+        return GoogleAnalytics.getInstance(application).newTracker(R.xml.global_tracker);
     }
 
     @Provides
