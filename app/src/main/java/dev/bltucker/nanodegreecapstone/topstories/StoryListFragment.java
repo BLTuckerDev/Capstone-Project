@@ -13,6 +13,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
+
 import java.util.List;
 
 import javax.inject.Inject;
@@ -41,6 +44,9 @@ public class StoryListFragment extends Fragment implements StoryListView {
     @Inject
     StoryListAdapter adapter;
 
+    @Inject
+    Tracker analyticsTracker;
+
     private Delegate delegate;
     private boolean launchingStoryDetailsView = false;
 
@@ -57,6 +63,8 @@ public class StoryListFragment extends Fragment implements StoryListView {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         CapstoneApplication.getApplication().getApplicationComponent().inject(this);
+        analyticsTracker.setScreenName("StoryListView");
+        analyticsTracker.send(new HitBuilders.ScreenViewBuilder().build());
     }
 
     @Override

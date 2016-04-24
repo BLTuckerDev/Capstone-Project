@@ -13,6 +13,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
+
 import java.util.List;
 
 import javax.inject.Inject;
@@ -51,6 +54,9 @@ public class StoryDetailFragment extends Fragment implements StoryDetailView {
     @Inject
     StoryDetailViewPresenter presenter;
 
+    @Inject
+    Tracker analyticsTracker;
+
     public StoryDetailFragment() {
         // Required empty public constructor
     }
@@ -63,6 +69,8 @@ public class StoryDetailFragment extends Fragment implements StoryDetailView {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         CapstoneApplication.getApplication().getApplicationComponent().inject(this);
+        analyticsTracker.setScreenName("StoryDetailView");
+        analyticsTracker.send(new HitBuilders.ScreenViewBuilder().build());
     }
 
     @Override
