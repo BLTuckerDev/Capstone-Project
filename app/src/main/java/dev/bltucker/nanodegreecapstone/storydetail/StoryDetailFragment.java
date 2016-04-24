@@ -117,7 +117,7 @@ public class StoryDetailFragment extends Fragment implements StoryDetailView {
 
     @Override
     public void showComments(List<Comment> commentList) {
-        commentsAdapter.addComments(commentList);
+        commentsAdapter.reset();
     }
 
     @OnClick(R.id.read_button)

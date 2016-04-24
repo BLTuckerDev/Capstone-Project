@@ -9,6 +9,4 @@ color theme
 preferences for disbaling notifications
 need an empty view for story list
 need an empty view for comments instead
-rotation within the detail fragment allows the story list fragment to show through, perhaps consider just using
-a second activity? that is what was done in spotify streamer and project sunshine.
 work on first app launch from cold and from install

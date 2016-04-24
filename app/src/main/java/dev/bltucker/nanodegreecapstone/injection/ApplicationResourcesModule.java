@@ -2,6 +2,7 @@ package dev.bltucker.nanodegreecapstone.injection;
 
 import android.accounts.Account;
 import android.content.Context;
+import android.content.res.Resources;
 
 import com.google.gson.Gson;
 
@@ -32,6 +33,12 @@ public class ApplicationResourcesModule {
 
     public ApplicationResourcesModule(CapstoneApplication application){
         this.application = application;
+    }
+
+    @Provides
+    @ApplicationScope
+    public Resources provideResources(Context context){
+        return context.getResources();
     }
 
     @Provides

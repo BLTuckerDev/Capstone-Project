@@ -1,8 +1,12 @@
 package dev.bltucker.nanodegreecapstone.models;
 
+import android.support.annotation.Nullable;
+
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -11,10 +15,11 @@ import timber.log.Timber;
 
 public class ReadingSession {
     //todo collect analytics on the average number of comments a read story has
-    private static final int INITIAL_COMMENT_CAPACITY = 50;
+    private static final int INITIAL_COMMENT_CAPACITY = 30;
     //TODO convert to arrays where we can
     private Story currentStory;
     private List<Comment> currentStoryComments;
+    private Map<Long, Comment> commentIdToParentMap;
 
     private List<Story> storyList;
     private boolean storyListIsDirty = false;
@@ -23,13 +28,23 @@ public class ReadingSession {
     public ReadingSession(@StoryMax int maximumStoryCount){
         currentStory = null;
         currentStoryComments = new ArrayList<>(INITIAL_COMMENT_CAPACITY);
+        commentIdToParentMap = new HashMap<>(INITIAL_COMMENT_CAPACITY);
         storyList = new ArrayList<>(maximumStoryCount);
     }
 
     public void read(Story selectedStory, List<Comment> selectedStoryComments){
         currentStory = selectedStory;
         currentStoryComments.clear();
+        commentIdToParentMap.clear();
         currentStoryComments.addAll(selectedStoryComments);
+
+        for (int i = 0; i < selectedStoryComments.size(); i++) {
+            Comment currentComment = selectedStoryComments.get(i);
+            long[] childComments = currentComment.getReplyIds();
+            for (int j = 0; j < childComments.length; j++) {
+                commentIdToParentMap.put(childComments[j], currentComment);
+            }
+        }
     }
 
     public void setStories(List<Story> stories){
@@ -56,5 +71,10 @@ public class ReadingSession {
 
     public void setStoryListIsDirty(boolean storyListIsDirty) {
         this.storyListIsDirty = storyListIsDirty;
+    }
+
+    @Nullable
+    public Comment getParentComment(long commentId){
+        return commentIdToParentMap.get(commentId);
     }
 }
