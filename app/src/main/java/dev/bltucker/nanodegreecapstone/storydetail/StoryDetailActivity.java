@@ -14,11 +14,13 @@ public class StoryDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_story_detail);
 
-        Fragment storyDetailFragment = StoryDetailFragment.newInstance();
+        if(null == savedInstanceState){
+            Fragment storyDetailFragment = StoryDetailFragment.newInstance();
 
-        getSupportFragmentManager().beginTransaction()
-                .add(R.id.story_activity_coordinator_layout, storyDetailFragment)
-                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                .commit();
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.story_activity_coordinator_layout, storyDetailFragment)
+                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                    .commit();
+        }
     }
 }
