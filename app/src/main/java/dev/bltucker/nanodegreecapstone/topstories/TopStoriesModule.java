@@ -30,8 +30,8 @@ public class TopStoriesModule {
 
     @Provides
     @ApplicationScope
-    public StoryListAdapter provideStoryListAdapter(StoryListViewPresenter presenter, @StoryMax int storyMax){
-        return new StoryListAdapter(presenter, storyMax);
+    public StoryListAdapter provideStoryListAdapter(StoryListViewPresenter presenter, @StoryMax int storyMax, ReadingSession readingSession){
+        return new StoryListAdapter(presenter, storyMax, readingSession);
     }
 
     @Provides

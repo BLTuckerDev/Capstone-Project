@@ -24,35 +24,41 @@ public class ReadingSessionTest {
 
     @Test
     public void testRead() throws Exception {
-        final long[] commentRefs = new long[]{1l,2l,3l,4l,5l};
         final Date now = new Date();
 
-        List<Comment> commentList = new ArrayList<>(commentRefs.length);
-        for(int i = 0; i < commentRefs.length; i++){
-            commentList.add(new Comment(commentRefs[i], "Comment Author", "Comment", now.getTime(), new long[0]));
-        }
+        Comment firstComment = new Comment(1L, "First Comment Author", "Comment Text", now.getTime(), new long[]{2L});
+        Comment childComment = new Comment(2L, "Second comment author", "Child Comment", now.getTime(), new long[]{});
+        List<Comment> commentList = new ArrayList<>();
+        commentList.add(firstComment);
+        commentList.add(childComment);
 
+        final Long[] commentRefs = new Long[]{firstComment.getId(), childComment.getId()};
         Story testStory = new Story(1, "Brett", 1, now.getTime(), "Title", "https://google.com/", commentRefs);
 
         objectUnderTest.read(testStory, commentList);
 
         assertEquals(testStory, objectUnderTest.getCurrentStory());
-        assertEquals(commentList, objectUnderTest.getCurrentStoryComments());
-
+        assertEquals(commentList.size(), objectUnderTest.currentStoryCommentCount());
+        assertNotNull(objectUnderTest.getCurrentStoryComment(0));
+        assertEquals(firstComment, objectUnderTest.getCurrentStoryComment(0));
+        assertEquals(firstComment, objectUnderTest.getParentComment(childComment.getId()));
+        assertNull(objectUnderTest.getStory(Integer.MAX_VALUE));
+        assertNull(objectUnderTest.getStory(Integer.MIN_VALUE));
+        assertNull(objectUnderTest.getCurrentStoryComment(Integer.MAX_VALUE));
+        assertNull(objectUnderTest.getCurrentStoryComment(Integer.MIN_VALUE));
     }
 
     @Test
     public void testAddStories() throws Exception {
         final Date now = new Date();
-        Story testStory = new Story(1, "Brett", 1, now.getTime(), "Title", "https://google.com/", new long[0]);
+        Story testStory = new Story(1, "Brett", 1, now.getTime(), "Title", "https://google.com/", new Long[0]);
         List<Story> storyList = new ArrayList<>();
         storyList.add(testStory);
 
         objectUnderTest.setStories(storyList);
 
-        assertEquals(1, objectUnderTest.getStories().size());
-        assertEquals(storyList, objectUnderTest.getStories());
-        assertEquals(0, objectUnderTest.getCurrentPositionInList());
+        assertEquals(1, objectUnderTest.storyCount());
+        assertTrue(objectUnderTest.hasStories());
 
     }
 }

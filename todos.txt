@@ -2,7 +2,6 @@
 
 Shared element transition on story title perhaps?
 Loading spinners when stories are loading on the story list screen
-analytics
 location
 notifications
 color theme

@@ -18,18 +18,20 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import dev.bltucker.nanodegreecapstone.R;
 import dev.bltucker.nanodegreecapstone.injection.StoryMax;
+import dev.bltucker.nanodegreecapstone.models.ReadingSession;
 import dev.bltucker.nanodegreecapstone.models.Story;
 
 public class StoryListAdapter extends RecyclerView.Adapter<StoryListAdapter.StoryHeadlineViewHolder> {
 
     private final StoryListViewPresenter presenter;
-
-    private final List<Story> storyList;
+    private final int maximumStoryCount;
+    private final ReadingSession readingSession;
 
     @Inject
-    public StoryListAdapter(StoryListViewPresenter presenter, @StoryMax int maximumStoryCount){
+    public StoryListAdapter(StoryListViewPresenter presenter, @StoryMax int maximumStoryCount, ReadingSession readingSession){
         this.presenter = presenter;
-        storyList = new ArrayList<>(maximumStoryCount);
+        this.maximumStoryCount = maximumStoryCount;
+        this.readingSession = readingSession;
     }
 
     @Override
@@ -40,18 +42,16 @@ public class StoryListAdapter extends RecyclerView.Adapter<StoryListAdapter.Stor
 
     @Override
     public void onBindViewHolder(StoryListAdapter.StoryHeadlineViewHolder holder, int position) {
-        Story story = storyList.get(position);
+        Story story = readingSession.getStory(position);
         holder.setStory(story);
     }
 
     @Override
     public int getItemCount() {
-        return storyList.size();
+        return readingSession.storyCount();
     }
 
-    public void setData(List<Story> stories){
-        storyList.clear();
-        storyList.addAll(stories);
+    public void reset(){
         notifyDataSetChanged();
     }
 

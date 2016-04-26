@@ -46,7 +46,7 @@ public class StoryCommentsAdapter extends RecyclerView.Adapter<StoryCommentsAdap
 
     @Override
     public void onBindViewHolder(CommentViewHolder holder, int position) {
-        Comment comment = readingSession.getCurrentStoryComments().get(position);
+        Comment comment = readingSession.getCurrentStoryComment(position);
         holder.authorNameTextView.setText(comment.getAuthorName());
         holder.postTimeTextView.setText(getFormattedCommentTime(comment, holder.itemView.getContext()));
         holder.commentBodyTextView.setText(Html.fromHtml(comment.getCommentText()));
@@ -95,7 +95,7 @@ public class StoryCommentsAdapter extends RecyclerView.Adapter<StoryCommentsAdap
 
     @Override
     public int getItemCount() {
-        return readingSession.getCurrentStoryComments().size();
+        return readingSession.currentStoryCommentCount();
     }
 
     public void reset() {

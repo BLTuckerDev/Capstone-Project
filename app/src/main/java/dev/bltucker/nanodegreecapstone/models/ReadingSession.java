@@ -1,12 +1,10 @@
 package dev.bltucker.nanodegreecapstone.models;
 
 import android.support.annotation.Nullable;
+import android.support.v4.util.SimpleArrayMap;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -14,21 +12,19 @@ import dev.bltucker.nanodegreecapstone.injection.StoryMax;
 import timber.log.Timber;
 
 public class ReadingSession {
-    //todo collect analytics on the average number of comments a read story has
     private static final int INITIAL_COMMENT_CAPACITY = 30;
-    //TODO convert to arrays where we can
-    private Story currentStory;
-    private List<Comment> currentStoryComments;
-    private Map<Long, Comment> commentIdToParentMap;
 
-    private List<Story> storyList;
+    private Story currentStory;
+    private final List<Comment> currentStoryComments;
+    private final SimpleArrayMap<Long, Comment> commentIdToParentMap;
+    private final List<Story> storyList;
     private boolean storyListIsDirty = false;
 
     @Inject
     public ReadingSession(@StoryMax int maximumStoryCount){
         currentStory = null;
         currentStoryComments = new ArrayList<>(INITIAL_COMMENT_CAPACITY);
-        commentIdToParentMap = new HashMap<>(INITIAL_COMMENT_CAPACITY);
+        commentIdToParentMap = new SimpleArrayMap<>(INITIAL_COMMENT_CAPACITY);
         storyList = new ArrayList<>(maximumStoryCount);
     }
 
@@ -53,16 +49,12 @@ public class ReadingSession {
         storyList.addAll(stories);
     }
 
-    public List<Story> getStories(){
-        return Collections.unmodifiableList(storyList);
+    public boolean hasStories(){
+        return !storyList.isEmpty();
     }
 
     public Story getCurrentStory(){
         return currentStory;
-    }
-
-    public List<Comment> getCurrentStoryComments(){
-        return Collections.unmodifiableList(currentStoryComments);
     }
 
     public boolean isStoryListIsDirty() {
@@ -76,5 +68,29 @@ public class ReadingSession {
     @Nullable
     public Comment getParentComment(long commentId){
         return commentIdToParentMap.get(commentId);
+    }
+
+    @Nullable
+    public Story getStory(int position) {
+        if(position < 0 || position >= storyList.size()){
+            return null;
+        }
+        return storyList.get(position);
+    }
+
+    public int storyCount() {
+        return storyList.size();
+    }
+
+    @Nullable
+    public Comment getCurrentStoryComment(int position) {
+        if(position < 0 || position >= currentStoryComments.size()){
+            return null;
+        }
+        return currentStoryComments.get(position);
+    }
+
+    public int currentStoryCommentCount() {
+        return currentStoryComments.size();
     }
 }

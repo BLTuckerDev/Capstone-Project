@@ -16,8 +16,6 @@ import android.widget.TextView;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 
-import java.util.List;
-
 import javax.inject.Inject;
 
 import butterknife.Bind;
@@ -25,7 +23,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import dev.bltucker.nanodegreecapstone.CapstoneApplication;
 import dev.bltucker.nanodegreecapstone.R;
-import dev.bltucker.nanodegreecapstone.models.Comment;
+import dev.bltucker.nanodegreecapstone.models.ReadingSession;
 import dev.bltucker.nanodegreecapstone.models.Story;
 
 public class StoryDetailFragment extends Fragment implements StoryDetailView {
@@ -53,6 +51,9 @@ public class StoryDetailFragment extends Fragment implements StoryDetailView {
 
     @Inject
     StoryDetailViewPresenter presenter;
+
+    @Inject
+    ReadingSession readingSession;
 
     @Inject
     Tracker analyticsTracker;
@@ -111,7 +112,8 @@ public class StoryDetailFragment extends Fragment implements StoryDetailView {
     }
 
     @Override
-    public void showStory(Story story) {
+    public void showStory() {
+        Story story = readingSession.getCurrentStory();
         storyTitleTextView.setText(story.getTitle());
         storyUrlTextView.setText(story.getUrl());
         storyPosterTextView.setText(String.format(getString(R.string.by_poster), story.getPosterName()));
@@ -124,7 +126,7 @@ public class StoryDetailFragment extends Fragment implements StoryDetailView {
     }
 
     @Override
-    public void showComments(List<Comment> commentList) {
+    public void showComments() {
         commentsAdapter.reset();
     }
 

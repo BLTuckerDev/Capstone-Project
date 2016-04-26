@@ -45,7 +45,7 @@ public class StoryProviderTests extends AndroidTestCase {
     }
 
     public void testStoryInsert(){
-        Story testStory = new Story(Long.MAX_VALUE, "Brett Tucker", 100, new Date().getTime(), "A Story Title", "https://google.com/", new long[]{1,2,3,4});
+        Story testStory = new Story(Long.MAX_VALUE, "Brett Tucker", 100, new Date().getTime(), "A Story Title", "https://google.com/", new Long[]{1L,2L,3L,4L});
 
         final CountDownLatch countDownLatch = new CountDownLatch(1);
 

@@ -48,7 +48,7 @@ public class StoryListViewPresenter implements SwipeRefreshLayout.OnRefreshListe
     public void onViewCreated(StoryListView view, LoaderManager loaderManager) {
         setStoryListView(view);
         this.loaderManager = loaderManager;
-        if(readingSession.getStories().isEmpty()){
+        if(!readingSession.hasStories()){
             forceStoryListReload();
         }
     }
@@ -56,14 +56,14 @@ public class StoryListViewPresenter implements SwipeRefreshLayout.OnRefreshListe
     public void onViewRestored(StoryListView view, LoaderManager loaderManager) {
         setStoryListView(view);
         this.loaderManager = loaderManager;
-        if(readingSession.getStories().isEmpty()){
+        if(!readingSession.hasStories()){
             forceStoryListReload();
         }
     }
 
     public void onViewResumed(StoryListView view) {
         setStoryListView(view);
-        this.storyListView.showStories(readingSession.getStories());
+        this.storyListView.showStories();
         if(readingSession.isStoryListIsDirty()){
             forceStoryListReload();
         }

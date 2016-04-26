@@ -16,15 +16,12 @@ import android.widget.ProgressBar;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 
-import java.util.List;
-
 import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import dev.bltucker.nanodegreecapstone.CapstoneApplication;
 import dev.bltucker.nanodegreecapstone.R;
-import dev.bltucker.nanodegreecapstone.models.Story;
 
 //TODO while the adapter is empty show a spinner so the user knows stories are loading.
 public class StoryListFragment extends Fragment implements StoryListView {
@@ -129,11 +126,11 @@ public class StoryListFragment extends Fragment implements StoryListView {
     }
 
     @Override
-    public void showStories(List<Story> stories) {
+    public void showStories() {
         if(swipeRefreshLayout.isRefreshing()){
             swipeRefreshLayout.setRefreshing(false);
         }
-        adapter.setData(stories);
+        adapter.reset();
     }
 
     @Override

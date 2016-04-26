@@ -6,8 +6,8 @@ import dev.bltucker.nanodegreecapstone.models.Comment;
 import dev.bltucker.nanodegreecapstone.models.Story;
 
 public interface StoryDetailView {
-    void showStory(Story story);
-    void showComments(List<Comment> commentList);
+    void showStory();
+    void showComments();
 
     void showStoryPostUrl(String url);
 }
