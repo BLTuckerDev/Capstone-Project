@@ -18,8 +18,8 @@ public final class Comment {
 
     public Comment(long id, String authorName, String commentText, long unixPostTime, long[] replyIdsParam){
         this.id = id;
-        this.authorName = authorName;
-        this.commentText = commentText;
+        this.authorName = authorName != null ? authorName : "";
+        this.commentText = commentText != null ? commentText : "";
         this.unixPostTime = unixPostTime;
         this.replyIds = Arrays.copyOf(replyIdsParam, replyIdsParam.length);
     }
