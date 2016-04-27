@@ -6,13 +6,14 @@ import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
+
 import dev.bltucker.nanodegreecapstone.data.SchematicContentProviderGenerator;
-import dev.bltucker.nanodegreecapstone.data.StoryCommentsLoader;
 import dev.bltucker.nanodegreecapstone.data.StoryListLoader;
 import dev.bltucker.nanodegreecapstone.events.EventBus;
 import dev.bltucker.nanodegreecapstone.events.SyncCompletedEvent;
 import dev.bltucker.nanodegreecapstone.models.ReadingSession;
-import dev.bltucker.nanodegreecapstone.models.Story;
 import rx.Subscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
@@ -20,37 +21,43 @@ import timber.log.Timber;
 
 public class StoryListViewPresenter implements SwipeRefreshLayout.OnRefreshListener {
 
-    static final String SELECTED_STORY_BUNDLE_KEY = "story";
-
     private final ReadingSession readingSession;
     private final EventBus eventBus;
 
     private final StoryListLoaderCallbackDelegate storyListLoaderCallbackDelegate;
-    private final StoryCommentLoaderCallbackDelegate storyCommentLoaderCallbackDelegate;
     private final Account account;
 
     private StoryListView storyListView;
     private Subscription syncCompletedEventSubscription;
 
     private LoaderManager loaderManager;
+    private final Tracker analyticsTracker;
 
-    public StoryListViewPresenter(ReadingSession readingSession, EventBus eventBus, StoryListLoaderCallbackDelegate storyListLoaderCallbackDelegate,
-                                  StoryCommentLoaderCallbackDelegate commentLoaderCallbackDelegate, Account account) {
+    public StoryListViewPresenter(ReadingSession readingSession,
+                                  EventBus eventBus,
+                                  StoryListLoaderCallbackDelegate storyListLoaderCallbackDelegate,
+                                  Account account, Tracker tracker) {
         this.readingSession = readingSession;
         this.eventBus = eventBus;
         this.storyListLoaderCallbackDelegate = storyListLoaderCallbackDelegate;
-        this.storyCommentLoaderCallbackDelegate = commentLoaderCallbackDelegate;
         this.account = account;
+        analyticsTracker = tracker;
         subscribeToSyncAdapterEvents();
     }
 
 
     public void onViewCreated(StoryListView view, LoaderManager loaderManager) {
         setStoryListView(view);
+        trackScreenView();
         this.loaderManager = loaderManager;
         if(!readingSession.hasStories()){
             forceStoryListReload();
         }
+    }
+
+    private void trackScreenView(){
+        analyticsTracker.setScreenName("StoryListView");
+        analyticsTracker.send(new HitBuilders.ScreenViewBuilder().build());
     }
 
     public void onViewRestored(StoryListView view, LoaderManager loaderManager) {
@@ -78,26 +85,21 @@ public class StoryListViewPresenter implements SwipeRefreshLayout.OnRefreshListe
         loaderManager = null;
     }
 
-    public void onCommentsButtonClick(final Story selectedStory) {
-        if(storyListView != null && this.loaderManager != null){
-            storyListView.showLoadingView();
-
-            Bundle argBundle = new Bundle();
-            argBundle.putParcelable(SELECTED_STORY_BUNDLE_KEY, selectedStory);
-            this.loaderManager.restartLoader(StoryCommentsLoader.STORY_COMMENT_LOADER, argBundle, storyCommentLoaderCallbackDelegate).forceLoad();
+    public void onCommentsButtonClick(final int storyPosition) {
+        if(storyListView != null){
+            storyListView.showStoryDetailView(storyPosition);
         }
     }
 
-    public void onReadStoryButtonClick(Story story) {
+    public void onReadStoryButtonClick(int storyPosition) {
         if(storyListView != null){
-            storyListView.showStoryPostUrl(story.getUrl());
+            storyListView.showStoryPostUrl(readingSession.getStory(storyPosition).getUrl());
         }
     }
 
     private void setStoryListView(StoryListView view) {
         storyListView = view;
         storyListLoaderCallbackDelegate.setStoryListView(view);
-        storyCommentLoaderCallbackDelegate.setStoryListView(view);
     }
 
     private void forceStoryListReload() {

@@ -13,17 +13,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
-
 import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import dev.bltucker.nanodegreecapstone.CapstoneApplication;
 import dev.bltucker.nanodegreecapstone.R;
+import dev.bltucker.nanodegreecapstone.models.Story;
 
-//TODO while the adapter is empty show a spinner so the user knows stories are loading.
 public class StoryListFragment extends Fragment implements StoryListView {
 
     @Bind(R.id.swipe_to_refresh_layout)
@@ -41,11 +38,7 @@ public class StoryListFragment extends Fragment implements StoryListView {
     @Inject
     StoryListAdapter adapter;
 
-    @Inject
-    Tracker analyticsTracker;
-
     private Delegate delegate;
-    private boolean launchingStoryDetailsView = false;
 
     public StoryListFragment() {
         // Required empty public constructor
@@ -60,8 +53,6 @@ public class StoryListFragment extends Fragment implements StoryListView {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         CapstoneApplication.getApplication().getApplicationComponent().inject(this);
-        analyticsTracker.setScreenName("StoryListView");
-        analyticsTracker.send(new HitBuilders.ScreenViewBuilder().build());
     }
 
     @Override
@@ -111,15 +102,6 @@ public class StoryListFragment extends Fragment implements StoryListView {
     }
 
     @Override
-    public void onStop() {
-        if(launchingStoryDetailsView){
-            hideLoadingView();
-            launchingStoryDetailsView = false;
-        }
-        super.onStop();
-    }
-
-    @Override
     public void onDestroy() {
         presenter.onViewDestroyed(this);
         super.onDestroy();
@@ -134,10 +116,9 @@ public class StoryListFragment extends Fragment implements StoryListView {
     }
 
     @Override
-    public void showCommentsView() {
+    public void showStoryDetailView(int storyPosition) {
         if(delegate != null){
-            launchingStoryDetailsView = true;
-            delegate.showCommentsView();
+            delegate.showCommentsView(storyPosition);
         }
     }
 
@@ -160,6 +141,6 @@ public class StoryListFragment extends Fragment implements StoryListView {
     }
 
     public interface Delegate {
-        void showCommentsView();
+        void showCommentsView(int storyPosition);
     }
 }

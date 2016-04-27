@@ -1,4 +1,4 @@
-package dev.bltucker.nanodegreecapstone.topstories;
+package dev.bltucker.nanodegreecapstone.storydetail;
 
 import android.os.Bundle;
 import android.os.Handler;
@@ -20,21 +20,21 @@ class StoryCommentLoaderCallbackDelegate implements LoaderManager.LoaderCallback
 
     private final Provider<StoryCommentsLoader> commentsLoaderProvider;
     private final ReadingSession readingSession;
-    private StoryListView storyListView;
+    private StoryDetailView storyDetailView;
 
     public StoryCommentLoaderCallbackDelegate(ReadingSession readingSession, Provider<StoryCommentsLoader> commentsLoaderProvider) {
         this.commentsLoaderProvider = commentsLoaderProvider;
         this.readingSession = readingSession;
     }
 
-    public void setStoryListView(StoryListView view){
-        this.storyListView = view;
+    public void setStoryDetailView(StoryDetailView view){
+        this.storyDetailView = view;
     }
 
     @Override
     public Loader onCreateLoader(int id, Bundle args) {
         StoryCommentsLoader commentsLoader = commentsLoaderProvider.get();
-        commentsLoader.setStory((Story) args.getParcelable(StoryListViewPresenter.SELECTED_STORY_BUNDLE_KEY));
+        commentsLoader.setStory((Story) args.getParcelable(StoryDetailViewPresenter.SELECTED_STORY_BUNDLE_KEY));
         return commentsLoader;
     }
 
@@ -45,8 +45,10 @@ class StoryCommentLoaderCallbackDelegate implements LoaderManager.LoaderCallback
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
-                if (storyListView != null) {
-                    storyListView.showCommentsView();
+                if (storyDetailView != null) {
+                    storyDetailView.hideLoadingSpinner();
+                    storyDetailView.showStory();
+                    storyDetailView.showComments();
                 }
             }
         });

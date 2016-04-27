@@ -92,12 +92,12 @@ public class StoryListAdapter extends RecyclerView.Adapter<StoryListAdapter.Stor
 
         @OnClick(R.id.comments_button)
         public void onCommentsButtonClick(View v){
-            presenter.onCommentsButtonClick(story);
+            presenter.onCommentsButtonClick(getAdapterPosition());
         }
 
         @OnClick(R.id.read_button)
         public void onReadButtonClick(View v){
-            presenter.onReadStoryButtonClick(story);
+            presenter.onReadStoryButtonClick(getAdapterPosition());
         }
     }
 }

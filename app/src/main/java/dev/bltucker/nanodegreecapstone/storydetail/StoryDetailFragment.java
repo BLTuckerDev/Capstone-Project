@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
@@ -55,23 +56,20 @@ public class StoryDetailFragment extends Fragment implements StoryDetailView {
     @Inject
     ReadingSession readingSession;
 
-    @Inject
-    Tracker analyticsTracker;
-
     public StoryDetailFragment() {
         // Required empty public constructor
     }
 
-    public static StoryDetailFragment newInstance() {
-        return new StoryDetailFragment();
+    public static StoryDetailFragment newInstance(Bundle argBundle) {
+        StoryDetailFragment storyDetailFragment = new StoryDetailFragment();
+        storyDetailFragment.setArguments(new Bundle(argBundle));
+        return storyDetailFragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         CapstoneApplication.getApplication().getApplicationComponent().inject(this);
-        analyticsTracker.setScreenName("StoryDetailView");
-        analyticsTracker.send(new HitBuilders.ScreenViewBuilder().build());
     }
 
     @Override
@@ -87,9 +85,10 @@ public class StoryDetailFragment extends Fragment implements StoryDetailView {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(commentsAdapter);
         if(null == savedInstanceState){
-            presenter.onViewCreated(this);
+            int storyPosition = getArguments().getInt(StoryDetailActivity.STORY_POSITION_BUNDLE_KEY);
+            presenter.onViewCreated(this, getLoaderManager(), storyPosition);
         } else {
-            presenter.onViewRestored(this);
+            presenter.onViewRestored(this, getLoaderManager());
         }
     }
 
@@ -139,5 +138,15 @@ public class StoryDetailFragment extends Fragment implements StoryDetailView {
     public void showStoryPostUrl(String url) {
         Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
         startActivity(browserIntent);
+    }
+
+    @Override
+    public void showLoadingSpinner() {
+        Toast.makeText(this.getContext(), "Loading....", Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void hideLoadingSpinner() {
+        Toast.makeText(this.getContext(),  "Finished loading", Toast.LENGTH_LONG).show();
     }
 }

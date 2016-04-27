@@ -2,11 +2,12 @@ package dev.bltucker.nanodegreecapstone.topstories;
 
 import android.accounts.Account;
 
+import com.google.android.gms.analytics.Tracker;
+
 import javax.inject.Provider;
 
 import dagger.Module;
 import dagger.Provides;
-import dev.bltucker.nanodegreecapstone.data.StoryCommentsLoader;
 import dev.bltucker.nanodegreecapstone.data.StoryListLoader;
 import dev.bltucker.nanodegreecapstone.events.EventBus;
 import dev.bltucker.nanodegreecapstone.home.HomeViewPresenter;
@@ -22,9 +23,10 @@ public class TopStoriesModule {
     @Provides
     @ApplicationScope
     public StoryListViewPresenter provideStoryListViewPresenter(ReadingSession readingSession, EventBus eventBus,
-                                                                StoryListLoaderCallbackDelegate storyListLoaderCallbackDelegate, StoryCommentLoaderCallbackDelegate storyCommentLoaderCallbackDelegate,
-                                                                Account account){
-        return new StoryListViewPresenter(readingSession, eventBus, storyListLoaderCallbackDelegate, storyCommentLoaderCallbackDelegate, account);
+                                                                StoryListLoaderCallbackDelegate storyListLoaderCallbackDelegate,
+                                                                Account account,
+                                                                Tracker tracker){
+        return new StoryListViewPresenter(readingSession, eventBus, storyListLoaderCallbackDelegate, account, tracker);
     }
 
 
@@ -44,12 +46,6 @@ public class TopStoriesModule {
     @ApplicationScope
     public StoryListLoaderCallbackDelegate provideStoryListLoaderCallbackDelegate(ReadingSession readingSession, Provider<StoryListLoader> storyListLoaderProvider){
         return new StoryListLoaderCallbackDelegate(readingSession, storyListLoaderProvider);
-    }
-
-    @Provides
-    @ApplicationScope
-    public StoryCommentLoaderCallbackDelegate provideStoryCommentLoaderCallbackDelegate(ReadingSession readingSession, Provider<StoryCommentsLoader> storyCommentsLoaderProvider){
-        return new StoryCommentLoaderCallbackDelegate(readingSession, storyCommentsLoaderProvider);
     }
 
 }

@@ -1,6 +1,5 @@
 package dev.bltucker.nanodegreecapstone.home;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
@@ -48,10 +47,10 @@ public class MainActivity extends AppCompatActivity implements HomeView, StoryLi
     }
 
     @Override
-    public void showCommentsView() {
+    public void showCommentsView(int storyPosition) {
         //TODO in tablet mode we will just show a different story in the details fragment here.
         //.updateStory() since the model will already be changed
         //TODO use a shared element transition here
-        startActivity(new Intent(this, StoryDetailActivity.class));
+        StoryDetailActivity.launch(this, storyPosition);
     }
 }
