@@ -87,6 +87,7 @@ public class StoryListViewPresenter implements SwipeRefreshLayout.OnRefreshListe
 
     public void onCommentsButtonClick(final int storyPosition) {
         if(storyListView != null){
+            readingSession.clearCurrentStory();
             storyListView.showStoryDetailView(storyPosition);
         }
     }

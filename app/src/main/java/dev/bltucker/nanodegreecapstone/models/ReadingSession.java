@@ -93,4 +93,10 @@ public class ReadingSession {
     public int currentStoryCommentCount() {
         return currentStoryComments.size();
     }
+
+    public void clearCurrentStory() {
+        currentStory = null;
+        currentStoryComments.clear();
+        commentIdToParentMap.clear();
+    }
 }

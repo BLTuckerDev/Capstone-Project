@@ -61,4 +61,21 @@ public class ReadingSessionTest {
         assertTrue(objectUnderTest.hasStories());
 
     }
+
+    @Test
+    public void testClearReadingSession(){
+        final Date now = new Date();
+        Story testStory = new Story(1, "Brett", 1, now.getTime(), "Title", "https://google.com/", new Long[0]);
+        List<Story> storyList = new ArrayList<>();
+        storyList.add(testStory);
+
+        objectUnderTest.setStories(storyList);
+        objectUnderTest.clearCurrentStory();
+
+        assertNull(objectUnderTest.getCurrentStory());
+        assertEquals(0, objectUnderTest.currentStoryCommentCount());
+        assertNull(objectUnderTest.getCurrentStoryComment(0));
+
+
+    }
 }
