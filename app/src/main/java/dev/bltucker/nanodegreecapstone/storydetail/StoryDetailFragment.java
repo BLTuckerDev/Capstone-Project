@@ -5,17 +5,19 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.ShareActionProvider;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
 
 import javax.inject.Inject;
 
@@ -56,6 +58,9 @@ public class StoryDetailFragment extends Fragment implements StoryDetailView {
     @Inject
     ReadingSession readingSession;
 
+    ShareActionProvider shareActionProvider;
+    MenuItem shareMenuItem;
+
     public StoryDetailFragment() {
         // Required empty public constructor
     }
@@ -66,9 +71,40 @@ public class StoryDetailFragment extends Fragment implements StoryDetailView {
         return storyDetailFragment;
     }
 
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.menu_detail_fragment, menu);
+
+        shareMenuItem = menu.findItem(R.id.menu_item_share_story);
+        shareMenuItem.setVisible(false);
+        shareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(shareMenuItem);
+    }
+
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+
+        if(readingSession.getCurrentStory() != null && shareActionProvider != null){
+            setupShareActionProvider();
+            shareMenuItem.setVisible(true);
+        }
+    }
+
+    private void setupShareActionProvider(){
+        Intent shareIntent = new Intent();
+        shareIntent.setAction(Intent.ACTION_SEND);
+        shareIntent.setType("text/plain");
+        shareIntent.putExtra(Intent.EXTRA_SUBJECT, readingSession.getCurrentStory().getTitle());
+        shareIntent.putExtra(Intent.EXTRA_TEXT, readingSession.getCurrentStory().getUrl());
+        shareActionProvider.setShareIntent(shareIntent);
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
         CapstoneApplication.getApplication().getApplicationComponent().inject(this);
     }
 
@@ -112,6 +148,9 @@ public class StoryDetailFragment extends Fragment implements StoryDetailView {
 
     @Override
     public void showStory() {
+        if(getActivity() != null){
+            getActivity().invalidateOptionsMenu();
+        }
         Story story = readingSession.getCurrentStory();
         storyTitleTextView.setText(story.getTitle());
         storyUrlTextView.setText(story.getUrl());
