@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -48,6 +49,12 @@ public class StoryDetailFragment extends Fragment implements StoryDetailView {
 
     @Bind(R.id.read_button)
     Button readButton;
+
+    @Bind(R.id.content_container)
+    LinearLayout contentContainer;
+
+    @Bind(R.id.loading_container)
+    LinearLayout loadingContainer;
 
     @Inject
     StoryCommentsAdapter commentsAdapter;
@@ -161,6 +168,9 @@ public class StoryDetailFragment extends Fragment implements StoryDetailView {
         } else {
             readButton.setVisibility(View.VISIBLE);
         }
+
+        loadingContainer.setVisibility(View.INVISIBLE);
+        contentContainer.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -177,15 +187,5 @@ public class StoryDetailFragment extends Fragment implements StoryDetailView {
     public void showStoryPostUrl(String url) {
         Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
         startActivity(browserIntent);
-    }
-
-    @Override
-    public void showLoadingSpinner() {
-        Toast.makeText(this.getContext(), "Loading....", Toast.LENGTH_LONG).show();
-    }
-
-    @Override
-    public void hideLoadingSpinner() {
-        Toast.makeText(this.getContext(),  "Finished loading", Toast.LENGTH_LONG).show();
     }
 }

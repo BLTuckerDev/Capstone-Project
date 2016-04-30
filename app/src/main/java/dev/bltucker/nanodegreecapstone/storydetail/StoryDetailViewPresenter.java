@@ -32,7 +32,6 @@ public class StoryDetailViewPresenter {
     public void onViewCreated(StoryDetailView detailView, LoaderManager loaderManager, int storyPosition) {
         setDetailView(detailView);
         this.loaderManager = loaderManager;
-        view.showLoadingSpinner();
         trackScreenView();
         forceCommentReload(storyPosition);
     }
