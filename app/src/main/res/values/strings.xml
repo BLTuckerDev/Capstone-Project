@@ -12,4 +12,5 @@
     <string name="loading_stories">Loading Stories...</string>
     <string name="loading_comments">Loading Comments...</string>
     <string name="there_are_not_stories_available">There are not stories available :(</string>
+    <string name="this_story_does_not_have_any_comments_yet">This story does not have any comments yet.</string>
 </resources>

@@ -22,7 +22,10 @@ import dev.bltucker.nanodegreecapstone.injection.GregorianUTC;
 import dev.bltucker.nanodegreecapstone.models.Comment;
 import dev.bltucker.nanodegreecapstone.models.ReadingSession;
 
-public class StoryCommentsAdapter extends RecyclerView.Adapter<StoryCommentsAdapter.CommentViewHolder> {
+public class StoryCommentsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+
+    private static final int EMPTY_COMMENT_ITEM_TYPE = 1;
+    private static final int COMMENT_ITEM_TYPE = 2;
 
     private final Resources resources;
     private final ReadingSession readingSession;
@@ -36,20 +39,31 @@ public class StoryCommentsAdapter extends RecyclerView.Adapter<StoryCommentsAdap
     }
 
     @Override
-    public CommentViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.story_comment_layout_item, parent, false);
-        View commentContainer = itemView.findViewById(R.id.comment_container);
-        itemView.setTag(R.id.comment_container, commentContainer);
-        return new CommentViewHolder(itemView);
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        if(viewType == EMPTY_COMMENT_ITEM_TYPE){
+            View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.empty_comments_section, parent, false);
+            return new EmptyCommentsViewHolder(itemView);
+        } else {
+            View itemView = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.story_comment_layout_item, parent, false);
+            View commentContainer = itemView.findViewById(R.id.comment_container);
+            itemView.setTag(R.id.comment_container, commentContainer);
+            return new CommentViewHolder(itemView);
+        }
     }
 
     @Override
-    public void onBindViewHolder(CommentViewHolder holder, int position) {
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+        if(holder.getItemViewType() == EMPTY_COMMENT_ITEM_TYPE){
+            return;
+        }
+
+        CommentViewHolder commentViewHolder = ((CommentViewHolder) holder);
+
         Comment comment = readingSession.getCurrentStoryComment(position);
-        holder.authorNameTextView.setText(comment.getAuthorName());
-        holder.postTimeTextView.setText(getFormattedCommentTime(comment, holder.itemView.getContext()));
-        holder.commentBodyTextView.setText(Html.fromHtml(comment.getCommentText()));
+        commentViewHolder.authorNameTextView.setText(comment.getAuthorName());
+        commentViewHolder.postTimeTextView.setText(getFormattedCommentTime(comment, holder.itemView.getContext()));
+        commentViewHolder.commentBodyTextView.setText(Html.fromHtml(comment.getCommentText()));
 
         int commentDepth = getCommentDepth(comment, 0);
         if(commentDepth > 0){
@@ -94,8 +108,21 @@ public class StoryCommentsAdapter extends RecyclerView.Adapter<StoryCommentsAdap
     }
 
     @Override
+    public int getItemViewType(int position) {
+        if(readingSession.currentStoryCommentCount() == 0){
+            return EMPTY_COMMENT_ITEM_TYPE;
+        } else {
+            return COMMENT_ITEM_TYPE;
+        }
+    }
+
+    @Override
     public int getItemCount() {
-        return readingSession.currentStoryCommentCount();
+        if(readingSession.currentStoryCommentCount() > 0){
+            return readingSession.currentStoryCommentCount();
+        } else {
+            return 1;
+        }
     }
 
     public void reset() {
@@ -116,6 +143,12 @@ public class StoryCommentsAdapter extends RecyclerView.Adapter<StoryCommentsAdap
         public CommentViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+        }
+    }
+
+    public static class EmptyCommentsViewHolder extends RecyclerView.ViewHolder{
+        public EmptyCommentsViewHolder(View itemView){
+            super(itemView);
         }
     }
 }
