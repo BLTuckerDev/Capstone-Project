@@ -11,7 +11,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 
 import javax.inject.Inject;
 
@@ -19,7 +20,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import dev.bltucker.nanodegreecapstone.CapstoneApplication;
 import dev.bltucker.nanodegreecapstone.R;
-import dev.bltucker.nanodegreecapstone.models.Story;
+import dev.bltucker.nanodegreecapstone.models.ReadingSession;
 
 public class StoryListFragment extends Fragment implements StoryListView {
 
@@ -29,14 +30,23 @@ public class StoryListFragment extends Fragment implements StoryListView {
     @Bind(R.id.story_list_recyclerview)
     RecyclerView recyclerView;
 
-    @Bind(R.id.loading_spinner)
-    ProgressBar loadingSpinner;
+    @Bind(R.id.loading_container)
+    LinearLayout loadingContainer;
+
+    @Bind(R.id.content_container)
+    LinearLayout contentContainer;
+
+    @Bind(R.id.empty_view_container)
+    FrameLayout emptyViewContainer;
 
     @Inject
     StoryListViewPresenter presenter;
 
     @Inject
     StoryListAdapter adapter;
+
+    @Inject
+    ReadingSession readingSession;
 
     private Delegate delegate;
 
@@ -113,6 +123,15 @@ public class StoryListFragment extends Fragment implements StoryListView {
             swipeRefreshLayout.setRefreshing(false);
         }
         adapter.reset();
+        loadingContainer.setVisibility(View.INVISIBLE);
+
+        if(readingSession.hasStories()){
+            emptyViewContainer.setVisibility(View.GONE);
+            contentContainer.setVisibility(View.VISIBLE);
+        } else {
+            contentContainer.setVisibility(View.INVISIBLE);
+            emptyViewContainer.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -126,18 +145,6 @@ public class StoryListFragment extends Fragment implements StoryListView {
     public void showStoryPostUrl(String url) {
         Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
         startActivity(browserIntent);
-    }
-
-    @Override
-    public void showLoadingView() {
-        loadingSpinner.setVisibility(View.VISIBLE);
-        recyclerView.setVisibility(View.INVISIBLE);
-    }
-
-    @Override
-    public void hideLoadingView() {
-        loadingSpinner.setVisibility(View.INVISIBLE);
-        recyclerView.setVisibility(View.VISIBLE);
     }
 
     public interface Delegate {

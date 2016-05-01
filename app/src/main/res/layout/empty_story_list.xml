@@ -3,6 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/empty_view_container"
+    android:visibility="gone"
     android:padding="16dp">
 
     <TextView
@@ -12,6 +14,7 @@
         android:gravity="center"
         android:layout_gravity="center_horizontal|center_vertical"
         style="@style/Base.TextAppearance.AppCompat.SearchResult.Title"
+        android:text="@string/there_are_not_stories_available"
         tools:text="There are no stories available :("/>
 
 </FrameLayout>

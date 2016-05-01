@@ -70,7 +70,9 @@ public class StoryListViewPresenter implements SwipeRefreshLayout.OnRefreshListe
 
     public void onViewResumed(StoryListView view) {
         setStoryListView(view);
-        this.storyListView.showStories();
+        if(readingSession.hasStories()){
+            this.storyListView.showStories();
+        }
         if(readingSession.isStoryListIsDirty()){
             forceStoryListReload();
         }

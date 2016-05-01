@@ -33,10 +33,6 @@ class StoryListLoaderCallbackDelegate implements LoaderManager.LoaderCallbacks {
     @Override
     public Loader<List<Story>> onCreateLoader(int id, Bundle args) {
         Timber.d("StoryListLoaderCallbackDelegate.onCreateLoader");
-        if (storyListView != null) {
-            storyListView.showLoadingView();
-        }
-
         StoryListLoader storyListLoader = storyListLoaderProvider.get();
         Timber.d("Returning an instance of story list loader %d", storyListLoader.hashCode());
         return storyListLoader;
@@ -56,7 +52,6 @@ class StoryListLoaderCallbackDelegate implements LoaderManager.LoaderCallbacks {
                 if(storyListView != null){
                     Timber.d("StoryListView is available to the loader. View is being updated");
                     storyListView.showStories();
-                    storyListView.hideLoadingView();
                 }
             }
         });

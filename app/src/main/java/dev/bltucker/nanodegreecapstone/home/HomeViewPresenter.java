@@ -25,9 +25,9 @@ public class HomeViewPresenter {
 
     public void onViewCreated(HomeView createdView){
         view = createdView;
+        view.showStoryList();
         requestImmediateSync();
         setupPeriodicSync();
-        view.showStoryList();
     }
 
     public void onViewRestored(HomeView restoredView){

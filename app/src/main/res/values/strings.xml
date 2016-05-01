@@ -9,4 +9,7 @@
     <string name="minutes_ago">%1$d minutes ago</string>
     <string name="less_than_a_minute">less than a minute ago</string>
     <string name="share">Share</string>
+    <string name="loading_stories">Loading Stories...</string>
+    <string name="loading_comments">Loading Comments...</string>
+    <string name="there_are_not_stories_available">There are not stories available :(</string>
 </resources>
