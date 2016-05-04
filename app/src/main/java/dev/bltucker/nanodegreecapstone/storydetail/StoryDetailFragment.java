@@ -29,6 +29,7 @@ import dev.bltucker.nanodegreecapstone.CapstoneApplication;
 import dev.bltucker.nanodegreecapstone.R;
 import dev.bltucker.nanodegreecapstone.models.ReadingSession;
 import dev.bltucker.nanodegreecapstone.models.Story;
+import dev.bltucker.nanodegreecapstone.settings.SettingsActivity;
 
 public class StoryDetailFragment extends Fragment implements StoryDetailView {
 
@@ -97,6 +98,17 @@ public class StoryDetailFragment extends Fragment implements StoryDetailView {
             setupShareActionProvider();
             shareMenuItem.setVisible(true);
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        if(item.getItemId() == R.id.menu_item_settings){
+            SettingsActivity.launch(this.getActivity());
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     private void setupShareActionProvider(){

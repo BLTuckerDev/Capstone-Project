@@ -58,11 +58,14 @@
             android:enabled="true"
             android:exported="true">
             <intent-filter>
-                <action android:name="dev.bltucker.nanodegreecapstone.SYNC_COMPLETED"></action>
+                <action android:name="dev.bltucker.nanodegreecapstone.SYNC_COMPLETED" />
             </intent-filter>
         </receiver>
 
-        <activity android:name=".storydetail.StoryDetailActivity"></activity>
+        <activity android:name=".storydetail.StoryDetailActivity" />
+        <activity
+            android:name=".settings.SettingsActivity"
+            android:label="@string/title_activity_settings"></activity>
     </application>
 
 </manifest>

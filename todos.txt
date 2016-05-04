@@ -2,11 +2,13 @@
 
 Shared element transition on story title perhaps?
 top 5 stories widget
-location
+allow user to set a home location in settings
+use home location to pop a notification about stories they wanted to read when they got home
 notifications
 color theme
 preferences for disabling notifications
 
+and one for storing the user entered location where they would liek to see reminders from our app.
 
 
 work on first app launch from cold and from install
