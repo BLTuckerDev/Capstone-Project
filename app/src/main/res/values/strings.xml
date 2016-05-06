@@ -16,5 +16,7 @@
     <string name="title_activity_settings">Settings</string>
     <string name="location">Location</string>
     <string name="settings">Settings</string>
+    <string name="allow_notifications_preference">allowNotifications</string>
+    <string name="location_preference">location</string>
 
 </resources>

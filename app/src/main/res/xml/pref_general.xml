@@ -4,7 +4,7 @@
         android:capitalize="words"
         android:defaultValue=""
         android:inputType="textCapWords"
-        android:key="location"
+        android:key="@string/location_preference"
         android:maxLines="1"
         android:selectAllOnFocus="true"
         android:singleLine="true"
@@ -12,9 +12,8 @@
 
     <SwitchPreference
         android:defaultValue="true"
-        android:key="allowNotifications"
+        android:key="@string/allow_notifications_preference"
         android:title="Allow Notifications"
         />
-
 
 </PreferenceScreen>
