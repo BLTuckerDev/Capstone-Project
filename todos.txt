@@ -16,6 +16,15 @@
     create a widget that will load just the top five stories and display them in a list.
     Tapping them will take you to the detail activity
 
+5. Tablet mode requirement
+    We will need to provide at least one alternate layout in our app to support tablets.
+
+6. Read Later Feature
+    This is related to our requirement to use location and notification, once we have set up a way
+    of reminding people of stories they wanted to read later we will need an activity that the
+    notification can send them to in order to read those stories. A simple list where each element
+    opens the browser will suffice for now.
+
 
 
 
