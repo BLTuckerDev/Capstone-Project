@@ -1,8 +1,9 @@
 package dev.bltucker.nanodegreecapstone.injection;
 
 import dagger.Component;
-import dev.bltucker.nanodegreecapstone.data.StoryListLoader;
 import dev.bltucker.nanodegreecapstone.home.MainActivity;
+import dev.bltucker.nanodegreecapstone.location.GeofenceCreationIntentServiceComponent;
+import dev.bltucker.nanodegreecapstone.location.GeofenceCreationIntentServiceModule;
 import dev.bltucker.nanodegreecapstone.storydetail.StoryDetailFragment;
 import dev.bltucker.nanodegreecapstone.storydetail.StoryDetailModule;
 import dev.bltucker.nanodegreecapstone.topstories.StoryListFragment;
@@ -18,4 +19,6 @@ public interface ApplicationComponent {
     void inject(StoryListFragment fragment);
     void inject(StoryDetailFragment fragment);
     void inject(SyncCompletedBroadCastReceiver syncCompletedBroadCastReceiver);
+
+    GeofenceCreationIntentServiceComponent geofenceCreationIntentServiceComponent(GeofenceCreationIntentServiceModule module);
 }
