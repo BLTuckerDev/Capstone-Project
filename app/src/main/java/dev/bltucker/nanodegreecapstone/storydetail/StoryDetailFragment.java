@@ -18,7 +18,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import javax.inject.Inject;
 
@@ -171,6 +170,11 @@ public class StoryDetailFragment extends Fragment implements StoryDetailView {
             getActivity().invalidateOptionsMenu();
         }
         Story story = readingSession.getCurrentStory();
+
+        if(null == story){
+            return;
+        }
+
         storyTitleTextView.setText(story.getTitle());
         storyUrlTextView.setText(story.getUrl());
         storyPosterTextView.setText(String.format(getString(R.string.by_poster), story.getPosterName()));
