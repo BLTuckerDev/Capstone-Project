@@ -1,6 +1,7 @@
 package dev.bltucker.nanodegreecapstone.injection;
 
 import android.accounts.Account;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.res.Resources;
 
@@ -35,6 +36,12 @@ public class ApplicationResourcesModule {
 
     public ApplicationResourcesModule(CapstoneApplication application){
         this.application = application;
+    }
+
+    @Provides
+    @ApplicationScope
+    public NotificationManager provideNotificationManager(){
+        return (NotificationManager) application.getSystemService(Context.NOTIFICATION_SERVICE);
     }
 
     @Provides

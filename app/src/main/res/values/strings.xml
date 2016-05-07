@@ -19,5 +19,6 @@
     <string name="allow_notifications_preference">allowNotifications</string>
     <string name="location_preference">location</string>
     <string name="dont_forget_to_read">Don\'t forget to read these stories!</string>
+    <string name="read_now">Read Now</string>
 
 </resources>
