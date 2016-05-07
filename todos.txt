@@ -3,14 +3,9 @@
     Animate the card in the story list into the card for the detail header?
     Or animate the title into the detail title
 
-2. Location Requirement:
-    Use the location entered by the user in the shared preference to create a geo fence,
-    when the user enters that location, pop the notification reminding them to read whatever
-    story they had saved for reading later.
 
 3. Notification Requirement:
-    If the notification preference is set then, pop a notification to the user containing the story
-    title and story url. If they tap the notification take them to the story url.
+    Launch the read later list activity instead of the story list activity
 
 4. Widget Requirement:
     create a widget that will load just the top five stories and display them in a list.
