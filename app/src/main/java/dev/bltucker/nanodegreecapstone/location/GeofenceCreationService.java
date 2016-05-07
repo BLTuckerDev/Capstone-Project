@@ -2,17 +2,13 @@ package dev.bltucker.nanodegreecapstone.location;
 
 import android.app.IntentService;
 import android.app.PendingIntent;
-import android.content.Intent;
 import android.content.Context;
+import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
-import android.support.annotation.NonNull;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.Status;
-import com.google.android.gms.location.Geofence;
-import com.google.android.gms.location.GeofencingRequest;
 import com.google.android.gms.location.LocationServices;
 
 import java.io.IOException;
@@ -51,6 +47,14 @@ public class GeofenceCreationService extends IntentService {
                 .inject(this);
     }
 
+    @Override
+    public void onDestroy() {
+        if(googleApiClient.isConnected()){
+            googleApiClient.disconnect();
+        }
+        super.onDestroy();
+    }
+
     public static void createGeofence(Context context, String locationString) {
         Intent intent = new Intent(context, GeofenceCreationService.class);
         intent.setAction(ACTION_CREATE_GEO_FENCE);
@@ -73,6 +77,10 @@ public class GeofenceCreationService extends IntentService {
             String locationString = intent.getStringExtra(LOCATION_PARAMETER);
             List<Address> fromLocationName = geocoder.getFromLocationName(locationString, 1);
 
+            if(fromLocationName.isEmpty()){
+                return;
+            }
+
             Address address = fromLocationName.get(0);
             Timber.d("Longitude: %f", address.getLongitude());
             Timber.d("Latitude: %f", address.getLatitude());
@@ -83,13 +91,14 @@ public class GeofenceCreationService extends IntentService {
                     return;
                 }
             }
+            //We do not ever fire an intent to this service unless we have permission.
             //noinspection MissingPermission
             LocationServices.GeofencingApi.addGeofences(googleApiClient,
                     geofencingRequestProvider.getRequest(address),
                     getPendingIntent());
 
         } catch (IOException e) {
-            e.printStackTrace();
+            Timber.e(e, "Exception while attempting to create a geofence.");
         }
     }
 
