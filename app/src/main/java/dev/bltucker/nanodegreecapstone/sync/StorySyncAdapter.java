@@ -35,6 +35,8 @@ public final class StorySyncAdapter extends AbstractThreadedSyncAdapter {
 
     public static final String ACCOUNT_TYPE = "bltucker.dev";
 
+    public static final String SYNC_COMPLETED_ACTION ="dev.bltucker.nanodegreecapstone.SYNC_COMPLETED";
+
     @Inject
     HackerNewsApiService apiService;
 
@@ -83,7 +85,8 @@ public final class StorySyncAdapter extends AbstractThreadedSyncAdapter {
                       final long stopTime = System.currentTimeMillis();
                       Timber.d("Sync completed in %d milliseconds", stopTime - startTime);
                       Intent syncCompletedIntent = new Intent();
-                      syncCompletedIntent.setAction("dev.bltucker.nanodegreecapstone.SYNC_COMPLETED");
+                      syncCompletedIntent.setPackage(getContext().getPackageName());
+                      syncCompletedIntent.setAction(SYNC_COMPLETED_ACTION);
                       getContext().sendBroadcast(syncCompletedIntent);
                   }
 

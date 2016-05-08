@@ -21,5 +21,6 @@
     <string name="dont_forget_to_read">Don\'t forget to read these stories!</string>
     <string name="read_now">Read Now</string>
     <string name="top_five_stories">Top Five Stories</string>
+    <string name="add_widget">Add widget</string>
 
 </resources>
