@@ -12,4 +12,6 @@ public interface ReadLaterListView {
     void showStories(List<ReadLaterStory> data);
 
     void showEmptyView();
+
+    void readStory(ReadLaterStory story);
 }

@@ -74,4 +74,10 @@ public class ReadLaterListPresenter implements LoaderManager.LoaderCallbacks<Lis
     public void onRefresh() {
         loaderManager.restartLoader(ReadLaterStoryListLoader.ID, null, this);
     }
+
+    public void onReadLaterStoryClicked(ReadLaterStory story) {
+        if(view != null){
+            view.readStory(story);
+        }
+    }
 }
