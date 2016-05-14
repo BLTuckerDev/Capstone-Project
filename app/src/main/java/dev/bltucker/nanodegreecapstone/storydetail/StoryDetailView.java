@@ -4,4 +4,5 @@ public interface StoryDetailView {
     void showStory();
     void showComments();
     void showStoryPostUrl(String url);
+    void showStorySaveConfirmation();
 }

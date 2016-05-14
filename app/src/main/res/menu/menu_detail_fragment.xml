@@ -6,6 +6,11 @@
         android:title="@string/share"
         app:actionProviderClass="android.support.v7.widget.ShareActionProvider"/>
 
+    <item android:id="@+id/menu_item_save_story"
+        app:showAsAction="ifRoom"
+        android:title="Save"
+        android:icon="@drawable/ic_watch_later_black_24dp"/>
+
     <item
         android:id="@+id/menu_item_settings"
         app:showAsAction="never"

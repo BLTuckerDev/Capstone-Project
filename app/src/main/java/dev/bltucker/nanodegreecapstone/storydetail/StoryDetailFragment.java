@@ -1,10 +1,12 @@
 package dev.bltucker.nanodegreecapstone.storydetail;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -18,6 +20,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import javax.inject.Inject;
 
@@ -87,6 +90,9 @@ public class StoryDetailFragment extends Fragment implements StoryDetailView {
         shareMenuItem = menu.findItem(R.id.menu_item_share_story);
         shareMenuItem.setVisible(false);
         shareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(shareMenuItem);
+
+        MenuItem saveItem = menu.findItem(R.id.menu_item_save_story);
+        DrawableCompat.setTint(saveItem.getIcon(), Color.WHITE);
     }
 
     @Override
@@ -104,6 +110,11 @@ public class StoryDetailFragment extends Fragment implements StoryDetailView {
 
         if(item.getItemId() == R.id.menu_item_settings){
             SettingsActivity.launch(this.getActivity());
+            return true;
+        }
+
+        if(item.getItemId() == R.id.menu_item_save_story){
+            presenter.onSaveStoryClick();
             return true;
         }
 
@@ -203,5 +214,10 @@ public class StoryDetailFragment extends Fragment implements StoryDetailView {
     public void showStoryPostUrl(String url) {
         Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
         startActivity(browserIntent);
+    }
+
+    @Override
+    public void showStorySaveConfirmation() {
+        Toast.makeText(getContext(), getString(R.string.story_saved), Toast.LENGTH_LONG).show();
     }
 }
