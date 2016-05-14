@@ -42,6 +42,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="8dp"
                 style="@style/Base.TextAppearance.AppCompat.Subhead"
+                android:maxLines="1"
+                android:ellipsize="end"
                 tools:text="by Brett Tucker"/>
 
             <TextView
