@@ -115,7 +115,7 @@ public class StoryListFragment extends Fragment implements StoryListView {
     public void onDestroy() {
         presenter.onViewDestroyed(this);
         super.onDestroy();
-    }
+   }
 
     @Override
     public void showStories() {
