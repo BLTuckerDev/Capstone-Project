@@ -55,4 +55,10 @@ public class HomeViewPresenter {
               Bundle.EMPTY,
               syncInterval);
     }
+
+    public void onShowReadLaterMenuClick() {
+        if(view != null){
+            view.showReadLaterListView();
+        }
+    }
 }
