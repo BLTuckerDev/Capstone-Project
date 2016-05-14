@@ -1,6 +1,5 @@
 package dev.bltucker.nanodegreecapstone.widget;
 
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -14,7 +13,6 @@ import java.util.Locale;
 import dev.bltucker.nanodegreecapstone.R;
 import dev.bltucker.nanodegreecapstone.data.SchematicContentProviderGenerator;
 import dev.bltucker.nanodegreecapstone.data.StoryColumns;
-import dev.bltucker.nanodegreecapstone.home.MainActivity;
 import timber.log.Timber;
 
 class MyRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {

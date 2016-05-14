@@ -13,7 +13,7 @@ import javax.inject.Inject;
 
 import dev.bltucker.nanodegreecapstone.CapstoneApplication;
 import dev.bltucker.nanodegreecapstone.R;
-import dev.bltucker.nanodegreecapstone.home.MainActivity;
+import dev.bltucker.nanodegreecapstone.readlater.ReadLaterListActivity;
 
 public class GeofenceTransitionsIntentService extends IntentService {
 
@@ -54,8 +54,7 @@ public class GeofenceTransitionsIntentService extends IntentService {
         notificationBuilder.setContentTitle(notificationTitle);
         notificationBuilder.setContentText(getString(R.string.read_now));
 
-        //TODO launch the yet to be created "saved for later" activity
-        Intent notificationIntent = new Intent(this, MainActivity.class);
+        Intent notificationIntent = new Intent(this, ReadLaterListActivity.class);
         PendingIntent pendingNotificationIntent = PendingIntent.getActivity(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         notificationBuilder.setContentIntent(pendingNotificationIntent);
