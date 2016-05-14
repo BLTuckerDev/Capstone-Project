@@ -78,7 +78,7 @@
         <receiver android:name=".widget.TopFiveStoriesWidgetProvider">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-                <action android:name="dev.bltucker.nanodegreecapstone.SYNC_COMPLETED"/>
+                <action android:name="dev.bltucker.nanodegreecapstone.SYNC_COMPLETED" />
             </intent-filter>
 
             <meta-data
@@ -86,11 +86,13 @@
                 android:resource="@xml/top_five_stories_widget_info" />
         </receiver>
 
-        <service android:name=".widget.TopFiveStoriesWidgetRemoteViewService"
+        <service
+            android:name=".widget.TopFiveStoriesWidgetRemoteViewService"
             android:enabled="true"
             android:exported="false"
-            android:permission="android.permission.BIND_REMOTEVIEWS"/>
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
 
+        <activity android:name=".readlater.ReadLaterListActivity"></activity>
     </application>
 
 </manifest>
