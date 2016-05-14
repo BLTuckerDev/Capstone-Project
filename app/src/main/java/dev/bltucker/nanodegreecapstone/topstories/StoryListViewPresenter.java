@@ -45,13 +45,15 @@ public class StoryListViewPresenter implements SwipeRefreshLayout.OnRefreshListe
         subscribeToSyncAdapterEvents();
     }
 
-
     public void onViewCreated(StoryListView view, LoaderManager loaderManager) {
         setStoryListView(view);
         trackScreenView();
         this.loaderManager = loaderManager;
         if(!readingSession.hasStories()){
-            forceStoryListReload();
+            if(!readingSession.hasStories() || readingSession.isStoryListIsDirty()){
+                readingSession.setStoryListIsDirty(false);
+                this.loaderManager.initLoader(StoryListLoader.STORY_LIST_LOADER, null, storyListLoaderCallbackDelegate);
+            }
         }
     }
 
@@ -63,19 +65,17 @@ public class StoryListViewPresenter implements SwipeRefreshLayout.OnRefreshListe
     public void onViewRestored(StoryListView view, LoaderManager loaderManager) {
         setStoryListView(view);
         this.loaderManager = loaderManager;
-        if(!readingSession.hasStories()){
-            forceStoryListReload();
+        if(readingSession.hasStories()){
+            this.storyListView.showStories();
+        }
+        if(readingSession.isStoryListIsDirty()){
+            readingSession.setStoryListIsDirty(false);
+            this.loaderManager.restartLoader(StoryListLoader.STORY_LIST_LOADER, null, storyListLoaderCallbackDelegate);
         }
     }
 
     public void onViewResumed(StoryListView view) {
         setStoryListView(view);
-        if(readingSession.hasStories()){
-            this.storyListView.showStories();
-        }
-        if(readingSession.isStoryListIsDirty()){
-            forceStoryListReload();
-        }
     }
 
     public void onViewPaused(StoryListView view) {
@@ -105,12 +105,6 @@ public class StoryListViewPresenter implements SwipeRefreshLayout.OnRefreshListe
         storyListLoaderCallbackDelegate.setStoryListView(view);
     }
 
-    private void forceStoryListReload() {
-        Timber.d("forceStoryListReload");
-        this.loaderManager.restartLoader(StoryListLoader.STORY_LIST_LOADER, null, storyListLoaderCallbackDelegate).forceLoad();
-        readingSession.setStoryListIsDirty(false);
-    }
-
     private void subscribeToSyncAdapterEvents() {
         syncCompletedEventSubscription = eventBus.subscribeTo(SyncCompletedEvent.class)
                 .observeOn(AndroidSchedulers.mainThread())
@@ -127,7 +121,7 @@ public class StoryListViewPresenter implements SwipeRefreshLayout.OnRefreshListe
                     public void onNext(Object o) {
                         Timber.d("StoryListViewPresenter syncCompleteHandler");
                         if(storyListView != null){
-                            forceStoryListReload();
+                            loaderManager.restartLoader(StoryListLoader.STORY_LIST_LOADER, null, storyListLoaderCallbackDelegate);
                         } else {
                             readingSession.setStoryListIsDirty(true);
                         }

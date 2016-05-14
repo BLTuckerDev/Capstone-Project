@@ -19,10 +19,18 @@ public class StoryListLoader extends AsyncTaskLoader<List<Story>> {
     public StoryListLoader(Context context, StoryRepository storyRepository) {
         super(context);
         this.storyRepository = storyRepository;
+        onContentChanged();
     }
 
     @Override
     public List<Story> loadInBackground() {
         return storyRepository.getAllStories().toBlocking().first();
+    }
+
+    @Override
+    protected void onStartLoading() {
+        if (takeContentChanged()) {
+            forceLoad();
+        }
     }
 }
