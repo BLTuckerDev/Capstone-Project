@@ -3,26 +3,15 @@
     Animate the card in the story list into the card for the detail header?
     Or animate the title into the detail title
 
-
-3. Notification Requirement:
-    Launch the read later list activity instead of the story list activity
-
-4. Widget Requirement:
-    create a widget that will load just the top five stories and display them in a list.
-    Tapping them will take you to the detail activity
-
 5. Tablet mode requirement
     We will need to provide at least one alternate layout in our app to support tablets.
 
 6. Read Later Feature
-    This is related to our requirement to use location and notification, once we have set up a way
-    of reminding people of stories they wanted to read later we will need an activity that the
-    notification can send them to in order to read those stories. A simple list where each element
-    opens the browser will suffice for now.
-
+    add a read/delete button to the items in the read later adapter and handling deleting
 
 
 
 Later:
 work on first app launch from cold and from install
 work on comment loading time for stories with lots of comments
+widget taking you directly to story detail activity
