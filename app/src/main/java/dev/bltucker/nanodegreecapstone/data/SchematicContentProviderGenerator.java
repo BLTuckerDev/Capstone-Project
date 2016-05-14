@@ -52,7 +52,16 @@ public final class SchematicContentProviderGenerator {
     public static class ReadLaterStoryPaths {
 
         @ContentUri(path = READ_LATER_STORY_PATH, type = "vnd.android.cursor.dir/list")
-        public static final Uri ALL_READ_LATER_STORIES = Uri.parse("content://" + AUTHORITY + "/" + STORY_PATH);
+        public static final Uri ALL_READ_LATER_STORIES = Uri.parse("content://" + AUTHORITY + "/" + READ_LATER_STORY_PATH);
+
+        @InexactContentUri(path = READ_LATER_STORY_PATH + "/*",
+                name = "STORY_ID",
+                type = "vnd.android.cursor.dir/list",
+                whereColumn = ReadLaterColumns._ID,
+                pathSegment = 1)
+        public static Uri withStoryId(String id) {
+            return Uri.withAppendedPath(ALL_READ_LATER_STORIES, id);
+        }
     }
 
 }
