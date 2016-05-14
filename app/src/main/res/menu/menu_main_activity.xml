@@ -4,6 +4,7 @@
 
     <item android:id="@+id/menu_item_show_read_later"
         app:showAsAction="ifRoom"
+        android:icon="@drawable/ic_book_black_24dp"
         android:title="@string/read_later"   />
 
 </menu>

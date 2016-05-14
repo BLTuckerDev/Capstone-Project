@@ -1,7 +1,9 @@
 package dev.bltucker.nanodegreecapstone.home;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -27,6 +29,8 @@ public class MainActivity extends AppCompatActivity implements HomeView, StoryLi
         super.onCreateOptionsMenu(menu);
         MenuInflater inflater=getMenuInflater();
         inflater.inflate(R.menu.menu_main_activity, menu);
+        MenuItem item = menu.findItem(R.id.menu_item_show_read_later);
+        DrawableCompat.setTint(item.getIcon(), Color.WHITE);
         return true;
     }
 
