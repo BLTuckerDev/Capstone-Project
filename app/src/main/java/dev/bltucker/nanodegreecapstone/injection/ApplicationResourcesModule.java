@@ -2,6 +2,7 @@ package dev.bltucker.nanodegreecapstone.injection;
 
 import android.accounts.Account;
 import android.app.NotificationManager;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.res.Resources;
 
@@ -36,6 +37,12 @@ public class ApplicationResourcesModule {
 
     public ApplicationResourcesModule(CapstoneApplication application){
         this.application = application;
+    }
+
+    @Provides
+    @ApplicationScope
+    public ContentResolver provideContentResolver(){
+        return application.getContentResolver();
     }
 
     @Provides
@@ -116,8 +123,8 @@ public class ApplicationResourcesModule {
 
     @Provides
     @ApplicationScope
-    public StoryRepository provideStoryRepository(Context context, HackerNewsApiService hackerNewsApiService, DescendingScoreStoryComparator comparator){
-        return new CombinationBackedStoryRepository(context, hackerNewsApiService, comparator);
+    public StoryRepository provideStoryRepository(ContentResolver contentResolver, HackerNewsApiService hackerNewsApiService, DescendingScoreStoryComparator comparator){
+        return new CombinationBackedStoryRepository(contentResolver, hackerNewsApiService, comparator);
     }
 
 

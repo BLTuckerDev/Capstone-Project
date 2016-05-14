@@ -2,12 +2,10 @@ package dev.bltucker.nanodegreecapstone.data;
 
 import android.content.ContentResolver;
 import android.content.ContentValues;
-import android.content.Context;
 import android.database.Cursor;
 import android.util.LruCache;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -23,15 +21,15 @@ public class CombinationBackedStoryRepository implements StoryRepository {
     //TODO test this class!
     public static final int CACHE_SIZE = 2 * 1024 * 1024; // 2MiB
 
-    private final Context context;
+    private final ContentResolver contentResolver;
     private final HackerNewsApiService hackerNewsApiService;
     private final DescendingScoreStoryComparator storyComparator;
 
     private LruCache<Long, List<Comment>> commentLruCache;
 
     @Inject
-    public CombinationBackedStoryRepository(Context context, HackerNewsApiService hackerNewsApiService, DescendingScoreStoryComparator storyComparator) {
-        this.context = context;
+    public CombinationBackedStoryRepository(ContentResolver contentResolver, HackerNewsApiService hackerNewsApiService, DescendingScoreStoryComparator storyComparator) {
+        this.contentResolver = contentResolver;
         this.hackerNewsApiService = hackerNewsApiService;
         this.storyComparator = storyComparator;
         commentLruCache = new LruCache<>(CACHE_SIZE);
@@ -42,7 +40,7 @@ public class CombinationBackedStoryRepository implements StoryRepository {
         return Observable.create(new Observable.OnSubscribe<List<Story>>() {
             @Override
             public void call(Subscriber<? super List<Story>> subscriber) {
-                Cursor query = context.getContentResolver().query(SchematicContentProviderGenerator.StoryPaths.ALL_STORIES,
+                Cursor query = contentResolver.query(SchematicContentProviderGenerator.StoryPaths.ALL_STORIES,
                         null,
                         null,
                         null,
@@ -70,7 +68,7 @@ public class CombinationBackedStoryRepository implements StoryRepository {
     }
 
     private Long[] getCommentIds(long storyId) {
-        Cursor query = context.getContentResolver().query(SchematicContentProviderGenerator.CommentRefs.withStoryId(String.valueOf(storyId)), null, null, null, null);
+        Cursor query = contentResolver.query(SchematicContentProviderGenerator.CommentRefs.withStoryId(String.valueOf(storyId)), null, null, null, null);
         Long[] commentIds = new Long[query.getCount()];
         int index = 0;
         while (query.moveToNext()) {
@@ -121,8 +119,6 @@ public class CombinationBackedStoryRepository implements StoryRepository {
 
     @Override
     public void saveStories(List<Story> stories) {
-        final ContentResolver contentResolver = context.getContentResolver();
-
         commentLruCache.evictAll();
         int deletedStories = contentResolver.delete(SchematicContentProviderGenerator.StoryPaths.ALL_STORIES, null, null);
         int deletedComments = contentResolver.delete(SchematicContentProviderGenerator.CommentRefs.ALL_COMMENTS, null, null);

@@ -54,7 +54,7 @@
                 android:layout_height="wrap_content"
                 style="@style/Widget.AppCompat.Button.Borderless"
                 android:text="@string/comments_button_text"
-                android:layout_alignParentLeft="true"/>
+                android:layout_alignParentStart="true"/>
 
             <Button
                 android:id="@+id/read_button"
@@ -62,7 +62,7 @@
                 android:layout_height="wrap_content"
                 style="@style/Widget.AppCompat.Button.Borderless"
                 android:text="@string/read_button_text"
-                android:layout_alignParentRight="true"/>
+                android:layout_alignParentEnd="true"/>
 
         </RelativeLayout>
 

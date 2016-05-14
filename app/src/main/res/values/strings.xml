@@ -28,5 +28,6 @@
     <string name="read_later">Stories for later</string>
     <string name="you_do_not_have_any_stories_saved_for_later">You do not have any stories saved for later.</string>
     <string name="story_saved">Story saved for later!</string>
+    <string name="delete_button_text">delete</string>
 
 </resources>

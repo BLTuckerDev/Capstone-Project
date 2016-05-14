@@ -1,5 +1,6 @@
 package dev.bltucker.nanodegreecapstone.readlater;
 
+import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -17,21 +18,21 @@ import rx.Subscriber;
 
 public class ContentProviderBackedRepository implements ReadLaterRepository {
 
-    private final Context context;
+    private final ContentResolver contentResolver;
 
-    @Inject public ContentProviderBackedRepository(Context context){
-        this.context = context;
+    @Inject public ContentProviderBackedRepository(ContentResolver contentResolver){
+        this.contentResolver = contentResolver;
     }
 
     @Override
     public void save(ReadLaterStory readLaterStory) {
         ContentValues contentValues = ReadLaterStory.mapToContentValues(readLaterStory);
-        context.getContentResolver().insert(SchematicContentProviderGenerator.StoryPaths.ALL_STORIES, contentValues);
+        contentResolver.insert(SchematicContentProviderGenerator.StoryPaths.ALL_STORIES, contentValues);
     }
 
     @Override
     public void remove(ReadLaterStory readLaterStory) {
-        context.getContentResolver().delete(SchematicContentProviderGenerator.ReadLaterStoryPaths.withStoryId(String.valueOf(readLaterStory.getId())), null, null);
+        contentResolver.delete(SchematicContentProviderGenerator.ReadLaterStoryPaths.withStoryId(String.valueOf(readLaterStory.getId())), null, null);
     }
 
     @Override
@@ -39,7 +40,7 @@ public class ContentProviderBackedRepository implements ReadLaterRepository {
         return Observable.create(new Observable.OnSubscribe<List<ReadLaterStory>>() {
             @Override
             public void call(Subscriber<? super List<ReadLaterStory>> subscriber) {
-                Cursor query = context.getContentResolver().query(SchematicContentProviderGenerator.ReadLaterStoryPaths.ALL_READ_LATER_STORIES,
+                Cursor query = contentResolver.query(SchematicContentProviderGenerator.ReadLaterStoryPaths.ALL_READ_LATER_STORIES,
                         null,
                         null,
                         null,

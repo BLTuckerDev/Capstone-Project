@@ -1,5 +1,6 @@
 package dev.bltucker.nanodegreecapstone.storydetail;
 
+import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -24,7 +25,7 @@ import timber.log.Timber;
 public class StoryDetailViewPresenter {
     static final String SELECTED_STORY_BUNDLE_KEY = "story";
 
-    private final Context context;
+    private final ContentResolver contentResolver;
     private final ReadingSession readingSession;
     private final Tracker analyticsTracker;
     private final StoryCommentLoaderCallbackDelegate commentLoaderCallbackDelegate;
@@ -32,9 +33,9 @@ public class StoryDetailViewPresenter {
     private StoryDetailView view;
     private LoaderManager loaderManager;
 
-    public StoryDetailViewPresenter(Context context, ReadingSession readingSession, Tracker analyticsTracker,
+    public StoryDetailViewPresenter(ContentResolver contentResolver, ReadingSession readingSession, Tracker analyticsTracker,
                                     StoryCommentLoaderCallbackDelegate commentLoaderCallbackDelegate){
-        this.context = context;
+        this.contentResolver = contentResolver;
         this.readingSession = readingSession;
         this.analyticsTracker = analyticsTracker;
         this.commentLoaderCallbackDelegate = commentLoaderCallbackDelegate;
@@ -98,32 +99,34 @@ public class StoryDetailViewPresenter {
             @Override
             public void call() {
 
-                Cursor query = context.getContentResolver().query(SchematicContentProviderGenerator.ReadLaterStoryPaths.withStoryId(String.valueOf(saveMe.getId())),
+                Cursor query = contentResolver.query(SchematicContentProviderGenerator.ReadLaterStoryPaths.withStoryId(String.valueOf(saveMe.getId())),
                         null,
                         null,
                         null,
                         null);
 
                 if(query.getCount() > 0){
+                    query.close();
                     return;
                 }
 
                 ContentValues cv = ReadLaterStory.mapToContentValues(saveMe);
-                context.getContentResolver().insert(SchematicContentProviderGenerator.ReadLaterStoryPaths.ALL_READ_LATER_STORIES, cv);
+                contentResolver.insert(SchematicContentProviderGenerator.ReadLaterStoryPaths.ALL_READ_LATER_STORIES, cv);
+                query.close();
             }
         }).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<Object>() {
                     @Override
-                    public void onCompleted() {}
-                    @Override
-                    public void onError(Throwable e) {}
-                    @Override
-                    public void onNext(Object o) {
+                    public void onCompleted() {
                         if(view != null){
                             view.showStorySaveConfirmation();
                         }
                     }
+                    @Override
+                    public void onError(Throwable e) {}
+                    @Override
+                    public void onNext(Object o) { }
                 });
     }
 }

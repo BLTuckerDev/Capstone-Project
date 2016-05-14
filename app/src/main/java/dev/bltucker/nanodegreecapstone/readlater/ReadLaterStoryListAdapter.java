@@ -14,6 +14,7 @@ import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import dev.bltucker.nanodegreecapstone.R;
 import dev.bltucker.nanodegreecapstone.models.ReadLaterStory;
 
@@ -65,24 +66,28 @@ public class ReadLaterStoryListAdapter extends RecyclerView.Adapter<ReadLaterSto
 
         @Bind(R.id.poster_name_textview)
         TextView posterNameTextView;
+
         private ReadLaterStory story;
 
         public ReadLaterStoryViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
-
-            cardView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    presenter.onReadLaterStoryClicked(story);
-                }
-            });
         }
 
         public void setStory(ReadLaterStory story){
             this.story = story;
             storyTitleTextView.setText(story.getTitle());
             posterNameTextView.setText(story.getPosterName());
+        }
+
+        @OnClick(R.id.read_button)
+        public void onReadButtonClick(View v){
+            presenter.onReadLaterStoryClicked(story);
+        }
+
+        @OnClick(R.id.delete_button)
+        public void onDeleteButtonClick(View v){
+            presenter.onReadLaterStoryDeleteClicked(story);
         }
     }
 }

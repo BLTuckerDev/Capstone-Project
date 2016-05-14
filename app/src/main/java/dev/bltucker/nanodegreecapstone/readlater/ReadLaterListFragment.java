@@ -115,6 +115,7 @@ public class ReadLaterListFragment extends Fragment implements ReadLaterListView
 
     @Override
     public void showStories(List<ReadLaterStory> data) {
+        swipeRefreshLayout.setRefreshing(false);
         emptyContainer.setVisibility(View.GONE);
         swipeRefreshLayout.setVisibility(View.VISIBLE);
         adapter.setStories(data);
