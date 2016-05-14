@@ -102,12 +102,10 @@ public class ReadLaterListPresenter implements LoaderManager.LoaderCallbacks<Lis
         .subscribe(new Subscriber<Object>() {
             @Override
             public void onCompleted() {
-                loaderManager.getLoader(ReadLaterStoryListLoader.ID).forceLoad();
+                loaderManager.restartLoader(ReadLaterStoryListLoader.ID, null, ReadLaterListPresenter.this);
             }
-
             @Override
             public void onError(Throwable e) { }
-
             @Override
             public void onNext(Object o) { }
         });
