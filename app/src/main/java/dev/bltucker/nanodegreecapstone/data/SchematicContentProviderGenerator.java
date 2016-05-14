@@ -19,6 +19,8 @@ public final class SchematicContentProviderGenerator {
 
     public static final String COMMENTS_PATH = "comments";
 
+    public static final String READ_LATER_STORY_PATH = "readLaterStories";
+
 
     @TableEndpoint(table = DatabaseGenerator.STORIES)
     public static class StoryPaths {
@@ -43,6 +45,14 @@ public final class SchematicContentProviderGenerator {
             return Uri.withAppendedPath(ALL_COMMENTS, id);
         }
 
+    }
+
+
+    @TableEndpoint(table = DatabaseGenerator.READ_LATER_STORIES)
+    public static class ReadLaterStoryPaths {
+
+        @ContentUri(path = READ_LATER_STORY_PATH, type = "vnd.android.cursor.dir/list")
+        public static final Uri ALL_READ_LATER_STORIES = Uri.parse("content://" + AUTHORITY + "/" + STORY_PATH);
     }
 
 }

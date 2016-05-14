@@ -15,4 +15,6 @@ public final class DatabaseGenerator {
 
     @Table(CommentRefsColumns.class) public static final String COMMENT_REFS = "commentRefs";
 
+    @Table(ReadLaterColumns.class) public static final String READ_LATER_STORIES = "readLaterStories";
+
 }

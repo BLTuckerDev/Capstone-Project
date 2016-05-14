@@ -51,6 +51,26 @@ public final class Story implements Parcelable {
         this.commentIds = Arrays.copyOf(commentIdsParam, commentIdsParam.length);
     }
 
+    protected Story(Parcel input){
+        id = input.readLong();
+        posterName = input.readString();
+        score = input.readLong();
+        unixTime = input.readLong();
+        title = input.readString();
+        url = input.readString();
+        final int commentIdsLength = input.readInt();
+
+        long[] primitive = new long[commentIdsLength];
+        input.readLongArray(primitive);
+
+        Long[] objects = new Long[commentIdsLength];
+        for (int i = 0; i < primitive.length; i++) {
+            objects[i] = primitive[i];
+        }
+
+        commentIds = objects;
+    }
+
     public long getId() {
         return id;
     }
@@ -113,6 +133,32 @@ public final class Story implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(id);
+        dest.writeString(posterName);
+        dest.writeLong(score);
+        dest.writeLong(unixTime);
+        dest.writeString(title);
+        dest.writeString(url);
 
+        dest.writeInt(commentIds.length);
+        long[] primitive = new long[commentIds.length];
+        for (int i = 0; i < commentIds.length; i++) {
+            primitive[i] = commentIds[i];
+        }
+
+        dest.writeLongArray(primitive);
     }
+
+
+    public static final Parcelable.Creator<Story> CREATOR =
+            new Parcelable.Creator<Story>(){
+                public Story createFromParcel(Parcel in){
+                    return new Story(in);
+                }
+
+                @Override
+                public Story[] newArray(int size) {
+                    return new Story[size];
+                }
+            };
 }

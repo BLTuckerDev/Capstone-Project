@@ -15,6 +15,7 @@ import java.util.Set;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
+import dev.bltucker.nanodegreecapstone.models.ReadLaterStory;
 import dev.bltucker.nanodegreecapstone.models.Story;
 
 public class StoryProviderTests extends AndroidTestCase {
@@ -153,6 +154,63 @@ public class StoryProviderTests extends AndroidTestCase {
         assertEquals(commentIds.length, commentsCursor.getCount());
 
         commentsCursor.close();
+    }
+
+    public void testReadLaterStoryInsert(){
+        ReadLaterStory testStory = new ReadLaterStory(Long.MAX_VALUE, "Brett Tucker",  "Read Later Story Title", "https://google.com/");
+
+        final CountDownLatch countDownLatch = new CountDownLatch(1);
+
+        mContext.getContentResolver().registerContentObserver(SchematicContentProviderGenerator.ReadLaterStoryPaths.ALL_READ_LATER_STORIES,
+                true,
+                TestContentObserver.createInstance(countDownLatch, mContext));
+
+        ContentValues cv = ReadLaterStory.mapToContentValues(testStory);
+
+        Uri insertedUri = mContext.getContentResolver().insert(SchematicContentProviderGenerator.ReadLaterStoryPaths.ALL_READ_LATER_STORIES, cv);
+
+        try{
+            countDownLatch.await(15_000, TimeUnit.MILLISECONDS);
+        } catch (InterruptedException ex){
+            fail();
+        }
+
+        assertNotNull(insertedUri);
+
+        Cursor readLaterStoryCursor = mContext.getContentResolver().query(SchematicContentProviderGenerator.ReadLaterStoryPaths.ALL_READ_LATER_STORIES,
+                null,
+                null,
+                null,
+                null);
+
+        assertTrue(readLaterStoryCursor.moveToFirst());
+
+        Set<Map.Entry<String, Object>> valueSet = cv.valueSet();
+
+        for(Map.Entry<String, Object> values : valueSet){
+            String columnName = values.getKey();
+            int cursorColumnIndex = readLaterStoryCursor.getColumnIndex(columnName);
+
+            switch (columnName){
+                case StoryColumns._ID:
+                    assertEquals(values.getValue(), readLaterStoryCursor.getLong(cursorColumnIndex));
+                    break;
+
+                case StoryColumns.POSTER_NAME:
+                    assertEquals(values.getValue(), readLaterStoryCursor.getString(cursorColumnIndex));
+                    break;
+
+                case StoryColumns.TITLE:
+                    assertEquals(values.getValue(), readLaterStoryCursor.getString(cursorColumnIndex));
+                    break;
+
+                case StoryColumns.URL:
+                    assertEquals(values.getValue(), readLaterStoryCursor.getString(cursorColumnIndex));
+                    break;
+            }
+        }
+
+        readLaterStoryCursor.close();
     }
 
 }
