@@ -20,6 +20,7 @@ public class StoryCommentsLoader extends AsyncTaskLoader<List<Comment>> {
     public StoryCommentsLoader(Context context, StoryRepository repository){
         super(context);
         storyRepository = repository;
+        onContentChanged();
     }
 
     public void setStory(Story story){
@@ -33,5 +34,12 @@ public class StoryCommentsLoader extends AsyncTaskLoader<List<Comment>> {
     @Override
     public List<Comment> loadInBackground() {
         return storyRepository.getStoryComments(selectedStory).toBlocking().first();
+    }
+
+    @Override
+    protected void onStartLoading() {
+        if (takeContentChanged()) {
+            forceLoad();
+        }
     }
 }

@@ -33,6 +33,9 @@ class StoryCommentLoaderCallbackDelegate implements LoaderManager.LoaderCallback
 
     @Override
     public Loader onCreateLoader(int id, Bundle args) {
+        if(storyDetailView != null){
+            storyDetailView.showCommentsLoadingSpinner();
+        }
         StoryCommentsLoader commentsLoader = commentsLoaderProvider.get();
         commentsLoader.setStory((Story) args.getParcelable(StoryDetailViewPresenter.SELECTED_STORY_BUNDLE_KEY));
         return commentsLoader;
@@ -46,6 +49,7 @@ class StoryCommentLoaderCallbackDelegate implements LoaderManager.LoaderCallback
             @Override
             public void run() {
                 if (storyDetailView != null) {
+                    storyDetailView.hideCommentsLoadingSpinner();
                     storyDetailView.showStory();
                     storyDetailView.showComments();
                 }

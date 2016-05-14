@@ -53,9 +53,6 @@ public class StoryDetailFragment extends Fragment implements StoryDetailView {
     @Bind(R.id.read_button)
     Button readButton;
 
-    @Bind(R.id.content_container)
-    LinearLayout contentContainer;
-
     @Bind(R.id.loading_container)
     LinearLayout loadingContainer;
 
@@ -195,9 +192,6 @@ public class StoryDetailFragment extends Fragment implements StoryDetailView {
         } else {
             readButton.setVisibility(View.VISIBLE);
         }
-
-        loadingContainer.setVisibility(View.INVISIBLE);
-        contentContainer.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -219,5 +213,17 @@ public class StoryDetailFragment extends Fragment implements StoryDetailView {
     @Override
     public void showStorySaveConfirmation() {
         Toast.makeText(getContext(), getString(R.string.story_saved), Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void showCommentsLoadingSpinner() {
+        recyclerView.setVisibility(View.INVISIBLE);
+        loadingContainer.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hideCommentsLoadingSpinner() {
+        loadingContainer.setVisibility(View.INVISIBLE);
+        recyclerView.setVisibility(View.VISIBLE);
     }
 }

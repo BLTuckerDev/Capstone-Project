@@ -5,4 +5,6 @@ public interface StoryDetailView {
     void showComments();
     void showStoryPostUrl(String url);
     void showStorySaveConfirmation();
+    void showCommentsLoadingSpinner();
+    void hideCommentsLoadingSpinner();
 }

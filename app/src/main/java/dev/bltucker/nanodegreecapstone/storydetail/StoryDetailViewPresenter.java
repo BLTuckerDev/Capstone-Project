@@ -2,7 +2,6 @@ package dev.bltucker.nanodegreecapstone.storydetail;
 
 import android.content.ContentResolver;
 import android.content.ContentValues;
-import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
@@ -10,8 +9,11 @@ import android.support.v4.app.LoaderManager;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 
+import java.util.ArrayList;
+
 import dev.bltucker.nanodegreecapstone.data.SchematicContentProviderGenerator;
 import dev.bltucker.nanodegreecapstone.data.StoryCommentsLoader;
+import dev.bltucker.nanodegreecapstone.models.Comment;
 import dev.bltucker.nanodegreecapstone.models.ReadLaterStory;
 import dev.bltucker.nanodegreecapstone.models.ReadingSession;
 import dev.bltucker.nanodegreecapstone.models.Story;
@@ -44,17 +46,19 @@ public class StoryDetailViewPresenter {
 
     public void onViewCreated(StoryDetailView detailView, LoaderManager loaderManager, int storyPosition) {
         setDetailView(detailView);
+        Story selectedStory = readingSession.getStory(storyPosition);
+        readingSession.read(selectedStory, new ArrayList<Comment>());
+        view.showStory();
         this.loaderManager = loaderManager;
         trackScreenView();
-        forceCommentReload(storyPosition);
+        initializeCommentLoader(selectedStory);
     }
 
-    private void forceCommentReload(int storyPosition) {
-        Timber.d("forceCommentReload");
-        Story selectedStory = readingSession.getStory(storyPosition);
+    private void initializeCommentLoader(Story story) {
+        Timber.d("initializeCommentLoader");
         Bundle loaderBundle = new Bundle();
-        loaderBundle.putParcelable(SELECTED_STORY_BUNDLE_KEY, selectedStory);
-        this.loaderManager.restartLoader(StoryCommentsLoader.STORY_COMMENT_LOADER, loaderBundle, commentLoaderCallbackDelegate).forceLoad();
+        loaderBundle.putParcelable(SELECTED_STORY_BUNDLE_KEY, story);
+        this.loaderManager.initLoader(StoryCommentsLoader.STORY_COMMENT_LOADER, loaderBundle, commentLoaderCallbackDelegate);
     }
 
     private void trackScreenView(){

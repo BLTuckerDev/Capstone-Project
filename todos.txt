@@ -6,9 +6,11 @@
 5. Tablet mode requirement
     We will need to provide at least one alternate layout in our app to support tablets.
 
+6. work on comment loading time for stories with lots of comments
+    the selected story needs to be set immediately so we can show it, and then load comments
+    in background. This is especially important now that we have a button for saving a story for later.
 
 Later:
 work on first app launch from cold and from install
-work on comment loading time for stories with lots of comments
 widget taking you directly to story detail activity
 more subcomponents based on fragment/activity so we can inject loader managers
