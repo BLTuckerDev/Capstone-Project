@@ -36,12 +36,10 @@ public class MainActivity extends AppCompatActivity implements HomeView, StoryLi
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
         if(item.getItemId() == R.id.menu_item_show_read_later){
             homeViewPresenter.onShowReadLaterMenuClick();
             return true;
         }
-
 
         return super.onOptionsItemSelected(item);
     }
@@ -82,7 +80,6 @@ public class MainActivity extends AppCompatActivity implements HomeView, StoryLi
     @Override
     public void showCommentsView(int storyPosition) {
         //TODO in tablet mode we will just show a different story in the details fragment here.
-        //.updateStory() since the model will already be changed
         //TODO use a shared element transition here
         StoryDetailActivity.launch(this, storyPosition);
     }

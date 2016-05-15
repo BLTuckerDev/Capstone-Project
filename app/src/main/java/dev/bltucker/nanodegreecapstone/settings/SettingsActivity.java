@@ -1,6 +1,7 @@
 package dev.bltucker.nanodegreecapstone.settings;
 
 import android.Manifest;
+import android.app.ActivityOptions;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -23,7 +24,8 @@ public class SettingsActivity extends AppCompatActivity implements SharedPrefere
     private String locationPreferenceKey;
 
     public static void launch(FragmentActivity activity) {
-        activity.startActivity(new Intent(activity, SettingsActivity.class));
+        Intent intent = new Intent(activity, SettingsActivity.class);
+        ActivityCompat.startActivity(activity, intent, ActivityOptions.makeSceneTransitionAnimation(activity).toBundle());
     }
 
     @Override

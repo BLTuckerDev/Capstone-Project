@@ -1,7 +1,10 @@
 package dev.bltucker.nanodegreecapstone.readlater;
 
+import android.app.Activity;
+import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
@@ -15,8 +18,8 @@ public class ReadLaterListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_read_later_list);
     }
 
-    public static void launch(Context context) {
-        Intent launchIntent = new Intent(context, ReadLaterListActivity.class);
-        context.startActivity(launchIntent);
+    public static void launch(Activity activity) {
+        Intent launchIntent = new Intent(activity, ReadLaterListActivity.class);
+        ActivityCompat.startActivity(activity, launchIntent, ActivityOptions.makeSceneTransitionAnimation(activity).toBundle());
     }
 }

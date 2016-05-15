@@ -1,7 +1,10 @@
 package dev.bltucker.nanodegreecapstone.storydetail;
 
+import android.app.Activity;
+import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
@@ -40,10 +43,10 @@ public class StoryDetailActivity extends AppCompatActivity {
                 .commit();
     }
 
-    public static void launch(Context context, int storyPosition) {
-        Intent launchIntent = new Intent(context, StoryDetailActivity.class);
+    public static void launch(Activity activity, int storyPosition) {
+        Intent launchIntent = new Intent(activity, StoryDetailActivity.class);
         launchIntent.putExtra(STORY_POSITION_BUNDLE_KEY, storyPosition);
-        context.startActivity(launchIntent);
+        ActivityCompat.startActivity(activity, launchIntent, ActivityOptions.makeSceneTransitionAnimation(activity).toBundle());
     }
 
     public static final String STORY_POSITION_BUNDLE_KEY = "storyPosition";
