@@ -36,6 +36,9 @@ import dev.bltucker.nanodegreecapstone.settings.SettingsActivity;
 
 public class StoryDetailFragment extends Fragment implements StoryDetailView {
 
+    public static final String STORY_POSITION_BUNDLE_KEY = "storyPosition";
+    public static final int NO_STORY_SELECTED_POSITION = -1;
+
     @Bind(R.id.story_title_textview)
     TextView storyTitleTextView;
 
@@ -154,7 +157,7 @@ public class StoryDetailFragment extends Fragment implements StoryDetailView {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(commentsAdapter);
         if(null == savedInstanceState){
-            int storyPosition = getArguments() != null ? getArguments().getInt(StoryDetailActivity.STORY_POSITION_BUNDLE_KEY, -1) : -1;
+            int storyPosition = getArguments() != null ? getArguments().getInt(STORY_POSITION_BUNDLE_KEY, -1) : -1;
             presenter.onViewCreated(this, getLoaderManager(), storyPosition);
         } else {
             presenter.onViewRestored(this, getLoaderManager());
