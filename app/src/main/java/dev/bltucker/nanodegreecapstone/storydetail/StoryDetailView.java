@@ -7,4 +7,6 @@ public interface StoryDetailView {
     void showStorySaveConfirmation();
     void showCommentsLoadingSpinner();
     void hideCommentsLoadingSpinner();
+    void showEmptyView();
+    void showSelectAStoryPrompt();
 }

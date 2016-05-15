@@ -119,7 +119,6 @@ public class StoryListFragment extends Fragment implements StoryListView {
     @Override
     public void showStories() {
         swipeRefreshLayout.setRefreshing(false);
-        adapter.reset();
 
         if(readingSession.hasStories()){
             emptyViewContainer.setVisibility(View.GONE);
@@ -128,6 +127,7 @@ public class StoryListFragment extends Fragment implements StoryListView {
             recyclerView.setVisibility(View.INVISIBLE);
             emptyViewContainer.setVisibility(View.VISIBLE);
         }
+        adapter.reset();
     }
 
     @Override

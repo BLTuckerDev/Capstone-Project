@@ -7,10 +7,28 @@
                                                  tools:context=".home.MainActivity">
 
 
-    <fragment
-        android:id="@+id/story_list_fragment"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:name="dev.bltucker.nanodegreecapstone.topstories.StoryListFragment"/>
+        android:orientation="horizontal">
+
+
+        <fragment
+            android:id="@+id/story_list_fragment"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:name="dev.bltucker.nanodegreecapstone.topstories.StoryListFragment"/>
+
+        <fragment
+            android:id="@+id/story_detail_fragment"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3"
+            android:name="dev.bltucker.nanodegreecapstone.storydetail.StoryDetailFragment"/>
+
+
+    </LinearLayout>
+
 
 </android.support.design.widget.CoordinatorLayout>

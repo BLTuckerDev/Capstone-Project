@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.view.MenuItemCompat;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.ShareActionProvider;
@@ -55,6 +56,12 @@ public class StoryDetailFragment extends Fragment implements StoryDetailView {
 
     @Bind(R.id.loading_container)
     LinearLayout loadingContainer;
+
+    @Bind(R.id.empty_view_container)
+    View emptyViewContainer;
+
+    @Bind(R.id.detail_header_cardview)
+    CardView headerView;
 
     @Inject
     StoryCommentsAdapter commentsAdapter;
@@ -147,7 +154,7 @@ public class StoryDetailFragment extends Fragment implements StoryDetailView {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(commentsAdapter);
         if(null == savedInstanceState){
-            int storyPosition = getArguments().getInt(StoryDetailActivity.STORY_POSITION_BUNDLE_KEY);
+            int storyPosition = getArguments() != null ? getArguments().getInt(StoryDetailActivity.STORY_POSITION_BUNDLE_KEY, -1) : -1;
             presenter.onViewCreated(this, getLoaderManager(), storyPosition);
         } else {
             presenter.onViewRestored(this, getLoaderManager());
@@ -218,12 +225,29 @@ public class StoryDetailFragment extends Fragment implements StoryDetailView {
     @Override
     public void showCommentsLoadingSpinner() {
         recyclerView.setVisibility(View.INVISIBLE);
+        emptyViewContainer.setVisibility(View.INVISIBLE);
         loadingContainer.setVisibility(View.VISIBLE);
+        headerView.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void hideCommentsLoadingSpinner() {
         loadingContainer.setVisibility(View.INVISIBLE);
+        emptyViewContainer.setVisibility(View.INVISIBLE);
         recyclerView.setVisibility(View.VISIBLE);
+        headerView.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void showEmptyView() {
+        loadingContainer.setVisibility(View.INVISIBLE);
+        recyclerView.setVisibility(View.INVISIBLE);
+        emptyViewContainer.setVisibility(View.VISIBLE);
+        headerView.setVisibility(View.INVISIBLE);
+    }
+
+    @Override
+    public void showSelectAStoryPrompt() {
+        Toast.makeText(getContext(), getString(R.string.select_a_story_first), Toast.LENGTH_LONG).show();
     }
 }

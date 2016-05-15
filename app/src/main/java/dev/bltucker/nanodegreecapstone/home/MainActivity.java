@@ -2,6 +2,7 @@ package dev.bltucker.nanodegreecapstone.home;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -18,8 +19,6 @@ import dev.bltucker.nanodegreecapstone.storydetail.StoryDetailActivity;
 import dev.bltucker.nanodegreecapstone.topstories.StoryListFragment;
 
 public class MainActivity extends AppCompatActivity implements HomeView, StoryListFragment.Delegate {
-
-    private static final String STORY_LIST_FRAGMENT_TAG = "storyListFragment";
 
     @Inject
     HomeViewPresenter homeViewPresenter;
@@ -63,24 +62,20 @@ public class MainActivity extends AppCompatActivity implements HomeView, StoryLi
     }
 
     @Override
-    public void showStoryList() {
-        StoryListFragment storyListFragment = StoryListFragment.newInstance();
-        getSupportFragmentManager()
-                .beginTransaction()
-                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                .add(R.id.main_activity_coordinator_layout, storyListFragment, STORY_LIST_FRAGMENT_TAG)
-                .commit();
-    }
-
-    @Override
     public void showReadLaterListView() {
         ReadLaterListActivity.launch(this);
     }
 
     @Override
     public void showCommentsView(int storyPosition) {
-        //TODO in tablet mode we will just show a different story in the details fragment here.
-        //TODO use a shared element transition here
-        StoryDetailActivity.launch(this, storyPosition);
+
+        Fragment fragmentById = getSupportFragmentManager().findFragmentById(R.id.story_detail_fragment);
+
+        if(null == fragmentById){
+            StoryDetailActivity.launch(this, storyPosition);
+        } else {
+            //fragment is in view do something else
+        }
+
     }
 }

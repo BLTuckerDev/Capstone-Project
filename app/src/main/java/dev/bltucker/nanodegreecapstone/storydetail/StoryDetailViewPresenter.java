@@ -46,12 +46,17 @@ public class StoryDetailViewPresenter {
 
     public void onViewCreated(StoryDetailView detailView, LoaderManager loaderManager, int storyPosition) {
         setDetailView(detailView);
-        Story selectedStory = readingSession.getStory(storyPosition);
-        readingSession.read(selectedStory, new ArrayList<Comment>());
-        view.showStory();
         this.loaderManager = loaderManager;
         trackScreenView();
-        initializeCommentLoader(selectedStory);
+
+        if(storyPosition == -1){
+            view.showEmptyView();
+        } else {
+            Story selectedStory = readingSession.getStory(storyPosition);
+            readingSession.read(selectedStory, new ArrayList<Comment>());
+            view.showStory();
+            initializeCommentLoader(selectedStory);
+        }
     }
 
     private void initializeCommentLoader(Story story) {
@@ -98,6 +103,12 @@ public class StoryDetailViewPresenter {
 
     public void onSaveStoryClick() {
         Story selectedStory = readingSession.getCurrentStory();
+
+        if(null == selectedStory){
+            view.showSelectAStoryPrompt();
+            return;
+        }
+
         final ReadLaterStory saveMe = new ReadLaterStory(selectedStory.getId(), selectedStory.getPosterName(), selectedStory.getTitle(), selectedStory.getUrl());
         Completable.fromAction(new Action0() {
             @Override

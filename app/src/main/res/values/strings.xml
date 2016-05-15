@@ -29,5 +29,8 @@
     <string name="you_do_not_have_any_stories_saved_for_later">You do not have any stories saved for later.</string>
     <string name="story_saved">Story saved for later!</string>
     <string name="delete_button_text">delete</string>
+    <string name="story_detail_fragment_tag">storyDetailFragmentTag</string>
+    <string name="select_a_story_to_view_comments">Select a story to view comments</string>
+    <string name="select_a_story_first">You must select a story first</string>
 
 </resources>
