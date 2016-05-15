@@ -3,8 +3,6 @@ package dev.bltucker.nanodegreecapstone.sync;
 import android.accounts.Account;
 import android.content.AbstractThreadedSyncAdapter;
 import android.content.ContentProviderClient;
-import android.content.ContentResolver;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SyncResult;
@@ -16,17 +14,14 @@ import java.util.List;
 import javax.inject.Inject;
 
 import dev.bltucker.nanodegreecapstone.CapstoneApplication;
-import dev.bltucker.nanodegreecapstone.data.CommentRefsColumns;
 import dev.bltucker.nanodegreecapstone.data.HackerNewsApiService;
-import dev.bltucker.nanodegreecapstone.data.SchematicContentProviderGenerator;
 import dev.bltucker.nanodegreecapstone.data.StoryRepository;
-import dev.bltucker.nanodegreecapstone.events.EventBus;
-import dev.bltucker.nanodegreecapstone.events.SyncCompletedEvent;
 import dev.bltucker.nanodegreecapstone.injection.StoryMax;
 import dev.bltucker.nanodegreecapstone.models.Story;
 import rx.Observable;
 import rx.Subscriber;
 import rx.functions.Func1;
+import rx.schedulers.Schedulers;
 import timber.log.Timber;
 
 public final class StorySyncAdapter extends AbstractThreadedSyncAdapter {
@@ -79,6 +74,7 @@ public final class StorySyncAdapter extends AbstractThreadedSyncAdapter {
                       return Observable.just(storyList);
                   }
               })
+                .subscribeOn(Schedulers.io())
               .subscribe(new Subscriber<List<Story>>() {
                   @Override
                   public void onCompleted() {

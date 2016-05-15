@@ -55,8 +55,7 @@ public class StoryListFragment extends Fragment implements StoryListView {
     }
 
     public static StoryListFragment newInstance() {
-        StoryListFragment fragment = new StoryListFragment();
-        return fragment;
+        return new StoryListFragment();
     }
 
     @Override
@@ -119,17 +118,14 @@ public class StoryListFragment extends Fragment implements StoryListView {
 
     @Override
     public void showStories() {
-        if(swipeRefreshLayout.isRefreshing()){
-            swipeRefreshLayout.setRefreshing(false);
-        }
+        swipeRefreshLayout.setRefreshing(false);
         adapter.reset();
-        loadingContainer.setVisibility(View.INVISIBLE);
 
         if(readingSession.hasStories()){
             emptyViewContainer.setVisibility(View.GONE);
-            contentContainer.setVisibility(View.VISIBLE);
+            recyclerView.setVisibility(View.VISIBLE);
         } else {
-            contentContainer.setVisibility(View.INVISIBLE);
+            recyclerView.setVisibility(View.INVISIBLE);
             emptyViewContainer.setVisibility(View.VISIBLE);
         }
     }
@@ -145,6 +141,18 @@ public class StoryListFragment extends Fragment implements StoryListView {
     public void showStoryPostUrl(String url) {
         Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
         startActivity(browserIntent);
+    }
+
+    @Override
+    public void showLoadingSpinner() {
+        contentContainer.setVisibility(View.INVISIBLE);
+        loadingContainer.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hideLoadingSpinner() {
+        loadingContainer.setVisibility(View.INVISIBLE);
+        contentContainer.setVisibility(View.VISIBLE);
     }
 
     public interface Delegate {

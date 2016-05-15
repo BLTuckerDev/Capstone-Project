@@ -1,16 +1,13 @@
 
-1. Shared Element Transition Requirement:
-    Animate the card in the story list into the card for the detail header?
-    Or animate the title into the detail title
 
 5. Tablet mode requirement
     We will need to provide at least one alternate layout in our app to support tablets.
 
-6. work on comment loading time for stories with lots of comments
-    the selected story needs to be set immediately so we can show it, and then load comments
-    in background. This is especially important now that we have a button for saving a story for later.
 
 Later:
 work on first app launch from cold and from install
 widget taking you directly to story detail activity
 more subcomponents based on fragment/activity so we can inject loader managers
+shared element transitions
+better comment loading so that we can display the comment tree as its loaded, rather
+than all at once at the end.

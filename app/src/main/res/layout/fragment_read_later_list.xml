@@ -27,7 +27,6 @@
             android:gravity="center"
             android:text="@string/loading_stories"/>
 
-
     </LinearLayout>
 
     <LinearLayout

@@ -14,6 +14,7 @@ import dev.bltucker.nanodegreecapstone.data.StoryListLoader;
 import dev.bltucker.nanodegreecapstone.events.EventBus;
 import dev.bltucker.nanodegreecapstone.events.SyncCompletedEvent;
 import dev.bltucker.nanodegreecapstone.models.ReadingSession;
+import dev.bltucker.nanodegreecapstone.sync.StorySyncAdapter;
 import rx.Subscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
@@ -49,12 +50,7 @@ public class StoryListViewPresenter implements SwipeRefreshLayout.OnRefreshListe
         setStoryListView(view);
         trackScreenView();
         this.loaderManager = loaderManager;
-        if(!readingSession.hasStories()){
-            if(!readingSession.hasStories() || readingSession.isStoryListIsDirty()){
-                readingSession.setStoryListIsDirty(false);
-                this.loaderManager.initLoader(StoryListLoader.STORY_LIST_LOADER, null, storyListLoaderCallbackDelegate);
-            }
-        }
+        setupView();
     }
 
     private void trackScreenView(){
@@ -65,12 +61,27 @@ public class StoryListViewPresenter implements SwipeRefreshLayout.OnRefreshListe
     public void onViewRestored(StoryListView view, LoaderManager loaderManager) {
         setStoryListView(view);
         this.loaderManager = loaderManager;
-        if(readingSession.hasStories()){
-            this.storyListView.showStories();
-        }
-        if(readingSession.isStoryListIsDirty()){
+        setupView();
+    }
+
+    private void setupView() {
+        final boolean hasStories = readingSession.hasStories();
+        final boolean sessionIsDirty = readingSession.isStoryListIsDirty();
+
+        if(!hasStories && sessionIsDirty){
+            storyListView.showLoadingSpinner();
             readingSession.setStoryListIsDirty(false);
-            this.loaderManager.restartLoader(StoryListLoader.STORY_LIST_LOADER, null, storyListLoaderCallbackDelegate);
+            this.loaderManager.initLoader(StoryListLoader.STORY_LIST_LOADER, null, storyListLoaderCallbackDelegate);
+        } else if(!hasStories && !sessionIsDirty){
+            storyListView.showLoadingSpinner();
+        } else if(hasStories && !sessionIsDirty){
+            storyListView.hideLoadingSpinner();
+            storyListView.showStories();
+        } else if(hasStories && sessionIsDirty){
+            storyListView.hideLoadingSpinner();
+            storyListView.showStories();
+            readingSession.setStoryListIsDirty(false);
+            this.loaderManager.initLoader(StoryListLoader.STORY_LIST_LOADER, null, storyListLoaderCallbackDelegate);
         }
     }
 

@@ -51,6 +51,7 @@ class StoryListLoaderCallbackDelegate implements LoaderManager.LoaderCallbacks {
             public void run() {
                 if(storyListView != null){
                     Timber.d("StoryListView is available to the loader. View is being updated");
+                    storyListView.hideLoadingSpinner();
                     storyListView.showStories();
                 }
             }
