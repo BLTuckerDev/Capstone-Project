@@ -14,6 +14,7 @@ import javax.inject.Inject;
 import dev.bltucker.nanodegreecapstone.CapstoneApplication;
 import dev.bltucker.nanodegreecapstone.R;
 import dev.bltucker.nanodegreecapstone.readlater.ReadLaterListActivity;
+import timber.log.Timber;
 
 public class GeofenceTransitionsIntentService extends IntentService {
 
@@ -34,15 +35,22 @@ public class GeofenceTransitionsIntentService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
+        Timber.d("handling a geo fence change intent");
         GeofencingEvent geofencingEvent = GeofencingEvent.fromIntent(intent);
         if(geofencingEvent.hasError()){
+            Timber.d("geo fence event has error, will fail to handle transition");
+            Timber.d("geo fence error code: %d", geofencingEvent.getErrorCode());
             return;
         }
 
         int geofenceTransition = geofencingEvent.getGeofenceTransition();
 
         if(geofenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER || geofenceTransition == Geofence.GEOFENCE_TRANSITION_DWELL){
+            Timber.d("geofence event transition will result in a notification");
             sendReminderNotification();
+        } else {
+            Timber.d("geofence event will not result in a transition");
+            Timber.d("geofence transition integer: %d", geofenceTransition);
         }
     }
 
