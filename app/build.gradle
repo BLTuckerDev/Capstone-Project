@@ -3,9 +3,16 @@ apply plugin: 'com.neenbedankt.android-apt'
 
 
 android {
+    signingConfigs {
+        releaseConfig {
+            keyAlias 'key'
+            keyPassword 'password'
+            storeFile file('./keystore/keystore.jks')
+            storePassword 'password'
+        }
+    }
     compileSdkVersion 23
     buildToolsVersion "23.0.2"
-
     defaultConfig {
         applicationId "dev.bltucker.nanodegreecapstone"
         minSdkVersion 21
@@ -17,26 +24,17 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.releaseConfig
         }
     }
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-
+    compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
-
-
-
     apt 'com.google.dagger:dagger-compiler:2.1'
     provided 'javax.annotation:jsr250-api:1.0'
-
-
-
     apt 'net.simonvt.schematic:schematic-compiler:0.6.4'
-
-
-
     compile 'com.android.support:appcompat-v7:23.3.0'
     compile 'com.android.support:design:23.3.0'
     compile 'com.android.support:recyclerview-v7:23.3.0'
