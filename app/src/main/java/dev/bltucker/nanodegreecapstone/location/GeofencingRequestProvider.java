@@ -8,7 +8,7 @@ import com.google.android.gms.location.GeofencingRequest;
 public class GeofencingRequestProvider {
 
     private static final String GEOFENCE_REQUEST_ID = "home";
-    private static final int GEOFENCE_RADIUS_IN_METERS = 12;
+    private static final int GEOFENCE_RADIUS_IN_METERS = 100;
     private static final int LOITER_DELAY_IN_MILLISECONDS = 300000;
     private static final int RESPONSIVENESS_DELAY = 300000;
 
