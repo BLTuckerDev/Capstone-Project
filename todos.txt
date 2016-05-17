@@ -1,4 +1,11 @@
 
+Make sure settings menu is available in all activities
+
+Check for any save for later stories before sending the notification,
+dont send if we dont have any to read
+
+Notifications are popping every 5 minutes, adjust this, we only want
+a notification when they arrive at their location
 
 Later:
 work on first app launch from cold and from install

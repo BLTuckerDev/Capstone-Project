@@ -21,13 +21,13 @@ public class GeofencingRequestProvider {
                 .setExpirationDuration(Geofence.NEVER_EXPIRE)
                 .setLoiteringDelay(LOITER_DELAY_IN_MILLISECONDS)
                 .setNotificationResponsiveness(RESPONSIVENESS_DELAY)
-                .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER| Geofence.GEOFENCE_TRANSITION_DWELL)
+                .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER)
                 .build();
 
         GeofencingRequest.Builder builder = new GeofencingRequest.Builder();
 
         builder.addGeofence(homeGeoFence);
-        builder.setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_DWELL);
+        builder.setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_ENTER);
 
         return builder.build();
     }

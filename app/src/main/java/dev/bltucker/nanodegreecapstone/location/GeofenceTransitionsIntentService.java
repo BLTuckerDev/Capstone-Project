@@ -4,7 +4,9 @@ import android.app.IntentService;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.ContentResolver;
 import android.content.Intent;
+import android.database.Cursor;
 
 import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.GeofencingEvent;
@@ -13,6 +15,7 @@ import javax.inject.Inject;
 
 import dev.bltucker.nanodegreecapstone.CapstoneApplication;
 import dev.bltucker.nanodegreecapstone.R;
+import dev.bltucker.nanodegreecapstone.data.SchematicContentProviderGenerator;
 import dev.bltucker.nanodegreecapstone.readlater.ReadLaterListActivity;
 import timber.log.Timber;
 
@@ -22,6 +25,9 @@ public class GeofenceTransitionsIntentService extends IntentService {
 
     @Inject
     NotificationManager notificationManager;
+
+    @Inject
+    ContentResolver contentResolver;
 
     public GeofenceTransitionsIntentService() {
         super(GeofenceTransitionsIntentService.class.getName());
@@ -45,13 +51,29 @@ public class GeofenceTransitionsIntentService extends IntentService {
 
         int geofenceTransition = geofencingEvent.getGeofenceTransition();
 
-        if(geofenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER || geofenceTransition == Geofence.GEOFENCE_TRANSITION_DWELL){
-            Timber.d("geofence event transition will result in a notification");
+        if(geofenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER){
+            Timber.d("geofence event transition has occurred");
+            if(getReadLaterStoryCount() > 0){
+                Timber.d("geofence event transition will result in a notification");
+                sendReminderNotification();
+            } else {
+                Timber.d("There were no stories saved for later so no notification will be sent");
+            }
             sendReminderNotification();
         } else {
             Timber.d("geofence event will not result in a transition");
             Timber.d("geofence transition integer: %d", geofenceTransition);
         }
+    }
+
+    private int getReadLaterStoryCount(){
+        Cursor readLaterStoryCursor = contentResolver.query(SchematicContentProviderGenerator.ReadLaterStoryPaths.ALL_READ_LATER_STORIES,
+                null,
+                null,
+                null,
+                null);
+
+        return readLaterStoryCursor != null ? readLaterStoryCursor.getCount() : 0;
     }
 
     private void sendReminderNotification() {
