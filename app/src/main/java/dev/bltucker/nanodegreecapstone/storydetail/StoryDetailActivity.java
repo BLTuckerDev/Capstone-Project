@@ -3,13 +3,19 @@ package dev.bltucker.nanodegreecapstone.storydetail;
 import android.app.Activity;
 import android.app.ActivityOptions;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 
 import dev.bltucker.nanodegreecapstone.R;
+import dev.bltucker.nanodegreecapstone.settings.SettingsActivity;
 import timber.log.Timber;
 
 public class StoryDetailActivity extends AppCompatActivity {
@@ -21,6 +27,25 @@ public class StoryDetailActivity extends AppCompatActivity {
         if(null == savedInstanceState){
             addStoryDetailFragment(getIntent().getExtras());
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+        MenuInflater inflater=getMenuInflater();
+        inflater.inflate(R.menu.menu_story_detail_activity, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        if(item.getItemId() == R.id.menu_item_settings){
+            SettingsActivity.launch(this);
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     private void addStoryDetailFragment(Bundle bundle){

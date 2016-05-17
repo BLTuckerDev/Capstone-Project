@@ -13,6 +13,7 @@ import javax.inject.Inject;
 import dev.bltucker.nanodegreecapstone.CapstoneApplication;
 import dev.bltucker.nanodegreecapstone.R;
 import dev.bltucker.nanodegreecapstone.readlater.ReadLaterListActivity;
+import dev.bltucker.nanodegreecapstone.settings.SettingsActivity;
 import dev.bltucker.nanodegreecapstone.storydetail.StoryDetailActivity;
 import dev.bltucker.nanodegreecapstone.storydetail.StoryDetailFragment;
 import dev.bltucker.nanodegreecapstone.topstories.StoryListFragment;
@@ -37,6 +38,11 @@ public class MainActivity extends AppCompatActivity implements HomeView, StoryLi
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getItemId() == R.id.menu_item_show_read_later){
             homeViewPresenter.onShowReadLaterMenuClick();
+            return true;
+        }
+
+        if(item.getItemId() == R.id.menu_item_settings){
+            SettingsActivity.launch(this);
             return true;
         }
 

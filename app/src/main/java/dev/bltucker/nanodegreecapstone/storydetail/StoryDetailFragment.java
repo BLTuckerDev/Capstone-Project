@@ -115,11 +115,6 @@ public class StoryDetailFragment extends Fragment implements StoryDetailView {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        if(item.getItemId() == R.id.menu_item_settings){
-            SettingsActivity.launch(this.getActivity());
-            return true;
-        }
-
         if(item.getItemId() == R.id.menu_item_save_story){
             presenter.onSaveStoryClick();
             return true;
