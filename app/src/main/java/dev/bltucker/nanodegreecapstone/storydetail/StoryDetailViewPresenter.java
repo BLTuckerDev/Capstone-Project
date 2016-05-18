@@ -59,6 +59,13 @@ public class StoryDetailViewPresenter {
         }
     }
 
+    public void onViewRestored(StoryDetailView detailView, LoaderManager loaderManager) {
+        setDetailView(detailView);
+        this.loaderManager = loaderManager;
+         view.showStory();
+        initializeCommentLoader(readingSession.getCurrentStory());
+    }
+
     private void initializeCommentLoader(Story story) {
         Timber.d("initializeCommentLoader");
         Bundle loaderBundle = new Bundle();
@@ -71,12 +78,6 @@ public class StoryDetailViewPresenter {
         analyticsTracker.send(new HitBuilders.ScreenViewBuilder().build());
     }
 
-    public void onViewRestored(StoryDetailView detailView, LoaderManager loaderManager) {
-        setDetailView(detailView);
-        this.loaderManager = loaderManager;
-        view.showStory();
-        view.showComments();
-    }
 
     private void setDetailView(StoryDetailView detailView) {
         view = detailView;

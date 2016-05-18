@@ -15,3 +15,4 @@ shared element transitions
 better comment loading so that we can display the comment tree as its loaded, rather
 than all at once at the end.
 task stack builder for the read later activity
+take a closer look at my loaders and additional method i may need to implement
