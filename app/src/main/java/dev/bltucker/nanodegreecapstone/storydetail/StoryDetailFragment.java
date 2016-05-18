@@ -32,7 +32,6 @@ import dev.bltucker.nanodegreecapstone.CapstoneApplication;
 import dev.bltucker.nanodegreecapstone.R;
 import dev.bltucker.nanodegreecapstone.models.ReadingSession;
 import dev.bltucker.nanodegreecapstone.models.Story;
-import dev.bltucker.nanodegreecapstone.settings.SettingsActivity;
 
 public class StoryDetailFragment extends Fragment implements StoryDetailView {
 
@@ -136,7 +135,9 @@ public class StoryDetailFragment extends Fragment implements StoryDetailView {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        CapstoneApplication.getApplication().getApplicationComponent().inject(this);
+        CapstoneApplication.getApplication().getApplicationComponent()
+                .storyDetailComponent(new StoryDetailFragmentModule(this))
+                .inject(this);
     }
 
     @Override

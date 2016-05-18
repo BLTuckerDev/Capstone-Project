@@ -7,23 +7,23 @@ import dev.bltucker.nanodegreecapstone.location.GeofenceCreationIntentServiceMod
 import dev.bltucker.nanodegreecapstone.location.GeofenceTransitionsIntentService;
 import dev.bltucker.nanodegreecapstone.readlater.ReadLaterComponent;
 import dev.bltucker.nanodegreecapstone.readlater.ReadLaterListFragmentModule;
-import dev.bltucker.nanodegreecapstone.storydetail.StoryDetailFragment;
-import dev.bltucker.nanodegreecapstone.storydetail.StoryDetailModule;
-import dev.bltucker.nanodegreecapstone.topstories.StoryListFragment;
+import dev.bltucker.nanodegreecapstone.storydetail.StoryDetailFragmentComponent;
+import dev.bltucker.nanodegreecapstone.storydetail.StoryDetailFragmentModule;
 import dev.bltucker.nanodegreecapstone.sync.StorySyncAdapter;
+import dev.bltucker.nanodegreecapstone.topstories.StoryListFragment;
 import dev.bltucker.nanodegreecapstone.topstories.SyncCompletedBroadCastReceiver;
 import dev.bltucker.nanodegreecapstone.topstories.TopStoriesModule;
 
 @ApplicationScope
-@Component(modules = { ApplicationResourcesModule.class, TopStoriesModule.class, StoryDetailModule.class})
+@Component(modules = { ApplicationResourcesModule.class, TopStoriesModule.class})
 public interface ApplicationComponent {
     void inject(MainActivity mainActivity);
     void inject(StorySyncAdapter syncAdapter);
     void inject(StoryListFragment fragment);
-    void inject(StoryDetailFragment fragment);
     void inject(SyncCompletedBroadCastReceiver syncCompletedBroadCastReceiver);
     void inject(GeofenceTransitionsIntentService geofenceTransitionsIntentService);
 
     GeofenceCreationIntentServiceComponent geofenceCreationIntentServiceComponent(GeofenceCreationIntentServiceModule module);
     ReadLaterComponent readLaterComponent(ReadLaterListFragmentModule module);
+    StoryDetailFragmentComponent storyDetailComponent(StoryDetailFragmentModule module);
 }
