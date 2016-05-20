@@ -16,6 +16,8 @@ import javax.inject.Inject;
 import dev.bltucker.nanodegreecapstone.CapstoneApplication;
 import dev.bltucker.nanodegreecapstone.data.HackerNewsApiService;
 import dev.bltucker.nanodegreecapstone.data.StoryRepository;
+import dev.bltucker.nanodegreecapstone.events.EventBus;
+import dev.bltucker.nanodegreecapstone.events.SyncCompletedEvent;
 import dev.bltucker.nanodegreecapstone.injection.StoryMax;
 import dev.bltucker.nanodegreecapstone.models.Story;
 import rx.Observable;
@@ -37,6 +39,9 @@ public final class StorySyncAdapter extends AbstractThreadedSyncAdapter {
 
     @Inject
     StoryRepository storyRepository;
+
+    @Inject
+    EventBus eventBus;
 
     @Inject
     @StoryMax
@@ -80,10 +85,9 @@ public final class StorySyncAdapter extends AbstractThreadedSyncAdapter {
                   public void onCompleted() {
                       final long stopTime = System.currentTimeMillis();
                       Timber.d("Sync completed in %d milliseconds", stopTime - startTime);
-                      Intent syncCompletedIntent = new Intent();
-                      syncCompletedIntent.setPackage(getContext().getPackageName());
-                      syncCompletedIntent.setAction(SYNC_COMPLETED_ACTION);
-                      getContext().sendBroadcast(syncCompletedIntent);
+                      //notify the application
+                      eventBus.publish(new SyncCompletedEvent());
+                      notifyWidgets();
                   }
 
                   @Override
@@ -96,5 +100,12 @@ public final class StorySyncAdapter extends AbstractThreadedSyncAdapter {
                       storyRepository.saveStories(stories);
                   }
               });
+    }
+
+    private void notifyWidgets() {
+        Intent syncCompletedIntent = new Intent();
+        syncCompletedIntent.setPackage(getContext().getPackageName());
+        syncCompletedIntent.setAction(SYNC_COMPLETED_ACTION);
+        getContext().sendBroadcast(syncCompletedIntent);
     }
 }

@@ -55,15 +55,6 @@
                 android:resource="@xml/authenticator" />
         </service>
 
-        <receiver
-            android:name=".topstories.SyncCompletedBroadCastReceiver"
-            android:enabled="true"
-            android:exported="true" >
-            <intent-filter>
-                <action android:name="dev.bltucker.nanodegreecapstone.SYNC_COMPLETED" />
-            </intent-filter>
-        </receiver>
-
         <activity android:name=".storydetail.StoryDetailActivity" />
         <activity
             android:name=".settings.SettingsActivity"

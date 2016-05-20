@@ -14,7 +14,6 @@ import dev.bltucker.nanodegreecapstone.data.StoryListLoader;
 import dev.bltucker.nanodegreecapstone.events.EventBus;
 import dev.bltucker.nanodegreecapstone.events.SyncCompletedEvent;
 import dev.bltucker.nanodegreecapstone.models.ReadingSession;
-import dev.bltucker.nanodegreecapstone.sync.StorySyncAdapter;
 import rx.Subscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;

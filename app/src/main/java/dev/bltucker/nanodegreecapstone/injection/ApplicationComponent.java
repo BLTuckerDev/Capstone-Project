@@ -11,7 +11,6 @@ import dev.bltucker.nanodegreecapstone.storydetail.StoryDetailFragmentComponent;
 import dev.bltucker.nanodegreecapstone.storydetail.StoryDetailFragmentModule;
 import dev.bltucker.nanodegreecapstone.sync.StorySyncAdapter;
 import dev.bltucker.nanodegreecapstone.topstories.StoryListFragment;
-import dev.bltucker.nanodegreecapstone.topstories.SyncCompletedBroadCastReceiver;
 import dev.bltucker.nanodegreecapstone.topstories.TopStoriesModule;
 
 @ApplicationScope
@@ -20,7 +19,6 @@ public interface ApplicationComponent {
     void inject(MainActivity mainActivity);
     void inject(StorySyncAdapter syncAdapter);
     void inject(StoryListFragment fragment);
-    void inject(SyncCompletedBroadCastReceiver syncCompletedBroadCastReceiver);
     void inject(GeofenceTransitionsIntentService geofenceTransitionsIntentService);
 
     GeofenceCreationIntentServiceComponent geofenceCreationIntentServiceComponent(GeofenceCreationIntentServiceModule module);
