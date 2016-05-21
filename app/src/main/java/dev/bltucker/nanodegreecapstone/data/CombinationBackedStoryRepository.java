@@ -18,20 +18,18 @@ import rx.functions.Func1;
 import timber.log.Timber;
 
 public class CombinationBackedStoryRepository implements StoryRepository {
-    //TODO test this class!
+
     public static final int CACHE_SIZE = 2 * 1024 * 1024; // 2MiB
 
     private final ContentResolver contentResolver;
     private final HackerNewsApiService hackerNewsApiService;
-    private final DescendingScoreStoryComparator storyComparator;
 
     private LruCache<Long, List<Comment>> commentLruCache;
 
     @Inject
-    public CombinationBackedStoryRepository(ContentResolver contentResolver, HackerNewsApiService hackerNewsApiService, DescendingScoreStoryComparator storyComparator) {
+    public CombinationBackedStoryRepository(ContentResolver contentResolver, HackerNewsApiService hackerNewsApiService) {
         this.contentResolver = contentResolver;
         this.hackerNewsApiService = hackerNewsApiService;
-        this.storyComparator = storyComparator;
         commentLruCache = new LruCache<>(CACHE_SIZE);
     }
 
@@ -45,6 +43,11 @@ public class CombinationBackedStoryRepository implements StoryRepository {
                         null,
                         null,
                         null);
+
+                if(null == query){
+                    subscriber.onError(new Exception("Query for all stories returned a null cursor"));
+                    return;
+                }
 
                 List<Story> storyList = new ArrayList<>(query.getCount());
 
@@ -69,6 +72,11 @@ public class CombinationBackedStoryRepository implements StoryRepository {
 
     private Long[] getCommentIds(long storyId) {
         Cursor query = contentResolver.query(SchematicContentProviderGenerator.CommentRefs.withStoryId(String.valueOf(storyId)), null, null, null, null);
+
+        if(null == query){
+            return new Long[0];
+        }
+
         Long[] commentIds = new Long[query.getCount()];
         int index = 0;
         while (query.moveToNext()) {
@@ -89,7 +97,8 @@ public class CombinationBackedStoryRepository implements StoryRepository {
         }
 
         Long[] commentIds = getCommentIds(story.getId());
-        Observable<List<Comment>> listObservable = Observable.from(commentIds)
+
+        return Observable.from(commentIds)
                 .concatMap(new Func1<Long, Observable<Comment>>() {
                     @Override
                     public Observable<Comment> call(Long commentId) {
@@ -97,8 +106,6 @@ public class CombinationBackedStoryRepository implements StoryRepository {
                     }
                 })
                 .toList();
-
-        return listObservable;
     }
 
     public List<Comment> addCommentToList(long commentId){
