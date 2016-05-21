@@ -43,14 +43,24 @@ class StoryListLoaderCallbackDelegate implements LoaderManager.LoaderCallbacks<L
         if(!newStories.isEmpty()){
             Timber.d("StoryListLoader finished, first story title in new data set is: %s", newStories.get(0).getTitle());
         }
-        readingSession.setStories(newStories);
+
+        readingSession.setLatestSyncStories(newStories);
+
         new Handler(Looper.getMainLooper()).post(new Runnable(){
             @Override
             public void run() {
                 if(storyListView != null){
-                    Timber.d("StoryListView is available. View is being updated");
                     storyListView.hideLoadingSpinner();
-                    storyListView.showStories();
+                    storyListView.stopRefreshing();
+
+                    if(readingSession.hasStories()){
+                        if(readingSession.isStoryListIsDirty()){
+                            storyListView.showUpdatedStoriesNotification();
+                        }
+                    } else {
+                        readingSession.updateUserStoriesToLatestSync();
+                        storyListView.showStories();
+                    }
                 }
             }
         });

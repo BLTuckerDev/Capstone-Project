@@ -8,10 +8,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import dev.bltucker.nanodegreecapstone.events.EventBus;
-import dev.bltucker.nanodegreecapstone.events.SyncCompletedEvent;
 import dev.bltucker.nanodegreecapstone.injection.StoryMax;
-import rx.Subscriber;
 import timber.log.Timber;
 
 public class ReadingSession {
@@ -20,28 +17,18 @@ public class ReadingSession {
     private Story currentStory;
     private final List<Comment> currentStoryComments;
     private final SimpleArrayMap<Long, Comment> commentIdToParentMap;
-    private final List<Story> storyList;
+    private final List<Story> userReadingList;
     private boolean storyListIsDirty = false;
 
+    private final List<Story> latestSyncStories;
+
     @Inject
-    public ReadingSession(@StoryMax int maximumStoryCount, EventBus eventBus){
+    public ReadingSession(@StoryMax int maximumStoryCount){
         currentStory = null;
         currentStoryComments = new ArrayList<>(INITIAL_COMMENT_CAPACITY);
         commentIdToParentMap = new SimpleArrayMap<>(INITIAL_COMMENT_CAPACITY);
-        storyList = new ArrayList<>(maximumStoryCount);
-
-        eventBus.subscribeTo(SyncCompletedEvent.class)
-                .subscribe(new Subscriber<Object>() {
-                    @Override
-                    public void onCompleted() {  }
-                    @Override
-                    public void onError(Throwable e) { }
-                    @Override
-                    public void onNext(Object o) {
-                        storyListIsDirty = true;
-                    }
-                });
-
+        userReadingList = new ArrayList<>(maximumStoryCount);
+        latestSyncStories = new ArrayList<>(maximumStoryCount);
     }
 
     public void read(Story selectedStory, List<Comment> selectedStoryComments){
@@ -59,15 +46,8 @@ public class ReadingSession {
         }
     }
 
-    public void setStories(List<Story> stories){
-        Timber.d("ReadingSessions stories are being updated");
-        storyListIsDirty = false;
-        storyList.clear();
-        storyList.addAll(stories);
-    }
-
     public boolean hasStories(){
-        return !storyList.isEmpty();
+        return !userReadingList.isEmpty();
     }
 
     public Story getCurrentStory(){
@@ -85,14 +65,14 @@ public class ReadingSession {
 
     @Nullable
     public Story getStory(int position) {
-        if(position < 0 || position >= storyList.size()){
+        if(position < 0 || position >= userReadingList.size()){
             return null;
         }
-        return storyList.get(position);
+        return userReadingList.get(position);
     }
 
     public int storyCount() {
-        return storyList.size();
+        return userReadingList.size();
     }
 
     @Nullable
@@ -111,5 +91,18 @@ public class ReadingSession {
         currentStory = null;
         currentStoryComments.clear();
         commentIdToParentMap.clear();
+    }
+
+    public void setLatestSyncStories(List<Story> newStories) {
+        latestSyncStories.clear();
+        latestSyncStories.addAll(newStories);
+        storyListIsDirty = !latestSyncStories.equals(userReadingList);
+    }
+
+    public void updateUserStoriesToLatestSync() {
+        Timber.d("ReadingSessions stories are being updated");
+        storyListIsDirty = false;
+        userReadingList.clear();
+        userReadingList.addAll(latestSyncStories);
     }
 }

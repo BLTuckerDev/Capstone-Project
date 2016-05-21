@@ -21,11 +21,11 @@ public class TopStoriesModule {
 
     @Provides
     @ApplicationScope
-    public StoryListViewPresenter provideStoryListViewPresenter(ReadingSession readingSession, EventBus eventBus,
+    public StoryListViewPresenter provideStoryListViewPresenter(ReadingSession readingSession,
                                                                 StoryListLoaderCallbackDelegate storyListLoaderCallbackDelegate,
                                                                 Account account,
                                                                 Tracker tracker){
-        return new StoryListViewPresenter(readingSession, eventBus, storyListLoaderCallbackDelegate, account, tracker);
+        return new StoryListViewPresenter(readingSession, storyListLoaderCallbackDelegate, account, tracker);
     }
 
 

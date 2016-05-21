@@ -11,7 +11,11 @@ import dev.bltucker.nanodegreecapstone.models.Comment;
 import dev.bltucker.nanodegreecapstone.models.ReadingSession;
 import dev.bltucker.nanodegreecapstone.models.Story;
 
-import static org.junit.Assert.*;
+import static junit.framework.Assert.assertFalse;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 public class ReadingSessionTest {
 
@@ -24,6 +28,7 @@ public class ReadingSessionTest {
 
     @Test
     public void testRead() throws Exception {
+        //TODO remove this when we remove the current story global
         final Date now = new Date();
 
         Comment firstComment = new Comment(1L, "First Comment Author", "Comment Text", now.getTime(), new long[]{2L});
@@ -49,33 +54,35 @@ public class ReadingSessionTest {
     }
 
     @Test
-    public void testAddStories() throws Exception {
-        final Date now = new Date();
-        Story testStory = new Story(1, "Brett", 1, now.getTime(), "Title", "https://google.com/", new Long[0]);
-        List<Story> storyList = new ArrayList<>();
-        storyList.add(testStory);
+    public void testSettingSameStoriesDoesNotDirtySession(){
 
-        objectUnderTest.setStories(storyList);
+        Story a = new Story(1, "A", 1, 0, "A Story", "", new Long[0]);
+        Story b = new Story(2, "B", 1, 0, "B Story", "", new Long[0]);
+        Story c = new Story(3, "C", 1, 0, "C Story", "", new Long[0]);
 
-        assertEquals(1, objectUnderTest.storyCount());
-        assertTrue(objectUnderTest.hasStories());
+        List<Story> listA = new ArrayList<>();
+        List<Story> listB = new ArrayList<>();
+
+
+        listA.add(a);
+        listA.add(b);
+        listA.add(c);
+
+        listB.add(a);
+        listB.add(b);
+        listB.add(c);
+
+
+        objectUnderTest.setLatestSyncStories(listA);
+        objectUnderTest.updateUserStoriesToLatestSync();
+
+        objectUnderTest.setLatestSyncStories(listB);
+
+
+        assertFalse(objectUnderTest.isStoryListIsDirty());
+
+
 
     }
 
-    @Test
-    public void testClearReadingSession(){
-        final Date now = new Date();
-        Story testStory = new Story(1, "Brett", 1, now.getTime(), "Title", "https://google.com/", new Long[0]);
-        List<Story> storyList = new ArrayList<>();
-        storyList.add(testStory);
-
-        objectUnderTest.setStories(storyList);
-        objectUnderTest.clearCurrentStory();
-
-        assertNull(objectUnderTest.getCurrentStory());
-        assertEquals(0, objectUnderTest.currentStoryCommentCount());
-        assertNull(objectUnderTest.getCurrentStoryComment(0));
-
-
-    }
 }

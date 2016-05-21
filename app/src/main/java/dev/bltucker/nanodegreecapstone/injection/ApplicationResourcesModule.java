@@ -123,8 +123,8 @@ public class ApplicationResourcesModule {
 
     @Provides
     @ApplicationScope
-    public StoryRepository provideStoryRepository(ContentResolver contentResolver, HackerNewsApiService hackerNewsApiService, DescendingScoreStoryComparator comparator){
-        return new CombinationBackedStoryRepository(contentResolver, hackerNewsApiService, comparator);
+    public StoryRepository provideStoryRepository(ContentResolver contentResolver, HackerNewsApiService hackerNewsApiService){
+        return new CombinationBackedStoryRepository(contentResolver, hackerNewsApiService);
     }
 
 
@@ -138,7 +138,7 @@ public class ApplicationResourcesModule {
 
     @Provides
     @ApplicationScope
-    public ReadingSession provideReadingSession(@StoryMax int storyMax, EventBus eventBus){
-        return new ReadingSession(storyMax, eventBus);
+    public ReadingSession provideReadingSession(@StoryMax int storyMax){
+        return new ReadingSession(storyMax);
     }
 }

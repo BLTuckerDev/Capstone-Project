@@ -13,6 +13,7 @@ import dev.bltucker.nanodegreecapstone.events.SyncCompletedEvent;
 import dev.bltucker.nanodegreecapstone.models.Story;
 import rx.Subscriber;
 import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
 import timber.log.Timber;
 
 public class StoryListLoader extends AsyncTaskLoader<List<Story>> {
@@ -55,6 +56,7 @@ public class StoryListLoader extends AsyncTaskLoader<List<Story>> {
 
     private void subscribeToSyncEvents(){
         syncAdapterChangeSubscription = eventBus.subscribeTo(SyncCompletedEvent.class)
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<Object>() {
                     @Override
                     public void onCompleted() {   }

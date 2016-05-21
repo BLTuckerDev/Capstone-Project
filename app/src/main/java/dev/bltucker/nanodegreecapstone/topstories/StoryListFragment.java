@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -106,13 +107,13 @@ public class StoryListFragment extends Fragment implements StoryListView {
 
     @Override
     public void onPause() {
-        presenter.onViewPaused(this);
+        presenter.onViewPaused();
         super.onPause();
     }
 
     @Override
     public void onDestroy() {
-        presenter.onViewDestroyed(this);
+        presenter.onViewDestroyed();
         super.onDestroy();
    }
 
@@ -153,6 +154,27 @@ public class StoryListFragment extends Fragment implements StoryListView {
     public void hideLoadingSpinner() {
         loadingContainer.setVisibility(View.INVISIBLE);
         contentContainer.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void stopRefreshing(){
+        swipeRefreshLayout.setRefreshing(false);
+    }
+
+    @Override
+    public void showUpdatedStoriesNotification() {
+        if(null == getView()){
+            return;
+        }
+
+        Snackbar.make(getView(), R.string.new_stories_are_available, Snackbar.LENGTH_INDEFINITE)
+                .setAction(R.string.refresh, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        presenter.onShowRefreshedStories();
+                    }
+                })
+                .show();
     }
 
     public interface Delegate {
