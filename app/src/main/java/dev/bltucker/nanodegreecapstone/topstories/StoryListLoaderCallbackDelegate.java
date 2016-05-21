@@ -10,7 +10,6 @@ import java.util.List;
 
 import javax.inject.Provider;
 
-import dev.bltucker.nanodegreecapstone.data.StoryListLoader;
 import dev.bltucker.nanodegreecapstone.models.ReadingSession;
 import dev.bltucker.nanodegreecapstone.models.Story;
 import timber.log.Timber;

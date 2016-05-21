@@ -8,7 +8,6 @@ import javax.inject.Provider;
 
 import dagger.Module;
 import dagger.Provides;
-import dev.bltucker.nanodegreecapstone.data.StoryListLoader;
 import dev.bltucker.nanodegreecapstone.events.EventBus;
 import dev.bltucker.nanodegreecapstone.home.HomeViewPresenter;
 import dev.bltucker.nanodegreecapstone.injection.ApplicationScope;

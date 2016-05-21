@@ -1,4 +1,4 @@
-package dev.bltucker.nanodegreecapstone.data;
+package dev.bltucker.nanodegreecapstone.topstories;
 
 import android.content.Context;
 import android.support.v4.content.AsyncTaskLoader;
@@ -7,6 +7,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import dev.bltucker.nanodegreecapstone.data.StoryRepository;
 import dev.bltucker.nanodegreecapstone.models.Story;
 
 public class StoryListLoader extends AsyncTaskLoader<List<Story>> {
