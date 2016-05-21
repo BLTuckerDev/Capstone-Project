@@ -8,7 +8,10 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import dev.bltucker.nanodegreecapstone.events.EventBus;
+import dev.bltucker.nanodegreecapstone.events.SyncCompletedEvent;
 import dev.bltucker.nanodegreecapstone.injection.StoryMax;
+import rx.Subscriber;
 import timber.log.Timber;
 
 public class ReadingSession {
@@ -21,11 +24,24 @@ public class ReadingSession {
     private boolean storyListIsDirty = false;
 
     @Inject
-    public ReadingSession(@StoryMax int maximumStoryCount){
+    public ReadingSession(@StoryMax int maximumStoryCount, EventBus eventBus){
         currentStory = null;
         currentStoryComments = new ArrayList<>(INITIAL_COMMENT_CAPACITY);
         commentIdToParentMap = new SimpleArrayMap<>(INITIAL_COMMENT_CAPACITY);
         storyList = new ArrayList<>(maximumStoryCount);
+
+        eventBus.subscribeTo(SyncCompletedEvent.class)
+                .subscribe(new Subscriber<Object>() {
+                    @Override
+                    public void onCompleted() {  }
+                    @Override
+                    public void onError(Throwable e) { }
+                    @Override
+                    public void onNext(Object o) {
+                        storyListIsDirty = true;
+                    }
+                });
+
     }
 
     public void read(Story selectedStory, List<Comment> selectedStoryComments){
@@ -45,6 +61,7 @@ public class ReadingSession {
 
     public void setStories(List<Story> stories){
         Timber.d("ReadingSessions stories are being updated");
+        storyListIsDirty = false;
         storyList.clear();
         storyList.addAll(stories);
     }
@@ -59,10 +76,6 @@ public class ReadingSession {
 
     public boolean isStoryListIsDirty() {
         return storyListIsDirty;
-    }
-
-    public void setStoryListIsDirty(boolean storyListIsDirty) {
-        this.storyListIsDirty = storyListIsDirty;
     }
 
     @Nullable

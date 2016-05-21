@@ -8,7 +8,6 @@ Notifications are popping every 5 minutes, adjust this, we only want
 a notification when they arrive at their location
 
 Later:
-work on first app launch from cold and from install
 widget taking you directly to story detail activity
 more subcomponents based on fragment/activity so we can inject loader managers
 shared element transitions
@@ -16,6 +15,4 @@ better comment loading so that we can display the comment tree as its loaded, ra
 than all at once at the end.
 task stack builder for the read later activity
 take a closer look at my loaders and additional method i may need to implement
-show a load more spinner while loading
-look into rotation during story loading
-
+get rid of global "current story"

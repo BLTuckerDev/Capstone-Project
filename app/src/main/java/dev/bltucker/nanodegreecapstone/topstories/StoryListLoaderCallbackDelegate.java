@@ -14,7 +14,7 @@ import dev.bltucker.nanodegreecapstone.models.ReadingSession;
 import dev.bltucker.nanodegreecapstone.models.Story;
 import timber.log.Timber;
 
-class StoryListLoaderCallbackDelegate implements LoaderManager.LoaderCallbacks {
+class StoryListLoaderCallbackDelegate implements LoaderManager.LoaderCallbacks<List<Story>> {
 
     private final ReadingSession readingSession;
     private final Provider<StoryListLoader> storyListLoaderProvider;
@@ -38,18 +38,17 @@ class StoryListLoaderCallbackDelegate implements LoaderManager.LoaderCallbacks {
     }
 
     @Override
-    public void onLoadFinished(Loader loader, Object data) {
+    public void onLoadFinished(Loader<List<Story>> loader, List<Story> newStories) {
         Timber.d("onLoadFinished");
-        final List<Story> newStories = (List<Story>)data;
         if(!newStories.isEmpty()){
             Timber.d("StoryListLoader finished, first story title in new data set is: %s", newStories.get(0).getTitle());
         }
-        readingSession.setStories((List<Story>) data);
+        readingSession.setStories(newStories);
         new Handler(Looper.getMainLooper()).post(new Runnable(){
             @Override
             public void run() {
                 if(storyListView != null){
-                    Timber.d("StoryListView is available to the loader. View is being updated");
+                    Timber.d("StoryListView is available. View is being updated");
                     storyListView.hideLoadingSpinner();
                     storyListView.showStories();
                 }

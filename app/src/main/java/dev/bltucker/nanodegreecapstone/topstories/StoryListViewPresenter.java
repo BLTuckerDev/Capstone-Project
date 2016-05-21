@@ -68,13 +68,11 @@ public class StoryListViewPresenter implements SwipeRefreshLayout.OnRefreshListe
             storyListView.showStories();
 
             if(readingSession.isStoryListIsDirty()){
-                readingSession.setStoryListIsDirty(false);
                 loaderManager.initLoader(StoryListLoader.STORY_LIST_LOADER, null, storyListLoaderCallbackDelegate);
             }
 
         } else {
             storyListView.showLoadingSpinner();
-            readingSession.setStoryListIsDirty(false);
             loaderManager.initLoader(StoryListLoader.STORY_LIST_LOADER, null, storyListLoaderCallbackDelegate);
         }
     }
@@ -130,7 +128,7 @@ public class StoryListViewPresenter implements SwipeRefreshLayout.OnRefreshListe
                             //show a snackbar to restart the loader here.
 //                            loaderManager.restartLoader(StoryListLoader.STORY_LIST_LOADER, null, storyListLoaderCallbackDelegate);
                         } else {
-                            readingSession.setStoryListIsDirty(true);
+
                         }
                     }
                 });
