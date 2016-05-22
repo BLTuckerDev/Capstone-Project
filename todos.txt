@@ -18,3 +18,6 @@ take a closer look at my comment loader and additional method i may need to impl
 get rid of global "current story"
 consider loading in every onResume call for story list? nothing will change if everything is still the same? but we will cover all the bases for updating the user about fresher stories?
 more tests
+sync state observer
+remove the google analytics stuff from the repo now that we've passed through udacity
+pull to refresh comment list
