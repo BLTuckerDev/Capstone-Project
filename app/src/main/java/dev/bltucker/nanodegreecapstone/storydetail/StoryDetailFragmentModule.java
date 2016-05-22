@@ -36,8 +36,9 @@ public class StoryDetailFragmentModule {
     public StoryDetailViewPresenter provideStoryDetailPresenter(ContentResolver contentResolver,
                                                                 ReadingSession readingSession,
                                                                 Tracker tracker,
-                                                                StoryCommentLoaderCallbackDelegate commentLoaderCallbackDelegate){
-        return new StoryDetailViewPresenter(contentResolver, readingSession, tracker, commentLoaderCallbackDelegate);
+                                                                StoryCommentLoaderCallbackDelegate commentLoaderCallbackDelegate,
+                                                                LoaderManager loaderManager){
+        return new StoryDetailViewPresenter(contentResolver, readingSession, tracker, commentLoaderCallbackDelegate, loaderManager);
     }
 
     @Provides

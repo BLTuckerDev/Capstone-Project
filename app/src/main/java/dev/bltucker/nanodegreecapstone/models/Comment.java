@@ -1,10 +1,13 @@
 package dev.bltucker.nanodegreecapstone.models;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.SerializedName;
 
 import java.util.Arrays;
 
-public final class Comment {
+public final class Comment implements Parcelable {
 
     private final long id;
     @SerializedName("by")
@@ -22,6 +25,16 @@ public final class Comment {
         this.commentText = commentText != null ? commentText : "";
         this.unixPostTime = unixPostTime;
         this.replyIds = Arrays.copyOf(replyIdsParam, replyIdsParam.length);
+    }
+
+    public Comment(Parcel in){
+        this.id = in.readLong();
+        this.authorName = in.readString();
+        this.commentText = in.readString();
+        this.unixPostTime = in.readLong();
+        int replyIdLength = in.readInt();
+        this.replyIds = new long[replyIdLength];
+        in.readLongArray(this.replyIds);
     }
 
     public long getId() {
@@ -62,4 +75,31 @@ public final class Comment {
     public int hashCode() {
         return (int) (id ^ (id >>> 32));
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(this.id);
+        dest.writeString(this.authorName);
+        dest.writeString(this.commentText);
+        dest.writeLong(unixPostTime);
+        dest.writeInt(replyIds.length);
+        dest.writeLongArray(replyIds);
+    }
+
+    public static final Creator<Comment> CREATOR = new Creator<Comment>() {
+        @Override
+        public Comment createFromParcel(Parcel in) {
+            return new Comment(in);
+        }
+
+        @Override
+        public Comment[] newArray(int size) {
+            return new Comment[size];
+        }
+    };
 }
