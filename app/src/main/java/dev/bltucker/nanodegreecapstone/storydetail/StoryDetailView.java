@@ -3,7 +3,7 @@ package dev.bltucker.nanodegreecapstone.storydetail;
 public interface StoryDetailView {
     void showStory();
     void showComments();
-    void showStoryPostUrl(String url);
+    void showStoryPostUrl();
     void showStorySaveConfirmation();
     void showCommentsLoadingSpinner();
     void hideCommentsLoadingSpinner();

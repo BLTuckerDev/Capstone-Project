@@ -23,6 +23,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+
 import javax.inject.Inject;
 
 import butterknife.Bind;
@@ -30,13 +32,14 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import dev.bltucker.nanodegreecapstone.CapstoneApplication;
 import dev.bltucker.nanodegreecapstone.R;
-import dev.bltucker.nanodegreecapstone.models.ReadingSession;
+import dev.bltucker.nanodegreecapstone.models.Comment;
 import dev.bltucker.nanodegreecapstone.models.Story;
 
 public class StoryDetailFragment extends Fragment implements StoryDetailView {
 
-    public static final String STORY_POSITION_BUNDLE_KEY = "storyPosition";
-    public static final int NO_STORY_SELECTED_POSITION = -1;
+    static final String STORY_BUNDLE_KEY = "story";
+
+    private static final String DETAIL_STORY_BUNDLE_KEY = "detailStory";
 
     @Bind(R.id.story_title_textview)
     TextView storyTitleTextView;
@@ -72,18 +75,23 @@ public class StoryDetailFragment extends Fragment implements StoryDetailView {
     StoryDetailViewPresenter presenter;
 
     @Inject
-    ReadingSession readingSession;
+    DetailStoryProvider detailStoryProvider;
 
     ShareActionProvider shareActionProvider;
     MenuItem shareMenuItem;
+
+    private DetailStory detailStory;
+
 
     public StoryDetailFragment() {
         // Required empty public constructor
     }
 
-    public static StoryDetailFragment newInstance(Bundle argBundle) {
+    public static StoryDetailFragment newInstance(Story selectedStory) {
         StoryDetailFragment storyDetailFragment = new StoryDetailFragment();
-        storyDetailFragment.setArguments(new Bundle(argBundle));
+        Bundle args = new Bundle();
+        args.putParcelable(STORY_BUNDLE_KEY, selectedStory);
+        storyDetailFragment.setArguments(args);
         return storyDetailFragment;
     }
 
@@ -105,7 +113,7 @@ public class StoryDetailFragment extends Fragment implements StoryDetailView {
     public void onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
 
-        if(readingSession.getCurrentStory() != null && shareActionProvider != null){
+        if (detailStory != null && shareActionProvider != null) {
             setupShareActionProvider();
             shareMenuItem.setVisible(true);
         }
@@ -114,7 +122,7 @@ public class StoryDetailFragment extends Fragment implements StoryDetailView {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        if(item.getItemId() == R.id.menu_item_save_story){
+        if (item.getItemId() == R.id.menu_item_save_story) {
             presenter.onSaveStoryClick();
             return true;
         }
@@ -122,12 +130,12 @@ public class StoryDetailFragment extends Fragment implements StoryDetailView {
         return super.onOptionsItemSelected(item);
     }
 
-    private void setupShareActionProvider(){
+    private void setupShareActionProvider() {
         Intent shareIntent = new Intent();
         shareIntent.setAction(Intent.ACTION_SEND);
         shareIntent.setType("text/plain");
-        shareIntent.putExtra(Intent.EXTRA_SUBJECT, readingSession.getCurrentStory().getTitle());
-        shareIntent.putExtra(Intent.EXTRA_TEXT, readingSession.getCurrentStory().getUrl());
+        shareIntent.putExtra(Intent.EXTRA_SUBJECT, detailStory.getTitle());
+        shareIntent.putExtra(Intent.EXTRA_TEXT, detailStory.getUrl());
         shareActionProvider.setShareIntent(shareIntent);
     }
 
@@ -138,6 +146,22 @@ public class StoryDetailFragment extends Fragment implements StoryDetailView {
         CapstoneApplication.getApplication().getApplicationComponent()
                 .storyDetailComponent(new StoryDetailFragmentModule(this))
                 .inject(this);
+
+        initializeDetailStory(savedInstanceState);
+    }
+
+    private void initializeDetailStory(Bundle savedInstanceState) {
+        if (savedInstanceState != null) {
+            detailStory = savedInstanceState.getParcelable(DETAIL_STORY_BUNDLE_KEY);
+        } else {
+            detailStory = detailStoryProvider.getDetailStory((Story) getArguments().getParcelable(STORY_BUNDLE_KEY), new ArrayList<Comment>());
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable(DETAIL_STORY_BUNDLE_KEY, detailStory);
     }
 
     @Override
@@ -152,11 +176,10 @@ public class StoryDetailFragment extends Fragment implements StoryDetailView {
         super.onActivityCreated(savedInstanceState);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(commentsAdapter);
-        if(null == savedInstanceState){
-            int storyPosition = getArguments() != null ? getArguments().getInt(STORY_POSITION_BUNDLE_KEY, -1) : -1;
-            presenter.onViewCreated(this, storyPosition);
+        if (null == savedInstanceState) {
+            presenter.onViewCreated(this, detailStory);
         } else {
-            presenter.onViewRestored(this);
+            presenter.onViewRestored(this, detailStory);
         }
     }
 
@@ -180,20 +203,19 @@ public class StoryDetailFragment extends Fragment implements StoryDetailView {
 
     @Override
     public void showStory() {
-        if(getActivity() != null){
+        if (getActivity() != null) {
             getActivity().invalidateOptionsMenu();
         }
-        Story story = readingSession.getCurrentStory();
 
-        if(null == story){
+        if (null == detailStory) {
             return;
         }
 
-        storyTitleTextView.setText(story.getTitle());
-        storyUrlTextView.setText(story.getUrl());
-        storyPosterTextView.setText(String.format(getString(R.string.by_poster), story.getPosterName()));
-        storyScoreTextView.setText(String.format(getString(R.string.story_score), story.getScore()));
-        if(null == story.getUrl()){
+        storyTitleTextView.setText(detailStory.getTitle());
+        storyUrlTextView.setText(detailStory.getUrl());
+        storyPosterTextView.setText(String.format(getString(R.string.by_poster), detailStory.getPosterName()));
+        storyScoreTextView.setText(String.format(getString(R.string.story_score), detailStory.getScore()));
+        if (null == detailStory.getUrl()) {
             readButton.setVisibility(View.INVISIBLE);
         } else {
             readButton.setVisibility(View.VISIBLE);
@@ -206,14 +228,16 @@ public class StoryDetailFragment extends Fragment implements StoryDetailView {
     }
 
     @OnClick(R.id.read_button)
-    public void onReadButtonClick(View v){
+    public void onReadButtonClick(View v) {
         presenter.onReadButtonClicked();
     }
 
     @Override
-    public void showStoryPostUrl(String url) {
-        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-        startActivity(browserIntent);
+    public void showStoryPostUrl() {
+        if (detailStory.getUrl() != null) {
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(detailStory.getUrl()));
+            startActivity(browserIntent);
+        }
     }
 
     @Override

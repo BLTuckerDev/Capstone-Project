@@ -12,7 +12,6 @@ import javax.inject.Provider;
 
 import dagger.Module;
 import dagger.Provides;
-import dev.bltucker.nanodegreecapstone.data.StoryCommentsLoader;
 import dev.bltucker.nanodegreecapstone.injection.GregorianUTC;
 import dev.bltucker.nanodegreecapstone.models.ReadingSession;
 
@@ -23,6 +22,12 @@ public class StoryDetailFragmentModule {
 
     public StoryDetailFragmentModule(StoryDetailFragment fragment){
         this.fragment = fragment;
+    }
+
+    @Provides
+    @StoryDetailFragmentScope
+    public DetailStoryProvider provideDetailStoryProvider(){
+        return new DetailStoryProvider();
     }
 
     @Provides

@@ -55,7 +55,8 @@ public class DetailStory implements Parcelable {
         return Collections.unmodifiableList(this.commentList);
     }
 
-    public void addComments(List<Comment> comments){
+    public void setComments(List<Comment> comments){
+        this.commentList.clear();
         this.commentList.addAll(comments);
     }
 
