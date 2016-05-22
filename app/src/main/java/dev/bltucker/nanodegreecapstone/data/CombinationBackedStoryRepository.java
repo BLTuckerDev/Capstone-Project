@@ -89,14 +89,14 @@ public class CombinationBackedStoryRepository implements StoryRepository {
     }
 
     @Override
-    public Observable<List<Comment>> getStoryComments(final Story story) {
-        List<Comment> cachedComments = commentLruCache.get(story.getId());
+    public Observable<List<Comment>> getStoryComments(final long storyId) {
+        List<Comment> cachedComments = commentLruCache.get(storyId);
 
         if (cachedComments != null) {
             return Observable.just(cachedComments);
         }
 
-        Long[] commentIds = getCommentIds(story.getId());
+        Long[] commentIds = getCommentIds(storyId);
 
         return Observable.from(commentIds)
                 .concatMap(new Func1<Long, Observable<Comment>>() {
