@@ -20,7 +20,6 @@ import butterknife.ButterKnife;
 import dev.bltucker.nanodegreecapstone.R;
 import dev.bltucker.nanodegreecapstone.injection.GregorianUTC;
 import dev.bltucker.nanodegreecapstone.models.Comment;
-import dev.bltucker.nanodegreecapstone.models.ReadingSession;
 
 public class StoryCommentsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -28,13 +27,12 @@ public class StoryCommentsAdapter extends RecyclerView.Adapter<RecyclerView.View
     private static final int COMMENT_ITEM_TYPE = 2;
 
     private final Resources resources;
-    private final ReadingSession readingSession;
     private final Calendar calendar;
+    private DetailStory detailStory;
 
     @Inject
-    public StoryCommentsAdapter(@GregorianUTC Calendar utcCalendar, Resources resources, ReadingSession readingSession){
+    public StoryCommentsAdapter(@GregorianUTC Calendar utcCalendar, Resources resources){
         this.resources = resources;
-        this.readingSession = readingSession;
         calendar = utcCalendar;
     }
 
@@ -58,9 +56,14 @@ public class StoryCommentsAdapter extends RecyclerView.Adapter<RecyclerView.View
             return;
         }
 
+        Comment comment = detailStory.getComment(position);
+
+        if(null == comment){
+            return;
+        }
+
         CommentViewHolder commentViewHolder = ((CommentViewHolder) holder);
 
-        Comment comment = readingSession.getCurrentStoryComment(position);
         commentViewHolder.authorNameTextView.setText(comment.getAuthorName());
         commentViewHolder.postTimeTextView.setText(getFormattedCommentTime(comment, holder.itemView.getContext()));
         commentViewHolder.commentBodyTextView.setText(Html.fromHtml(comment.getCommentText()));
@@ -98,7 +101,7 @@ public class StoryCommentsAdapter extends RecyclerView.Adapter<RecyclerView.View
     }
 
     private int getCommentDepth(Comment aComment, int depth){
-        Comment parentComment = readingSession.getParentComment(aComment.getId());
+        Comment parentComment = detailStory.getParentComment(aComment.getId());
         if(null == parentComment){
             return depth;
         }
@@ -109,7 +112,7 @@ public class StoryCommentsAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     @Override
     public int getItemViewType(int position) {
-        if(readingSession.currentStoryCommentCount() == 0){
+        if(detailStory.getCommentCount() == 0){
             return EMPTY_COMMENT_ITEM_TYPE;
         } else {
             return COMMENT_ITEM_TYPE;
@@ -118,8 +121,8 @@ public class StoryCommentsAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     @Override
     public int getItemCount() {
-        if(readingSession.currentStoryCommentCount() > 0){
-            return readingSession.currentStoryCommentCount();
+        if(detailStory != null){
+            return detailStory.getCommentCount();
         } else {
             return 1;
         }
@@ -127,6 +130,10 @@ public class StoryCommentsAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     public void reset() {
         notifyDataSetChanged();
+    }
+
+    public void setDetailStory(DetailStory detailStory) {
+        this.detailStory = detailStory;
     }
 
     public static class CommentViewHolder extends RecyclerView.ViewHolder{
