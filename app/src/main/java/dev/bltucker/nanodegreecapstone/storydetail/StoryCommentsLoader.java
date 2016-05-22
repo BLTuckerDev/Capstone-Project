@@ -1,4 +1,4 @@
-package dev.bltucker.nanodegreecapstone.data;
+package dev.bltucker.nanodegreecapstone.storydetail;
 
 import android.content.Context;
 import android.support.v4.content.AsyncTaskLoader;
@@ -7,10 +7,14 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import dev.bltucker.nanodegreecapstone.data.StoryRepository;
 import dev.bltucker.nanodegreecapstone.models.Comment;
 import dev.bltucker.nanodegreecapstone.models.Story;
 
 public class StoryCommentsLoader extends AsyncTaskLoader<List<Comment>> {
+
+    static final String SELECTED_STORY_ID_BUNDLE_KEY = "selectedStoryBundleKey";
+
 
     public static final int STORY_COMMENT_LOADER = StoryCommentsLoader.class.hashCode();
     private final StoryRepository storyRepository;
