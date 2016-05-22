@@ -36,17 +36,17 @@ public class StoryDetailViewPresenter {
     private LoaderManager loaderManager;
 
     public StoryDetailViewPresenter(ContentResolver contentResolver, ReadingSession readingSession, Tracker analyticsTracker,
-                                    StoryCommentLoaderCallbackDelegate commentLoaderCallbackDelegate){
+                                    StoryCommentLoaderCallbackDelegate commentLoaderCallbackDelegate, LoaderManager loaderManager){
         this.contentResolver = contentResolver;
         this.readingSession = readingSession;
         this.analyticsTracker = analyticsTracker;
         this.commentLoaderCallbackDelegate = commentLoaderCallbackDelegate;
+        this.loaderManager = loaderManager;
     }
 
 
-    public void onViewCreated(StoryDetailView detailView, LoaderManager loaderManager, int storyPosition) {
+    public void onViewCreated(StoryDetailView detailView, int storyPosition) {
         setDetailView(detailView);
-        this.loaderManager = loaderManager;
         trackScreenView();
 
         if(storyPosition == -1){
@@ -59,9 +59,8 @@ public class StoryDetailViewPresenter {
         }
     }
 
-    public void onViewRestored(StoryDetailView detailView, LoaderManager loaderManager) {
+    public void onViewRestored(StoryDetailView detailView) {
         setDetailView(detailView);
-        this.loaderManager = loaderManager;
          view.showStory();
         initializeCommentLoader(readingSession.getCurrentStory());
     }
@@ -93,7 +92,6 @@ public class StoryDetailViewPresenter {
     }
 
     public void onViewDestroyed() {
-        loaderManager = null;
     }
 
     public void onReadButtonClicked() {

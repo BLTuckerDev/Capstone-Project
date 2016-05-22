@@ -154,9 +154,9 @@ public class StoryDetailFragment extends Fragment implements StoryDetailView {
         recyclerView.setAdapter(commentsAdapter);
         if(null == savedInstanceState){
             int storyPosition = getArguments() != null ? getArguments().getInt(STORY_POSITION_BUNDLE_KEY, -1) : -1;
-            presenter.onViewCreated(this, getLoaderManager(), storyPosition);
+            presenter.onViewCreated(this, storyPosition);
         } else {
-            presenter.onViewRestored(this, getLoaderManager());
+            presenter.onViewRestored(this);
         }
     }
 
@@ -168,8 +168,8 @@ public class StoryDetailFragment extends Fragment implements StoryDetailView {
 
     @Override
     public void onPause() {
-        super.onPause();
         presenter.onViewPaused();
+        super.onPause();
     }
 
     @Override
