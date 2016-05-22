@@ -10,13 +10,12 @@ import java.util.List;
 
 import javax.inject.Provider;
 
-import dev.bltucker.nanodegreecapstone.data.StoryCommentsLoader;
 import dev.bltucker.nanodegreecapstone.models.Comment;
 import dev.bltucker.nanodegreecapstone.models.ReadingSession;
 import dev.bltucker.nanodegreecapstone.models.Story;
 import timber.log.Timber;
 
-class StoryCommentLoaderCallbackDelegate implements LoaderManager.LoaderCallbacks {
+class StoryCommentLoaderCallbackDelegate implements LoaderManager.LoaderCallbacks<List<Comment>> {
 
     private final Provider<StoryCommentsLoader> commentsLoaderProvider;
     private final ReadingSession readingSession;
@@ -37,25 +36,22 @@ class StoryCommentLoaderCallbackDelegate implements LoaderManager.LoaderCallback
             storyDetailView.showCommentsLoadingSpinner();
         }
         StoryCommentsLoader commentsLoader = commentsLoaderProvider.get();
-        commentsLoader.setStory((Story) args.getParcelable(StoryDetailViewPresenter.SELECTED_STORY_BUNDLE_KEY));
+        commentsLoader.setStoryId(args.getLong(StoryCommentsLoader.SELECTED_STORY_ID_BUNDLE_KEY));
         return commentsLoader;
     }
 
     @Override
-    public void onLoadFinished(Loader loader, Object data) {
-        StoryCommentsLoader commentsLoader = (StoryCommentsLoader) loader;
-        readingSession.read(commentsLoader.getStory(), (List<Comment>) data);
+    public void onLoadFinished(Loader<List<Comment>> loader, final List<Comment> data) {
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
                 if (storyDetailView != null) {
                     storyDetailView.hideCommentsLoadingSpinner();
                     storyDetailView.showStory();
-                    storyDetailView.showComments();
+                    storyDetailView.showComments(data);
                 }
             }
         });
-
     }
 
     @Override

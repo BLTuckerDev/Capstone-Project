@@ -18,7 +18,7 @@ public class StoryCommentsLoader extends AsyncTaskLoader<List<Comment>> {
 
     public static final int STORY_COMMENT_LOADER = StoryCommentsLoader.class.hashCode();
     private final StoryRepository storyRepository;
-    private Story selectedStory;
+    private long storyId;
 
     @Inject
     public StoryCommentsLoader(Context context, StoryRepository repository){
@@ -27,17 +27,9 @@ public class StoryCommentsLoader extends AsyncTaskLoader<List<Comment>> {
         onContentChanged();
     }
 
-    public void setStory(Story story){
-        selectedStory = story;
-    }
-
-    public Story getStory(){
-        return selectedStory;
-    }
-
     @Override
     public List<Comment> loadInBackground() {
-        return storyRepository.getStoryComments(selectedStory).toBlocking().first();
+        return storyRepository.getStoryComments(storyId).toBlocking().first();
     }
 
     @Override
@@ -45,5 +37,9 @@ public class StoryCommentsLoader extends AsyncTaskLoader<List<Comment>> {
         if (takeContentChanged()) {
             forceLoad();
         }
+    }
+
+    public void setStoryId(long storyId) {
+        this.storyId = storyId;
     }
 }

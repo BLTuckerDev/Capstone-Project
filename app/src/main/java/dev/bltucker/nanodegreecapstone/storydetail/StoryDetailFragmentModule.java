@@ -43,7 +43,7 @@ public class StoryDetailFragmentModule {
                                                                 Tracker tracker,
                                                                 StoryCommentLoaderCallbackDelegate commentLoaderCallbackDelegate,
                                                                 LoaderManager loaderManager){
-        return new StoryDetailViewPresenter(contentResolver, readingSession, tracker, commentLoaderCallbackDelegate, loaderManager);
+        return new StoryDetailViewPresenter(contentResolver, tracker, commentLoaderCallbackDelegate, loaderManager);
     }
 
     @Provides
@@ -54,7 +54,7 @@ public class StoryDetailFragmentModule {
 
     @Provides
     @StoryDetailFragmentScope
-    public StoryCommentsAdapter provideStoryCommentsAdapter(@GregorianUTC Calendar calendar, Resources resources, ReadingSession readingSession){
-        return new StoryCommentsAdapter(calendar, resources, readingSession);
+    public StoryCommentsAdapter provideStoryCommentsAdapter(@GregorianUTC Calendar calendar, Resources resources){
+        return new StoryCommentsAdapter(calendar, resources);
     }
 }
