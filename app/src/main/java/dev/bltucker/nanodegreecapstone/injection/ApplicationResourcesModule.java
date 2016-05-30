@@ -9,6 +9,7 @@ import android.content.res.Resources;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import java.util.Calendar;
 import java.util.SimpleTimeZone;
@@ -23,7 +24,9 @@ import dev.bltucker.nanodegreecapstone.data.DescendingScoreStoryComparator;
 import dev.bltucker.nanodegreecapstone.data.HackerNewsApiService;
 import dev.bltucker.nanodegreecapstone.data.StoryRepository;
 import dev.bltucker.nanodegreecapstone.events.EventBus;
+import dev.bltucker.nanodegreecapstone.models.Comment;
 import dev.bltucker.nanodegreecapstone.models.ReadingSession;
+import dev.bltucker.nanodegreecapstone.storydetail.CommentTypeAdapter;
 import dev.bltucker.nanodegreecapstone.sync.StorySyncAdapter;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
@@ -93,7 +96,9 @@ public class ApplicationResourcesModule {
     @Provides
     @ApplicationScope
     public Gson provideGson(){
-        return new Gson();
+        GsonBuilder builder = new GsonBuilder();
+        builder.registerTypeAdapter(Comment.class, new CommentTypeAdapter());
+        return builder.create();
     }
 
 
