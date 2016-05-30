@@ -79,16 +79,14 @@ public class StoryListViewPresenter implements SwipeRefreshLayout.OnRefreshListe
         loaderManager = null;
     }
 
-    public void onCommentsButtonClick(final int storyPosition) {
+    public void onCommentsButtonClick(final Story story) {
         if(storyListView != null){
-            readingSession.clearCurrentStory();
-            storyListView.showStoryDetailView(storyPosition);
+            storyListView.showStoryDetailView(story);
         }
     }
 
-    public void onReadStoryButtonClick(int storyPosition) {
+    public void onReadStoryButtonClick(Story story) {
         if(storyListView != null){
-            Story story = readingSession.getStory(storyPosition);
             if(story != null){
                 storyListView.showStoryPostUrl(story.getUrl());
             }

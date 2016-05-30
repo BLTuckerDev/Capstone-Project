@@ -28,6 +28,7 @@ public class StoryCommentsAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     private final Resources resources;
     private final Calendar calendar;
+
     private DetailStory detailStory;
 
     @Inject
@@ -53,6 +54,10 @@ public class StoryCommentsAdapter extends RecyclerView.Adapter<RecyclerView.View
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if(holder.getItemViewType() == EMPTY_COMMENT_ITEM_TYPE){
+            return;
+        }
+
+        if(!detailStory.hasStory()){
             return;
         }
 
@@ -112,7 +117,7 @@ public class StoryCommentsAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     @Override
     public int getItemViewType(int position) {
-        if(detailStory.getCommentCount() == 0){
+        if(!detailStory.hasStory() || detailStory.getCommentCount() == 0){
             return EMPTY_COMMENT_ITEM_TYPE;
         } else {
             return COMMENT_ITEM_TYPE;
@@ -121,7 +126,7 @@ public class StoryCommentsAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     @Override
     public int getItemCount() {
-        if(detailStory != null){
+        if(detailStory.hasStory()){
             return detailStory.getCommentCount();
         } else {
             return 1;
@@ -134,6 +139,7 @@ public class StoryCommentsAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     public void setDetailStory(DetailStory detailStory) {
         this.detailStory = detailStory;
+        notifyDataSetChanged();
     }
 
     public static class CommentViewHolder extends RecyclerView.ViewHolder{

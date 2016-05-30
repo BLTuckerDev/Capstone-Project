@@ -24,6 +24,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -87,7 +88,7 @@ public class StoryDetailFragment extends Fragment implements StoryDetailView {
         // Required empty public constructor
     }
 
-    public static StoryDetailFragment newInstance(Story selectedStory) {
+    public static StoryDetailFragment newInstance(@Nullable Story selectedStory) {
         StoryDetailFragment storyDetailFragment = new StoryDetailFragment();
         Bundle args = new Bundle();
         args.putParcelable(STORY_BUNDLE_KEY, selectedStory);
@@ -113,7 +114,7 @@ public class StoryDetailFragment extends Fragment implements StoryDetailView {
     public void onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
 
-        if (detailStory != null && shareActionProvider != null) {
+        if (detailStory.hasStory() && shareActionProvider != null) {
             setupShareActionProvider();
             shareMenuItem.setVisible(true);
         }
@@ -123,7 +124,7 @@ public class StoryDetailFragment extends Fragment implements StoryDetailView {
     public boolean onOptionsItemSelected(MenuItem item) {
 
         if (item.getItemId() == R.id.menu_item_save_story) {
-            presenter.onSaveStoryClick();
+            presenter.onSaveStoryClick(detailStory);
             return true;
         }
 
@@ -151,6 +152,7 @@ public class StoryDetailFragment extends Fragment implements StoryDetailView {
     }
 
     private void initializeDetailStory(Bundle savedInstanceState) {
+        //TODO HANDLE NULL STORIES FOR TABLET MODE
         if (savedInstanceState != null) {
             detailStory = savedInstanceState.getParcelable(DETAIL_STORY_BUNDLE_KEY);
         } else {
@@ -175,6 +177,7 @@ public class StoryDetailFragment extends Fragment implements StoryDetailView {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        commentsAdapter.setDetailStory(detailStory);
         recyclerView.setAdapter(commentsAdapter);
         if (null == savedInstanceState) {
             presenter.onViewCreated(this, detailStory);
@@ -207,7 +210,7 @@ public class StoryDetailFragment extends Fragment implements StoryDetailView {
             getActivity().invalidateOptionsMenu();
         }
 
-        if (null == detailStory) {
+        if (!detailStory.hasStory()) {
             return;
         }
 
@@ -223,7 +226,8 @@ public class StoryDetailFragment extends Fragment implements StoryDetailView {
     }
 
     @Override
-    public void showComments() {
+    public void showComments(List<Comment> data) {
+        detailStory.setComments(data);
         commentsAdapter.reset();
     }
 
@@ -234,7 +238,7 @@ public class StoryDetailFragment extends Fragment implements StoryDetailView {
 
     @Override
     public void showStoryPostUrl() {
-        if (detailStory.getUrl() != null) {
+        if (detailStory.hasStory() && detailStory.getUrl() != null) {
             Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(detailStory.getUrl()));
             startActivity(browserIntent);
         }

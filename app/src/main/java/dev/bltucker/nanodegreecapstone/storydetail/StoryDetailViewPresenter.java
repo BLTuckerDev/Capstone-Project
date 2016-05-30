@@ -4,6 +4,7 @@ import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.LoaderManager;
 
 import com.google.android.gms.analytics.HitBuilders;
@@ -26,7 +27,7 @@ public class StoryDetailViewPresenter {
     private StoryDetailView view;
     private LoaderManager loaderManager;
 
-    public StoryDetailViewPresenter(ContentResolver contentResolver, Tracker analyticsTracker, StoryCommentLoaderCallbackDelegate commentLoaderCallbackDelegate, LoaderManager loaderManager){
+    public StoryDetailViewPresenter(ContentResolver contentResolver, Tracker analyticsTracker, StoryCommentLoaderCallbackDelegate commentLoaderCallbackDelegate, LoaderManager loaderManager) {
         this.contentResolver = contentResolver;
         this.analyticsTracker = analyticsTracker;
         this.commentLoaderCallbackDelegate = commentLoaderCallbackDelegate;
@@ -37,25 +38,35 @@ public class StoryDetailViewPresenter {
     public void onViewCreated(StoryDetailView detailView, DetailStory detailStory) {
         setDetailView(detailView);
         trackScreenView();
-        view.showStory();
-        initializeCommentLoader(detailStory);
+
+        if (detailStory.hasStory()) {
+            view.showStory();
+            initializeCommentLoader(detailStory);
+        } else {
+            view.showEmptyView();
+        }
 
     }
 
     public void onViewRestored(StoryDetailView detailView, DetailStory detailStory) {
         setDetailView(detailView);
-         view.showStory();
-        initializeCommentLoader(detailStory);
+
+        if (detailStory.hasStory()) {
+            view.showStory();
+            initializeCommentLoader(detailStory);
+        } else {
+            view.showEmptyView();
+        }
     }
 
     private void initializeCommentLoader(DetailStory story) {
         Timber.d("initializeCommentLoader");
         Bundle loaderBundle = new Bundle();
-        loaderBundle.putParcelable(StoryCommentsLoader.SELECTED_STORY_ID_BUNDLE_KEY, story);
+        loaderBundle.putLong(StoryCommentsLoader.SELECTED_STORY_ID_BUNDLE_KEY, story.getStoryId());
         this.loaderManager.initLoader(StoryCommentsLoader.STORY_COMMENT_LOADER, loaderBundle, commentLoaderCallbackDelegate);
     }
 
-    private void trackScreenView(){
+    private void trackScreenView() {
         analyticsTracker.setScreenName("StoryDetailView");
         analyticsTracker.send(new HitBuilders.ScreenViewBuilder().build());
     }
@@ -74,16 +85,17 @@ public class StoryDetailViewPresenter {
         view = null;
     }
 
-    public void onViewDestroyed() {   }
+    public void onViewDestroyed() {
+    }
 
     public void onReadButtonClicked() {
-        if(view != null){
+        if (view != null) {
             view.showStoryPostUrl();
         }
     }
 
     public void onSaveStoryClick(DetailStory detailStory) {
-        if(null == detailStory){
+        if (null == detailStory) {
             return;
         }
 
@@ -98,11 +110,11 @@ public class StoryDetailViewPresenter {
                         null,
                         null);
 
-                if(null == query){
+                if (null == query) {
                     return;
                 }
 
-                if(query.getCount() > 0){
+                if (query.getCount() > 0) {
                     query.close();
                     return;
                 }
@@ -116,14 +128,18 @@ public class StoryDetailViewPresenter {
                 .subscribe(new Subscriber<Object>() {
                     @Override
                     public void onCompleted() {
-                        if(view != null){
+                        if (view != null) {
                             view.showStorySaveConfirmation();
                         }
                     }
+
                     @Override
-                    public void onError(Throwable e) {}
+                    public void onError(Throwable e) {
+                    }
+
                     @Override
-                    public void onNext(Object o) { }
+                    public void onNext(Object o) {
+                    }
                 });
     }
 }

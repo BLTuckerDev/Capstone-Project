@@ -12,6 +12,7 @@ import javax.inject.Inject;
 
 import dev.bltucker.nanodegreecapstone.CapstoneApplication;
 import dev.bltucker.nanodegreecapstone.R;
+import dev.bltucker.nanodegreecapstone.models.Story;
 import dev.bltucker.nanodegreecapstone.readlater.ReadLaterListActivity;
 import dev.bltucker.nanodegreecapstone.settings.SettingsActivity;
 import dev.bltucker.nanodegreecapstone.storydetail.StoryDetailActivity;
@@ -59,7 +60,7 @@ public class MainActivity extends AppCompatActivity implements HomeView, StoryLi
 
         if (null == savedInstanceState) {
             if(twoPaneMode){
-                replaceDetailFragment();
+                replaceDetailFragment(null);
             }
             homeViewPresenter.onViewCreated(this);
         } else {
@@ -67,8 +68,8 @@ public class MainActivity extends AppCompatActivity implements HomeView, StoryLi
         }
     }
 
-    private void replaceDetailFragment() {
-        StoryDetailFragment storyDetailFragment = StoryDetailFragment.newInstance(null);
+    private void replaceDetailFragment(Story story) {
+        StoryDetailFragment storyDetailFragment = StoryDetailFragment.newInstance(story);
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.story_detail_fragment_container, storyDetailFragment)
                 .commit();
@@ -86,11 +87,11 @@ public class MainActivity extends AppCompatActivity implements HomeView, StoryLi
     }
 
     @Override
-    public void showCommentsView(int storyPosition) {
+    public void showCommentsView(Story story) {
         if(twoPaneMode){
-            replaceDetailFragment();
+            replaceDetailFragment(story);
         } else {
-            StoryDetailActivity.launch(this, storyPosition);
+            StoryDetailActivity.launch(this, story);
         }
     }
 }

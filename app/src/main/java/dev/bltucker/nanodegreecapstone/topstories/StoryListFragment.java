@@ -22,6 +22,7 @@ import butterknife.ButterKnife;
 import dev.bltucker.nanodegreecapstone.CapstoneApplication;
 import dev.bltucker.nanodegreecapstone.R;
 import dev.bltucker.nanodegreecapstone.models.ReadingSession;
+import dev.bltucker.nanodegreecapstone.models.Story;
 
 public class StoryListFragment extends Fragment implements StoryListView {
 
@@ -132,9 +133,9 @@ public class StoryListFragment extends Fragment implements StoryListView {
     }
 
     @Override
-    public void showStoryDetailView(int storyPosition) {
+    public void showStoryDetailView(Story story) {
         if(delegate != null){
-            delegate.showCommentsView(storyPosition);
+            delegate.showCommentsView(story);
         }
     }
 
@@ -178,6 +179,6 @@ public class StoryListFragment extends Fragment implements StoryListView {
     }
 
     public interface Delegate {
-        void showCommentsView(int storyPosition);
+        void showCommentsView(Story story);
     }
 }

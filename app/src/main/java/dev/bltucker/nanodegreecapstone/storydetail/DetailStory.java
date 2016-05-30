@@ -14,12 +14,13 @@ import dev.bltucker.nanodegreecapstone.models.Story;
 
 public class DetailStory implements Parcelable {
 
+    @Nullable
     private final Story story;
 
     private final List<Comment> commentList =  new ArrayList<>();
     private final SimpleArrayMap<Long, Comment> commentIdToParentMap = new SimpleArrayMap<>();
 
-    public DetailStory(Story story){
+    public DetailStory(@Nullable Story story){
         this.story = story;
     }
 
@@ -29,26 +30,32 @@ public class DetailStory implements Parcelable {
     }
 
     public long getStoryId(){
+        assert story != null;
         return story.getId();
     }
 
     public String getPosterName(){
+        assert story != null;
         return story.getPosterName();
     }
 
     public long getScore(){
+        assert story != null;
         return story.getScore();
     }
 
     public String getTitle(){
+        assert story != null;
         return story.getTitle();
     }
 
     public String getUrl(){
+        assert story != null;
         return story.getUrl();
     }
 
     public Long[] getCommentIds(){
+        assert story != null;
         return story.getCommentIds();
     }
 
@@ -84,6 +91,7 @@ public class DetailStory implements Parcelable {
 
     @Nullable
     public Comment getParentComment(long commentId){
+        assert story != null;
         return commentIdToParentMap.get(commentId);
     }
 
@@ -109,4 +117,8 @@ public class DetailStory implements Parcelable {
             return new DetailStory[size];
         }
     };
+
+    public boolean hasStory() {
+        return story != null;
+    }
 }
