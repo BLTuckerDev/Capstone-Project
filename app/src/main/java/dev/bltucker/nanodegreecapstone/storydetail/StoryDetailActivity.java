@@ -3,18 +3,18 @@ package dev.bltucker.nanodegreecapstone.storydetail;
 import android.app.Activity;
 import android.app.ActivityOptions;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import dev.bltucker.nanodegreecapstone.R;
+import dev.bltucker.nanodegreecapstone.models.Story;
 import dev.bltucker.nanodegreecapstone.settings.SettingsActivity;
 import timber.log.Timber;
 
@@ -54,12 +54,13 @@ public class StoryDetailActivity extends AppCompatActivity {
             return;
         }
 
-        if(!bundle.containsKey(StoryDetailFragment.STORY_POSITION_BUNDLE_KEY)){
+        if(!bundle.containsKey(StoryDetailFragment.STORY_BUNDLE_KEY)){
             Timber.e("StoryDetailActivity bundle is missing the story position");
             return;
         }
 
-        Fragment storyDetailFragment = StoryDetailFragment.newInstance(bundle);
+        Story story = bundle.getParcelable(StoryDetailFragment.STORY_BUNDLE_KEY);
+        Fragment storyDetailFragment = StoryDetailFragment.newInstance(story);
 
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.story_activity_coordinator_layout, storyDetailFragment)
@@ -67,9 +68,9 @@ public class StoryDetailActivity extends AppCompatActivity {
                 .commit();
     }
 
-    public static void launch(Activity activity, int storyPosition) {
+    public static void launch(Activity activity, @Nullable Story story) {
         Intent launchIntent = new Intent(activity, StoryDetailActivity.class);
-        launchIntent.putExtra(StoryDetailFragment.STORY_POSITION_BUNDLE_KEY, storyPosition);
+        launchIntent.putExtra(StoryDetailFragment.STORY_BUNDLE_KEY, story);
         ActivityCompat.startActivity(activity, launchIntent, ActivityOptions.makeSceneTransitionAnimation(activity).toBundle());
     }
 }

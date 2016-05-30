@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity implements HomeView, StoryLi
 
         if (null == savedInstanceState) {
             if(twoPaneMode){
-                replaceDetailFragment(StoryDetailFragment.NO_STORY_SELECTED_POSITION);
+                replaceDetailFragment();
             }
             homeViewPresenter.onViewCreated(this);
         } else {
@@ -67,10 +67,8 @@ public class MainActivity extends AppCompatActivity implements HomeView, StoryLi
         }
     }
 
-    private void replaceDetailFragment(int storyPosition) {
-        Bundle bundle = new Bundle();
-        bundle.putInt(StoryDetailFragment.STORY_POSITION_BUNDLE_KEY, storyPosition);
-        StoryDetailFragment storyDetailFragment = StoryDetailFragment.newInstance(bundle);
+    private void replaceDetailFragment() {
+        StoryDetailFragment storyDetailFragment = StoryDetailFragment.newInstance(null);
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.story_detail_fragment_container, storyDetailFragment)
                 .commit();
@@ -90,7 +88,7 @@ public class MainActivity extends AppCompatActivity implements HomeView, StoryLi
     @Override
     public void showCommentsView(int storyPosition) {
         if(twoPaneMode){
-            replaceDetailFragment(storyPosition);
+            replaceDetailFragment();
         } else {
             StoryDetailActivity.launch(this, storyPosition);
         }
