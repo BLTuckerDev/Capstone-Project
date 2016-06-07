@@ -38,7 +38,6 @@ public class StoryListViewPresenter implements SwipeRefreshLayout.OnRefreshListe
         setStoryListView(view);
         trackScreenView();
         this.loaderManager = loaderManager;
-        setupView();
     }
 
     private void trackScreenView(){
@@ -49,7 +48,6 @@ public class StoryListViewPresenter implements SwipeRefreshLayout.OnRefreshListe
     public void onViewRestored(StoryListView view, LoaderManager loaderManager) {
         setStoryListView(view);
         this.loaderManager = loaderManager;
-        setupView();
     }
 
     private void setupView() {
@@ -68,6 +66,7 @@ public class StoryListViewPresenter implements SwipeRefreshLayout.OnRefreshListe
 
     public void onViewResumed(StoryListView view) {
         setStoryListView(view);
+        setupView();
     }
 
     public void onViewPaused() {
