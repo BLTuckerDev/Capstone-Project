@@ -21,11 +21,17 @@ public class TopStoriesModule {
 
     @Provides
     @ApplicationScope
+    public SyncRequestDelegate provideSyncRequestDelegate(Account account){
+        return new SyncRequestDelegate(account);
+    }
+
+    @Provides
+    @ApplicationScope
     public StoryListViewPresenter provideStoryListViewPresenter(ReadingSession readingSession,
                                                                 StoryListLoaderCallbackDelegate storyListLoaderCallbackDelegate,
-                                                                Account account,
+                                                                SyncRequestDelegate syncRequestDelegate,
                                                                 Tracker tracker){
-        return new StoryListViewPresenter(readingSession, storyListLoaderCallbackDelegate, account, tracker);
+        return new StoryListViewPresenter(readingSession, storyListLoaderCallbackDelegate, syncRequestDelegate, tracker);
     }
 
 

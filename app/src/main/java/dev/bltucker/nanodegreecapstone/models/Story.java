@@ -10,7 +10,7 @@ import java.util.Arrays;
 
 import dev.bltucker.nanodegreecapstone.data.StoryColumns;
 
-public final class Story implements Parcelable {
+public class Story implements Parcelable {
 
     public static ContentValues mapToContentValues(Story aStory){
 

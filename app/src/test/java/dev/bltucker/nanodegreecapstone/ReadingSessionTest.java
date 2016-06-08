@@ -27,33 +27,6 @@ public class ReadingSessionTest {
     }
 
     @Test
-    public void testRead() throws Exception {
-        //TODO remove this when we remove the current story global
-        final Date now = new Date();
-
-        Comment firstComment = new Comment(1L, "First Comment Author", "Comment Text", now.getTime(), new long[]{2L});
-        Comment childComment = new Comment(2L, "Second comment author", "Child Comment", now.getTime(), new long[]{});
-        List<Comment> commentList = new ArrayList<>();
-        commentList.add(firstComment);
-        commentList.add(childComment);
-
-        final Long[] commentRefs = new Long[]{firstComment.getId(), childComment.getId()};
-        Story testStory = new Story(1, "Brett", 1, now.getTime(), "Title", "https://google.com/", commentRefs);
-
-        objectUnderTest.read(testStory, commentList);
-
-        assertEquals(testStory, objectUnderTest.getCurrentStory());
-        assertEquals(commentList.size(), objectUnderTest.currentStoryCommentCount());
-        assertNotNull(objectUnderTest.getCurrentStoryComment(0));
-        assertEquals(firstComment, objectUnderTest.getCurrentStoryComment(0));
-        assertEquals(firstComment, objectUnderTest.getParentComment(childComment.getId()));
-        assertNull(objectUnderTest.getStory(Integer.MAX_VALUE));
-        assertNull(objectUnderTest.getStory(Integer.MIN_VALUE));
-        assertNull(objectUnderTest.getCurrentStoryComment(Integer.MAX_VALUE));
-        assertNull(objectUnderTest.getCurrentStoryComment(Integer.MIN_VALUE));
-    }
-
-    @Test
     public void testSettingSameStoriesDoesNotDirtySession(){
 
         Story a = new Story(1, "A", 1, 0, "A Story", "", new Long[0]);

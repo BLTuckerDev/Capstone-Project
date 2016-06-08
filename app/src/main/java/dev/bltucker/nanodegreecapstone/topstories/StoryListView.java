@@ -4,7 +4,7 @@ import dev.bltucker.nanodegreecapstone.models.Story;
 
 public interface StoryListView {
     void showStories();
-    void showStoryDetailView(Story storyPosition);
+    void showStoryDetailView(Story story);
     void showStoryPostUrl(String url);
     void showLoadingSpinner();
     void hideLoadingSpinner();
