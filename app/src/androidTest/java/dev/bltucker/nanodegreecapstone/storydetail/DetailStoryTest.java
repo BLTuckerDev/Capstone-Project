@@ -70,6 +70,7 @@ public class DetailStoryTest {
     public void testWriteToParcel(){
         Parcel output = Parcel.obtain();
 
+        objectUnderTest.setComments(fakeComments);
         objectUnderTest.writeToParcel(output, 0);
         output.setDataPosition(0);
 
