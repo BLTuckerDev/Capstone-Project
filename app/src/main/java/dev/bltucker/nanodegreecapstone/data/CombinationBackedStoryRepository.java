@@ -96,16 +96,15 @@ public class CombinationBackedStoryRepository implements StoryRepository {
             return Observable.just(cachedComments);
         }
 
-        Long[] commentIds = getCommentIds(storyId);
+        final Long[] commentIds = getCommentIds(storyId);
 
         return Observable.from(commentIds)
-                .concatMap(new Func1<Long, Observable<Comment>>() {
+                .concatMap(new Func1<Long, Observable<List<Comment>>>() {
                     @Override
-                    public Observable<Comment> call(Long commentId) {
-                        return Observable.from(addCommentToList(commentId));
+                    public Observable<List<Comment>> call(Long aLong) {
+                        return Observable.just(addCommentToList(aLong));
                     }
-                })
-                .toList();
+                });
     }
 
     public List<Comment> addCommentToList(long commentId){
