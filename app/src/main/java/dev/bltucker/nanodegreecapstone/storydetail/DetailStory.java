@@ -4,15 +4,21 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.util.SimpleArrayMap;
+import android.util.ArraySet;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Observable;
+import java.util.Set;
 
 import dev.bltucker.nanodegreecapstone.models.Comment;
 import dev.bltucker.nanodegreecapstone.models.Story;
 
-public class DetailStory implements Parcelable {
+//TODO figure out how to do this with just Rx
+public class DetailStory extends Observable implements Parcelable {
 
     @Nullable
     private final Story story;
@@ -75,11 +81,48 @@ public class DetailStory implements Parcelable {
         return commentList.get(index);
     }
 
-    public void setComments(List<Comment> comments){
+    public boolean hasLoadedAllComments(){
+        if(null == story){
+            return false;
+        }
+
+        Set<Long> parentCommentIds = new HashSet<>();
+        parentCommentIds.addAll(Arrays.asList(story.getCommentIds()));
+
+        for (int i = 0; i < commentList.size(); i++) {
+            if (parentCommentIds.contains(commentList.get(i).getId())) {
+                parentCommentIds.remove(commentList.get(i).getId());
+            }
+        }
+
+        return parentCommentIds.isEmpty();
+    }
+
+    public void addComments(List<Comment> comments){
+        for (int i = 0; i < comments.size(); i++) {
+            if(commentList.contains(comments.get(i))){
+                continue;
+            }
+
+            commentList.add(comments.get(i));
+        }
+
+        updateCommentIdToParentMap();
+        setChanged();
+        notifyObservers();
+    }
+    
+    public void replaceComments(List<Comment> comments){
         this.commentList.clear();
         commentIdToParentMap.clear();
         this.commentList.addAll(comments);
 
+        updateCommentIdToParentMap();
+        setChanged();
+        notifyObservers();
+    }
+
+    private void updateCommentIdToParentMap() {
         for (int i = 0; i < commentList.size(); i++) {
             Comment currentComment = commentList.get(i);
             long[] childComments = currentComment.getReplyIds();

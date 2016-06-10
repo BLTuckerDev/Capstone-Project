@@ -60,9 +60,6 @@ public class StoryDetailFragment extends Fragment implements StoryDetailView {
     @Bind(R.id.read_button)
     Button readButton;
 
-    @Bind(R.id.loading_container)
-    LinearLayout loadingContainer;
-
     @Bind(R.id.empty_view_container)
     View emptyViewContainer;
 
@@ -225,11 +222,6 @@ public class StoryDetailFragment extends Fragment implements StoryDetailView {
         }
     }
 
-    @Override
-    public void showComments(List<Comment> data) {
-        detailStory.setComments(data);
-        commentsAdapter.reset();
-    }
 
     @OnClick(R.id.read_button)
     public void onReadButtonClick(View v) {
@@ -250,31 +242,9 @@ public class StoryDetailFragment extends Fragment implements StoryDetailView {
     }
 
     @Override
-    public void showCommentsLoadingSpinner() {
-        recyclerView.setVisibility(View.INVISIBLE);
-        emptyViewContainer.setVisibility(View.INVISIBLE);
-        loadingContainer.setVisibility(View.VISIBLE);
-        headerView.setVisibility(View.VISIBLE);
-    }
-
-    @Override
-    public void hideCommentsLoadingSpinner() {
-        loadingContainer.setVisibility(View.INVISIBLE);
-        emptyViewContainer.setVisibility(View.INVISIBLE);
-        recyclerView.setVisibility(View.VISIBLE);
-        headerView.setVisibility(View.VISIBLE);
-    }
-
-    @Override
     public void showEmptyView() {
-        loadingContainer.setVisibility(View.INVISIBLE);
         recyclerView.setVisibility(View.INVISIBLE);
         emptyViewContainer.setVisibility(View.VISIBLE);
         headerView.setVisibility(View.INVISIBLE);
-    }
-
-    @Override
-    public void showSelectAStoryPrompt() {
-        Toast.makeText(getContext(), getString(R.string.select_a_story_first), Toast.LENGTH_LONG).show();
     }
 }

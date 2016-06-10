@@ -49,7 +49,7 @@ public class StoryDetailFragmentModule {
     @Provides
     @StoryDetailFragmentScope
     public StoryCommentLoaderCallbackDelegate provideStoryCommentLoaderCallbackDelegate(ReadingSession readingSession, Provider<StoryCommentsLoader> storyCommentsLoaderProvider){
-        return new StoryCommentLoaderCallbackDelegate(readingSession, storyCommentsLoaderProvider);
+        return new StoryCommentLoaderCallbackDelegate(storyCommentsLoaderProvider);
     }
 
     @Provides

@@ -4,7 +4,6 @@ import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.LoaderManager;
 
 import com.google.android.gms.analytics.HitBuilders;
@@ -62,7 +61,7 @@ public class StoryDetailViewPresenter {
     private void initializeCommentLoader(DetailStory story) {
         Timber.d("initializeCommentLoader");
         Bundle loaderBundle = new Bundle();
-        loaderBundle.putLong(StoryCommentsLoader.SELECTED_STORY_ID_BUNDLE_KEY, story.getStoryId());
+        loaderBundle.putParcelable(StoryCommentsLoader.SELECTED_DETAIL_STORY, story);
         this.loaderManager.initLoader(StoryCommentsLoader.STORY_COMMENT_LOADER, loaderBundle, commentLoaderCallbackDelegate);
     }
 

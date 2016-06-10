@@ -2,6 +2,8 @@ package dev.bltucker.nanodegreecapstone.storydetail;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.util.TypedValue;
@@ -12,6 +14,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.Calendar;
+import java.util.Observable;
+import java.util.Observer;
 
 import javax.inject.Inject;
 
@@ -21,10 +25,12 @@ import dev.bltucker.nanodegreecapstone.R;
 import dev.bltucker.nanodegreecapstone.injection.GregorianUTC;
 import dev.bltucker.nanodegreecapstone.models.Comment;
 
-public class StoryCommentsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+//TODO need to deal with rotation while loading, make sure we dont reload comments that are already loaded
+public class StoryCommentsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements Observer {
 
     private static final int EMPTY_COMMENT_ITEM_TYPE = 1;
     private static final int COMMENT_ITEM_TYPE = 2;
+    private static final int LOADING_COMMENTS_ITEM_TYPE = 3;
 
     private final Resources resources;
     private final Calendar calendar;
@@ -42,6 +48,10 @@ public class StoryCommentsAdapter extends RecyclerView.Adapter<RecyclerView.View
         if(viewType == EMPTY_COMMENT_ITEM_TYPE){
             View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.empty_comments_section, parent, false);
             return new EmptyCommentsViewHolder(itemView);
+        } else if(viewType == LOADING_COMMENTS_ITEM_TYPE){
+            View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.comment_loading_item, parent, false);
+            return new LoadingCommentsViewHolder(itemView);
+
         } else {
             View itemView = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.story_comment_layout_item, parent, false);
@@ -54,6 +64,10 @@ public class StoryCommentsAdapter extends RecyclerView.Adapter<RecyclerView.View
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if(holder.getItemViewType() == EMPTY_COMMENT_ITEM_TYPE){
+            return;
+        }
+
+        if(holder.getItemViewType() == LOADING_COMMENTS_ITEM_TYPE){
             return;
         }
 
@@ -117,8 +131,10 @@ public class StoryCommentsAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     @Override
     public int getItemViewType(int position) {
-        if(!detailStory.hasStory() || detailStory.getCommentCount() == 0){
+        if(!detailStory.hasStory() || detailStory.getCommentCount() == 0 && detailStory.hasLoadedAllComments()){
             return EMPTY_COMMENT_ITEM_TYPE;
+        } else if(!detailStory.hasLoadedAllComments() && position == detailStory.getCommentCount()){
+            return LOADING_COMMENTS_ITEM_TYPE;
         } else {
             return COMMENT_ITEM_TYPE;
         }
@@ -127,19 +143,31 @@ public class StoryCommentsAdapter extends RecyclerView.Adapter<RecyclerView.View
     @Override
     public int getItemCount() {
         if(detailStory.hasStory()){
-            return detailStory.getCommentCount();
+            return detailStory.hasLoadedAllComments() ? detailStory.getCommentCount() : detailStory.getCommentCount() + 1;
         } else {
             return 1;
         }
     }
 
-    public void reset() {
+    public void setDetailStory(DetailStory detailStory) {
+
+        if(detailStory != null){
+            detailStory.deleteObserver(this);
+        }
+
+        this.detailStory = detailStory;
+        this.detailStory.addObserver(this);
         notifyDataSetChanged();
     }
 
-    public void setDetailStory(DetailStory detailStory) {
-        this.detailStory = detailStory;
-        notifyDataSetChanged();
+    @Override
+    public void update(Observable observable, Object data) {
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                notifyDataSetChanged();
+            }
+        });
     }
 
     public static class CommentViewHolder extends RecyclerView.ViewHolder{
@@ -161,6 +189,12 @@ public class StoryCommentsAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     public static class EmptyCommentsViewHolder extends RecyclerView.ViewHolder{
         public EmptyCommentsViewHolder(View itemView){
+            super(itemView);
+        }
+    }
+
+    public static class LoadingCommentsViewHolder extends RecyclerView.ViewHolder {
+        public LoadingCommentsViewHolder(View itemView) {
             super(itemView);
         }
     }
