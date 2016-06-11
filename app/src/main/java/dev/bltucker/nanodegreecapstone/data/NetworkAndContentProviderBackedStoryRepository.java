@@ -3,6 +3,7 @@ package dev.bltucker.nanodegreecapstone.data;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.support.annotation.VisibleForTesting;
 import android.util.LruCache;
 
 import java.util.ArrayList;
@@ -13,21 +14,24 @@ import javax.inject.Inject;
 import dev.bltucker.nanodegreecapstone.models.Comment;
 import dev.bltucker.nanodegreecapstone.models.Story;
 import rx.Observable;
-import rx.Subscriber;
 import rx.functions.Func1;
 import timber.log.Timber;
 
-public class CombinationBackedStoryRepository implements StoryRepository {
+public class NetworkAndContentProviderBackedStoryRepository implements StoryRepository {
 
     public static final int CACHE_SIZE = 2 * 1024 * 1024; // 2MiB
 
-    private final ContentResolver contentResolver;
-    private final HackerNewsApiService hackerNewsApiService;
+    @VisibleForTesting
+    final ContentResolver contentResolver;
 
-    private LruCache<Long, List<Comment>> commentLruCache;
+    @VisibleForTesting
+    final HackerNewsApiService hackerNewsApiService;
+
+    @VisibleForTesting
+    final LruCache<Long, List<Comment>> commentLruCache;
 
     @Inject
-    public CombinationBackedStoryRepository(ContentResolver contentResolver, HackerNewsApiService hackerNewsApiService) {
+    public NetworkAndContentProviderBackedStoryRepository(ContentResolver contentResolver, HackerNewsApiService hackerNewsApiService) {
         this.contentResolver = contentResolver;
         this.hackerNewsApiService = hackerNewsApiService;
         commentLruCache = new LruCache<>(CACHE_SIZE);
@@ -35,45 +39,45 @@ public class CombinationBackedStoryRepository implements StoryRepository {
 
     @Override
     public Observable<List<Story>> getAllStories() {
-        return Observable.create(new Observable.OnSubscribe<List<Story>>() {
-            @Override
-            public void call(Subscriber<? super List<Story>> subscriber) {
-                Cursor query = contentResolver.query(SchematicContentProviderGenerator.StoryPaths.ALL_STORIES,
-                        null,
-                        null,
-                        null,
-                        null);
 
-                if(null == query){
-                    subscriber.onError(new Exception("Query for all stories returned a null cursor"));
-                    return;
-                }
+        Cursor queryCursor = contentResolver.query(SchematicContentProviderGenerator.StoryPaths.ALL_STORIES,
+                null,
+                null,
+                null,
+                null);
 
-                List<Story> storyList = new ArrayList<>(query.getCount());
+        if (null == queryCursor) {
+            return Observable.error(new Exception("Query for all stories returned a null cursor"));
+        }
 
-                while (query.moveToNext()) {
-                    long storyId = query.getLong(query.getColumnIndex(StoryColumns._ID));
-                    String storyPoster = query.getString(query.getColumnIndex(StoryColumns.POSTER_NAME));
-                    long score = query.getLong(query.getColumnIndex(StoryColumns.SCORE));
-                    String title = query.getString(query.getColumnIndex(StoryColumns.TITLE));
-                    long unixTime = query.getLong(query.getColumnIndex(StoryColumns.UNIX_TIME));
-                    String storyUrl = query.getString(query.getColumnIndex(StoryColumns.URL));
-                    Long[] commentIds = getCommentIds(storyId);
+        return Observable.just(queryCursor)
+                .map(new Func1<Cursor, List<Story>>() {
+                    @Override
+                    public List<Story> call(Cursor cursor) {
+                        List<Story> storyList = new ArrayList<>(cursor.getCount());
 
-                    storyList.add(new Story(storyId, storyPoster, score, unixTime, title, storyUrl, commentIds));
-                }
+                        while (cursor.moveToNext()) {
+                            long storyId = cursor.getLong(cursor.getColumnIndex(StoryColumns._ID));
+                            String storyPoster = cursor.getString(cursor.getColumnIndex(StoryColumns.POSTER_NAME));
+                            long score = cursor.getLong(cursor.getColumnIndex(StoryColumns.SCORE));
+                            String title = cursor.getString(cursor.getColumnIndex(StoryColumns.TITLE));
+                            long unixTime = cursor.getLong(cursor.getColumnIndex(StoryColumns.UNIX_TIME));
+                            String storyUrl = cursor.getString(cursor.getColumnIndex(StoryColumns.URL));
+                            Long[] commentIds = getCommentIds(storyId);
 
-                query.close();
-                subscriber.onNext(storyList);
-                subscriber.onCompleted();
-            }
-        });
+                            storyList.add(new Story(storyId, storyPoster, score, unixTime, title, storyUrl, commentIds));
+                        }
+
+                        cursor.close();
+                        return storyList;
+                    }
+                });
     }
 
     private Long[] getCommentIds(long storyId) {
         Cursor query = contentResolver.query(SchematicContentProviderGenerator.CommentRefs.withStoryId(String.valueOf(storyId)), null, null, null, null);
 
-        if(null == query){
+        if (null == query) {
             return new Long[0];
         }
 
@@ -107,14 +111,14 @@ public class CombinationBackedStoryRepository implements StoryRepository {
                 });
     }
 
-    public List<Comment> addCommentToList(long commentId){
+    public List<Comment> addCommentToList(long commentId) {
 
         List<Comment> commentList = new ArrayList<>();
         Comment comment = hackerNewsApiService.getComment(commentId).toBlocking().first();
 
-        if (comment.getAuthorName() != null && comment.getCommentText() != null) {
+        if (comment.getAuthorName() != null && comment.getCommentText() != null && comment.getCommentText().length() > 0) {
             commentList.add(comment);
-            if(comment.getReplyIds().length > 0){
+            if (comment.getReplyIds().length > 0) {
                 for (int i = 0; i < comment.getReplyIds().length; i++) {
                     commentList.addAll(addCommentToList(comment.getReplyIds()[i]));
                 }

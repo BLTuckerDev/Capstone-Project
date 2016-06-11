@@ -45,11 +45,10 @@ dependencies {
     compile 'com.google.android.gms:play-services-location:8.4.0'
     compile 'com.google.dagger:dagger:2.1'
     compile 'com.jakewharton.timber:timber:4.1.1'
-    compile 'com.squareup.okhttp3:okhttp:3.2.0'
     compile 'com.google.code.gson:gson:2.6.2'
-    compile 'com.squareup.retrofit2:retrofit:2.0.0'
-    compile 'com.squareup.retrofit2:adapter-rxjava:2.0.0'
-    compile 'com.squareup.retrofit2:converter-gson:2.0.0'
+    compile 'com.squareup.retrofit2:retrofit:2.0.2'
+    compile 'com.squareup.retrofit2:adapter-rxjava:2.0.2'
+    compile 'com.squareup.retrofit2:converter-gson:2.0.2'
     compile 'net.simonvt.schematic:schematic:0.6.4'
     compile 'com.jakewharton:butterknife:7.0.1'
     compile 'io.reactivex:rxandroid:1.1.0'
@@ -57,8 +56,25 @@ dependencies {
 
 
     testCompile 'junit:junit:4.12'
-    testCompile 'org.mockito:mockito-core:1.10.19'
+    testCompile ('org.mockito:mockito-core:1.10.19'){
+        exclude module: "hamcrest-core"
+    }
 
+    testCompile ('org.powermock:powermock-api-mockito:1.6.5'){
+        exclude module: "hamcrest-core"
+        exclude module: "objenesis"
+    }
+
+
+    testCompile ('org.powermock:powermock-module-junit4:1.6.5'){
+        exclude module: "hamcrest-core"
+        exclude module: "objenesis"
+    }
+
+    testCompile 'com.squareup.retrofit2:retrofit-mock:2.0.2'
+
+    androidTestCompile 'com.google.dexmaker:dexmaker-mockito:1.2'
+    androidTestCompile 'com.google.dexmaker:dexmaker:1.2'
 
     androidTestCompile ('com.android.support.test:runner:0.4.1'){
         exclude module: 'support-annotations'

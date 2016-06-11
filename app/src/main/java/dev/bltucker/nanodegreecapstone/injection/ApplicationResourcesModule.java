@@ -12,15 +12,13 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import java.util.Calendar;
-import java.util.SimpleTimeZone;
 import java.util.TimeZone;
 
 import dagger.Module;
 import dagger.Provides;
 import dev.bltucker.nanodegreecapstone.CapstoneApplication;
 import dev.bltucker.nanodegreecapstone.R;
-import dev.bltucker.nanodegreecapstone.data.CombinationBackedStoryRepository;
-import dev.bltucker.nanodegreecapstone.data.DescendingScoreStoryComparator;
+import dev.bltucker.nanodegreecapstone.data.NetworkAndContentProviderBackedStoryRepository;
 import dev.bltucker.nanodegreecapstone.data.HackerNewsApiService;
 import dev.bltucker.nanodegreecapstone.data.StoryRepository;
 import dev.bltucker.nanodegreecapstone.events.EventBus;
@@ -129,7 +127,7 @@ public class ApplicationResourcesModule {
     @Provides
     @ApplicationScope
     public StoryRepository provideStoryRepository(ContentResolver contentResolver, HackerNewsApiService hackerNewsApiService){
-        return new CombinationBackedStoryRepository(contentResolver, hackerNewsApiService);
+        return new NetworkAndContentProviderBackedStoryRepository(contentResolver, hackerNewsApiService);
     }
 
 
