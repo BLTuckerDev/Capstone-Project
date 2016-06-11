@@ -26,6 +26,7 @@ import dev.bltucker.nanodegreecapstone.injection.GregorianUTC;
 import dev.bltucker.nanodegreecapstone.models.Comment;
 
 //TODO need to deal with rotation while loading, make sure we dont reload comments that are already loaded
+//TODO when we see that the detail story has updated, see if the loading spinner item is visible, if it is notify(), if it isnt maybe we dont notify until it is?
 public class StoryCommentsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements Observer {
 
     private static final int EMPTY_COMMENT_ITEM_TYPE = 1;

@@ -2,13 +2,21 @@ package dev.bltucker.nanodegreecapstone.models;
 
 import android.content.ContentValues;
 import android.os.Parcel;
+import android.test.suitebuilder.annotation.SmallTest;
 
 import org.junit.Test;
 
-import static dev.bltucker.nanodegreecapstone.data.StoryColumns.*;
-import static org.junit.Assert.*;
+import static dev.bltucker.nanodegreecapstone.data.StoryColumns.POSTER_NAME;
+import static dev.bltucker.nanodegreecapstone.data.StoryColumns.RANK;
+import static dev.bltucker.nanodegreecapstone.data.StoryColumns.SCORE;
+import static dev.bltucker.nanodegreecapstone.data.StoryColumns.TITLE;
+import static dev.bltucker.nanodegreecapstone.data.StoryColumns.UNIX_TIME;
+import static dev.bltucker.nanodegreecapstone.data.StoryColumns.URL;
+import static dev.bltucker.nanodegreecapstone.data.StoryColumns._ID;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
-
+@SmallTest
 public class StoryTest {
 
     @Test

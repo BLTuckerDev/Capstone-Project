@@ -1,6 +1,7 @@
 package dev.bltucker.nanodegreecapstone.storydetail;
 
 import android.os.Parcel;
+import android.test.suitebuilder.annotation.SmallTest;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -12,9 +13,10 @@ import java.util.List;
 import dev.bltucker.nanodegreecapstone.models.Comment;
 import dev.bltucker.nanodegreecapstone.models.Story;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
 
-
+@SmallTest
 public class DetailStoryTest {
 
     Story fakeStory;

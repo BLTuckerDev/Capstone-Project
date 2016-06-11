@@ -2,11 +2,14 @@ package dev.bltucker.nanodegreecapstone.topstories;
 
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
+import android.test.suitebuilder.annotation.SmallTest;
 
 import com.google.android.gms.analytics.Tracker;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.runners.MockitoJUnitRunner;
 
 import dev.bltucker.nanodegreecapstone.models.ReadingSession;
 import dev.bltucker.nanodegreecapstone.models.Story;
@@ -22,6 +25,8 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+@SmallTest
+@RunWith(MockitoJUnitRunner.class)
 public class StoryListViewPresenterTest {
 
     StoryListViewPresenter objectUnderTest;

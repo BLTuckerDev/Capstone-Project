@@ -1,5 +1,7 @@
 package dev.bltucker.nanodegreecapstone;
 
+import android.test.suitebuilder.annotation.SmallTest;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -17,6 +19,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+@SmallTest
 public class ReadingSessionTest {
 
     public ReadingSession objectUnderTest;

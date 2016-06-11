@@ -8,6 +8,7 @@ import android.content.pm.ProviderInfo;
 import android.database.Cursor;
 import android.net.Uri;
 import android.test.AndroidTestCase;
+import android.test.suitebuilder.annotation.LargeTest;
 
 import java.util.Date;
 import java.util.Map;
@@ -18,6 +19,7 @@ import java.util.concurrent.TimeUnit;
 import dev.bltucker.nanodegreecapstone.models.ReadLaterStory;
 import dev.bltucker.nanodegreecapstone.models.Story;
 
+@LargeTest
 public class StoryProviderTests extends AndroidTestCase {
 
     @Override
