@@ -141,7 +141,7 @@ public class ApplicationResourcesModule {
 
     @Provides
     @ApplicationScope
-    public ReadingSession provideReadingSession(@StoryMax int storyMax){
-        return new ReadingSession(storyMax);
+    public ReadingSession provideReadingSession(@StoryMax int storyMax, EventBus eventBus){
+        return new ReadingSession(storyMax, eventBus);
     }
 }

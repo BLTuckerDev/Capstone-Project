@@ -1,5 +1,6 @@
 package dev.bltucker.nanodegreecapstone.models;
 
+import android.annotation.SuppressLint;
 import android.support.annotation.Nullable;
 
 import java.util.ArrayList;
@@ -7,20 +8,43 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import dev.bltucker.nanodegreecapstone.events.EventBus;
+import dev.bltucker.nanodegreecapstone.events.SyncCompletedEvent;
 import dev.bltucker.nanodegreecapstone.injection.StoryMax;
+import rx.Subscriber;
+import rx.Subscription;
 import timber.log.Timber;
 
 public class ReadingSession {
 
     private final List<Story> userReadingList;
+
+    @SuppressWarnings({"unused", "FieldCanBeLocal"})
+    private final Subscription syncAdapterChangeSubscription;
     private boolean storyListIsDirty = false;
 
     private final List<Story> latestSyncStories;
 
     @Inject
-    public ReadingSession(@StoryMax int maximumStoryCount){
+    public ReadingSession(@StoryMax int maximumStoryCount, EventBus eventBus){
         userReadingList = new ArrayList<>(maximumStoryCount);
         latestSyncStories = new ArrayList<>(maximumStoryCount);
+
+        syncAdapterChangeSubscription = eventBus.subscribeTo(SyncCompletedEvent.class)
+                .subscribe(new Subscriber<Object>() {
+                    @Override
+                    public void onCompleted() {   }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Timber.e(e, "Error thrown after a sync complete event handler");
+                    }
+
+                    @Override
+                    public void onNext(Object o) {
+                        storyListIsDirty = true;
+                    }
+                });
     }
 
     public boolean hasStories(){
