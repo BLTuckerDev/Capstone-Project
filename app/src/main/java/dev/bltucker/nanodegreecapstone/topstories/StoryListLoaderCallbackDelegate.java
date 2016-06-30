@@ -42,6 +42,8 @@ class StoryListLoaderCallbackDelegate implements LoaderManager.LoaderCallbacks<L
         Timber.d("onLoadFinished");
         if(!newStories.isEmpty()){
             Timber.d("StoryListLoader finished, first story title in new data set is: %s", newStories.get(0).getTitle());
+        } else {
+            Timber.d("StoryListLoader finished, there are no stories");
         }
 
         readingSession.setLatestSyncStories(newStories);
