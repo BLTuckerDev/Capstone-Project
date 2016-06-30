@@ -13,6 +13,7 @@ import dev.bltucker.nanodegreecapstone.data.StoryRepository;
 import dev.bltucker.nanodegreecapstone.models.Comment;
 import dev.bltucker.nanodegreecapstone.models.Story;
 import rx.Subscriber;
+import rx.schedulers.Schedulers;
 import timber.log.Timber;
 
 public class StoryCommentsLoader extends AsyncTaskLoader<Void> {
@@ -35,6 +36,8 @@ public class StoryCommentsLoader extends AsyncTaskLoader<Void> {
     public Void loadInBackground() {
 
         storyRepository.getStoryComments(detailStory.getStoryId())
+                .subscribeOn(Schedulers.immediate())
+                .observeOn(Schedulers.immediate())
                 .subscribe(new Subscriber<List<Comment>>() {
                     @Override
                     public void onCompleted() { }
@@ -65,5 +68,6 @@ public class StoryCommentsLoader extends AsyncTaskLoader<Void> {
 
     public void setDetailStory(DetailStory detailStory) {
         this.detailStory = detailStory;
+        onContentChanged();
     }
 }
