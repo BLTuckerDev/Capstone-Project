@@ -34,6 +34,7 @@ public class StoryListLoader extends AsyncTaskLoader<List<Story>> {
 
     @Override
     public List<Story> loadInBackground() {
+        Timber.d("StoryListLoader loading in background");
         return storyRepository.getAllStories().toBlocking().first();
     }
 
@@ -68,6 +69,7 @@ public class StoryListLoader extends AsyncTaskLoader<List<Story>> {
 
                     @Override
                     public void onNext(Object o) {
+                        Timber.d("StoryListLoader onNext, setting content changed");
                         onContentChanged();
                     }
                 });

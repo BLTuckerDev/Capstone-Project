@@ -1,6 +1,5 @@
 package dev.bltucker.nanodegreecapstone.models;
 
-import android.annotation.SuppressLint;
 import android.support.annotation.Nullable;
 
 import java.util.ArrayList;
