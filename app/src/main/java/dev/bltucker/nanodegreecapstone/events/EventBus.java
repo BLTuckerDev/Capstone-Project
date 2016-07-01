@@ -20,10 +20,6 @@ public class EventBus {
         eventSubject.onNext(event);
     }
 
-    public Observable<Object> subscribeToAll() {
-        return eventSubject.asObservable();
-    }
-
     public Observable<Object> subscribeTo(final Class eventClass) {
         Timber.d("Subscribing to events of type: %s", eventClass.toString());
         return eventSubject.filter(new Func1<Object, Boolean>() {

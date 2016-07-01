@@ -18,6 +18,8 @@ import dev.bltucker.nanodegreecapstone.data.HackerNewsApiService;
 import dev.bltucker.nanodegreecapstone.data.StoryRepository;
 import dev.bltucker.nanodegreecapstone.events.EventBus;
 import dev.bltucker.nanodegreecapstone.events.SyncCompletedEvent;
+import dev.bltucker.nanodegreecapstone.events.SyncStartedEvent;
+import dev.bltucker.nanodegreecapstone.events.SyncStatusObserver;
 import dev.bltucker.nanodegreecapstone.injection.StoryMax;
 import dev.bltucker.nanodegreecapstone.models.Story;
 import rx.Observable;
@@ -33,6 +35,9 @@ public final class StorySyncAdapter extends AbstractThreadedSyncAdapter {
     public static final String ACCOUNT_TYPE = "bltucker.dev";
 
     public static final String SYNC_COMPLETED_ACTION ="dev.bltucker.nanodegreecapstone.SYNC_COMPLETED";
+
+    @Inject
+    SyncStatusObserver observer;
 
     @Inject
     HackerNewsApiService apiService;
@@ -60,6 +65,7 @@ public final class StorySyncAdapter extends AbstractThreadedSyncAdapter {
     @Override
     public void onPerformSync(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult) {
 
+        observer.setSyncInProgress(true);
         Timber.d("Syncing....");
         final long startTime = System.currentTimeMillis();
 
@@ -86,6 +92,7 @@ public final class StorySyncAdapter extends AbstractThreadedSyncAdapter {
                       final long stopTime = System.currentTimeMillis();
                       Timber.d("Sync completed in %d milliseconds", stopTime - startTime);
                       //notify the application
+                      observer.setSyncInProgress(false);
                       eventBus.publish(new SyncCompletedEvent());
                       notifyWidgets();
                   }

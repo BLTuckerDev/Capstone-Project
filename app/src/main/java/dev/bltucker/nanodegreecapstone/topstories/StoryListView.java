@@ -7,9 +7,6 @@ public interface StoryListView {
     void showStoryDetailView(Story story);
     void showStoryPostUrl(String url);
     void showLoadingSpinner();
-    void hideLoadingSpinner();
-
-    void stopRefreshing();
 
     void showUpdatedStoriesNotification();
 }

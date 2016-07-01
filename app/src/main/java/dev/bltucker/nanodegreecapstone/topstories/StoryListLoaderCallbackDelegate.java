@@ -51,19 +51,16 @@ class StoryListLoaderCallbackDelegate implements LoaderManager.LoaderCallbacks<L
         new Handler(Looper.getMainLooper()).post(new Runnable(){
             @Override
             public void run() {
-                if(storyListView != null){
-                    storyListView.hideLoadingSpinner();
-                    storyListView.stopRefreshing();
-
-                    if(readingSession.hasStories()){
-                        if(readingSession.isStoryListIsDirty()){
-                            storyListView.showUpdatedStoriesNotification();
-                        }
-                    } else {
-                        readingSession.updateUserStoriesToLatestSync();
-                        storyListView.showStories();
+            if(storyListView != null){
+                if(readingSession.hasStories()){
+                    if(readingSession.isStoryListIsDirty()){
+                        storyListView.showUpdatedStoriesNotification();
                     }
+                } else {
+                    readingSession.updateUserStoriesToLatestSync();
+                    storyListView.showStories();
                 }
+            }
             }
         });
     }

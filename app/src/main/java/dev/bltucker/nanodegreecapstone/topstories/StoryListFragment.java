@@ -21,6 +21,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import dev.bltucker.nanodegreecapstone.CapstoneApplication;
 import dev.bltucker.nanodegreecapstone.R;
+import dev.bltucker.nanodegreecapstone.events.SyncStatusObserver;
 import dev.bltucker.nanodegreecapstone.models.ReadingSession;
 import dev.bltucker.nanodegreecapstone.models.Story;
 
@@ -50,14 +51,13 @@ public class StoryListFragment extends Fragment implements StoryListView {
     @Inject
     ReadingSession readingSession;
 
+    @Inject
+    SyncStatusObserver syncStatusObserver;
+
     private Delegate delegate;
 
     public StoryListFragment() {
         // Required empty public constructor
-    }
-
-    public static StoryListFragment newInstance() {
-        return new StoryListFragment();
     }
 
     @Override
@@ -120,6 +120,11 @@ public class StoryListFragment extends Fragment implements StoryListView {
 
     @Override
     public void showStories() {
+        if(!readingSession.hasStories() && syncStatusObserver.isSyncInProgress()){
+            return;
+        }
+
+        hideLoadingSpinner();
         swipeRefreshLayout.setRefreshing(false);
 
         if(readingSession.hasStories()){
@@ -151,15 +156,9 @@ public class StoryListFragment extends Fragment implements StoryListView {
         loadingContainer.setVisibility(View.VISIBLE);
     }
 
-    @Override
-    public void hideLoadingSpinner() {
+    private void hideLoadingSpinner() {
         loadingContainer.setVisibility(View.INVISIBLE);
         contentContainer.setVisibility(View.VISIBLE);
-    }
-
-    @Override
-    public void stopRefreshing(){
-        swipeRefreshLayout.setRefreshing(false);
     }
 
     @Override
@@ -167,6 +166,9 @@ public class StoryListFragment extends Fragment implements StoryListView {
         if(null == getView()){
             return;
         }
+
+        hideLoadingSpinner();
+        swipeRefreshLayout.setRefreshing(false);
 
         Snackbar.make(getView(), R.string.new_stories_are_available, Snackbar.LENGTH_INDEFINITE)
                 .setAction(R.string.refresh, new View.OnClickListener() {
