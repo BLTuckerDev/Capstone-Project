@@ -8,6 +8,5 @@ import rx.Observable;
 
 public interface StoryRepository {
     Observable<List<Story>> getAllStories();
-    Observable<List<Comment>> getStoryComments(long storyId);
     void saveStories(List<Story> stories);
 }

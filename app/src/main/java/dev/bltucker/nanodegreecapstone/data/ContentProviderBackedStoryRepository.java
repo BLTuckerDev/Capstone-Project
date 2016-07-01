@@ -4,37 +4,29 @@ import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.support.annotation.VisibleForTesting;
-import android.util.LruCache;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
 
-import dev.bltucker.nanodegreecapstone.models.Comment;
 import dev.bltucker.nanodegreecapstone.models.Story;
 import rx.Observable;
 import rx.functions.Func1;
 import timber.log.Timber;
 
-public class NetworkAndContentProviderBackedStoryRepository implements StoryRepository {
-
-    public static final int CACHE_SIZE = 2 * 1024 * 1024; // 2MiB
+public class ContentProviderBackedStoryRepository implements StoryRepository {
 
     @VisibleForTesting
     final ContentResolver contentResolver;
 
     @VisibleForTesting
-    final HackerNewsApiService hackerNewsApiService;
-
-    @VisibleForTesting
-    final LruCache<Long, List<Comment>> commentLruCache;
+    final CommentRepository commentRepository;
 
     @Inject
-    public NetworkAndContentProviderBackedStoryRepository(ContentResolver contentResolver, HackerNewsApiService hackerNewsApiService) {
+    public ContentProviderBackedStoryRepository(ContentResolver contentResolver, CommentRepository commentRepository) {
         this.contentResolver = contentResolver;
-        this.hackerNewsApiService = hackerNewsApiService;
-        commentLruCache = new LruCache<>(CACHE_SIZE);
+        this.commentRepository = commentRepository;
     }
 
     @Override
@@ -63,7 +55,7 @@ public class NetworkAndContentProviderBackedStoryRepository implements StoryRepo
                             String title = cursor.getString(cursor.getColumnIndex(StoryColumns.TITLE));
                             long unixTime = cursor.getLong(cursor.getColumnIndex(StoryColumns.UNIX_TIME));
                             String storyUrl = cursor.getString(cursor.getColumnIndex(StoryColumns.URL));
-                            Long[] commentIds = getCommentIds(storyId);
+                            Long[] commentIds = commentRepository.getCommentIds(storyId);
 
                             storyList.add(new Story(storyId, storyPoster, score, unixTime, title, storyUrl, commentIds));
                         }
@@ -74,62 +66,9 @@ public class NetworkAndContentProviderBackedStoryRepository implements StoryRepo
                 });
     }
 
-    private Long[] getCommentIds(long storyId) {
-        Cursor query = contentResolver.query(SchematicContentProviderGenerator.CommentRefs.withStoryId(String.valueOf(storyId)), null, null, null, null);
-
-        if (null == query) {
-            return new Long[0];
-        }
-
-        Long[] commentIds = new Long[query.getCount()];
-        int index = 0;
-        while (query.moveToNext()) {
-            commentIds[index] = query.getLong(query.getColumnIndex(CommentRefsColumns._ID));
-            index++;
-        }
-
-        query.close();
-        return commentIds;
-    }
-
-    @Override
-    public Observable<List<Comment>> getStoryComments(final long storyId) {
-        List<Comment> cachedComments = commentLruCache.get(storyId);
-
-        if (cachedComments != null) {
-            return Observable.just(cachedComments);
-        }
-
-        final Long[] commentIds = getCommentIds(storyId);
-
-        return Observable.from(commentIds)
-                .concatMap(new Func1<Long, Observable<List<Comment>>>() {
-                    @Override
-                    public Observable<List<Comment>> call(Long aLong) {
-                        return Observable.just(addCommentToList(aLong));
-                    }
-                });
-    }
-
-    public List<Comment> addCommentToList(long commentId) {
-
-        List<Comment> commentList = new ArrayList<>();
-        Comment comment = hackerNewsApiService.getComment(commentId).toBlocking().first();
-
-        if (comment.getAuthorName() != null && comment.getCommentText() != null && comment.getCommentText().length() > 0) {
-            commentList.add(comment);
-            if (comment.getReplyIds().length > 0) {
-                for (int i = 0; i < comment.getReplyIds().length; i++) {
-                    commentList.addAll(addCommentToList(comment.getReplyIds()[i]));
-                }
-            }
-        }
-        return commentList;
-    }
-
     @Override
     public void saveStories(List<Story> stories) {
-        commentLruCache.evictAll();
+        commentRepository.clearInMemoryCache();
         int deletedStories = contentResolver.delete(SchematicContentProviderGenerator.StoryPaths.ALL_STORIES, null, null);
         int deletedComments = contentResolver.delete(SchematicContentProviderGenerator.CommentRefs.ALL_COMMENTS, null, null);
 

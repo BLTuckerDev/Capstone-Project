@@ -18,7 +18,8 @@ import dagger.Module;
 import dagger.Provides;
 import dev.bltucker.nanodegreecapstone.CapstoneApplication;
 import dev.bltucker.nanodegreecapstone.R;
-import dev.bltucker.nanodegreecapstone.data.NetworkAndContentProviderBackedStoryRepository;
+import dev.bltucker.nanodegreecapstone.data.CommentRepository;
+import dev.bltucker.nanodegreecapstone.data.ContentProviderBackedStoryRepository;
 import dev.bltucker.nanodegreecapstone.data.HackerNewsApiService;
 import dev.bltucker.nanodegreecapstone.data.StoryRepository;
 import dev.bltucker.nanodegreecapstone.events.EventBus;
@@ -109,13 +110,11 @@ public class ApplicationResourcesModule {
     @Provides
     @ApplicationScope
     public Retrofit provideRetrofitClient(Gson gson){
-        Retrofit retrofit = new Retrofit.Builder()
+        return new Retrofit.Builder()
                 .baseUrl("https://hacker-news.firebaseio.com/v0/")
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .build();
-
-        return retrofit;
     }
 
     @Provides
@@ -126,10 +125,15 @@ public class ApplicationResourcesModule {
 
     @Provides
     @ApplicationScope
-    public StoryRepository provideStoryRepository(ContentResolver contentResolver, HackerNewsApiService hackerNewsApiService){
-        return new NetworkAndContentProviderBackedStoryRepository(contentResolver, hackerNewsApiService);
+    public StoryRepository provideStoryRepository(ContentResolver contentResolver, CommentRepository commentRepository){
+        return new ContentProviderBackedStoryRepository(contentResolver, commentRepository);
     }
 
+    @Provides
+    @ApplicationScope
+    public CommentRepository provideCommentRepository(HackerNewsApiService hackerNewsApiService, ContentResolver contentResolver){
+        return new CommentRepository(hackerNewsApiService, contentResolver);
+    }
 
     @Provides
     @ApplicationScope

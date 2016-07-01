@@ -30,13 +30,13 @@ import static org.powermock.api.mockito.PowerMockito.mockStatic;
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({ContentResolver.class, Uri.class})
 @PowerMockRunnerDelegate(MockitoJUnitRunner.class)
-public class NetworkAndContentProviderBackedStoryRepositoryTest {
+public class ContentProviderBackedStoryRepositoryTest {
 
     ContentResolver mockContentResolver;
 
     FakeHackerNewsApiService fakeHackerNewsService;
 
-    NetworkAndContentProviderBackedStoryRepository objectUnderTest;
+    ContentProviderBackedStoryRepository objectUnderTest;
 
     @Before
     public void setup(){
@@ -46,7 +46,7 @@ public class NetworkAndContentProviderBackedStoryRepositoryTest {
 
         initializeFakeService();
 
-        objectUnderTest = new NetworkAndContentProviderBackedStoryRepository(mockContentResolver, fakeHackerNewsService);
+        objectUnderTest = new ContentProviderBackedStoryRepository(mockContentResolver, fakeHackerNewsService);
     }
 
     private void initializeFakeService() {
