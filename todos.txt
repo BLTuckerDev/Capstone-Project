@@ -1,20 +1,10 @@
 
-Make sure settings menu is available in all activities
-
-Check for any save for later stories before sending the notification,
-dont send if we dont have any to read
-
-Notifications are popping every 5 minutes, adjust this, we only want
-a notification when they arrive at their location
 
 Later:
-on first load, while we are syncing we just display the empty story view with no indication, that we are in fact syncing.
 widget taking you directly to story detail activity
 shared element transitions
-better comment loading so that we can display the comment tree as its loaded, rather than all at once at the end.
 task stack builder for the read later activity
 consider loading in every onResume call for story list? nothing will change if everything is still the same? but we will cover all the bases for updating the user about fresher stories?
 more tests
-sync state observer
 remove the google analytics stuff from the repo now that we've passed through udacity
 pull to refresh comment list
