@@ -2,4 +2,5 @@
 <resources>
     <integer name="reading_session_story_max">75</integer>
     <integer name="sync_interval_seconds">1800</integer>
+    <integer name="comment_cache_size">3145728</integer>
 </resources>
