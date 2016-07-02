@@ -22,6 +22,7 @@ import dev.bltucker.nanodegreecapstone.models.Story;
 
 import static junit.framework.Assert.assertEquals;
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyLong;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
@@ -71,6 +72,8 @@ public class ContentProviderBackedStoryRepositoryTest {
         when(mockCommentCursor.getColumnIndex(CommentRefsColumns._ID)).thenReturn(0);
         when(mockCommentCursor.getLong(0)).thenReturn(1L);
         when(mockCommentCursor.moveToNext()).thenReturn(true, false);
+
+        when(mockCommentRepository.getCommentIds(anyLong())).thenReturn(new Long[0]);
 
         List<Story> storyList = objectUnderTest.getAllStories().toBlocking().first();
 
