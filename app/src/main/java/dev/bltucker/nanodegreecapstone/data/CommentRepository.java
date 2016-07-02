@@ -16,8 +16,6 @@ import rx.functions.Func1;
 
 public class CommentRepository {
 
-    public static final int CACHE_SIZE = 3 * 1024 * 1024; // 3MiB
-
     @VisibleForTesting
     final HackerNewsApiService hackerNewsApiService;
     private final ContentResolver contentResolver;
@@ -26,10 +24,12 @@ public class CommentRepository {
     final LruCache<Long, List<Comment>> commentLruCache;
 
     @Inject
-    public CommentRepository(HackerNewsApiService hackerNewsApiService, ContentResolver contentResolver){
+    public CommentRepository(HackerNewsApiService hackerNewsApiService,
+                             ContentResolver contentResolver,
+                             LruCache<Long, List<Comment>> commentCache){
         this.hackerNewsApiService = hackerNewsApiService;
         this.contentResolver = contentResolver;
-        commentLruCache = new LruCache<>(CACHE_SIZE);
+        commentLruCache = commentCache;
     }
 
     public Observable<List<Comment>> getStoryComments(final long storyId) {

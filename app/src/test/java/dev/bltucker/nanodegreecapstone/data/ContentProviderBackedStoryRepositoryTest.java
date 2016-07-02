@@ -12,13 +12,9 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.modules.junit4.PowerMockRunnerDelegate;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import dev.bltucker.nanodegreecapstone.models.Comment;
 import dev.bltucker.nanodegreecapstone.models.Story;
 
 import static junit.framework.Assert.assertEquals;
@@ -34,51 +30,16 @@ public class ContentProviderBackedStoryRepositoryTest {
 
     ContentResolver mockContentResolver;
 
-    FakeHackerNewsApiService fakeHackerNewsService;
+    CommentRepository mockCommentRepository;
 
     ContentProviderBackedStoryRepository objectUnderTest;
 
     @Before
     public void setup(){
-
         mockContentResolver = mock(ContentResolver.class);
-        fakeHackerNewsService = new FakeHackerNewsApiService();
-
-        initializeFakeService();
-
-        objectUnderTest = new ContentProviderBackedStoryRepository(mockContentResolver, fakeHackerNewsService);
+        mockCommentRepository = mock(CommentRepository.class);
+        objectUnderTest = new ContentProviderBackedStoryRepository(mockContentResolver, mockCommentRepository);
     }
-
-    private void initializeFakeService() {
-        List<Long> storyIds = new ArrayList<>();
-        Map<Long, Story> stories = new HashMap<>();
-        Map<Long, Comment> comments = new HashMap<>();
-
-        for(long i = 0; i < 10; i++){
-
-            storyIds.add(i);
-            Story testStory = new Story(i, "Test Poster " + i,
-                    100,
-                    new Date().getTime(),
-                    "Test Title" + i,
-                    "https://google.com/",
-                    new Long[0]);
-
-
-            stories.put(i, testStory);
-
-            Comment testComment = new Comment(i,
-                    "Test Commenter",
-                    "Test Comment Text: " + i,
-                    new Date().getTime(),
-                    new long[0]);
-
-            comments.put(i, testComment);
-        }
-
-        fakeHackerNewsService.addFakeData(storyIds, stories, comments);
-    }
-
 
     @Test
     public void testGetAllStories() throws Exception {
@@ -107,9 +68,6 @@ public class ContentProviderBackedStoryRepositoryTest {
         List<Story> storyList = objectUnderTest.getAllStories().toBlocking().first();
 
         assertEquals(1, storyList.size());
-
-        //TODO create a fake story,
-
     }
 
     private void mockCursorCalls(Cursor mockCursor) {
@@ -133,19 +91,6 @@ public class ContentProviderBackedStoryRepositoryTest {
 
         when(mockCursor.getColumnIndex(StoryColumns.URL)).thenReturn(5);
         when(mockCursor.getString(5)).thenReturn("https://google.com/");
-
-
-
-    }
-
-    @Test
-    public void testGetStoryComments() throws Exception {
-
-    }
-
-    @Test
-    public void testAddCommentToList() throws Exception {
-
     }
 
     @Test
