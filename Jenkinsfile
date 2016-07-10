@@ -11,7 +11,7 @@ node{
     sh "./gradlew test"
 
     sh "gcloud auth activate-service-account --key-file ${env.GCLOUD_AUTH_FILE}"
-    sh "gcloud beta test android run --app app/build/outputs/apk/app-debug-unaligned.apk  --test app/build/outputs/apk/app-debug-androidTest-unaligned.apk"
+    sh "gcloud beta test android run --project ${env.GCLOUD_NANODEGREE_CAPSTONE_PROJECT_ID} --app app/build/outputs/apk/app-debug-unaligned.apk  --test app/build/outputs/apk/app-debug-androidTest-unaligned.apk"
 
     stage 'Build'
 
