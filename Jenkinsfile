@@ -10,6 +10,10 @@ node{
 
     sh "./gradlew test"
 
+    stage "Sonar Analysis"
+
+    sh "./gradlew sonarqube"
+
     stage 'Build'
 
     echo "Building branch: ${env.BRANCH_NAME}"
