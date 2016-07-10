@@ -36,6 +36,8 @@ captures/
 #IntelliJ
 *.iml
 
+#sonar
+app/.sonar_lock
 
 # User-specific stuff:
 .idea/codeStyleSettings.xml

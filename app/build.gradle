@@ -1,6 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'com.neenbedankt.android-apt'
-
+apply plugin: 'org.sonarqube'
 
 android {
     signingConfigs {
@@ -27,6 +27,27 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.releaseConfig
         }
+    }
+}
+
+
+sonarqube {
+    properties {
+        // required metadata
+        property "sonar.projectKey", "Nanodegree-Capstone"
+        property "sonar.projectName", "Nanodegree-Capstone"
+        property "sonar.projectVersion", "${version}"
+
+        // path to source directories (required)
+        property "sonar.sources", "src"
+        property "sonar.test", "src/androidTest/java, src/test"
+        property "sonar.exclusions", "build/**/*.*, src/androidTest/**/*.java, src/test/**/*.java"
+
+        // other configs
+        property "sonar.java.source", "7"
+
+        // Android Lint
+        property "sonar.android.lint.report", "build/outputs/lint-results.xml"
     }
 }
 
