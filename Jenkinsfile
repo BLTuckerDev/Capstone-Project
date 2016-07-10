@@ -10,6 +10,8 @@ node{
 
     sh "./gradlew test"
 
+    sh "gcloud beta test android run --app app/build/outputs/apk/app-debug-unaligned.apk  --test app/build/outputs/apk/app-debug-androidTest-unaligned.apk"
+
     stage 'Build'
 
     echo "Building branch: ${env.BRANCH_NAME}"
