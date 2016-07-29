@@ -22,6 +22,7 @@ node{
     sh "./gradlew assembleDebugAndroidTest"
 
     stage 'Archive'
+    step([$class: 'ArtifactArchiver', artifacts: 'app/build/outputs/dexcount/debugChart/*', fingerprint: true])
     step([$class: 'ArtifactArchiver', artifacts: 'app/build/outputs/apk/*.apk', fingerprint: true])
     step([$class: 'JUnitResultArchiver', testResults: 'app/build/test-results/**/TEST-*.xml'])
 

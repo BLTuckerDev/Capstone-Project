@@ -14,6 +14,7 @@ buildscript {
         classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
         classpath 'com.google.gms:google-services:2.0.0-alpha6'
         classpath "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.0.1"
+        classpath 'com.getkeepsafe.dexcount:dexcount-gradle-plugin:0.5.5'
     }
 }
 
