@@ -41,11 +41,6 @@ public class TopStoriesModule {
         return new StoryListAdapter(presenter, storyMax, readingSession);
     }
 
-    @Provides
-    @ApplicationScope
-    public HomeViewPresenter provideHomeViewPresenter(@SyncIntervalSeconds int syncInterval, Account account){
-        return new HomeViewPresenter(syncInterval, account);
-    }
 
     @Provides
     @ApplicationScope

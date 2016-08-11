@@ -1,26 +1,33 @@
 package dev.bltucker.nanodegreecapstone.home;
 
 import android.accounts.Account;
-import android.content.ContentResolver;
-import android.os.Bundle;
+import android.support.annotation.VisibleForTesting;
 
 import javax.inject.Inject;
 
-import dev.bltucker.nanodegreecapstone.data.SchematicContentProviderGenerator;
+import dev.bltucker.nanodegreecapstone.injection.ApplicationScope;
 import dev.bltucker.nanodegreecapstone.injection.SyncIntervalSeconds;
-import dev.bltucker.nanodegreecapstone.sync.StorySyncAdapter;
 
+@ApplicationScope
 public class HomeViewPresenter {
 
-    private final int syncInterval;
-    private HomeView view;
+    @VisibleForTesting
+    HomeView view;
 
-    private final Account storySyncAccount;
+    @VisibleForTesting
+    final Account storySyncAccount;
+
+    @VisibleForTesting
+    ContentSyncRequester contentSyncRequester;
+
+    @VisibleForTesting
+    final int syncInterval;
 
     @Inject
-    public HomeViewPresenter(@SyncIntervalSeconds int syncInterval, Account providedAccount){
+    public HomeViewPresenter(@SyncIntervalSeconds int syncInterval, Account providedAccount, ContentSyncRequester contentSyncRequester){
         this.syncInterval = syncInterval;
         this.storySyncAccount = providedAccount;
+        this.contentSyncRequester = contentSyncRequester;
     }
 
     public void onViewCreated(HomeView createdView){
@@ -39,20 +46,11 @@ public class HomeViewPresenter {
 
 
     private void requestImmediateSync(){
-        Bundle bundle = new Bundle();
-        bundle.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
-        bundle.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
-        ContentResolver.requestSync(storySyncAccount,
-              SchematicContentProviderGenerator.AUTHORITY, bundle);
+        contentSyncRequester.requestImmediateSync(storySyncAccount);
     }
 
     private void setupPeriodicSync(){
-        ContentResolver.setSyncAutomatically(storySyncAccount, SchematicContentProviderGenerator.AUTHORITY, true);
-        ContentResolver.addPeriodicSync(
-              storySyncAccount,
-              SchematicContentProviderGenerator.AUTHORITY,
-              Bundle.EMPTY,
-              syncInterval);
+        contentSyncRequester.requestPeriodicSync(storySyncAccount, syncInterval);
     }
 
     public void onShowReadLaterMenuClick() {

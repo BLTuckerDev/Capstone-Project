@@ -18,7 +18,6 @@ import dev.bltucker.nanodegreecapstone.data.HackerNewsApiService;
 import dev.bltucker.nanodegreecapstone.data.StoryRepository;
 import dev.bltucker.nanodegreecapstone.events.EventBus;
 import dev.bltucker.nanodegreecapstone.events.SyncCompletedEvent;
-import dev.bltucker.nanodegreecapstone.events.SyncStartedEvent;
 import dev.bltucker.nanodegreecapstone.events.SyncStatusObserver;
 import dev.bltucker.nanodegreecapstone.injection.StoryMax;
 import dev.bltucker.nanodegreecapstone.models.Story;

@@ -38,6 +38,8 @@ captures/
 
 #sonar
 app/.sonar_lock
+.idea/sonarlint.xml
+
 
 # User-specific stuff:
 .idea/codeStyleSettings.xml
@@ -46,6 +48,7 @@ app/.sonar_lock
 .idea/dictionaries
 .idea/vcs.xml
 .idea/jsLibraryMappings.xml
+
 
 # Sensitive or high-churn files:
 .idea/dataSources.ids
