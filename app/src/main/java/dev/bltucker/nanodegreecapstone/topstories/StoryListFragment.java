@@ -19,9 +19,9 @@ import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import dev.bltucker.nanodegreecapstone.CapstoneApplication;
 import dev.bltucker.nanodegreecapstone.R;
 import dev.bltucker.nanodegreecapstone.events.SyncStatusObserver;
+import dev.bltucker.nanodegreecapstone.injection.DaggerInjector;
 import dev.bltucker.nanodegreecapstone.models.ReadingSession;
 import dev.bltucker.nanodegreecapstone.models.Story;
 
@@ -63,7 +63,7 @@ public class StoryListFragment extends Fragment implements StoryListView {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        CapstoneApplication.getApplication().getApplicationComponent().inject(this);
+        DaggerInjector.getApplicationComponent().inject(this);
     }
 
     @Override

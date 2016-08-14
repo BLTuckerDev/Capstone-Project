@@ -19,6 +19,7 @@ import dev.bltucker.nanodegreecapstone.data.StoryRepository;
 import dev.bltucker.nanodegreecapstone.events.EventBus;
 import dev.bltucker.nanodegreecapstone.events.SyncCompletedEvent;
 import dev.bltucker.nanodegreecapstone.events.SyncStatusObserver;
+import dev.bltucker.nanodegreecapstone.injection.DaggerInjector;
 import dev.bltucker.nanodegreecapstone.injection.StoryMax;
 import dev.bltucker.nanodegreecapstone.models.Story;
 import rx.Observable;
@@ -53,12 +54,12 @@ public final class StorySyncAdapter extends AbstractThreadedSyncAdapter {
 
     public StorySyncAdapter(Context context, boolean autoInitialize) {
         super(context, autoInitialize);
-        CapstoneApplication.getApplication().getApplicationComponent().inject(this);
+        DaggerInjector.getApplicationComponent().inject(this);
     }
 
     public StorySyncAdapter(Context context, boolean autoInitialize, boolean allowParallelSyncs) {
         super(context, autoInitialize, allowParallelSyncs);
-        CapstoneApplication.getApplication().getApplicationComponent().inject(this);
+        DaggerInjector.getApplicationComponent().inject(this);
     }
 
     @Override

@@ -33,6 +33,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import dev.bltucker.nanodegreecapstone.CapstoneApplication;
 import dev.bltucker.nanodegreecapstone.R;
+import dev.bltucker.nanodegreecapstone.injection.DaggerInjector;
 import dev.bltucker.nanodegreecapstone.models.Comment;
 import dev.bltucker.nanodegreecapstone.models.Story;
 
@@ -141,7 +142,7 @@ public class StoryDetailFragment extends Fragment implements StoryDetailView {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        CapstoneApplication.getApplication().getApplicationComponent()
+        DaggerInjector.getApplicationComponent()
                 .storyDetailComponent(new StoryDetailFragmentModule(this))
                 .inject(this);
 
