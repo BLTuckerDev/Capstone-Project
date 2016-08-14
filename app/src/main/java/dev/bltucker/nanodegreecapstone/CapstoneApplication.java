@@ -26,11 +26,14 @@ public class CapstoneApplication extends Application {
         if(BuildConfig.DEBUG){
             Timber.plant(new Timber.DebugTree());
         }
-        application = this;
+        createApplicationComponent();
+        createSyncAdapterAccount();
+    }
+
+    protected void createApplicationComponent() {
         applicationComponent = DaggerApplicationComponent.builder()
                 .applicationResourcesModule(new ApplicationResourcesModule(this))
                 .build();
-        createSyncAdapterAccount();
     }
 
     private void createSyncAdapterAccount(){
