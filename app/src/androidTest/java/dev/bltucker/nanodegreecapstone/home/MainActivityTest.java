@@ -1,6 +1,5 @@
 package dev.bltucker.nanodegreecapstone.home;
 
-import android.support.test.espresso.ViewAssertion;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
@@ -29,7 +28,7 @@ public class MainActivityTest {
 
         HomeViewPresenter homeViewPresenter = ((MainActivity) activityRule.getActivity()).homeViewPresenter;
 
-        onView(withId(R.id.loading_container)).check(matches(isDisplayed()));
+        onView(withId(R.id.content_container)).check(matches(isDisplayed()));
 
 
 

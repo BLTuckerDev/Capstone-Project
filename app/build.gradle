@@ -13,10 +13,11 @@ android {
         }
     }
     compileSdkVersion 23
-    buildToolsVersion "23.0.2"
+    buildToolsVersion "23.0.3"
     defaultConfig {
         applicationId "dev.bltucker.nanodegreecapstone"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "dev.bltucker.nanodegreecapstone.util.MockTestRunner"
+//        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         minSdkVersion 21
         targetSdkVersion 23
         versionCode 1
