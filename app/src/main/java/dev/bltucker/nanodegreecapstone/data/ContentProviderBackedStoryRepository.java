@@ -68,12 +68,11 @@ public class ContentProviderBackedStoryRepository implements StoryRepository {
 
     @Override
     public void saveStories(List<Story> stories) {
-        commentRepository.clearInMemoryCache();
         int deletedStories = contentResolver.delete(SchematicContentProviderGenerator.StoryPaths.ALL_STORIES, null, null);
-        int deletedComments = contentResolver.delete(SchematicContentProviderGenerator.CommentRefs.ALL_COMMENTS, null, null);
+        int deletedComments = contentResolver.delete(SchematicContentProviderGenerator.CommentRefs.ALL_COMMENT_REFS, null, null);
 
         Timber.d("Deleted %d stories", deletedStories);
-        Timber.d("Deleted %d comments", deletedComments);
+        Timber.d("Deleted %d comment references", deletedComments);
 
         List<ContentValues> storyContentValues = new ArrayList<>(stories.size());
         List<ContentValues> commentRefsContentValuesList = new ArrayList<>();
@@ -90,7 +89,7 @@ public class ContentProviderBackedStoryRepository implements StoryRepository {
         Timber.d("Inserted %d stories", insertedStoryCount);
 
         ContentValues[] commentRefsContentValuesArray = new ContentValues[commentRefsContentValuesList.size()];
-        int commentRefInsertCount = contentResolver.bulkInsert(SchematicContentProviderGenerator.CommentRefs.ALL_COMMENTS, commentRefsContentValuesList.toArray(commentRefsContentValuesArray));
+        int commentRefInsertCount = contentResolver.bulkInsert(SchematicContentProviderGenerator.CommentRefs.ALL_COMMENT_REFS, commentRefsContentValuesList.toArray(commentRefsContentValuesArray));
 
         Timber.d("Inserted %d comment references", commentRefInsertCount);
     }

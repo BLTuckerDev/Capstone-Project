@@ -7,6 +7,8 @@ import net.simonvt.schematic.annotation.ContentUri;
 import net.simonvt.schematic.annotation.InexactContentUri;
 import net.simonvt.schematic.annotation.TableEndpoint;
 
+import dev.bltucker.nanodegreecapstone.storydetail.data.CommentColumns;
+
 @ContentProvider(authority = SchematicContentProviderGenerator.AUTHORITY,
         database = DatabaseGenerator.class,
         packageName = "dev.bltucker.nanodegreecapstone.data",
@@ -16,6 +18,8 @@ public final class SchematicContentProviderGenerator {
     public static final String AUTHORITY = "dev.bltucker.nanodegreecapstone.data";
 
     public static final String STORY_PATH = "stories";
+
+    public static final String COMMENT_REFS_PATH = "commentRefs";
 
     public static final String COMMENTS_PATH = "comments";
 
@@ -32,17 +36,17 @@ public final class SchematicContentProviderGenerator {
     @TableEndpoint(table = DatabaseGenerator.COMMENT_REFS)
     public static class CommentRefs {
 
-        @ContentUri(path = COMMENTS_PATH, type = "vnd.android.cursor.dir/list", defaultSort = CommentRefsColumns.READ_RANK)
-        public static final Uri ALL_COMMENTS = Uri.parse("content://" + AUTHORITY + "/" + COMMENTS_PATH);
+        @ContentUri(path = COMMENT_REFS_PATH, type = "vnd.android.cursor.dir/list", defaultSort = CommentRefsColumns.READ_RANK)
+        public static final Uri ALL_COMMENT_REFS = Uri.parse("content://" + AUTHORITY + "/" + COMMENT_REFS_PATH);
 
-        @InexactContentUri(path = COMMENTS_PATH + "/*",
+        @InexactContentUri(path = COMMENT_REFS_PATH + "/*",
                 name = "STORY_ID",
                 type = "vnd.android.cursor.dir/list",
                 whereColumn = CommentRefsColumns.STORY_ID,
                 defaultSort = CommentRefsColumns.READ_RANK,
                 pathSegment = 1)
         public static Uri withStoryId(String id) {
-            return Uri.withAppendedPath(ALL_COMMENTS, id);
+            return Uri.withAppendedPath(ALL_COMMENT_REFS, id);
         }
 
     }
@@ -62,6 +66,23 @@ public final class SchematicContentProviderGenerator {
         public static Uri withStoryId(String id) {
             return Uri.withAppendedPath(ALL_READ_LATER_STORIES, id);
         }
+    }
+
+    @TableEndpoint(table = DatabaseGenerator.COMMENTS)
+    public static class CommentPaths{
+
+        @ContentUri(path = COMMENTS_PATH, type = "vnd.android.cursor.dir/list")
+        public static final Uri ALL_COMMENTS = Uri.parse("content://" + AUTHORITY + "/" + COMMENTS_PATH);
+
+        @InexactContentUri(path = COMMENTS_PATH + "/*",
+                name = "STORY_ID",
+                type = "vnd.android.cursor.dir/list",
+                whereColumn = CommentColumns.PARENT_ID,
+                pathSegment = 1)
+        public static Uri withStoryId(String id) {
+            return Uri.withAppendedPath(ALL_COMMENTS, id);
+        }
+
     }
 
 }
