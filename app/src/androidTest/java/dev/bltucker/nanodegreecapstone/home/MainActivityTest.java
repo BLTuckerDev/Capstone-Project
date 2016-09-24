@@ -1,8 +1,6 @@
 package dev.bltucker.nanodegreecapstone.home;
 
-import android.app.Instrumentation;
 import android.content.Context;
-import android.support.test.InstrumentationRegistry;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.util.Log;
@@ -16,10 +14,9 @@ import org.junit.runner.RunWith;
 import dev.bltucker.nanodegreecapstone.CapstoneApplication;
 import dev.bltucker.nanodegreecapstone.R;
 import dev.bltucker.nanodegreecapstone.injection.ApplicationComponent;
-import dev.bltucker.nanodegreecapstone.injection.ApplicationResourcesModule;
 import dev.bltucker.nanodegreecapstone.injection.DaggerApplicationComponent;
 import dev.bltucker.nanodegreecapstone.injection.DaggerInjector;
-import dev.bltucker.nanodegreecapstone.injection.MockApplicationResourcesModule;
+import dev.bltucker.nanodegreecapstone.injection.TestApplicationResourcesModule;
 
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.espresso.Espresso.onView;
@@ -46,7 +43,7 @@ public class MainActivityTest {
         Context context = getInstrumentation().getTargetContext().getApplicationContext();
 
         final ApplicationComponent applicationComponent = DaggerApplicationComponent.builder()
-                .applicationResourcesModule(new MockApplicationResourcesModule((CapstoneApplication) context))
+                .applicationResourcesModule(new TestApplicationResourcesModule((CapstoneApplication) context))
                 .build();
 
         DaggerInjector.initializeInjector(applicationComponent);

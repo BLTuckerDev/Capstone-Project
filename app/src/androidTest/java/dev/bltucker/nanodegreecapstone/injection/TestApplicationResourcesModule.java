@@ -5,9 +5,9 @@ import dev.bltucker.nanodegreecapstone.CapstoneApplication;
 
 @Module
 @ApplicationScope
-public class MockApplicationResourcesModule extends ApplicationResourcesModule {
+public class TestApplicationResourcesModule extends ApplicationResourcesModule {
 
-    public MockApplicationResourcesModule(CapstoneApplication application) {
+    public TestApplicationResourcesModule(CapstoneApplication application) {
         super(application);
     }
 }
