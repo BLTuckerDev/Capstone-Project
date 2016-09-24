@@ -26,13 +26,14 @@ public class StoryProviderTests extends AndroidTestCase {
     public void setUp(){
         mContext.getContentResolver().delete(SchematicContentProviderGenerator.StoryPaths.ALL_STORIES, null, null);
         mContext.getContentResolver().delete(SchematicContentProviderGenerator.CommentRefs.ALL_COMMENTS, null, null);
+        mContext.getContentResolver().delete(SchematicContentProviderGenerator.ReadLaterStoryPaths.ALL_READ_LATER_STORIES, null, null);
     }
 
     @Override
     public void tearDown(){
         mContext.getContentResolver().delete(SchematicContentProviderGenerator.StoryPaths.ALL_STORIES, null, null);
         mContext.getContentResolver().delete(SchematicContentProviderGenerator.CommentRefs.ALL_COMMENTS, null, null);
-
+        mContext.getContentResolver().delete(SchematicContentProviderGenerator.ReadLaterStoryPaths.ALL_READ_LATER_STORIES, null, null);
     }
 
     public void testProviderRegistration(){
