@@ -93,8 +93,6 @@ dependencies {
         exclude module: "objenesis"
     }
 
-    testCompile 'com.squareup.retrofit2:retrofit-mock:2.1.0'
-
     androidTestCompile 'com.google.dexmaker:dexmaker-mockito:1.2'
     androidTestCompile 'com.google.dexmaker:dexmaker:1.2'
 
