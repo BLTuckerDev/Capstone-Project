@@ -129,7 +129,6 @@ public class ContentProviderBackedStoryRepositoryTest {
 
         objectUnderTest.saveStories(stories);
 
-        verify(mockCommentRepository).clearInMemoryCache();
         verify(mockContentResolver, times(2)).delete(any(Uri.class), anyString(), any(String[].class));
         verify(mockContentResolver, times(2)).bulkInsert(any(Uri.class), any(ContentValues[].class));
 

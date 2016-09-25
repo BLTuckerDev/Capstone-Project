@@ -42,7 +42,7 @@ public class DetailStoryTest {
                     "Comment Author " + i,
                     "Comment Text" + i,
                     new Date().getTime(),
-                    new long[0]));
+                    1L));
 
             objectUnderTest = new DetailStory(fakeStory);
         }
