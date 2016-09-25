@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="dev.bltucker.nanodegreecapstone" >
+    package="dev.bltucker.nanodegreecapstone">
 
     <uses-permission android:name="android.permission.READ_SYNC_SETTINGS" />
     <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
@@ -15,8 +15,10 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme" >
-        <activity android:name=".home.MainActivity" android:theme="@style/LauncherTheme" >
+        android:theme="@style/AppTheme">
+        <activity
+            android:name=".home.MainActivity"
+            android:theme="@style/LauncherTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -33,7 +35,7 @@
 
         <service
             android:name=".sync.StorySyncService"
-            android:exported="true" >
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.content.SyncAdapter" />
             </intent-filter>
@@ -45,7 +47,7 @@
         <service
             android:name=".sync.AuthenticatorService"
             android:enabled="true"
-            android:exported="true" >
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.accounts.AccountAuthenticator" />
             </intent-filter>
@@ -67,7 +69,7 @@
             android:name=".location.GeofenceCreationService"
             android:exported="false" />
 
-        <receiver android:name=".widget.TopFiveStoriesWidgetProvider" >
+        <receiver android:name=".widget.TopFiveStoriesWidgetProvider">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
                 <action android:name="dev.bltucker.nanodegreecapstone.SYNC_COMPLETED" />
@@ -89,6 +91,10 @@
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
+
+        <service
+            android:name=".storydetail.data.StoryCommentDownloadService"
+            android:exported="false"></service>
     </application>
 
 </manifest>

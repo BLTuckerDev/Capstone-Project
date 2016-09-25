@@ -13,6 +13,9 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import dev.bltucker.nanodegreecapstone.models.ReadingSession;
 import dev.bltucker.nanodegreecapstone.models.Story;
+import rx.Observable;
+import rx.Subscriber;
+import timber.log.Timber;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
@@ -196,4 +199,5 @@ public class StoryListViewPresenterTest {
         verify(mockReadingSession, times(1)).updateUserStoriesToLatestSync();
         verify(mockStoryListView, times(1)).showStories();
     }
+
 }
