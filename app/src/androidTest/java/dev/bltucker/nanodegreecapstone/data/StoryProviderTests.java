@@ -25,15 +25,15 @@ public class StoryProviderTests extends AndroidTestCase {
     @Override
     public void setUp(){
         mContext.getContentResolver().delete(SchematicContentProviderGenerator.StoryPaths.ALL_STORIES, null, null);
-        mContext.getContentResolver().delete(SchematicContentProviderGenerator.CommentRefs.ALL_COMMENTS, null, null);
         mContext.getContentResolver().delete(SchematicContentProviderGenerator.ReadLaterStoryPaths.ALL_READ_LATER_STORIES, null, null);
+        mContext.getContentResolver().delete(SchematicContentProviderGenerator.CommentRefs.ALL_COMMENT_REFS, null, null);
     }
 
     @Override
     public void tearDown(){
         mContext.getContentResolver().delete(SchematicContentProviderGenerator.StoryPaths.ALL_STORIES, null, null);
-        mContext.getContentResolver().delete(SchematicContentProviderGenerator.CommentRefs.ALL_COMMENTS, null, null);
         mContext.getContentResolver().delete(SchematicContentProviderGenerator.ReadLaterStoryPaths.ALL_READ_LATER_STORIES, null, null);
+        mContext.getContentResolver().delete(SchematicContentProviderGenerator.CommentRefs.ALL_COMMENT_REFS, null, null);
     }
 
     public void testProviderRegistration(){
@@ -113,12 +113,12 @@ public class StoryProviderTests extends AndroidTestCase {
         storyCursor.close();
     }
 
-    public void testCommentInsert(){
+    public void testCommentRefInsert(){
         final long storyId = Long.MAX_VALUE;
         final Long[] commentIds = new Long[]{1L,2L,3L,4L,5L};
         final CountDownLatch countDownLatch = new CountDownLatch(2);
 
-        mContext.getContentResolver().registerContentObserver(SchematicContentProviderGenerator.CommentRefs.ALL_COMMENTS,
+        mContext.getContentResolver().registerContentObserver(SchematicContentProviderGenerator.CommentRefs.ALL_COMMENT_REFS,
                 true,
                 TestContentObserver.createInstance(countDownLatch, mContext));
 
@@ -130,14 +130,14 @@ public class StoryProviderTests extends AndroidTestCase {
             contentValues[i] = cv;
         }
 
-        int insertCount = mContext.getContentResolver().bulkInsert(SchematicContentProviderGenerator.CommentRefs.ALL_COMMENTS, contentValues);
+        int insertCount = mContext.getContentResolver().bulkInsert(SchematicContentProviderGenerator.CommentRefs.ALL_COMMENT_REFS, contentValues);
 
-        ContentValues separateStoryComment = new ContentValues();
+        ContentValues separateStoryCommentRef = new ContentValues();
 
-        separateStoryComment.put(CommentRefsColumns.STORY_ID, Long.MIN_VALUE);
-        separateStoryComment.put(CommentRefsColumns._ID, 100l);
+        separateStoryCommentRef.put(CommentRefsColumns.STORY_ID, Long.MIN_VALUE);
+        separateStoryCommentRef.put(CommentRefsColumns._ID, 100l);
 
-        mContext.getContentResolver().insert(SchematicContentProviderGenerator.CommentRefs.ALL_COMMENTS, separateStoryComment);
+        mContext.getContentResolver().insert(SchematicContentProviderGenerator.CommentRefs.ALL_COMMENT_REFS, separateStoryCommentRef);
 
         try{
             countDownLatch.await(15_000, TimeUnit.MILLISECONDS);
@@ -147,16 +147,16 @@ public class StoryProviderTests extends AndroidTestCase {
 
         assertEquals(commentIds.length, insertCount);
 
-        Cursor commentsCursor = mContext.getContentResolver().query(SchematicContentProviderGenerator.CommentRefs.withStoryId(String.valueOf(storyId)),
+        Cursor commentRefsCursor = mContext.getContentResolver().query(SchematicContentProviderGenerator.CommentRefs.withStoryId(String.valueOf(storyId)),
                 null,
                 null,
                 null,
                 null);
 
-        assertTrue(commentsCursor.moveToFirst());
-        assertEquals(commentIds.length, commentsCursor.getCount());
+        assertTrue(commentRefsCursor.moveToFirst());
+        assertEquals(commentIds.length, commentRefsCursor.getCount());
 
-        commentsCursor.close();
+        commentRefsCursor.close();
     }
 
     public void testReadLaterStoryInsert(){
