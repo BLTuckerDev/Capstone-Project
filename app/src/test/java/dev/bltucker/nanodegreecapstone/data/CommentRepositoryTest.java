@@ -14,19 +14,18 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.modules.junit4.PowerMockRunnerDelegate;
 
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import dev.bltucker.nanodegreecapstone.models.Comment;
-import rx.Observable;
+import dev.bltucker.nanodegreecapstone.storydetail.data.CommentColumns;
+import rx.Subscriber;
 
 import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertNotNull;
+import static junit.framework.Assert.fail;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.powermock.api.mockito.PowerMockito.mockStatic;
 
@@ -37,61 +36,66 @@ import static org.powermock.api.mockito.PowerMockito.mockStatic;
 @PowerMockRunnerDelegate(MockitoJUnitRunner.class)
 public class CommentRepositoryTest {
 
-    HackerNewsApiService mockHackerNewsApiService;
-
     ContentResolver mockContentResolver;
 
-    LruCache<Long, List<Comment>> mockCache;
-
     CommentRepository objectUnderTest;
-    private Comment fakeComment;
-    private long fakeCommentId;
+
 
     @Before
     public void setUp() throws Exception {
-        fakeCommentId = 1L;
-        fakeComment = new Comment(fakeCommentId, "Author", "Comment Text", new Date().getTime(), new long[0]);
-
-        mockHackerNewsApiService = mock(HackerNewsApiService.class);
         mockContentResolver = mock(ContentResolver.class);
-        mockCache = mock(LruCache.class);
-        objectUnderTest = new CommentRepository(mockHackerNewsApiService, mockContentResolver, mockCache);
+        objectUnderTest = new CommentRepository(mockContentResolver);
     }
 
     @Test
-    public void testGetStoryCommentsCacheHit() throws Exception {
-        List<Comment> commentList = new ArrayList<>();
-        commentList.add(fakeComment);
-
-        when(mockCache.get(fakeCommentId)).thenReturn(commentList);
-
-        mockCache.put(fakeCommentId, commentList);
-
-        List<Comment> storyComments = objectUnderTest.getStoryComments(fakeCommentId).toBlocking().first();
-
-        assertEquals(storyComments.size(), commentList.size());
-        assertEquals(commentList, storyComments);
-    }
-
-    @Test
-    public void testGetStoryCommentsCacheMiss(){
+    public void testGetStoryComments_WithValidStoryId_ShouldReturnCommentList(){
         int storyId = 1;
+
         mockContentProviderCalls(storyId);
 
-        when(mockHackerNewsApiService.getComment(1)).thenReturn(Observable.just(fakeComment));
+        List<Comment> storyComments = objectUnderTest.getStoryComments(storyId).toBlocking().first();
 
-        List<Comment> commentList = objectUnderTest.getStoryComments(fakeCommentId).toBlocking().first();
+        assertEquals(2, storyComments.size());
+    }
 
-        assertEquals(1, commentList.size());
-        assertEquals(fakeComment, commentList.get(0));
+    @Test
+    public void testGetStoryComments_WithInvalidStoryId_ShouldReturnObservableError(){
+        Uri mockUri = mock(Uri.class);
+        mockStatic(Uri.class);
+        when(Uri.parse(anyString())).thenReturn(mockUri);
+        int storyId = 1;
+
+        when(mockContentResolver.query(SchematicContentProviderGenerator.CommentPaths.withStoryId(String.valueOf(storyId)),
+                null,
+                null,
+                null,
+                null))
+                .thenReturn(null);
+
+        objectUnderTest.getStoryComments(storyId).subscribe(new Subscriber<List<Comment>>() {
+            @Override
+            public void onCompleted() {   }
+
+            @Override
+            public void onError(Throwable e) {
+                assertNotNull(e);
+            }
+
+            @Override
+            public void onNext(List<Comment> comments) {
+                fail();
+            }
+        });
 
     }
 
-    private void mockContentProviderCalls(int storyId) {
+    @Test
+    public void testGetCommentIds_WithValidStoryId_ShouldReturnCommentIdsArray(){
         Uri mockUri = mock(Uri.class);
         mockStatic(Uri.class);
         when(Uri.parse(anyString())).thenReturn(mockUri);
         Cursor mockCursor = mock(Cursor.class);
+        int storyId = 1;
 
         when(mockContentResolver.query(SchematicContentProviderGenerator.CommentRefs.withStoryId(String.valueOf(storyId)),
                 null,
@@ -105,12 +109,53 @@ public class CommentRepositoryTest {
         when(mockCursor.getColumnIndex(CommentRefsColumns._ID)).thenReturn(1);
         when(mockCursor.getLong(1)).thenReturn(1L);
         doNothing().when(mockCursor).close();
+
+        Long[] commentIds = objectUnderTest.getCommentIds(storyId);
+
+        assertEquals(1, commentIds.length);
     }
 
     @Test
-    public void testClearInMemoryCache() throws Exception {
-        objectUnderTest.clearInMemoryCache();
+    public void testGetCommentIds_WithInvalidStoryId_ShouldReturnEmptyCommentsIdArray(){
+        Uri mockUri = mock(Uri.class);
+        mockStatic(Uri.class);
+        when(Uri.parse(anyString())).thenReturn(mockUri);
+        int storyId = 1;
 
-        verify(mockCache, times(1)).evictAll();
+        when(mockContentResolver.query(SchematicContentProviderGenerator.CommentRefs.withStoryId(String.valueOf(storyId)),
+                null,
+                null,
+                null,
+                null))
+                .thenReturn(null);
+
+        Long[] commentIds = objectUnderTest.getCommentIds(1);
+
+        assertEquals(0, commentIds.length);
+    }
+
+
+    private void mockContentProviderCalls(int storyId) {
+        Uri mockUri = mock(Uri.class);
+        mockStatic(Uri.class);
+        when(Uri.parse(anyString())).thenReturn(mockUri);
+        Cursor mockCursor = mock(Cursor.class);
+
+        when(mockContentResolver.query(SchematicContentProviderGenerator.CommentPaths.withStoryId(String.valueOf(storyId)),
+                null,
+                null,
+                null,
+                null))
+                .thenReturn(mockCursor);
+
+        when(mockCursor.getCount()).thenReturn(2);
+        when(mockCursor.moveToNext()).thenReturn(true, true, false);
+
+        when(mockCursor.getLong(mockCursor.getColumnIndex(CommentColumns._ID))).thenReturn(1L, 2L);
+        when(mockCursor.getString(mockCursor.getColumnIndex(CommentColumns.AUTHOR_NAME))).thenReturn("Author one", "Author two");
+        when(mockCursor.getString(mockCursor.getColumnIndex(CommentColumns.COMMENT_TEXT))).thenReturn("Comment One Text", "Comment Two Text");
+        when(mockCursor.getLong(mockCursor.getColumnIndex(CommentColumns.UNIX_POST_TIME))).thenReturn(System.currentTimeMillis());
+        when(mockCursor.getLong(mockCursor.getColumnIndex(CommentColumns.PARENT_ID))).thenReturn(10L, 20L);
+        doNothing().when(mockCursor).close();
     }
 }

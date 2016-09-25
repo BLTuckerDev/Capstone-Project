@@ -25,14 +25,6 @@ public class CommentRepository {
         this.contentResolver = contentResolver;
     }
 
-    public void saveComment(Comment comment){
-        ContentValues commentContentValues = Comment.mapToContentValues(comment);
-
-        contentResolver.insert(SchematicContentProviderGenerator.CommentPaths.ALL_COMMENTS, commentContentValues);
-
-        Timber.d("Saved comment with comment id: %d", comment.getId());
-    }
-
     public Observable<List<Comment>> getStoryComments(final long storyId) {
         Cursor commentCursor = contentResolver.query(SchematicContentProviderGenerator.CommentPaths.withStoryId(String.valueOf(storyId)),
                 null,
@@ -82,5 +74,17 @@ public class CommentRepository {
 
         query.close();
         return commentIds;
+    }
+
+    public void saveComments(List<Comment> comments) {
+        Timber.d("Saving %d comments", comments.size());
+        ContentValues[] contentValues = new ContentValues[comments.size()];
+
+        for (int i = 0; i < comments.size(); i++) {
+            Comment comment = comments.get(i);
+            contentValues[i] = Comment.mapToContentValues(comment);
+        }
+
+        contentResolver.bulkInsert(SchematicContentProviderGenerator.CommentPaths.ALL_COMMENTS, contentValues);
     }
 }

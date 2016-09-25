@@ -1,12 +1,10 @@
 package dev.bltucker.nanodegreecapstone.storydetail.data;
 
-import android.content.ContentResolver;
-import android.content.ContentValues;
 import android.support.annotation.VisibleForTesting;
 
 import java.util.List;
 
-import dev.bltucker.nanodegreecapstone.data.SchematicContentProviderGenerator;
+import dev.bltucker.nanodegreecapstone.data.CommentRepository;
 import dev.bltucker.nanodegreecapstone.events.EventBus;
 import dev.bltucker.nanodegreecapstone.events.StoryCommentsDownloadCompleteEvent;
 import dev.bltucker.nanodegreecapstone.models.Comment;
@@ -16,13 +14,13 @@ import timber.log.Timber;
 class StoryCommentDownloadSubscriber extends Subscriber<List<Comment>> {
 
     @VisibleForTesting
-    ContentResolver contentResolver;
+    CommentRepository commentRepository;
 
     @VisibleForTesting
     EventBus eventBus;
 
-    StoryCommentDownloadSubscriber(ContentResolver contentResolver, EventBus eventBus){
-        this.contentResolver = contentResolver;
+    StoryCommentDownloadSubscriber(CommentRepository commentRepository, EventBus eventBus){
+        this.commentRepository = commentRepository;
         this.eventBus = eventBus;
     }
 
@@ -39,13 +37,6 @@ class StoryCommentDownloadSubscriber extends Subscriber<List<Comment>> {
 
     @Override
     public void onNext(List<Comment> comments) {
-        ContentValues[] contentValues = new ContentValues[comments.size()];
-
-        for (int i = 0; i < comments.size(); i++) {
-            Comment comment = comments.get(i);
-            contentValues[i] = Comment.mapToContentValues(comment);
-        }
-
-        contentResolver.bulkInsert(SchematicContentProviderGenerator.CommentPaths.ALL_COMMENTS, contentValues);
+        commentRepository.saveComments(comments);
     }
 }

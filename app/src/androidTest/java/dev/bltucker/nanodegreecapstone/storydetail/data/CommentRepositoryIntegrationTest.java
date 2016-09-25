@@ -3,24 +3,23 @@ package dev.bltucker.nanodegreecapstone.storydetail.data;
 import android.database.Cursor;
 import android.test.AndroidTestCase;
 
-import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import dev.bltucker.nanodegreecapstone.data.CommentRepository;
 import dev.bltucker.nanodegreecapstone.data.SchematicContentProviderGenerator;
-import dev.bltucker.nanodegreecapstone.events.EventBus;
 import dev.bltucker.nanodegreecapstone.models.Comment;
 
-public class StoryCommentDownloadSubscriberIntegrationTest extends AndroidTestCase {
+public class CommentRepositoryIntegrationTest extends AndroidTestCase {
 
-    StoryCommentDownloadSubscriber objectUnderTest;
+    CommentRepository objectUnderTest;
 
     @Override
     public void setUp(){
         mContext.getContentResolver().delete(SchematicContentProviderGenerator.CommentPaths.ALL_COMMENTS, null, null);
-        objectUnderTest = new StoryCommentDownloadSubscriber(mContext.getContentResolver(), new EventBus());
+        objectUnderTest = new CommentRepository(mContext.getContentResolver());
     }
 
     @Override
@@ -41,7 +40,7 @@ public class StoryCommentDownloadSubscriberIntegrationTest extends AndroidTestCa
         long secondParentId = 2000L;
         commentList.add(new Comment(2L, secondAuthorName, "More Comment Text", System.currentTimeMillis(), secondParentId));
 
-        objectUnderTest.onNext(commentList);
+        objectUnderTest.saveComments(commentList);
 
 
         Cursor firstQuery = mContext.getContentResolver().query(SchematicContentProviderGenerator.CommentPaths.withStoryId(String.valueOf(firstParentId)),
