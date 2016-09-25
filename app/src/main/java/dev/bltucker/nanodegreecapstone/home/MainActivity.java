@@ -12,6 +12,7 @@ import javax.inject.Inject;
 
 import dev.bltucker.nanodegreecapstone.CapstoneApplication;
 import dev.bltucker.nanodegreecapstone.R;
+import dev.bltucker.nanodegreecapstone.injection.DaggerInjector;
 import dev.bltucker.nanodegreecapstone.models.Story;
 import dev.bltucker.nanodegreecapstone.readlater.ReadLaterListActivity;
 import dev.bltucker.nanodegreecapstone.settings.SettingsActivity;
@@ -54,7 +55,7 @@ public class MainActivity extends AppCompatActivity implements HomeView, StoryLi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        CapstoneApplication.getApplication().getApplicationComponent().inject(this);
+        DaggerInjector.getApplicationComponent().inject(this);
 
         twoPaneMode = findViewById(R.id.story_detail_fragment_container) != null;
 

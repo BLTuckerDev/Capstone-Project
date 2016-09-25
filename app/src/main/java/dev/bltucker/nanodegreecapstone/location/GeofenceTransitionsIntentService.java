@@ -16,6 +16,7 @@ import javax.inject.Inject;
 import dev.bltucker.nanodegreecapstone.CapstoneApplication;
 import dev.bltucker.nanodegreecapstone.R;
 import dev.bltucker.nanodegreecapstone.data.SchematicContentProviderGenerator;
+import dev.bltucker.nanodegreecapstone.injection.DaggerInjector;
 import dev.bltucker.nanodegreecapstone.readlater.ReadLaterListActivity;
 import timber.log.Timber;
 
@@ -36,7 +37,7 @@ public class GeofenceTransitionsIntentService extends IntentService {
     @Override
     public void onCreate() {
         super.onCreate();
-        CapstoneApplication.getApplication().getApplicationComponent().inject(this);
+        DaggerInjector.getApplicationComponent().inject(this);
     }
 
     @Override

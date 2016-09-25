@@ -18,6 +18,7 @@ import java.util.concurrent.TimeUnit;
 import javax.inject.Inject;
 
 import dev.bltucker.nanodegreecapstone.CapstoneApplication;
+import dev.bltucker.nanodegreecapstone.injection.DaggerInjector;
 import timber.log.Timber;
 
 
@@ -41,7 +42,7 @@ public class GeofenceCreationService extends IntentService {
     @Override
     public void onCreate() {
         super.onCreate();
-        CapstoneApplication.getApplication()
+        DaggerInjector
                 .getApplicationComponent()
                 .geofenceCreationIntentServiceComponent(new GeofenceCreationIntentServiceModule(this))
                 .inject(this);
