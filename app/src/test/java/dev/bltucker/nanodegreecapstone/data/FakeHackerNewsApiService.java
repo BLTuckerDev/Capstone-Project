@@ -6,6 +6,7 @@ import java.util.Map;
 
 import dev.bltucker.nanodegreecapstone.models.Comment;
 import dev.bltucker.nanodegreecapstone.models.Story;
+import dev.bltucker.nanodegreecapstone.storydetail.data.CommentDto;
 import retrofit2.http.Path;
 import rx.Observable;
 
@@ -33,7 +34,7 @@ public class FakeHackerNewsApiService implements HackerNewsApiService {
     }
 
     @Override
-    public Observable<Comment> getComment(@Path("commentId") long commentId) {
-        return Observable.just(comments.get(commentId));
+    public Observable<CommentDto> getComment(@Path("commentId") long commentId) {
+        return Observable.empty();
     }
 }

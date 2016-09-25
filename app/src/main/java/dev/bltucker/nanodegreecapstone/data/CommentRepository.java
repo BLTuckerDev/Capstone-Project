@@ -1,51 +1,67 @@
 package dev.bltucker.nanodegreecapstone.data;
 
 import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.database.Cursor;
-import android.support.annotation.VisibleForTesting;
-import android.util.LruCache;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import javax.inject.Inject;
 
 import dev.bltucker.nanodegreecapstone.models.Comment;
+import dev.bltucker.nanodegreecapstone.storydetail.data.CommentColumns;
 import rx.Observable;
 import rx.functions.Func1;
+import timber.log.Timber;
 
 public class CommentRepository {
 
-    @VisibleForTesting
-    final HackerNewsApiService hackerNewsApiService;
     private final ContentResolver contentResolver;
 
-    @VisibleForTesting
-    final LruCache<Long, List<Comment>> commentLruCache;
-
     @Inject
-    public CommentRepository(HackerNewsApiService hackerNewsApiService,
-                             ContentResolver contentResolver,
-                             LruCache<Long, List<Comment>> commentCache){
-        this.hackerNewsApiService = hackerNewsApiService;
+    public CommentRepository(ContentResolver contentResolver){
         this.contentResolver = contentResolver;
-        commentLruCache = commentCache;
+    }
+
+    public void saveComment(Comment comment){
+        ContentValues commentContentValues = Comment.mapToContentValues(comment);
+
+        contentResolver.insert(SchematicContentProviderGenerator.CommentPaths.ALL_COMMENTS, commentContentValues);
+
+        Timber.d("Saved comment with comment id: %d", comment.getId());
     }
 
     public Observable<List<Comment>> getStoryComments(final long storyId) {
-        List<Comment> cachedComments = commentLruCache.get(storyId);
+        Cursor commentCursor = contentResolver.query(SchematicContentProviderGenerator.CommentPaths.withStoryId(String.valueOf(storyId)),
+                null,
+                null,
+                null,
+                null);
 
-        if (cachedComments != null) {
-            return Observable.just(cachedComments);
+        if (null == commentCursor) {
+            return Observable.error(new Exception(String.format(Locale.US, "Query for story with id %d comments a null cursor", storyId)));
         }
 
-        final Long[] commentIds = getCommentIds(storyId);
-
-        return Observable.from(commentIds)
-                .concatMap(new Func1<Long, Observable<List<Comment>>>() {
+        return Observable.just(commentCursor)
+                .map(new Func1<Cursor, List<Comment>>() {
                     @Override
-                    public Observable<List<Comment>> call(Long aLong) {
-                        return Observable.just(addCommentToList(aLong));
+                    public List<Comment> call(Cursor commentCursor) {
+                        List<Comment> commentList = new ArrayList<>(commentCursor.getCount());
+
+                        while (commentCursor.moveToNext()) {
+                            long commentId = commentCursor.getLong(commentCursor.getColumnIndex(CommentColumns._ID));
+                            String commentAuthor = commentCursor.getString(commentCursor.getColumnIndex(CommentColumns.AUTHOR_NAME));
+                            String commentText = commentCursor.getString(commentCursor.getColumnIndex(CommentColumns.COMMENT_TEXT));
+                            long unixTime = commentCursor.getLong(commentCursor.getColumnIndex(CommentColumns.UNIX_POST_TIME));
+                            long parentId = commentCursor.getLong(commentCursor.getColumnIndex(CommentColumns.PARENT_ID));
+
+                            commentList.add(new Comment(commentId, commentAuthor, commentText, unixTime, parentId));
+                        }
+
+                        commentCursor.close();
+                        return commentList;
                     }
                 });
     }
@@ -67,25 +83,4 @@ public class CommentRepository {
         query.close();
         return commentIds;
     }
-
-    private List<Comment> addCommentToList(long commentId) {
-
-        List<Comment> commentList = new ArrayList<>();
-        Comment comment = hackerNewsApiService.getComment(commentId).toBlocking().first();
-
-        if (comment.getAuthorName() != null && comment.getCommentText() != null && comment.getCommentText().length() > 0) {
-            commentList.add(comment);
-            if (comment.getReplyIds().length > 0) {
-                for (int i = 0; i < comment.getReplyIds().length; i++) {
-                    commentList.addAll(addCommentToList(comment.getReplyIds()[i]));
-                }
-            }
-        }
-        return commentList;
-    }
-
-    void clearInMemoryCache(){
-        commentLruCache.evictAll();
-    }
-
 }

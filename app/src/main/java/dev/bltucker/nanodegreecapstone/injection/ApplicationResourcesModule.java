@@ -27,7 +27,6 @@ import dev.bltucker.nanodegreecapstone.data.StoryRepository;
 import dev.bltucker.nanodegreecapstone.events.EventBus;
 import dev.bltucker.nanodegreecapstone.models.Comment;
 import dev.bltucker.nanodegreecapstone.models.ReadingSession;
-import dev.bltucker.nanodegreecapstone.storydetail.CommentTypeAdapter;
 import dev.bltucker.nanodegreecapstone.sync.StorySyncAdapter;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
@@ -112,7 +111,6 @@ public class ApplicationResourcesModule {
     @ApplicationScope
     public Gson provideGson() {
         GsonBuilder builder = new GsonBuilder();
-        builder.registerTypeAdapter(Comment.class, new CommentTypeAdapter());
         return builder.create();
     }
 
@@ -147,7 +145,7 @@ public class ApplicationResourcesModule {
     @Provides
     @ApplicationScope
     public CommentRepository provideCommentRepository(HackerNewsApiService hackerNewsApiService, ContentResolver contentResolver, @CommentListCache LruCache<Long, List<Comment>> cache) {
-        return new CommentRepository(hackerNewsApiService, contentResolver, cache);
+        return new CommentRepository(contentResolver);
     }
 
     @Provides

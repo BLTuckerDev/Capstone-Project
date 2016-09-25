@@ -1,13 +1,26 @@
 package dev.bltucker.nanodegreecapstone.models;
 
+import android.content.ContentValues;
 import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.google.gson.annotations.SerializedName;
 
-import java.util.Arrays;
+import dev.bltucker.nanodegreecapstone.storydetail.data.CommentColumns;
 
 public final class Comment implements Parcelable {
+
+    public static ContentValues mapToContentValues(Comment aComment) {
+        ContentValues cv = new ContentValues();
+
+        cv.put(CommentColumns._ID, aComment.getId());
+        cv.put(CommentColumns.AUTHOR_NAME, aComment.getAuthorName());
+        cv.put(CommentColumns.COMMENT_TEXT, aComment.getCommentText());
+        cv.put(CommentColumns.UNIX_POST_TIME, aComment.getUnixPostTime());
+        cv.put(CommentColumns.PARENT_ID, aComment.getParentId());
+
+        return cv;
+    }
 
     private final long id;
     @SerializedName("by")
@@ -16,15 +29,16 @@ public final class Comment implements Parcelable {
     private final String commentText;
     @SerializedName("time")
     private final long unixPostTime;
-    @SerializedName("kids")
-    private final long[] replyIds;
+    @SerializedName("parent")
+    private final long parentId;
 
-    public Comment(long id, String authorName, String commentText, long unixPostTime, long[] replyIdsParam){
+    public Comment(long id, String authorName, String commentText,
+                   long unixPostTime, long parentId){
         this.id = id;
         this.authorName = authorName != null ? authorName : "";
         this.commentText = commentText != null ? commentText : "";
         this.unixPostTime = unixPostTime;
-        this.replyIds = Arrays.copyOf(replyIdsParam, replyIdsParam.length);
+        this.parentId = parentId;
     }
 
     public Comment(Parcel in){
@@ -32,9 +46,7 @@ public final class Comment implements Parcelable {
         this.authorName = in.readString();
         this.commentText = in.readString();
         this.unixPostTime = in.readLong();
-        int replyIdLength = in.readInt();
-        this.replyIds = new long[replyIdLength];
-        in.readLongArray(this.replyIds);
+        this.parentId = in.readLong();
     }
 
     public long getId() {
@@ -53,11 +65,8 @@ public final class Comment implements Parcelable {
         return unixPostTime;
     }
 
-    public long[] getReplyIds() {
-        if(null == replyIds){
-            return new long[0];
-        }
-        return Arrays.copyOf(replyIds, replyIds.length);
+    public long getParentId() {
+        return parentId;
     }
 
     @Override
@@ -87,8 +96,7 @@ public final class Comment implements Parcelable {
         dest.writeString(this.authorName);
         dest.writeString(this.commentText);
         dest.writeLong(unixPostTime);
-        dest.writeInt(replyIds.length);
-        dest.writeLongArray(replyIds);
+        dest.writeLong(this.parentId);
     }
 
     public static final Creator<Comment> CREATOR = new Creator<Comment>() {
@@ -102,4 +110,5 @@ public final class Comment implements Parcelable {
             return new Comment[size];
         }
     };
+
 }

@@ -4,7 +4,6 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.util.SimpleArrayMap;
-import android.util.ArraySet;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -123,11 +122,15 @@ public class DetailStory extends Observable implements Parcelable {
     }
 
     private void updateCommentIdToParentMap() {
+        //TODO get rid of this
         for (int i = 0; i < commentList.size(); i++) {
             Comment currentComment = commentList.get(i);
-            long[] childComments = currentComment.getReplyIds();
-            for (int j = 0; j < childComments.length; j++) {
-                commentIdToParentMap.put(childComments[j], currentComment);
+            for (int j = 0; j < commentList.size(); j++) {
+                Comment potentialParent = commentList.get(j);
+                if(potentialParent.getId() == currentComment.getParentId()){
+                    commentIdToParentMap.put(currentComment.getId(), potentialParent);
+                    break;
+                }
             }
         }
     }
