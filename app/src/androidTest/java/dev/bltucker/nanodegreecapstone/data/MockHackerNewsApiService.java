@@ -21,7 +21,8 @@ public class MockHackerNewsApiService implements HackerNewsApiService {
     public MockHackerNewsApiService(Gson gson) {
         random = new Random(System.currentTimeMillis());
         fakeStories = new ArrayList<>();
-        gson.fromJson(FAKE_STORIES_JSON, fakeStories.getClass());
+        List list = gson.fromJson(FAKE_STORIES_JSON, fakeStories.getClass());
+        fakeStories.addAll(list);
     }
 
 
