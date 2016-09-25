@@ -100,6 +100,9 @@ public final class StorySyncAdapter extends AbstractThreadedSyncAdapter {
                   @Override
                   public void onError(Throwable e) {
                       Timber.e(e, "Error downloading top stories");
+                      //TODO styorSyncErrorEvent and handle appropriately
+                      observer.setSyncInProgress(false);
+                      eventBus.publish(new SyncCompletedEvent());
                   }
 
                   @Override
