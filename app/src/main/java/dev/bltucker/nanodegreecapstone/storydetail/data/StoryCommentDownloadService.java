@@ -10,6 +10,7 @@ import dev.bltucker.nanodegreecapstone.CapstoneApplication;
 import dev.bltucker.nanodegreecapstone.events.EventBus;
 import dev.bltucker.nanodegreecapstone.injection.ApplicationScope;
 import dev.bltucker.nanodegreecapstone.models.Story;
+import dev.bltucker.nanodegreecapstone.storydetail.DetailStory;
 import rx.Subscription;
 
 public class StoryCommentDownloadService extends IntentService {
@@ -29,7 +30,7 @@ public class StoryCommentDownloadService extends IntentService {
         CapstoneApplication.getApplication().getApplicationComponent().inject(this);
     }
 
-    public static void startDownload(Context context, Story story) {
+    public static void startDownload(Context context, DetailStory story) {
         Intent intent = new Intent(context, StoryCommentDownloadService.class);
         intent.putExtra(STORY_PARAM, story);
         context.startService(intent);
@@ -38,7 +39,7 @@ public class StoryCommentDownloadService extends IntentService {
     @Override
     protected void onHandleIntent(Intent intent) {
         if (intent != null) {
-            final Story story = intent.getParcelableExtra(STORY_PARAM);
+            final DetailStory story = intent.getParcelableExtra(STORY_PARAM);
             long[] primitiveCommentIds =convertToPrimitiveArray(story.getCommentIds());
 
             if(currentSubscription != null && !currentSubscription.isUnsubscribed()){

@@ -30,9 +30,10 @@ public final class StoryCommentsObservableFactory {
                     @Override
                     public Comment call(CommentDto commentDto) {
                         return new Comment(commentDto.id, commentDto.by, commentDto.text, commentDto.time, commentDto.parent);
+                        //TODO save this to the sqlite database
                     }
                 })
-                .toList();
+                .toList();//don't t do this!
     }
 
     private Observable<CommentDto> downloadComments(final long[] commentIds) {
