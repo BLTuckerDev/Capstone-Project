@@ -9,6 +9,7 @@ import java.util.Random;
 
 import dev.bltucker.nanodegreecapstone.models.Comment;
 import dev.bltucker.nanodegreecapstone.models.Story;
+import dev.bltucker.nanodegreecapstone.storydetail.data.CommentDto;
 import retrofit2.http.Path;
 import rx.Observable;
 
@@ -43,13 +44,9 @@ public class MockHackerNewsApiService implements HackerNewsApiService {
     }
 
     @Override
-    public Observable<Comment> getComment(@Path("commentId") long commentId) {
+    public Observable<CommentDto> getComment(@Path("commentId") long commentId) {
         //TODO generate some comments with children, but dont generate an endless tree of comments
-        return Observable.just(new Comment(commentId,
-                getRandomAuthor(),
-                "",
-                System.currentTimeMillis(),
-                new long[0]));
+        return Observable.just(new CommentDto("Author", 1L, new long[0], 0L, "Text", System.currentTimeMillis()));
     }
 
     public String getRandomAuthor() {

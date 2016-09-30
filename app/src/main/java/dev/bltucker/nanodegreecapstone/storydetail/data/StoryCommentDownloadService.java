@@ -1,15 +1,12 @@
 package dev.bltucker.nanodegreecapstone.storydetail.data;
 
 import android.app.IntentService;
-import android.content.Intent;
 import android.content.Context;
+import android.content.Intent;
 
 import javax.inject.Inject;
 
-import dev.bltucker.nanodegreecapstone.CapstoneApplication;
-import dev.bltucker.nanodegreecapstone.events.EventBus;
-import dev.bltucker.nanodegreecapstone.injection.ApplicationScope;
-import dev.bltucker.nanodegreecapstone.models.Story;
+import dev.bltucker.nanodegreecapstone.injection.DaggerInjector;
 import dev.bltucker.nanodegreecapstone.storydetail.DetailStory;
 import rx.Subscription;
 
@@ -27,7 +24,7 @@ public class StoryCommentDownloadService extends IntentService {
 
     public StoryCommentDownloadService() {
         super("StoryCommentDownloadService");
-        CapstoneApplication.getApplication().getApplicationComponent().inject(this);
+        DaggerInjector.getApplicationComponent().inject(this);
     }
 
     public static void startDownload(Context context, DetailStory story) {
