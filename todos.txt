@@ -13,4 +13,7 @@ pull to refresh comment list
 
 
 ******
+!! downloader needs to emit comments more often, right now it only emits after it has downloaded every single comment available....
+rebase this branch on top of master
+Make detail fragment use a content observer that resets the loader whenever we see a change to the comments path.
 plan on removing comment refs by being smart with story id
