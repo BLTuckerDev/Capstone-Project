@@ -132,9 +132,9 @@ public class StoryCommentsAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     @Override
     public int getItemViewType(int position) {
-        if(!detailStory.hasStory() || detailStory.getCommentCount() == 0 && detailStory.hasLoadedAllComments()){
+        if(!detailStory.hasStory() || detailStory.getCommentCount() == 0){
             return EMPTY_COMMENT_ITEM_TYPE;
-        } else if(!detailStory.hasLoadedAllComments() && position == detailStory.getCommentCount()){
+        } else if(position == detailStory.getCommentCount()){
             return LOADING_COMMENTS_ITEM_TYPE;
         } else {
             return COMMENT_ITEM_TYPE;
@@ -144,7 +144,7 @@ public class StoryCommentsAdapter extends RecyclerView.Adapter<RecyclerView.View
     @Override
     public int getItemCount() {
         if(detailStory.hasStory()){
-            return detailStory.hasLoadedAllComments() ? detailStory.getCommentCount() : detailStory.getCommentCount() + 1;
+            return detailStory.getCommentCount();
         } else {
             return 1;
         }

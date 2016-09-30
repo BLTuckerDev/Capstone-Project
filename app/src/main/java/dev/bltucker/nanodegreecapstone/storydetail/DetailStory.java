@@ -80,22 +80,22 @@ public class DetailStory extends Observable implements Parcelable {
         return commentList.get(index);
     }
 
-    public boolean hasLoadedAllComments(){
-        if(null == story){
-            return false;
-        }
-
-        Set<Long> parentCommentIds = new HashSet<>();
-        parentCommentIds.addAll(Arrays.asList(story.getCommentIds()));
-
-        for (int i = 0; i < commentList.size(); i++) {
-            if (parentCommentIds.contains(commentList.get(i).getId())) {
-                parentCommentIds.remove(commentList.get(i).getId());
-            }
-        }
-
-        return parentCommentIds.isEmpty();
-    }
+//    public boolean hasLoadedAllComments(){
+//        if(null == story){
+//            return false;
+//        }
+//
+//        Set<Long> parentCommentIds = new HashSet<>();
+//        parentCommentIds.addAll(Arrays.asList(story.getCommentIds()));
+//
+//        for (int i = 0; i < commentList.size(); i++) {
+//            if (parentCommentIds.contains(commentList.get(i).getId())) {
+//                parentCommentIds.remove(commentList.get(i).getId());
+//            }
+//        }
+//
+//        return parentCommentIds.isEmpty();
+//    }
 
     public void addComments(List<Comment> comments){
         for (int i = 0; i < comments.size(); i++) {
