@@ -87,4 +87,9 @@ public class CommentRepository {
 
         contentResolver.bulkInsert(SchematicContentProviderGenerator.CommentPaths.ALL_COMMENTS, contentValues);
     }
+
+    public void saveComment(Comment comment){
+        Timber.d("Saving single comment");
+        contentResolver.insert(SchematicContentProviderGenerator.CommentPaths.ALL_COMMENTS, Comment.mapToContentValues(comment));
+    }
 }

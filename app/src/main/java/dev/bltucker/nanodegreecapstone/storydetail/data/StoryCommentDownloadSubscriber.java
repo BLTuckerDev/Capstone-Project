@@ -11,7 +11,7 @@ import dev.bltucker.nanodegreecapstone.models.Comment;
 import rx.Subscriber;
 import timber.log.Timber;
 
-class StoryCommentDownloadSubscriber extends Subscriber<List<Comment>> {
+class StoryCommentDownloadSubscriber extends Subscriber<Comment> {
 
     @VisibleForTesting
     CommentRepository commentRepository;
@@ -36,7 +36,7 @@ class StoryCommentDownloadSubscriber extends Subscriber<List<Comment>> {
     }
 
     @Override
-    public void onNext(List<Comment> comments) {
-        commentRepository.saveComments(comments);
+    public void onNext(Comment comment) {
+        commentRepository.saveComment(comment);
     }
 }

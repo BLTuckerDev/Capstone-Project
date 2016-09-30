@@ -24,16 +24,14 @@ public final class StoryCommentsObservableFactory {
         this.hackerNewsApiService = hackerNewsApiService;
     }
 
-    public Observable<List<Comment>> get(final long[] commentIds) {
+    public Observable<Comment> get(final long[] commentIds) {
         return downloadComments(commentIds)
                 .map(new Func1<CommentDto, Comment>() {
                     @Override
                     public Comment call(CommentDto commentDto) {
                         return new Comment(commentDto.id, commentDto.by, commentDto.text, commentDto.time, commentDto.parent);
-                        //TODO save this to the sqlite database
                     }
-                })
-                .toList();//don't t do this!
+                });
     }
 
     private Observable<CommentDto> downloadComments(final long[] commentIds) {
