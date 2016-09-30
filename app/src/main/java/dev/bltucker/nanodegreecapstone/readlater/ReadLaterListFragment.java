@@ -24,6 +24,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import dev.bltucker.nanodegreecapstone.CapstoneApplication;
 import dev.bltucker.nanodegreecapstone.R;
+import dev.bltucker.nanodegreecapstone.injection.DaggerInjector;
 import dev.bltucker.nanodegreecapstone.models.ReadLaterStory;
 
 public class ReadLaterListFragment extends Fragment implements ReadLaterListView {
@@ -59,7 +60,7 @@ public class ReadLaterListFragment extends Fragment implements ReadLaterListView
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        CapstoneApplication.getApplication()
+        DaggerInjector
                 .getApplicationComponent()
                 .readLaterComponent(new ReadLaterListFragmentModule(this))
                 .inject(this);
