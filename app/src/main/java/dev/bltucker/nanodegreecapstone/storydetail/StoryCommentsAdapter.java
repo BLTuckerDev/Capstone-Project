@@ -32,6 +32,7 @@ public class StoryCommentsAdapter extends RecyclerView.Adapter<RecyclerView.View
     private static final int EMPTY_COMMENT_ITEM_TYPE = 1;
     private static final int COMMENT_ITEM_TYPE = 2;
     private static final int LOADING_COMMENTS_ITEM_TYPE = 3;
+    public static final int MARGIN_PER_DEPTH = 15;
 
     private final Resources resources;
     private final Calendar calendar;
@@ -92,7 +93,7 @@ public class StoryCommentsAdapter extends RecyclerView.Adapter<RecyclerView.View
         if(commentDepth > 0){
             LinearLayout container = (LinearLayout) holder.itemView.getTag(R.id.comment_container);
             RecyclerView.LayoutParams layoutParams = (RecyclerView.LayoutParams) container.getLayoutParams();
-            float margin = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, commentDepth * 15, resources.getDisplayMetrics());
+            float margin = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, commentDepth * MARGIN_PER_DEPTH, resources.getDisplayMetrics());
             layoutParams.setMarginStart((int) margin);
             container.setLayoutParams(layoutParams);
             container.invalidate();

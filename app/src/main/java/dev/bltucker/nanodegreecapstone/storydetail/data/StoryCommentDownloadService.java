@@ -9,6 +9,7 @@ import javax.inject.Inject;
 import dev.bltucker.nanodegreecapstone.injection.DaggerInjector;
 import dev.bltucker.nanodegreecapstone.storydetail.DetailStory;
 import rx.Subscription;
+import timber.log.Timber;
 
 public class StoryCommentDownloadService extends IntentService {
 
@@ -39,7 +40,10 @@ public class StoryCommentDownloadService extends IntentService {
             final DetailStory story = intent.getParcelableExtra(STORY_PARAM);
             long[] primitiveCommentIds =convertToPrimitiveArray(story.getCommentIds());
 
+            Timber.d("StoryCommentDownloadService.onHandleIntent, story id: %d with %d comments",story.getStoryId(), primitiveCommentIds.length);
+
             if(currentSubscription != null && !currentSubscription.isUnsubscribed()){
+                Timber.d("StoryCommentDownloadService previous subscription was in progress. It will be unsubscribed");
                 currentSubscription.unsubscribe();
             }
 
