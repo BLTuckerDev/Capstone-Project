@@ -26,6 +26,12 @@ public final class StoryCommentsObservableFactory {
 
     public Observable<Comment> get(final long[] commentIds) {
         return downloadComments(commentIds)
+                .filter(new Func1<CommentDto, Boolean>() {
+                    @Override
+                    public Boolean call(CommentDto commentDto) {
+                        return commentDto.text != null && commentDto.text.trim().length() > 0;
+                    }
+                })
                 .map(new Func1<CommentDto, Comment>() {
                     @Override
                     public Comment call(CommentDto commentDto) {
