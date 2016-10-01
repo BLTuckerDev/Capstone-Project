@@ -25,22 +25,11 @@ public final class StoryCommentsObservableFactory {
     }
 
     public Observable<Comment> get(final long[] commentIds) {
-        return downloadComments(commentIds)
-                .filter(new Func1<CommentDto, Boolean>() {
-                    @Override
-                    public Boolean call(CommentDto commentDto) {
-                        return commentDto.text != null && commentDto.text.trim().length() > 0;
-                    }
-                })
-                .map(new Func1<CommentDto, Comment>() {
-                    @Override
-                    public Comment call(CommentDto commentDto) {
-                        return new Comment(commentDto.id, commentDto.by, commentDto.text, commentDto.time, commentDto.parent);
-                    }
-                });
+        return downloadComments(commentIds, 0);
     }
 
-    private Observable<CommentDto> downloadComments(final long[] commentIds) {
+    private Observable<Comment> downloadComments(final long[] commentIds, final int commentDepth) {
+        final int childDepth = commentDepth + 1;
         if (commentIds == null || commentIds.length == 0) {
             return Observable.empty();
         } else {
@@ -51,10 +40,17 @@ public final class StoryCommentsObservableFactory {
                             return hackerNewsApiService.getComment(commentIds[index]);
                         }
                     })
-                    .concatMap(new Func1<CommentDto, Observable<CommentDto>>() {
+                    .concatMap(new Func1<CommentDto, Observable<Comment>>() {
                         @Override
-                        public Observable<CommentDto> call(CommentDto commentDto) {
-                            return Observable.just(commentDto).mergeWith(downloadComments(commentDto.kids));
+                        public Observable<Comment> call(CommentDto commentDto) {
+                            return Observable.just(new Comment(commentDto.id, commentDto.by, commentDto.text, commentDto.time, commentDto.parent, commentDepth))
+                                    .mergeWith(downloadComments(commentDto.kids, childDepth));
+                        }
+                    })
+                    .filter(new Func1<Comment, Boolean>() {
+                        @Override
+                        public Boolean call(Comment comment) {
+                            return comment.getCommentText().trim().length() > 0;
                         }
                     });
         }

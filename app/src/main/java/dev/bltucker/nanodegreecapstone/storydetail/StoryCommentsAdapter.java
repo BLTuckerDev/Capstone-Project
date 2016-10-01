@@ -32,7 +32,7 @@ public class StoryCommentsAdapter extends RecyclerView.Adapter<RecyclerView.View
     private static final int EMPTY_COMMENT_ITEM_TYPE = 1;
     private static final int COMMENT_ITEM_TYPE = 2;
     private static final int LOADING_COMMENTS_ITEM_TYPE = 3;
-    public static final int MARGIN_PER_DEPTH = 15;
+    private static final int MARGIN_PER_DEPTH = 15;
 
     private final Resources resources;
     private final Calendar calendar;
@@ -89,7 +89,7 @@ public class StoryCommentsAdapter extends RecyclerView.Adapter<RecyclerView.View
         commentViewHolder.postTimeTextView.setText(getFormattedCommentTime(comment, holder.itemView.getContext()));
         commentViewHolder.commentBodyTextView.setText(Html.fromHtml(comment.getCommentText()));
 
-        int commentDepth = getCommentDepth(comment, 0);
+        int commentDepth = comment.getDepth();
         if(commentDepth > 0){
             LinearLayout container = (LinearLayout) holder.itemView.getTag(R.id.comment_container);
             RecyclerView.LayoutParams layoutParams = (RecyclerView.LayoutParams) container.getLayoutParams();
@@ -119,16 +119,6 @@ public class StoryCommentsAdapter extends RecyclerView.Adapter<RecyclerView.View
         }
 
         return context.getString(R.string.less_than_a_minute);
-    }
-
-    private int getCommentDepth(Comment aComment, int depth){
-        Comment parentComment = detailStory.getParentComment(aComment.getId());
-        if(null == parentComment){
-            return depth;
-        }
-
-        depth++;
-        return getCommentDepth(parentComment, depth);
     }
 
     @Override

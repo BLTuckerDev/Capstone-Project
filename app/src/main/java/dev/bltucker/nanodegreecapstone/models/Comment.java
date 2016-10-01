@@ -4,7 +4,6 @@ import android.content.ContentValues;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.google.gson.annotations.SerializedName;
 
 import dev.bltucker.nanodegreecapstone.storydetail.data.CommentColumns;
 
@@ -18,27 +17,31 @@ public final class Comment implements Parcelable {
         cv.put(CommentColumns.COMMENT_TEXT, aComment.getCommentText());
         cv.put(CommentColumns.UNIX_POST_TIME, aComment.getUnixPostTime());
         cv.put(CommentColumns.PARENT_ID, aComment.getParentId());
+        cv.put(CommentColumns.COMMENT_DEPTH, aComment.getDepth());
 
         return cv;
     }
 
     private final long id;
-    @SerializedName("by")
+
     private final String authorName;
-    @SerializedName("text")
+
     private final String commentText;
-    @SerializedName("time")
+
     private final long unixPostTime;
-    @SerializedName("parent")
+
     private final long parentId;
 
+    private final int depth;
+
     public Comment(long id, String authorName, String commentText,
-                   long unixPostTime, long parentId){
+                   long unixPostTime, long parentId, int commentDepth){
         this.id = id;
         this.authorName = authorName != null ? authorName : "";
         this.commentText = commentText != null ? commentText : "";
         this.unixPostTime = unixPostTime;
         this.parentId = parentId;
+        this.depth = commentDepth;
     }
 
     public Comment(Parcel in){
@@ -47,6 +50,7 @@ public final class Comment implements Parcelable {
         this.commentText = in.readString();
         this.unixPostTime = in.readLong();
         this.parentId = in.readLong();
+        this.depth = in.readInt();
     }
 
     public long getId() {
@@ -67,6 +71,10 @@ public final class Comment implements Parcelable {
 
     public long getParentId() {
         return parentId;
+    }
+
+    public int getDepth(){
+        return this.depth;
     }
 
     @Override
@@ -97,6 +105,7 @@ public final class Comment implements Parcelable {
         dest.writeString(this.commentText);
         dest.writeLong(unixPostTime);
         dest.writeLong(this.parentId);
+        dest.writeInt(this.depth);
     }
 
     public static final Creator<Comment> CREATOR = new Creator<Comment>() {

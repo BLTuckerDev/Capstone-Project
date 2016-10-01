@@ -48,8 +48,9 @@ public class CommentRepository {
                             String commentText = commentCursor.getString(commentCursor.getColumnIndex(CommentColumns.COMMENT_TEXT));
                             long unixTime = commentCursor.getLong(commentCursor.getColumnIndex(CommentColumns.UNIX_POST_TIME));
                             long parentId = commentCursor.getLong(commentCursor.getColumnIndex(CommentColumns.PARENT_ID));
+                            int commentDepth = commentCursor.getInt(commentCursor.getColumnIndex(CommentColumns.COMMENT_DEPTH));
 
-                            commentList.add(new Comment(commentId, commentAuthor, commentText, unixTime, parentId));
+                            commentList.add(new Comment(commentId, commentAuthor, commentText, unixTime, parentId, commentDepth));
                         }
 
                         commentCursor.close();

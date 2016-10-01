@@ -24,4 +24,7 @@ public interface CommentColumns {
     @DataType(DataType.Type.INTEGER)
     String PARENT_ID = "parentId";
 
+    @DataType(DataType.Type.INTEGER)
+    String COMMENT_DEPTH = "commentDepth";
+
 }
