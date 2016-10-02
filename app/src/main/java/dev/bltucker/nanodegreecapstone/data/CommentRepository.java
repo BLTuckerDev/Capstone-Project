@@ -25,15 +25,16 @@ public class CommentRepository {
         this.contentResolver = contentResolver;
     }
 
-    public Observable<List<Comment>> getStoryComments(final long storyId) {
-        Cursor commentCursor = contentResolver.query(SchematicContentProviderGenerator.CommentPaths.withStoryId(String.valueOf(storyId)),
+    private Observable<List<Comment>> getChildComments(final long parentId){
+        Timber.d("Getting child comments for parent id: %d", parentId);
+        Cursor commentCursor = contentResolver.query(SchematicContentProviderGenerator.CommentPaths.withParentId(String.valueOf(parentId)),
                 null,
                 null,
                 null,
                 null);
 
         if (null == commentCursor) {
-            return Observable.error(new Exception(String.format(Locale.US, "Query for story with id %d comments a null cursor", storyId)));
+            return Observable.error(new Exception(String.format(Locale.US, "Query for story with id %d comments a null cursor", parentId)));
         }
 
         return Observable.just(commentCursor)
@@ -43,7 +44,7 @@ public class CommentRepository {
                         List<Comment> commentList = new ArrayList<>(commentCursor.getCount());
 
                         while (commentCursor.moveToNext()) {
-                            long commentId = commentCursor.getLong(commentCursor.getColumnIndex(CommentColumns._ID));
+                            long commentId = commentCursor.getLong(commentCursor.getColumnIndex(CommentColumns.COMMENT_ID));
                             String commentAuthor = commentCursor.getString(commentCursor.getColumnIndex(CommentColumns.AUTHOR_NAME));
                             String commentText = commentCursor.getString(commentCursor.getColumnIndex(CommentColumns.COMMENT_TEXT));
                             long unixTime = commentCursor.getLong(commentCursor.getColumnIndex(CommentColumns.UNIX_POST_TIME));
@@ -51,12 +52,19 @@ public class CommentRepository {
                             int commentDepth = commentCursor.getInt(commentCursor.getColumnIndex(CommentColumns.COMMENT_DEPTH));
 
                             commentList.add(new Comment(commentId, commentAuthor, commentText, unixTime, parentId, commentDepth));
+                            commentList.addAll(getChildComments(commentId).toBlocking().first());
                         }
 
                         commentCursor.close();
                         return commentList;
                     }
                 });
+
+    }
+
+    public Observable<List<Comment>> getStoryComments(final long storyId) {
+        return getChildComments(storyId);
+
     }
 
     Long[] getCommentIds(long storyId) {

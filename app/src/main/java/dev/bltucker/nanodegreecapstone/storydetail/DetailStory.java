@@ -3,7 +3,6 @@ package dev.bltucker.nanodegreecapstone.storydetail;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
-import android.support.v4.util.SimpleArrayMap;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -20,7 +19,6 @@ public class DetailStory extends Observable implements Parcelable {
     private final Story story;
 
     private final List<Comment> commentList =  new ArrayList<>();
-    private final SimpleArrayMap<Long, Comment> commentIdToParentMap = new SimpleArrayMap<>();
 
     public DetailStory(@Nullable Story story){
         this.story = story;
@@ -78,41 +76,19 @@ public class DetailStory extends Observable implements Parcelable {
     }
 
     public void addComments(List<Comment> comments){
-        for (int i = 0; i < comments.size(); i++) {
-            if(commentList.contains(comments.get(i))){
-                continue;
-            }
+        commentList.clear();
+        commentList.addAll(comments);
 
-            commentList.add(comments.get(i));
-        }
-
-        updateCommentIdToParentMap();
         setChanged();
         notifyObservers();
     }
     
     public void replaceComments(List<Comment> comments){
         this.commentList.clear();
-        commentIdToParentMap.clear();
         this.commentList.addAll(comments);
 
-        updateCommentIdToParentMap();
         setChanged();
         notifyObservers();
-    }
-
-    private void updateCommentIdToParentMap() {
-        //TODO get rid of this
-        for (int i = 0; i < commentList.size(); i++) {
-            Comment currentComment = commentList.get(i);
-            for (int j = 0; j < commentList.size(); j++) {
-                Comment potentialParent = commentList.get(j);
-                if(potentialParent.getId() == currentComment.getParentId()){
-                    commentIdToParentMap.put(currentComment.getId(), potentialParent);
-                    break;
-                }
-            }
-        }
     }
 
     @Override

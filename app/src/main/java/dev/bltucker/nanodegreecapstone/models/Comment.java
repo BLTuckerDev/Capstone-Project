@@ -12,7 +12,7 @@ public final class Comment implements Parcelable {
     public static ContentValues mapToContentValues(Comment aComment) {
         ContentValues cv = new ContentValues();
 
-        cv.put(CommentColumns._ID, aComment.getId());
+        cv.put(CommentColumns.COMMENT_ID, aComment.getId());
         cv.put(CommentColumns.AUTHOR_NAME, aComment.getAuthorName());
         cv.put(CommentColumns.COMMENT_TEXT, aComment.getCommentText());
         cv.put(CommentColumns.UNIX_POST_TIME, aComment.getUnixPostTime());

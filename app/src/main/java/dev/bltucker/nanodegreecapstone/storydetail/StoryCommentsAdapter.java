@@ -90,14 +90,13 @@ public class StoryCommentsAdapter extends RecyclerView.Adapter<RecyclerView.View
         commentViewHolder.commentBodyTextView.setText(Html.fromHtml(comment.getCommentText()));
 
         int commentDepth = comment.getDepth();
-        if(commentDepth > 0){
-            LinearLayout container = (LinearLayout) holder.itemView.getTag(R.id.comment_container);
-            RecyclerView.LayoutParams layoutParams = (RecyclerView.LayoutParams) container.getLayoutParams();
-            float margin = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, commentDepth * MARGIN_PER_DEPTH, resources.getDisplayMetrics());
-            layoutParams.setMarginStart((int) margin);
-            container.setLayoutParams(layoutParams);
-            container.invalidate();
-        }
+        LinearLayout container = (LinearLayout) holder.itemView.getTag(R.id.comment_container);
+        RecyclerView.LayoutParams layoutParams = (RecyclerView.LayoutParams) container.getLayoutParams();
+        float margin = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, commentDepth * MARGIN_PER_DEPTH, resources.getDisplayMetrics());
+        layoutParams.setMarginStart((int) margin);
+        container.setLayoutParams(layoutParams);
+        container.invalidate();
+
     }
 
     private String getFormattedCommentTime(Comment comment, Context context){

@@ -78,8 +78,9 @@ public final class SchematicContentProviderGenerator {
                 name = "STORY_ID",
                 type = "vnd.android.cursor.dir/list",
                 whereColumn = CommentColumns.PARENT_ID,
-                pathSegment = 1)
-        public static Uri withStoryId(String id) {
+                pathSegment = 1,
+                defaultSort = CommentColumns._ID)
+        public static Uri withParentId(String id){
             return Uri.withAppendedPath(ALL_COMMENTS, id);
         }
 

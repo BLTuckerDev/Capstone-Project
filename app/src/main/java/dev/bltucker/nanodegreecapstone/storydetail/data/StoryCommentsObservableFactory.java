@@ -29,7 +29,6 @@ public final class StoryCommentsObservableFactory {
     }
 
     private Observable<Comment> downloadComments(final long[] commentIds, final int commentDepth) {
-        final int childDepth = commentDepth + 1;
         if (commentIds == null || commentIds.length == 0) {
             return Observable.empty();
         } else {
@@ -43,6 +42,7 @@ public final class StoryCommentsObservableFactory {
                     .concatMap(new Func1<CommentDto, Observable<Comment>>() {
                         @Override
                         public Observable<Comment> call(CommentDto commentDto) {
+                            final int childDepth = commentDepth + 1;
                             return Observable.just(new Comment(commentDto.id, commentDto.by, commentDto.text, commentDto.time, commentDto.parent, commentDepth))
                                     .mergeWith(downloadComments(commentDto.kids, childDepth));
                         }

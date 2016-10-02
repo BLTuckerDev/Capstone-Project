@@ -1,15 +1,18 @@
 package dev.bltucker.nanodegreecapstone.storydetail.data;
 
+import net.simonvt.schematic.annotation.AutoIncrement;
 import net.simonvt.schematic.annotation.ConflictResolutionType;
 import net.simonvt.schematic.annotation.DataType;
 import net.simonvt.schematic.annotation.PrimaryKey;
+import net.simonvt.schematic.annotation.Unique;
 
 public interface CommentColumns {
 
-    @DataType(DataType.Type.INTEGER) @PrimaryKey(onConflict = ConflictResolutionType.REPLACE)
+    @DataType(DataType.Type.INTEGER) @PrimaryKey(onConflict = ConflictResolutionType.REPLACE) @AutoIncrement
     String _ID = "_id";
 
     @DataType(DataType.Type.INTEGER)
+    @Unique(onConflict = ConflictResolutionType.REPLACE)
     String COMMENT_ID = "commentId";
 
     @DataType(DataType.Type.TEXT)
