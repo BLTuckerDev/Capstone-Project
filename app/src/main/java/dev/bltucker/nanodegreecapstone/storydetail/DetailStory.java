@@ -80,6 +80,9 @@ public class DetailStory extends Observable implements Parcelable {
         this.commentList.clear();
         this.commentList.addAll(comments);
 
+        if(oldComments.isEmpty() && comments.isEmpty()){
+            return;
+        }
         setChanged();
         notifyObservers(new DetailStoryChangeEvent(oldComments, this.commentList));
     }

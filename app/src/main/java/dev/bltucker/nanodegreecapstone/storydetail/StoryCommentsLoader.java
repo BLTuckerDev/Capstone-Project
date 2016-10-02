@@ -10,19 +10,16 @@ import javax.inject.Inject;
 import dev.bltucker.nanodegreecapstone.data.CommentRepository;
 import dev.bltucker.nanodegreecapstone.data.SchematicContentProviderGenerator;
 import dev.bltucker.nanodegreecapstone.models.Comment;
-import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 import timber.log.Timber;
 
-public class StoryCommentsLoader extends AsyncTaskLoader<Void> {
+public class StoryCommentsLoader extends AsyncTaskLoader<List<Comment>> {
 
     static final String SELECTED_DETAIL_STORY = "selectedStoryBundleKey";
 
     static final int STORY_COMMENT_LOADER = StoryCommentsLoader.class.hashCode();
 
+    private long detailStoryId;
     private final CommentRepository commentRepository;
-    private DetailStory detailStory;
     private ForceLoadContentObserver myContentObserver;
 
     @Inject
@@ -33,30 +30,11 @@ public class StoryCommentsLoader extends AsyncTaskLoader<Void> {
     }
 
     @Override
-    public Void loadInBackground() {
-
-        commentRepository.getStoryComments(detailStory.getStoryId())
-                .subscribeOn(Schedulers.immediate())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<List<Comment>>() {
-                    @Override
-                    public void onCompleted() { }
-
-                    @Override
-                    public void onError(Throwable e) { }
-
-                    @Override
-                    public void onNext(List<Comment> comments) {
-                        Timber.d("Comments loader onNext");
-                        if(isReset()){
-                            unsubscribe();
-                            return;
-                        }
-                        detailStory.addComments(comments);
-                    }
-                });
-
-        return null;
+    public List<Comment> loadInBackground() {
+        Timber.d("StoryCommentsLoader.loadInBackground");
+        List<Comment> comments = commentRepository.getStoryComments(detailStoryId).toBlocking().first();
+        Timber.d("StoryCommentsLoader loaded %d comments", comments.size());
+        return comments;
     }
 
     @Override
@@ -75,8 +53,8 @@ public class StoryCommentsLoader extends AsyncTaskLoader<Void> {
         super.onReset();
     }
 
-    public void setDetailStory(DetailStory detailStory) {
-        this.detailStory = detailStory;
+    public void setDetailStoryId(long detailStoryId) {
+        this.detailStoryId = detailStoryId;
         onContentChanged();
     }
 }

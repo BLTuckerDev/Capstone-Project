@@ -158,15 +158,7 @@ public class StoryCommentsAdapter extends RecyclerView.Adapter<RecyclerView.View
         final DetailStoryChangeEvent detailStoryChangeEvent = (DetailStoryChangeEvent) data;
         final DetailStoryDiffCallback diffCallback = new DetailStoryDiffCallback(detailStoryChangeEvent.oldComments, detailStoryChangeEvent.commentList);
         final DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(diffCallback);
-        if(data instanceof DetailStoryChangeEvent){
-            new Handler(Looper.getMainLooper()).post(new Runnable() {
-                @Override
-                public void run() {
-                    diffResult.dispatchUpdatesTo(StoryCommentsAdapter.this);
-                }
-            });
-        }
-
+        diffResult.dispatchUpdatesTo(StoryCommentsAdapter.this);
     }
 
     public static class CommentViewHolder extends RecyclerView.ViewHolder{

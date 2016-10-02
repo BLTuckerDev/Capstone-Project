@@ -4,14 +4,18 @@ import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 
+import java.util.List;
+
 import javax.inject.Provider;
 
+import dev.bltucker.nanodegreecapstone.models.Comment;
 import timber.log.Timber;
 
-class StoryCommentLoaderCallbackDelegate implements LoaderManager.LoaderCallbacks<Void> {
+class StoryCommentLoaderCallbackDelegate implements LoaderManager.LoaderCallbacks<List<Comment>> {
 
     private final Provider<StoryCommentsLoader> commentsLoaderProvider;
     private StoryDetailView storyDetailView;
+    private DetailStory detailStory;
 
     public StoryCommentLoaderCallbackDelegate(Provider<StoryCommentsLoader> commentsLoaderProvider) {
         this.commentsLoaderProvider = commentsLoaderProvider;
@@ -24,13 +28,15 @@ class StoryCommentLoaderCallbackDelegate implements LoaderManager.LoaderCallback
     @Override
     public Loader onCreateLoader(int id, Bundle args) {
         StoryCommentsLoader commentsLoader = commentsLoaderProvider.get();
-        commentsLoader.setDetailStory((DetailStory) args.getParcelable(StoryCommentsLoader.SELECTED_DETAIL_STORY));
+        detailStory = (DetailStory) args.getParcelable(StoryCommentsLoader.SELECTED_DETAIL_STORY);
+        commentsLoader.setDetailStoryId(detailStory.getStoryId());
         return commentsLoader;
     }
 
     @Override
-    public void onLoadFinished(Loader<Void> loader, final Void data) {
+    public void onLoadFinished(Loader<List<Comment>> loader, final List<Comment> data) {
         Timber.d("Loader Finished");
+        detailStory.addComments(data);
     }
 
     @Override
