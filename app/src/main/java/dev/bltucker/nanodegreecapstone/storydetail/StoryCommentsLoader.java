@@ -11,6 +11,7 @@ import dev.bltucker.nanodegreecapstone.data.CommentRepository;
 import dev.bltucker.nanodegreecapstone.data.SchematicContentProviderGenerator;
 import dev.bltucker.nanodegreecapstone.models.Comment;
 import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import timber.log.Timber;
 
@@ -36,7 +37,7 @@ public class StoryCommentsLoader extends AsyncTaskLoader<Void> {
 
         commentRepository.getStoryComments(detailStory.getStoryId())
                 .subscribeOn(Schedulers.immediate())
-                .observeOn(Schedulers.immediate())
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<List<Comment>>() {
                     @Override
                     public void onCompleted() { }

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.os.Handler;
 import android.os.Looper;
+import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.util.TypedValue;
@@ -14,6 +15,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.Calendar;
+import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -153,12 +155,18 @@ public class StoryCommentsAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     @Override
     public void update(Observable observable, Object data) {
-        new Handler(Looper.getMainLooper()).post(new Runnable() {
-            @Override
-            public void run() {
-                notifyDataSetChanged();
-            }
-        });
+        final DetailStoryChangeEvent detailStoryChangeEvent = (DetailStoryChangeEvent) data;
+        final DetailStoryDiffCallback diffCallback = new DetailStoryDiffCallback(detailStoryChangeEvent.oldComments, detailStoryChangeEvent.commentList);
+        final DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(diffCallback);
+        if(data instanceof DetailStoryChangeEvent){
+            new Handler(Looper.getMainLooper()).post(new Runnable() {
+                @Override
+                public void run() {
+                    diffResult.dispatchUpdatesTo(StoryCommentsAdapter.this);
+                }
+            });
+        }
+
     }
 
     public static class CommentViewHolder extends RecyclerView.ViewHolder{

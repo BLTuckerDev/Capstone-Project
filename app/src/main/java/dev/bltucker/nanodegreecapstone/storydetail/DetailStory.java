@@ -76,19 +76,12 @@ public class DetailStory extends Observable implements Parcelable {
     }
 
     public void addComments(List<Comment> comments){
-        commentList.clear();
-        commentList.addAll(comments);
-
-        setChanged();
-        notifyObservers();
-    }
-    
-    public void replaceComments(List<Comment> comments){
+        List<Comment> oldComments = new ArrayList<>(this.commentList);
         this.commentList.clear();
         this.commentList.addAll(comments);
 
         setChanged();
-        notifyObservers();
+        notifyObservers(new DetailStoryChangeEvent(oldComments, this.commentList));
     }
 
     @Override
