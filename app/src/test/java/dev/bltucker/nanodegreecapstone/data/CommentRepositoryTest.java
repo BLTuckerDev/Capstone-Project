@@ -65,7 +65,7 @@ public class CommentRepositoryTest {
         when(Uri.parse(anyString())).thenReturn(mockUri);
         int storyId = 1;
 
-        when(mockContentResolver.query(SchematicContentProviderGenerator.CommentPaths.withStoryId(String.valueOf(storyId)),
+        when(mockContentResolver.query(SchematicContentProviderGenerator.CommentPaths.withParentId(String.valueOf(storyId)),
                 null,
                 null,
                 null,
@@ -141,7 +141,7 @@ public class CommentRepositoryTest {
         when(Uri.parse(anyString())).thenReturn(mockUri);
         Cursor mockCursor = mock(Cursor.class);
 
-        when(mockContentResolver.query(SchematicContentProviderGenerator.CommentPaths.withStoryId(String.valueOf(storyId)),
+        when(mockContentResolver.query(SchematicContentProviderGenerator.CommentPaths.withParentId(String.valueOf(storyId)),
                 null,
                 null,
                 null,
@@ -151,7 +151,7 @@ public class CommentRepositoryTest {
         when(mockCursor.getCount()).thenReturn(2);
         when(mockCursor.moveToNext()).thenReturn(true, true, false);
 
-        when(mockCursor.getLong(mockCursor.getColumnIndex(CommentColumns._ID))).thenReturn(1L, 2L);
+        when(mockCursor.getLong(mockCursor.getColumnIndex(CommentColumns.COMMENT_ID))).thenReturn(1L, 2L);
         when(mockCursor.getString(mockCursor.getColumnIndex(CommentColumns.AUTHOR_NAME))).thenReturn("Author one", "Author two");
         when(mockCursor.getString(mockCursor.getColumnIndex(CommentColumns.COMMENT_TEXT))).thenReturn("Comment One Text", "Comment Two Text");
         when(mockCursor.getLong(mockCursor.getColumnIndex(CommentColumns.UNIX_POST_TIME))).thenReturn(System.currentTimeMillis());

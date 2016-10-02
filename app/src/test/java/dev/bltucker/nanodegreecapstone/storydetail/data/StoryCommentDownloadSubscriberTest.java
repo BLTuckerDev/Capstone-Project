@@ -46,37 +46,15 @@ public class StoryCommentDownloadSubscriberTest {
     public void setup(){
         commentRepository = mock(CommentRepository.class);
         mockEventBus = mock(EventBus.class);
-
         objectUnderTest = new StoryCommentDownloadSubscriber(commentRepository, mockEventBus);
     }
 
     @Test
-    public void testOnNext_ShouldBulkInsertIntoContentResolver() throws Exception {
-//
-//        mockStatic(ContentValues.class);
-//        mockStatic(Comment.class);
-//        mockStatic(Uri.class);
-//
-//        ContentValues mockContentValues = mock(ContentValues.class);
-//        List<Comment> commentList = new ArrayList<>();
-//
-//        commentList.add(new Comment(1L, "Author Name", "Comment Text", System.currentTimeMillis(), 1000L));
-//        commentList.add(new Comment(2L, "Another Author Name", "More Comment Text", System.currentTimeMillis(), 2000L));
-//
-//
-//        PowerMockito.whenNew(ContentValues.class).withNoArguments().thenReturn(mockContentValues);
-//        PowerMockito.doNothing().when(mockContentValues).put(anyString(), anyLong());
-//        PowerMockito.doNothing().when(mockContentValues).put(anyString(), anyString());
-//        PowerMockito.doNothing().when(mockContentValues).put(anyString(), anyString());
-//        PowerMockito.doNothing().when(mockContentValues).put(anyString(), anyLong());
-//        PowerMockito.doNothing().when(mockContentValues).put(anyString(), anyLong());
-//        PowerMockito.when(mockContentResolver.bulkInsert(any(Uri.class), any(ContentValues[].class))).thenReturn(2);
-//
-//        when(Comment.mapToContentValues(any(Comment.class))).thenReturn(mockContentValues);
-//
-//        objectUnderTest.onNext(commentList);
-//
-//        verify(mockContentResolver, times(1)).bulkInsert(any(Uri.class), any(ContentValues[].class));
+    public void testOnNext_ShouldSaveIntoCommentRepository() throws Exception {
+        Comment saveMe = new Comment(1L, "Author", "SOme Text", System.currentTimeMillis(), 20L, 1);
+        objectUnderTest.onNext(saveMe);
+
+        verify(objectUnderTest.commentRepository, times(1)).saveComment(saveMe);
     }
 
     @Test

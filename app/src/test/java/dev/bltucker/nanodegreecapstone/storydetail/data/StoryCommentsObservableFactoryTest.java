@@ -3,12 +3,14 @@ package dev.bltucker.nanodegreecapstone.storydetail.data;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import dev.bltucker.nanodegreecapstone.data.HackerNewsApiService;
 import dev.bltucker.nanodegreecapstone.models.Comment;
 import rx.Observable;
 import rx.Subscriber;
+import rx.observers.TestSubscriber;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertTrue;
@@ -37,27 +39,29 @@ public class StoryCommentsObservableFactoryTest {
 
         final long[] commentIds = new long[]{1L, 2L};
 
+        TestSubscriber<Comment> commentTestSubscriber = new TestSubscriber<>();
+
+        List<Comment> expectedCommentEmitList = new ArrayList<>();
+
+        expectedCommentEmitList.add(new Comment(fakeCommentOne.id, fakeCommentOne.by, fakeCommentOne.text, fakeCommentOne.time, fakeCommentOne.parent, 0));
+        expectedCommentEmitList.add(new Comment(fakeCommentTwo.id, fakeCommentTwo.by, fakeCommentTwo.text, fakeCommentTwo.time, fakeCommentTwo.parent, 0));
+
+
         objectUnderTest.get(commentIds)
-                .subscribe(new Subscriber<List<Comment>>() {
-                    @Override
-                    public void onCompleted() {
+                .subscribe(commentTestSubscriber);
 
-                    }
+        commentTestSubscriber.assertReceivedOnNext(expectedCommentEmitList);
+    }
 
-                    @Override
-                    public void onError(Throwable e) {
-                        fail();
-                    }
+    @Test
+    public void testGet_WithEmptyCommentIdArray_ShouldReturnEmptyObservable(){
+        TestSubscriber<Comment> commentTestSubscriber = new TestSubscriber<>();
 
-                    @Override
-                    public void onNext(List<Comment> comments) {
-                        assertEquals(2, comments.size());
-                        assertEquals(1L, comments.get(0).getId());
-                        assertEquals(2L, comments.get(1).getId());
-                    }
-                });
+        final long[] commentIds = new long[0];
+        objectUnderTest.get(commentIds)
+                .subscribe(commentTestSubscriber);
 
-
+        commentTestSubscriber.assertNoValues();
     }
 
 }

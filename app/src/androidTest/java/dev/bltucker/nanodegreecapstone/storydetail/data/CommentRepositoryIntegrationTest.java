@@ -34,22 +34,22 @@ public class CommentRepositoryIntegrationTest extends AndroidTestCase {
 
         String firstAuthorName = "Author Name";
         long firstParentId = 1000L;
-        commentList.add(new Comment(1L, firstAuthorName, "Comment Text", System.currentTimeMillis(), firstParentId));
+        commentList.add(new Comment(1L, firstAuthorName, "Comment Text", System.currentTimeMillis(), firstParentId, 1));
 
         String secondAuthorName = "Another Author Name";
         long secondParentId = 2000L;
-        commentList.add(new Comment(2L, secondAuthorName, "More Comment Text", System.currentTimeMillis(), secondParentId));
+        commentList.add(new Comment(2L, secondAuthorName, "More Comment Text", System.currentTimeMillis(), secondParentId, 1));
 
         objectUnderTest.saveComments(commentList);
 
 
-        Cursor firstQuery = mContext.getContentResolver().query(SchematicContentProviderGenerator.CommentPaths.withStoryId(String.valueOf(firstParentId)),
+        Cursor firstQuery = mContext.getContentResolver().query(SchematicContentProviderGenerator.CommentPaths.withParentId(String.valueOf(firstParentId)),
                 null,
                 null,
                 null,
                 null);
 
-        Cursor secondQuery = mContext.getContentResolver().query(SchematicContentProviderGenerator.CommentPaths.withStoryId(String.valueOf(secondParentId)),
+        Cursor secondQuery = mContext.getContentResolver().query(SchematicContentProviderGenerator.CommentPaths.withParentId(String.valueOf(secondParentId)),
                 null,
                 null,
                 null,

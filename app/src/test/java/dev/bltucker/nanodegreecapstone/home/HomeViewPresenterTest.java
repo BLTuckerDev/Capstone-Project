@@ -7,6 +7,7 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
@@ -60,6 +61,14 @@ public class HomeViewPresenterTest {
         objectUnderTest.view = mockView;
         objectUnderTest.onShowReadLaterMenuClick();
 
-        verify(objectUnderTest.view, times(1)).showReadLaterListView();
+        verify(mockView, times(1)).showReadLaterListView();
+    }
+
+    @Test
+    public void testOnShowReadLater_WithNullView_ShouldNotExecuteViewCommand(){
+        objectUnderTest.view = null;
+        objectUnderTest.onShowReadLaterMenuClick();
+
+        verify(mockView, never()).showReadLaterListView();
     }
 }

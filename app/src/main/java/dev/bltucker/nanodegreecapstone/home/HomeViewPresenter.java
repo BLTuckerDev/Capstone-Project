@@ -32,8 +32,8 @@ public class HomeViewPresenter {
 
     public void onViewCreated(HomeView createdView){
         view = createdView;
-        requestImmediateSync();
-        setupPeriodicSync();
+        contentSyncRequester.requestImmediateSync(storySyncAccount);
+        contentSyncRequester.requestPeriodicSync(storySyncAccount, syncInterval);
     }
 
     public void onViewRestored(HomeView restoredView){
@@ -42,15 +42,6 @@ public class HomeViewPresenter {
 
     public void onViewDestroyed(HomeView destroyedView){
         view = null;
-    }
-
-
-    private void requestImmediateSync(){
-        contentSyncRequester.requestImmediateSync(storySyncAccount);
-    }
-
-    private void setupPeriodicSync(){
-        contentSyncRequester.requestPeriodicSync(storySyncAccount, syncInterval);
     }
 
     public void onShowReadLaterMenuClick() {

@@ -41,7 +41,7 @@ public class StoryCommentDownloadService extends IntentService {
             long[] primitiveCommentIds =convertToPrimitiveArray(story.getCommentIds());
 
             Timber.d("StoryCommentDownloadService.onHandleIntent, story id: %d with %d comments",story.getStoryId(), primitiveCommentIds.length);
-
+//TODO intent service's already make sure only one job happens at a time so this isn't necessary, but we do need a way to stop a job in progress for cases where the user changes stories quickly.
             if(currentSubscription != null && !currentSubscription.isUnsubscribed()){
                 Timber.d("StoryCommentDownloadService previous subscription was in progress. It will be unsubscribed");
                 currentSubscription.unsubscribe();

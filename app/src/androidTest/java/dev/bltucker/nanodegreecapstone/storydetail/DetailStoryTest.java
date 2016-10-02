@@ -16,7 +16,7 @@ import dev.bltucker.nanodegreecapstone.models.Story;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 
-@SmallTest
+
 public class DetailStoryTest {
 
     Story fakeStory;
@@ -42,7 +42,8 @@ public class DetailStoryTest {
                     "Comment Author " + i,
                     "Comment Text" + i,
                     new Date().getTime(),
-                    1L));
+                    1L,
+                    1));
 
             objectUnderTest = new DetailStory(fakeStory);
         }
@@ -72,7 +73,7 @@ public class DetailStoryTest {
     public void testWriteToParcel(){
         Parcel output = Parcel.obtain();
 
-        objectUnderTest.replaceComments(fakeComments);
+        objectUnderTest.addComments(fakeComments);
         objectUnderTest.writeToParcel(output, 0);
         output.setDataPosition(0);
 
