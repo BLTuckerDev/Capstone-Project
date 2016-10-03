@@ -1,6 +1,7 @@
 package dev.bltucker.nanodegreecapstone.storydetail;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 
@@ -15,6 +16,8 @@ class StoryCommentLoaderCallbackDelegate implements LoaderManager.LoaderCallback
 
     private final Provider<StoryCommentsLoader> commentsLoaderProvider;
     private StoryDetailView storyDetailView;
+
+    @Nullable
     private DetailStory detailStory;
 
     public StoryCommentLoaderCallbackDelegate(Provider<StoryCommentsLoader> commentsLoaderProvider) {
@@ -36,7 +39,9 @@ class StoryCommentLoaderCallbackDelegate implements LoaderManager.LoaderCallback
     @Override
     public void onLoadFinished(Loader<List<Comment>> loader, final List<Comment> data) {
         Timber.d("Loader Finished");
-        detailStory.addComments(data);
+        if(detailStory != null){
+            detailStory.addComments(data);
+        }
     }
 
     @Override
