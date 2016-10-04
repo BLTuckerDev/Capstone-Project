@@ -2,7 +2,10 @@
 
 Next:
 + eliminate old comments periodically from the database.
-+ update story provider tests to perform crud integration on all tables\
++ update story provider tests to perform crud integration on all tables
++ StoryDetailViewPresenter tests
++ When the user saves a story for later download the comments for that story as it currently stands,
+    also add a way to view those comments in the read later activity
 + get some actual UI tests and fix the flakiness of the main activity espresso "test"
 + pull to refresh comment list
 + when no stories are available, but a sync is in progress, let's show a spinner on the home page
