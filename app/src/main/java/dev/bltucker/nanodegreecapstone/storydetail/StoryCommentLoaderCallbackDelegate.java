@@ -15,7 +15,6 @@ import timber.log.Timber;
 class StoryCommentLoaderCallbackDelegate implements LoaderManager.LoaderCallbacks<List<Comment>> {
 
     private final Provider<StoryCommentsLoader> commentsLoaderProvider;
-    private StoryDetailView storyDetailView;
 
     @Nullable
     private DetailStory detailStory;
@@ -24,12 +23,9 @@ class StoryCommentLoaderCallbackDelegate implements LoaderManager.LoaderCallback
         this.commentsLoaderProvider = commentsLoaderProvider;
     }
 
-    public void setStoryDetailView(StoryDetailView view){
-        this.storyDetailView = view;
-    }
-
     @Override
     public Loader onCreateLoader(int id, Bundle args) {
+        Timber.d("onCreateLoader");
         StoryCommentsLoader commentsLoader = commentsLoaderProvider.get();
         detailStory = (DetailStory) args.getParcelable(StoryCommentsLoader.SELECTED_DETAIL_STORY);
         commentsLoader.setDetailStoryId(detailStory.getStoryId());
@@ -47,5 +43,9 @@ class StoryCommentLoaderCallbackDelegate implements LoaderManager.LoaderCallback
     @Override
     public void onLoaderReset(Loader loader) {
         Timber.d("Loader reset");
+    }
+
+    public void setDetailStory(@Nullable DetailStory detailStory) {
+        this.detailStory = detailStory;
     }
 }

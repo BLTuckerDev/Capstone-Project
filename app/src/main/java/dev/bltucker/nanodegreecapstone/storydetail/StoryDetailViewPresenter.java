@@ -62,6 +62,7 @@ public class StoryDetailViewPresenter {
         Timber.d("initializeCommentLoader");
         Bundle loaderBundle = new Bundle();
         loaderBundle.putParcelable(StoryCommentsLoader.SELECTED_DETAIL_STORY, story);
+        commentLoaderCallbackDelegate.setDetailStory(story);
         this.loaderManager.initLoader(StoryCommentsLoader.STORY_COMMENT_LOADER, loaderBundle, commentLoaderCallbackDelegate);
     }
 
@@ -73,7 +74,6 @@ public class StoryDetailViewPresenter {
 
     private void setDetailView(StoryDetailView detailView) {
         view = detailView;
-        commentLoaderCallbackDelegate.setStoryDetailView(detailView);
     }
 
     public void onViewResumed(StoryDetailView detailView) {
@@ -98,6 +98,7 @@ public class StoryDetailViewPresenter {
             return;
         }
 
+        //TODO extract this when we create some tests for this class
         final ReadLaterStory saveMe = new ReadLaterStory(detailStory.getStoryId(), detailStory.getPosterName(), detailStory.getTitle(), detailStory.getUrl());
         Completable.fromAction(new Action0() {
             @Override

@@ -11,6 +11,7 @@ import java.util.Observable;
 
 import dev.bltucker.nanodegreecapstone.models.Comment;
 import dev.bltucker.nanodegreecapstone.models.Story;
+import timber.log.Timber;
 
 //TODO figure out how to do this with just Rx
 public class DetailStory extends Observable implements Parcelable {
@@ -76,6 +77,7 @@ public class DetailStory extends Observable implements Parcelable {
     }
 
     public void addComments(List<Comment> comments){
+        Timber.d("Adding %d comments to the detail story", comments.size());
         List<Comment> oldComments = new ArrayList<>(this.commentList);
         this.commentList.clear();
         this.commentList.addAll(comments);
