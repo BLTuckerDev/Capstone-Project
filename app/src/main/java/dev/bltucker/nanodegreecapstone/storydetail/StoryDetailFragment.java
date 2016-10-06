@@ -19,24 +19,21 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import dev.bltucker.nanodegreecapstone.CapstoneApplication;
 import dev.bltucker.nanodegreecapstone.R;
 import dev.bltucker.nanodegreecapstone.injection.DaggerInjector;
 import dev.bltucker.nanodegreecapstone.models.Comment;
 import dev.bltucker.nanodegreecapstone.models.Story;
-import dev.bltucker.nanodegreecapstone.storydetail.data.StoryCommentDownloadService;
+import dev.bltucker.nanodegreecapstone.storydetail.data.InterruptibleDownloadService;
 
 public class StoryDetailFragment extends Fragment implements StoryDetailView {
 
@@ -156,7 +153,7 @@ public class StoryDetailFragment extends Fragment implements StoryDetailView {
             detailStory = savedInstanceState.getParcelable(DETAIL_STORY_BUNDLE_KEY);
         } else {
             detailStory = detailStoryProvider.getDetailStory((Story) getArguments().getParcelable(STORY_BUNDLE_KEY), new ArrayList<Comment>());
-            StoryCommentDownloadService.startDownload(getContext(), detailStory);
+            InterruptibleDownloadService.startDownload(getContext(), detailStory);
         }
     }
 

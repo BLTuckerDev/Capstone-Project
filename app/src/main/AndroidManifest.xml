@@ -93,7 +93,11 @@
             android:value="@integer/google_play_services_version" />
 
         <service
-            android:name=".storydetail.data.StoryCommentDownloadService"
+            android:name=".storydetail.data.QueuedStoryCommentDownloadService"
+            android:exported="false" />
+        <service
+            android:name=".storydetail.data.InterruptibleDownloadService"
+            android:enabled="true"
             android:exported="false"></service>
     </application>
 

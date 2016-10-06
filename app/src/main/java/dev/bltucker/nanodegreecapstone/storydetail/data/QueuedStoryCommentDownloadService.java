@@ -11,7 +11,7 @@ import dev.bltucker.nanodegreecapstone.storydetail.DetailStory;
 import rx.Subscription;
 import timber.log.Timber;
 
-public class StoryCommentDownloadService extends IntentService {
+public class QueuedStoryCommentDownloadService extends IntentService {
 
     private static final String STORY_PARAM = "dev.bltucker.nanodegreecapstone.storydetail.data.extra.STORY";
 
@@ -23,15 +23,16 @@ public class StoryCommentDownloadService extends IntentService {
 
     private Subscription currentSubscription;
 
-    public StoryCommentDownloadService() {
-        super("StoryCommentDownloadService");
+    public QueuedStoryCommentDownloadService() {
+        super("QueuedStoryCommentDownloadService");
         DaggerInjector.getApplicationComponent().inject(this);
     }
 
     public static void startDownload(Context context, DetailStory story) {
-        Intent intent = new Intent(context, StoryCommentDownloadService.class);
+        Intent intent = new Intent(context, QueuedStoryCommentDownloadService.class);
         intent.putExtra(STORY_PARAM, story);
         context.startService(intent);
+        context.startService(new Intent(context, InterruptibleDownloadService.class));
     }
 
     @Override
@@ -40,15 +41,15 @@ public class StoryCommentDownloadService extends IntentService {
             final DetailStory story = intent.getParcelableExtra(STORY_PARAM);
             long[] primitiveCommentIds =convertToPrimitiveArray(story.getCommentIds());
 
-            Timber.d("StoryCommentDownloadService.onHandleIntent, story id: %d with %d comments",story.getStoryId(), primitiveCommentIds.length);
+            Timber.d("QueuedStoryCommentDownloadService.onHandleIntent, story id: %d with %d comments",story.getStoryId(), primitiveCommentIds.length);
 //TODO intent service's already make sure only one job happens at a time so this isn't necessary, but we do need a way to stop a job in progress for cases where the user changes stories quickly.
             if(currentSubscription != null && !currentSubscription.isUnsubscribed()){
-                Timber.d("StoryCommentDownloadService previous subscription was in progress. It will be unsubscribed");
+                Timber.d("QueuedStoryCommentDownloadService previous subscription was in progress. It will be unsubscribed");
                 currentSubscription.unsubscribe();
             }
 
-            currentSubscription = observableFactory.get(primitiveCommentIds)
-                    .subscribe(subscriberFactory.get());
+//            currentSubscription = observableFactory.get(primitiveCommentIds)
+//                    .subscribe(subscriberFactory.get(((MessageFlag) msg.obj)));
         }
     }
 

@@ -2,8 +2,6 @@ package dev.bltucker.nanodegreecapstone.storydetail.data;
 
 import android.support.annotation.VisibleForTesting;
 
-import java.util.List;
-
 import dev.bltucker.nanodegreecapstone.data.CommentRepository;
 import dev.bltucker.nanodegreecapstone.events.EventBus;
 import dev.bltucker.nanodegreecapstone.events.StoryCommentsDownloadCompleteEvent;
@@ -18,6 +16,8 @@ class StoryCommentDownloadSubscriber extends Subscriber<Comment> {
 
     @VisibleForTesting
     EventBus eventBus;
+
+    private volatile boolean shouldContinueDownloadingComments = true;
 
     StoryCommentDownloadSubscriber(CommentRepository commentRepository, EventBus eventBus){
         this.commentRepository = commentRepository;
@@ -38,5 +38,12 @@ class StoryCommentDownloadSubscriber extends Subscriber<Comment> {
     @Override
     public void onNext(Comment comment) {
         commentRepository.saveComment(comment);
+        if(!shouldContinueDownloadingComments){
+            unsubscribe();
+        }
+    }
+
+    public void setShouldContinueDownloadingComments(boolean shouldContinueDownloadingComments) {
+        this.shouldContinueDownloadingComments = shouldContinueDownloadingComments;
     }
 }
