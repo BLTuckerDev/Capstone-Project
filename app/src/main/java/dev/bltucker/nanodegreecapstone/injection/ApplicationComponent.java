@@ -1,6 +1,9 @@
 package dev.bltucker.nanodegreecapstone.injection;
 
 import dagger.Component;
+import dev.bltucker.nanodegreecapstone.data.CommentRepository;
+import dev.bltucker.nanodegreecapstone.data.HackerNewsApiService;
+import dev.bltucker.nanodegreecapstone.events.EventBus;
 import dev.bltucker.nanodegreecapstone.home.MainActivity;
 import dev.bltucker.nanodegreecapstone.location.GeofenceCreationIntentServiceComponent;
 import dev.bltucker.nanodegreecapstone.location.GeofenceCreationIntentServiceModule;
@@ -22,6 +25,9 @@ public interface ApplicationComponent {
     void inject(StorySyncAdapter syncAdapter);
     void inject(StoryListFragment fragment);
     void inject(GeofenceTransitionsIntentService geofenceTransitionsIntentService);
+
+    HackerNewsApiService hackerNewsApiService();
+    EventBus eventBus();
 
     GeofenceCreationIntentServiceComponent geofenceCreationIntentServiceComponent(GeofenceCreationIntentServiceModule module);
     ReadLaterComponent readLaterComponent(ReadLaterListFragmentModule module);

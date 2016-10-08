@@ -144,12 +144,6 @@ public class ApplicationResourcesModule {
 
     @Provides
     @ApplicationScope
-    public CommentRepository provideCommentRepository(HackerNewsApiService hackerNewsApiService, ContentResolver contentResolver, @CommentListCache LruCache<Long, List<Comment>> cache) {
-        return new CommentRepository(contentResolver);
-    }
-
-    @Provides
-    @ApplicationScope
     public EventBus provideEventBus() {
         return new EventBus();
     }

@@ -22,7 +22,7 @@ import timber.log.Timber;
 
 public class InterruptibleDownloadService extends Service {
 
-    private static final String STORY_PARAM = "dev.bltucker.nanodegreecapstone.storydetail.data.extra.STORY";
+    public static final String STORY_PARAM = "dev.bltucker.nanodegreecapstone.storydetail.data.extra.STORY";
     public static final int DOWNLOAD_STORY_COMMENTS_MESSAGE = 1;
 
     @Nullable

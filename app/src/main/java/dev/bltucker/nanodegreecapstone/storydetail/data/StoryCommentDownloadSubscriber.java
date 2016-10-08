@@ -17,7 +17,8 @@ class StoryCommentDownloadSubscriber extends Subscriber<Comment> {
     @VisibleForTesting
     EventBus eventBus;
 
-    private volatile boolean shouldContinueDownloadingComments = true;
+    @VisibleForTesting
+    volatile boolean shouldContinueDownloadingComments = true;
 
     StoryCommentDownloadSubscriber(CommentRepository commentRepository, EventBus eventBus){
         this.commentRepository = commentRepository;

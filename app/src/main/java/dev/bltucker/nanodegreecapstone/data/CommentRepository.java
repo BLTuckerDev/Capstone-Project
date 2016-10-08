@@ -10,12 +10,14 @@ import java.util.Locale;
 
 import javax.inject.Inject;
 
+import dev.bltucker.nanodegreecapstone.injection.ApplicationScope;
 import dev.bltucker.nanodegreecapstone.models.Comment;
 import dev.bltucker.nanodegreecapstone.storydetail.data.CommentColumns;
 import rx.Observable;
 import rx.functions.Func1;
 import timber.log.Timber;
 
+@ApplicationScope
 public class CommentRepository {
 
     private final ContentResolver contentResolver;

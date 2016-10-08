@@ -18,6 +18,7 @@ import dev.bltucker.nanodegreecapstone.events.EventBus;
 import dev.bltucker.nanodegreecapstone.models.Comment;
 import timber.log.Timber;
 
+import static junit.framework.Assert.assertTrue;
 import static org.mockito.Matchers.anyObject;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.times;
@@ -49,6 +50,17 @@ public class StoryCommentDownloadSubscriberTest {
         objectUnderTest.onNext(saveMe);
 
         verify(objectUnderTest.commentRepository, times(1)).saveComment(saveMe);
+    }
+
+    @Test
+    public void testOnNext_WithShouldContinueSetToFalse_ShouldStopDownloading(){
+        Comment saveMe = new Comment(1L, "Author", "SOme Text", System.currentTimeMillis(), 20L, 1);
+
+        objectUnderTest.shouldContinueDownloadingComments = false;
+        objectUnderTest.onNext(saveMe);
+
+        assertTrue(objectUnderTest.isUnsubscribed());
+
     }
 
     @Test

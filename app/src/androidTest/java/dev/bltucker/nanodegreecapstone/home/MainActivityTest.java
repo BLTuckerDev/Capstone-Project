@@ -29,11 +29,6 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 @RunWith(AndroidJUnit4.class)
 public class MainActivityTest {
 
-    @BeforeClass
-    public static void testShit(){
-        Log.d("TEST", "Wtf");
-    }
-
     @Rule
     public ActivityTestRule activityRule = new ActivityTestRule<>(
             MainActivity.class,
@@ -49,7 +44,6 @@ public class MainActivityTest {
                 .build();
 
         DaggerInjector.initializeInjector(applicationComponent);
-
     }
 
 
