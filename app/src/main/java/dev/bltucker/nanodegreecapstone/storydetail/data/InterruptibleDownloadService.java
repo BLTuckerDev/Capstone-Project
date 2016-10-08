@@ -106,8 +106,8 @@ public class InterruptibleDownloadService extends Service {
 
         DetailStory story = messageData.getParcelable(STORY_PARAM);
 
-        if (null == story) {
-            Timber.e("DetailStory was missing from message data for InterruptibleDownloadService message");
+        if (null == story && story.hasStory()) {
+            Timber.e("DetailStory was missing from message data OR the detail story had no story for InterruptibleDownloadService message");
             return;
         }
 

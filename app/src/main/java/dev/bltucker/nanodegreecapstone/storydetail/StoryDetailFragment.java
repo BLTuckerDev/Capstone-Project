@@ -154,7 +154,9 @@ public class StoryDetailFragment extends Fragment implements StoryDetailView {
             detailStory = savedInstanceState.getParcelable(DETAIL_STORY_BUNDLE_KEY);
         } else {
             detailStory = detailStoryProvider.getDetailStory((Story) getArguments().getParcelable(STORY_BUNDLE_KEY), new ArrayList<Comment>());
-            InterruptibleDownloadService.startDownload(getContext(), detailStory);
+            if(detailStory.hasStory()){
+                InterruptibleDownloadService.startDownload(getContext(), detailStory);
+            }
         }
     }
 
