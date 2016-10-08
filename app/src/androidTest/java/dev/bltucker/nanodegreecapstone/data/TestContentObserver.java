@@ -35,7 +35,9 @@ public class TestContentObserver extends ContentObserver {
     public void onChange(boolean selfChange) {
         super.onChange(selfChange);
         this.countDownLatch.countDown();
-        this.ht.quit();
-        this.context.getContentResolver().unregisterContentObserver(this);
+        if(this.countDownLatch.getCount() == 0){
+            this.ht.quit();
+            this.context.getContentResolver().unregisterContentObserver(this);
+        }
     }
 }

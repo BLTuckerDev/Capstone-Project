@@ -10,14 +10,18 @@ import android.net.Uri;
 import android.test.AndroidTestCase;
 import android.test.suitebuilder.annotation.LargeTest;
 
+import org.junit.Test;
+
 import java.util.Date;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
+import dev.bltucker.nanodegreecapstone.models.Comment;
 import dev.bltucker.nanodegreecapstone.models.ReadLaterStory;
 import dev.bltucker.nanodegreecapstone.models.Story;
+import dev.bltucker.nanodegreecapstone.storydetail.data.CommentColumns;
 
 @LargeTest
 public class StoryProviderTests extends AndroidTestCase {
@@ -27,6 +31,7 @@ public class StoryProviderTests extends AndroidTestCase {
         mContext.getContentResolver().delete(SchematicContentProviderGenerator.StoryPaths.ALL_STORIES, null, null);
         mContext.getContentResolver().delete(SchematicContentProviderGenerator.ReadLaterStoryPaths.ALL_READ_LATER_STORIES, null, null);
         mContext.getContentResolver().delete(SchematicContentProviderGenerator.CommentRefs.ALL_COMMENT_REFS, null, null);
+        mContext.getContentResolver().delete(SchematicContentProviderGenerator.CommentPaths.ALL_COMMENTS, null, null);
     }
 
     @Override
@@ -34,6 +39,7 @@ public class StoryProviderTests extends AndroidTestCase {
         mContext.getContentResolver().delete(SchematicContentProviderGenerator.StoryPaths.ALL_STORIES, null, null);
         mContext.getContentResolver().delete(SchematicContentProviderGenerator.ReadLaterStoryPaths.ALL_READ_LATER_STORIES, null, null);
         mContext.getContentResolver().delete(SchematicContentProviderGenerator.CommentRefs.ALL_COMMENT_REFS, null, null);
+        mContext.getContentResolver().delete(SchematicContentProviderGenerator.CommentPaths.ALL_COMMENTS, null, null);
     }
 
     public void testProviderRegistration(){
@@ -214,6 +220,79 @@ public class StoryProviderTests extends AndroidTestCase {
         }
 
         readLaterStoryCursor.close();
+    }
+
+    @Test
+    public void testCommentInsert(){
+        Comment testComment = new Comment(1L, "Test CommentAuthor", "This is an insert test", System.currentTimeMillis(), 10L, 0);
+
+        final CountDownLatch countDownLatch = new CountDownLatch(1);
+
+        mContext.getContentResolver().registerContentObserver(SchematicContentProviderGenerator.CommentPaths.ALL_COMMENTS,
+                true,
+                TestContentObserver.createInstance(countDownLatch, mContext));
+
+        ContentValues cv = Comment.mapToContentValues(testComment);
+
+        Uri insertedUri = mContext.getContentResolver().insert(SchematicContentProviderGenerator.CommentPaths.ALL_COMMENTS, cv);
+
+        try{
+            countDownLatch.await(15_000, TimeUnit.MILLISECONDS);
+        } catch (InterruptedException ex){
+            fail();
+        }
+
+        assertNotNull(insertedUri);
+
+        Cursor commentCursor = mContext.getContentResolver().query(SchematicContentProviderGenerator.CommentPaths.ALL_COMMENTS,
+                null,
+                null,
+                null,
+                null);
+
+        assertTrue(commentCursor.moveToFirst());
+
+        Set<Map.Entry<String, Object>> valueSet = cv.valueSet();
+
+        for(Map.Entry<String, Object> values : valueSet){
+            String columnName = values.getKey();
+            int cursorColumnIndex = commentCursor.getColumnIndex(columnName);
+
+            switch (columnName){
+                case CommentColumns._ID:
+                    assertEquals(values.getValue(), commentCursor.getLong(cursorColumnIndex));
+                    break;
+
+                case CommentColumns.COMMENT_ID:
+                    assertEquals(values.getValue(), commentCursor.getLong(cursorColumnIndex));
+                    break;
+
+                case CommentColumns.UNIX_POST_TIME:
+                    assertEquals(values.getValue(), commentCursor.getLong(cursorColumnIndex));
+                    break;
+
+                case CommentColumns.PARENT_ID:
+                    assertEquals(values.getValue(), commentCursor.getLong(cursorColumnIndex));
+                    break;
+
+                case CommentColumns.COMMENT_DEPTH:
+                    assertEquals(values.getValue(), commentCursor.getInt(cursorColumnIndex));
+                    break;
+
+
+                case CommentColumns.AUTHOR_NAME:
+                    assertEquals(values.getValue(), commentCursor.getString(cursorColumnIndex));
+                    break;
+
+                case CommentColumns.COMMENT_TEXT:
+                    assertEquals(values.getValue(), commentCursor.getString(cursorColumnIndex));
+                    break;
+
+            }
+        }
+
+        commentCursor.close();
+
     }
 
 }
