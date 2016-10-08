@@ -1,4 +1,4 @@
-package dev.bltucker.nanodegreecapstone.storydetail;
+package dev.bltucker.nanodegreecapstone.storydetail.data;
 
 import android.content.Context;
 import android.support.v4.content.AsyncTaskLoader;
@@ -14,9 +14,9 @@ import timber.log.Timber;
 
 public class StoryCommentsLoader extends AsyncTaskLoader<List<Comment>> {
 
-    static final String SELECTED_DETAIL_STORY = "selectedStoryBundleKey";
+    public static final String SELECTED_DETAIL_STORY = "selectedStoryBundleKey";
 
-    static final int STORY_COMMENT_LOADER = StoryCommentsLoader.class.hashCode();
+    public static final int STORY_COMMENT_LOADER = StoryCommentsLoader.class.hashCode();
 
     private long detailStoryId;
     private final CommentRepository commentRepository;

@@ -7,10 +7,10 @@ import dev.bltucker.nanodegreecapstone.location.GeofenceCreationIntentServiceMod
 import dev.bltucker.nanodegreecapstone.location.GeofenceTransitionsIntentService;
 import dev.bltucker.nanodegreecapstone.readlater.ReadLaterComponent;
 import dev.bltucker.nanodegreecapstone.readlater.ReadLaterListFragmentModule;
-import dev.bltucker.nanodegreecapstone.storydetail.StoryDetailFragmentComponent;
-import dev.bltucker.nanodegreecapstone.storydetail.StoryDetailFragmentModule;
-import dev.bltucker.nanodegreecapstone.storydetail.data.InterruptibleDownloadService;
-import dev.bltucker.nanodegreecapstone.storydetail.data.QueuedStoryCommentDownloadService;
+import dev.bltucker.nanodegreecapstone.storydetail.injection.InterruptibleDownloadServiceComponent;
+import dev.bltucker.nanodegreecapstone.storydetail.injection.InterruptibleDownloadServiceModule;
+import dev.bltucker.nanodegreecapstone.storydetail.injection.StoryDetailFragmentComponent;
+import dev.bltucker.nanodegreecapstone.storydetail.injection.StoryDetailFragmentModule;
 import dev.bltucker.nanodegreecapstone.sync.StorySyncAdapter;
 import dev.bltucker.nanodegreecapstone.topstories.StoryListFragment;
 import dev.bltucker.nanodegreecapstone.topstories.TopStoriesModule;
@@ -22,11 +22,10 @@ public interface ApplicationComponent {
     void inject(StorySyncAdapter syncAdapter);
     void inject(StoryListFragment fragment);
     void inject(GeofenceTransitionsIntentService geofenceTransitionsIntentService);
-    void inject(QueuedStoryCommentDownloadService queuedStoryCommentDownloadService);//TODO remove
-    void inject(InterruptibleDownloadService interruptibleDownloadService);//TODO consider its own scoped component
 
     GeofenceCreationIntentServiceComponent geofenceCreationIntentServiceComponent(GeofenceCreationIntentServiceModule module);
     ReadLaterComponent readLaterComponent(ReadLaterListFragmentModule module);
     StoryDetailFragmentComponent storyDetailComponent(StoryDetailFragmentModule module);
+    InterruptibleDownloadServiceComponent interruptibleDownloadServiceComponent(InterruptibleDownloadServiceModule module);
 
 }

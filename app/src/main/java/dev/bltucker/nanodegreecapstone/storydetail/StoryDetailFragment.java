@@ -34,6 +34,7 @@ import dev.bltucker.nanodegreecapstone.injection.DaggerInjector;
 import dev.bltucker.nanodegreecapstone.models.Comment;
 import dev.bltucker.nanodegreecapstone.models.Story;
 import dev.bltucker.nanodegreecapstone.storydetail.data.InterruptibleDownloadService;
+import dev.bltucker.nanodegreecapstone.storydetail.injection.StoryDetailFragmentModule;
 
 public class StoryDetailFragment extends Fragment implements StoryDetailView {
 

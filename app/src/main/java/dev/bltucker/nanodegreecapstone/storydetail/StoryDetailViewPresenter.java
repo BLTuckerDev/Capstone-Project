@@ -11,6 +11,8 @@ import com.google.android.gms.analytics.Tracker;
 
 import dev.bltucker.nanodegreecapstone.data.SchematicContentProviderGenerator;
 import dev.bltucker.nanodegreecapstone.models.ReadLaterStory;
+import dev.bltucker.nanodegreecapstone.storydetail.data.StoryCommentLoaderCallbackDelegate;
+import dev.bltucker.nanodegreecapstone.storydetail.data.StoryCommentsLoader;
 import rx.Completable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;

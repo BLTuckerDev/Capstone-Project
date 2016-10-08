@@ -11,6 +11,7 @@ import java.util.Observable;
 
 import dev.bltucker.nanodegreecapstone.models.Comment;
 import dev.bltucker.nanodegreecapstone.models.Story;
+import dev.bltucker.nanodegreecapstone.storydetail.events.DetailStoryChangeEvent;
 import timber.log.Timber;
 
 //TODO figure out how to do this with just Rx

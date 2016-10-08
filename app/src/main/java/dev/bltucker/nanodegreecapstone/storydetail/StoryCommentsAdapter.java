@@ -2,8 +2,6 @@ package dev.bltucker.nanodegreecapstone.storydetail;
 
 import android.content.Context;
 import android.content.res.Resources;
-import android.os.Handler;
-import android.os.Looper;
 import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
@@ -15,7 +13,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.Calendar;
-import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -26,6 +23,7 @@ import butterknife.ButterKnife;
 import dev.bltucker.nanodegreecapstone.R;
 import dev.bltucker.nanodegreecapstone.injection.GregorianUTC;
 import dev.bltucker.nanodegreecapstone.models.Comment;
+import dev.bltucker.nanodegreecapstone.storydetail.events.DetailStoryChangeEvent;
 
 //TODO need to deal with rotation while loading, make sure we dont reload comments that are already loaded
 //TODO when we see that the detail story has updated, see if the loading spinner item is visible, if it is notify(), if it isnt maybe we dont notify until it is?

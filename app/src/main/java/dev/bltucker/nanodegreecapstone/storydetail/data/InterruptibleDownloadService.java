@@ -4,43 +4,49 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.IBinder;
-import android.os.Looper;
 import android.os.Message;
 import android.support.annotation.Nullable;
+import android.support.annotation.VisibleForTesting;
 
 import javax.inject.Inject;
 
 import dev.bltucker.nanodegreecapstone.events.EventBus;
-import dev.bltucker.nanodegreecapstone.events.StoryCommentsDownloadStartedEvent;
+import dev.bltucker.nanodegreecapstone.storydetail.events.StoryCommentsDownloadStartedEvent;
 import dev.bltucker.nanodegreecapstone.injection.DaggerInjector;
 import dev.bltucker.nanodegreecapstone.storydetail.DetailStory;
+import dev.bltucker.nanodegreecapstone.storydetail.injection.InterruptibleDownloadServiceModule;
 import timber.log.Timber;
 
-
-//scope and component for this
-//make it completely testable
 
 public class InterruptibleDownloadService extends Service {
 
     private static final String STORY_PARAM = "dev.bltucker.nanodegreecapstone.storydetail.data.extra.STORY";
     public static final int DOWNLOAD_STORY_COMMENTS_MESSAGE = 1;
 
-    private volatile Looper serviceLooper;
-    private volatile ServiceMessageHandler serviceHandler;
-
     @Nullable
-    private volatile StoryCommentDownloadSubscriber currentSubscriber;
+    @VisibleForTesting
+    volatile StoryCommentDownloadSubscriber currentSubscriber;
 
     @Inject
+    @VisibleForTesting
+    volatile ServiceMessageHandler serviceHandler;
+
+    @Inject
+    @VisibleForTesting
     StoryCommentsObservableFactory observableFactory;
 
     @Inject
+    @VisibleForTesting
     StoryCommentDownloadSubscriberFactory subscriberFactory;
 
     @Inject
+    @VisibleForTesting
+    HandlerThread handlerThread;
+
+    @Inject
+    @VisibleForTesting
     EventBus eventBus;
 
 
@@ -51,7 +57,7 @@ public class InterruptibleDownloadService extends Service {
     }
 
     public InterruptibleDownloadService() {
-        DaggerInjector.getApplicationComponent().inject(this);
+        DaggerInjector.getApplicationComponent().interruptibleDownloadServiceComponent(new InterruptibleDownloadServiceModule(this)).inject(this);
     }
 
     @Override
@@ -64,12 +70,6 @@ public class InterruptibleDownloadService extends Service {
     public void onCreate() {
         super.onCreate();
         Timber.d("Service.onCreate");
-
-        HandlerThread handlerThread = new HandlerThread("InterruptibleDownloadServiceHandlerThread");
-        handlerThread.start();
-
-        serviceLooper = handlerThread.getLooper();
-        serviceHandler = new ServiceMessageHandler(serviceLooper);
     }
 
     @Override
@@ -133,18 +133,5 @@ public class InterruptibleDownloadService extends Service {
     public void onDestroy() {
         Timber.d("Service.onDestroy");
         super.onDestroy();
-    }
-
-    private final class ServiceMessageHandler extends Handler {
-
-        ServiceMessageHandler(Looper looper) {
-            super(looper);
-        }
-
-        @Override
-        public void handleMessage(Message msg) {
-            processMessage(msg.getData());
-            stopSelf(msg.arg1);
-        }
     }
 }

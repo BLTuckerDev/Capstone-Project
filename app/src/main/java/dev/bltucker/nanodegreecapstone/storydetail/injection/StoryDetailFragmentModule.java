@@ -1,4 +1,4 @@
-package dev.bltucker.nanodegreecapstone.storydetail;
+package dev.bltucker.nanodegreecapstone.storydetail.injection;
 
 import android.content.ContentResolver;
 import android.content.res.Resources;
@@ -14,6 +14,12 @@ import dagger.Module;
 import dagger.Provides;
 import dev.bltucker.nanodegreecapstone.injection.GregorianUTC;
 import dev.bltucker.nanodegreecapstone.models.ReadingSession;
+import dev.bltucker.nanodegreecapstone.storydetail.DetailStoryProvider;
+import dev.bltucker.nanodegreecapstone.storydetail.data.StoryCommentLoaderCallbackDelegate;
+import dev.bltucker.nanodegreecapstone.storydetail.StoryCommentsAdapter;
+import dev.bltucker.nanodegreecapstone.storydetail.data.StoryCommentsLoader;
+import dev.bltucker.nanodegreecapstone.storydetail.StoryDetailFragment;
+import dev.bltucker.nanodegreecapstone.storydetail.StoryDetailViewPresenter;
 
 @Module
 public class StoryDetailFragmentModule {

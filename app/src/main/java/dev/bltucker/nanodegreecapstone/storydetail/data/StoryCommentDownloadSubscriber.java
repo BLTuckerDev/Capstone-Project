@@ -4,7 +4,7 @@ import android.support.annotation.VisibleForTesting;
 
 import dev.bltucker.nanodegreecapstone.data.CommentRepository;
 import dev.bltucker.nanodegreecapstone.events.EventBus;
-import dev.bltucker.nanodegreecapstone.events.StoryCommentsDownloadCompleteEvent;
+import dev.bltucker.nanodegreecapstone.storydetail.events.StoryCommentsDownloadCompleteEvent;
 import dev.bltucker.nanodegreecapstone.models.Comment;
 import rx.Subscriber;
 import timber.log.Timber;
