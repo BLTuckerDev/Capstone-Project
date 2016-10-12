@@ -37,6 +37,7 @@ public class StoryCommentLoaderCallbackDelegate implements LoaderManager.LoaderC
     public void onLoadFinished(Loader<List<Comment>> loader, final List<Comment> data) {
         Timber.d("Loader Finished");
         if(detailStory != null){
+            Timber.d("Adding comments to detailStory");
             detailStory.addComments(data);
         }
     }

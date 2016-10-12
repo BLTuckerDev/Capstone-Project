@@ -1,6 +1,7 @@
 
 
 Next:
++ need loading spinner indicator
 + eliminate old comments periodically from the database.
 + StoryDetailViewPresenter tests
 + When the user saves a story for later download the comments for that story as it currently stands,
