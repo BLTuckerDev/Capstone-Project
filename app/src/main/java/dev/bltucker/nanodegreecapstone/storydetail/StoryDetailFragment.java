@@ -64,7 +64,7 @@ public class StoryDetailFragment extends Fragment implements StoryDetailView {
     View emptyViewContainer;
 
     @Bind(R.id.detail_header_cardview)
-    CardView headerView;
+    View headerView;
 
     @Inject
     StoryCommentsAdapter commentsAdapter;
