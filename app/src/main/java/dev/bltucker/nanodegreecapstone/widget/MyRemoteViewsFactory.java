@@ -16,6 +16,7 @@ import dev.bltucker.nanodegreecapstone.data.StoryColumns;
 import timber.log.Timber;
 
 class MyRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
+    public static final int MAX_WIDGET_STORY_COUNT = 5;
     private Context context;
     private Cursor dataCursor = null;
 
@@ -23,6 +24,7 @@ class MyRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
         this.context = context;
     }
 
+    @SuppressWarnings("squid:S1186")
     @Override
     public void onCreate() {    }
 
@@ -58,7 +60,7 @@ class MyRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
             return 0;
         }
 
-        return Math.min(5, dataCursor.getCount());
+        return Math.min(MAX_WIDGET_STORY_COUNT, dataCursor.getCount());
     }
 
     @Override

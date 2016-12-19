@@ -83,7 +83,7 @@ public class StoryCommentsAdapter extends RecyclerView.Adapter<RecyclerView.View
             return;
         }
 
-        CommentViewHolder commentViewHolder = ((CommentViewHolder) holder);
+        CommentViewHolder commentViewHolder = (CommentViewHolder) holder;
 
         commentViewHolder.authorNameTextView.setText(comment.getAuthorName());
         commentViewHolder.postTimeTextView.setText(getFormattedCommentTime(comment, holder.itemView.getContext()));
@@ -99,6 +99,7 @@ public class StoryCommentsAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     }
 
+    @SuppressWarnings("squid:S109")
     private String getFormattedCommentTime(Comment comment, Context context){
         long elapsedSeconds = (calendar.getTimeInMillis() / 1000) - comment.getUnixPostTime();
         long elapsedMinutes = elapsedSeconds / 60;

@@ -6,6 +6,7 @@ import net.simonvt.schematic.annotation.DataType;
 import net.simonvt.schematic.annotation.PrimaryKey;
 import net.simonvt.schematic.annotation.Unique;
 
+@SuppressWarnings({"squid:S1214", "squid:S00115"})
 public interface CommentColumns {
 
     @DataType(DataType.Type.INTEGER) @PrimaryKey(onConflict = ConflictResolutionType.REPLACE) @AutoIncrement

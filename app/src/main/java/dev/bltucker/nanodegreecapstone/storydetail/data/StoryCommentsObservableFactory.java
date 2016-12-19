@@ -2,10 +2,7 @@ package dev.bltucker.nanodegreecapstone.storydetail.data;
 
 import android.support.annotation.VisibleForTesting;
 
-import java.util.List;
-
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
 import dev.bltucker.nanodegreecapstone.data.HackerNewsApiService;
 import dev.bltucker.nanodegreecapstone.injection.ApplicationScope;

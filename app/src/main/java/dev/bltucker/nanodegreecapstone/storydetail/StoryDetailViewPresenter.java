@@ -137,8 +137,10 @@ public class StoryDetailViewPresenter {
 
                     @Override
                     public void onError(Throwable e) {
+                        Timber.e(e, "Error while attempting to save a read later story.");
                     }
 
+                    @SuppressWarnings("squid:S1186")
                     @Override
                     public void onNext(Object o) {
                     }

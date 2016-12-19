@@ -37,7 +37,7 @@ public class StoryCommentsLoader extends AsyncTaskLoader<List<Comment>> {
         super(context);
         commentRepository = repository;
         this.eventBus = eventBus;
-        //TODO injection of the change observer
+        //TODO injection of the change observer factory
         final int changeModulus = 5;
         myContentObserver = new ModulatedForceLoadContentObserver(changeModulus);
         onContentChanged();
@@ -60,10 +60,13 @@ public class StoryCommentsLoader extends AsyncTaskLoader<List<Comment>> {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<Object>() {
                     @Override
+                    @SuppressWarnings("squid:S1186")
                     public void onCompleted() {    }
 
                     @Override
-                    public void onError(Throwable e) {     }
+                    public void onError(Throwable e) {
+                        Timber.d(e, "Error while processing a StoryCommentsDownloadCompleteEvent");
+                    }
 
                     @Override
                     public void onNext(Object o) {

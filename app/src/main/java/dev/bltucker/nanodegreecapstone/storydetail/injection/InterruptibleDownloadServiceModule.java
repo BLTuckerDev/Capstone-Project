@@ -1,9 +1,6 @@
 package dev.bltucker.nanodegreecapstone.storydetail.injection;
 
 import android.os.HandlerThread;
-import android.os.Looper;
-
-import javax.inject.Named;
 
 import dagger.Module;
 import dagger.Provides;

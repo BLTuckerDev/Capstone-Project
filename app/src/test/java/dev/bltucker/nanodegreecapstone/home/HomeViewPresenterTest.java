@@ -50,7 +50,7 @@ public class HomeViewPresenterTest {
     public void testOnViewDestroyed() throws Exception {
 
         objectUnderTest.view = mockView;
-        objectUnderTest.onViewDestroyed(mockView);
+        objectUnderTest.onViewDestroyed();
 
         assertNull(objectUnderTest.view);
     }

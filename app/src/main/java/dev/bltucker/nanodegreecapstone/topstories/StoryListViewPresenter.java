@@ -40,7 +40,7 @@ public class StoryListViewPresenter implements SwipeRefreshLayout.OnRefreshListe
         this.loaderManager = loaderManager;
     }
 
-    private void trackScreenView(){
+    private void trackScreenView() {
         analyticsTracker.setScreenName("StoryListView");
         analyticsTracker.send(new HitBuilders.ScreenViewBuilder().build());
     }
@@ -51,10 +51,10 @@ public class StoryListViewPresenter implements SwipeRefreshLayout.OnRefreshListe
     }
 
     private void setupView() {
-        if(readingSession.hasStories()){
+        if (readingSession.hasStories()) {
             storyListView.showStories();
 
-            if(readingSession.isStoryListIsDirty()){
+            if (readingSession.isStoryListIsDirty()) {
                 loaderManager.initLoader(StoryListLoader.STORY_LIST_LOADER, null, storyListLoaderCallbackDelegate);
             }
 
@@ -73,22 +73,20 @@ public class StoryListViewPresenter implements SwipeRefreshLayout.OnRefreshListe
         setStoryListView(null);
     }
 
-    public void onViewDestroyed(){
+    public void onViewDestroyed() {
         setStoryListView(null);
         loaderManager = null;
     }
 
     public void onCommentsButtonClick(final Story story) {
-        if(storyListView != null){
+        if (storyListView != null) {
             storyListView.showStoryDetailView(story);
         }
     }
 
     public void onReadStoryButtonClick(Story story) {
-        if(storyListView != null){
-            if(story != null){
-                storyListView.showStoryPostUrl(story.getUrl());
-            }
+        if (storyListView != null && story != null) {
+            storyListView.showStoryPostUrl(story.getUrl());
         }
     }
 

@@ -1,7 +1,6 @@
 package dev.bltucker.nanodegreecapstone.injection;
 
 import dagger.Component;
-import dev.bltucker.nanodegreecapstone.data.CommentRepository;
 import dev.bltucker.nanodegreecapstone.data.HackerNewsApiService;
 import dev.bltucker.nanodegreecapstone.events.EventBus;
 import dev.bltucker.nanodegreecapstone.home.MainActivity;

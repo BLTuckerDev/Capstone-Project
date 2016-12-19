@@ -10,6 +10,7 @@ import java.util.Arrays;
 
 import dev.bltucker.nanodegreecapstone.data.StoryColumns;
 
+@SuppressWarnings({"squid:S1213"})
 public class Story implements Parcelable {
 
     public static ContentValues mapToContentValues(Story aStory){
@@ -111,6 +112,7 @@ public class Story implements Parcelable {
         return this.storyRank;
     }
 
+    @SuppressWarnings({"squid:S00121", "squid:S00122"})
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

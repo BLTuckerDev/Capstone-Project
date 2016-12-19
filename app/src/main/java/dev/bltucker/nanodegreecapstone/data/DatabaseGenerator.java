@@ -21,4 +21,6 @@ public final class DatabaseGenerator {
 
     @Table(CommentColumns.class) public static final String COMMENTS = "comments";
 
+    private DatabaseGenerator(){
+    }
 }

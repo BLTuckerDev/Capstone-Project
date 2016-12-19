@@ -56,6 +56,7 @@ public class InterruptibleDownloadService extends Service {
         context.startService(intent);
     }
 
+    @SuppressWarnings("squid:S1213")
     public InterruptibleDownloadService() {
         DaggerInjector.getApplicationComponent().interruptibleDownloadServiceComponent(new InterruptibleDownloadServiceModule(this)).inject(this);
     }
@@ -120,6 +121,7 @@ public class InterruptibleDownloadService extends Service {
                 .subscribe(currentSubscriber);
     }
 
+    @SuppressWarnings("squid:UnusedPrivateMethod")
     private long[] convertToPrimitiveArray(Long[] commentIds) {
         long[] primitiveCommentIds = new long[commentIds.length];
         for (int i = 0; i < commentIds.length; i++) {
