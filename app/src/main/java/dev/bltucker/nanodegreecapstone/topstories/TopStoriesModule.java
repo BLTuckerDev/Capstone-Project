@@ -29,9 +29,8 @@ public class TopStoriesModule {
     @ApplicationScope
     public StoryListViewPresenter provideStoryListViewPresenter(ReadingSession readingSession,
                                                                 StoryListLoaderCallbackDelegate storyListLoaderCallbackDelegate,
-                                                                SyncRequestDelegate syncRequestDelegate,
-                                                                Tracker tracker){
-        return new StoryListViewPresenter(readingSession, storyListLoaderCallbackDelegate, syncRequestDelegate, tracker);
+                                                                SyncRequestDelegate syncRequestDelegate){
+        return new StoryListViewPresenter(readingSession, storyListLoaderCallbackDelegate, syncRequestDelegate);
     }
 
 

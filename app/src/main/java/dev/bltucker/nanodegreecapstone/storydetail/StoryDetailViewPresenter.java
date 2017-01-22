@@ -6,9 +6,6 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
-
 import dev.bltucker.nanodegreecapstone.data.SchematicContentProviderGenerator;
 import dev.bltucker.nanodegreecapstone.models.ReadLaterStory;
 import rx.Completable;
@@ -20,15 +17,13 @@ import timber.log.Timber;
 
 public class StoryDetailViewPresenter {
     private final ContentResolver contentResolver;
-    private final Tracker analyticsTracker;
     private final StoryCommentLoaderCallbackDelegate commentLoaderCallbackDelegate;
 
     private StoryDetailView view;
     private LoaderManager loaderManager;
 
-    public StoryDetailViewPresenter(ContentResolver contentResolver, Tracker analyticsTracker, StoryCommentLoaderCallbackDelegate commentLoaderCallbackDelegate, LoaderManager loaderManager) {
+    public StoryDetailViewPresenter(ContentResolver contentResolver, StoryCommentLoaderCallbackDelegate commentLoaderCallbackDelegate, LoaderManager loaderManager) {
         this.contentResolver = contentResolver;
-        this.analyticsTracker = analyticsTracker;
         this.commentLoaderCallbackDelegate = commentLoaderCallbackDelegate;
         this.loaderManager = loaderManager;
     }
@@ -67,8 +62,7 @@ public class StoryDetailViewPresenter {
     }
 
     private void trackScreenView() {
-        analyticsTracker.setScreenName("StoryDetailView");
-        analyticsTracker.send(new HitBuilders.ScreenViewBuilder().build());
+        //TODO implement with firebase analytics
     }
 
 

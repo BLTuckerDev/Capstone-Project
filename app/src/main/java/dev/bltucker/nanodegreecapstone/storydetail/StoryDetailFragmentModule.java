@@ -4,8 +4,6 @@ import android.content.ContentResolver;
 import android.content.res.Resources;
 import android.support.v4.app.LoaderManager;
 
-import com.google.android.gms.analytics.Tracker;
-
 import java.util.Calendar;
 
 import javax.inject.Provider;
@@ -40,10 +38,9 @@ public class StoryDetailFragmentModule {
     @StoryDetailFragmentScope
     public StoryDetailViewPresenter provideStoryDetailPresenter(ContentResolver contentResolver,
                                                                 ReadingSession readingSession,
-                                                                Tracker tracker,
                                                                 StoryCommentLoaderCallbackDelegate commentLoaderCallbackDelegate,
                                                                 LoaderManager loaderManager){
-        return new StoryDetailViewPresenter(contentResolver, tracker, commentLoaderCallbackDelegate, loaderManager);
+        return new StoryDetailViewPresenter(contentResolver, commentLoaderCallbackDelegate, loaderManager);
     }
 
     @Provides

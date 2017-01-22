@@ -4,9 +4,6 @@ import android.support.annotation.VisibleForTesting;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
-
 import dev.bltucker.nanodegreecapstone.models.ReadingSession;
 import dev.bltucker.nanodegreecapstone.models.Story;
 
@@ -23,15 +20,12 @@ public class StoryListViewPresenter implements SwipeRefreshLayout.OnRefreshListe
     @VisibleForTesting
     LoaderManager loaderManager;
 
-    private final Tracker analyticsTracker;
-
     public StoryListViewPresenter(ReadingSession readingSession,
                                   StoryListLoaderCallbackDelegate storyListLoaderCallbackDelegate,
-                                  SyncRequestDelegate syncRequestDelegate, Tracker tracker) {
+                                  SyncRequestDelegate syncRequestDelegate) {
         this.readingSession = readingSession;
         this.storyListLoaderCallbackDelegate = storyListLoaderCallbackDelegate;
         this.syncRequestDelegate = syncRequestDelegate;
-        analyticsTracker = tracker;
     }
 
     public void onViewCreated(StoryListView view, LoaderManager loaderManager) {
@@ -41,8 +35,7 @@ public class StoryListViewPresenter implements SwipeRefreshLayout.OnRefreshListe
     }
 
     private void trackScreenView(){
-        analyticsTracker.setScreenName("StoryListView");
-        analyticsTracker.send(new HitBuilders.ScreenViewBuilder().build());
+        //TODO implement with firebase analytics
     }
 
     public void onViewRestored(StoryListView view, LoaderManager loaderManager) {

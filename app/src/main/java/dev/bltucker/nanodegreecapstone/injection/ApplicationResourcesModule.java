@@ -7,8 +7,6 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.util.LruCache;
 
-import com.google.android.gms.analytics.GoogleAnalytics;
-import com.google.android.gms.analytics.Tracker;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -59,12 +57,6 @@ public class ApplicationResourcesModule {
     @ApplicationScope
     public NotificationManager provideNotificationManager() {
         return (NotificationManager) application.getSystemService(Context.NOTIFICATION_SERVICE);
-    }
-
-    @Provides
-    @ApplicationScope
-    public Tracker provideTracker() {
-        return GoogleAnalytics.getInstance(application).newTracker(R.xml.global_tracker);
     }
 
     @Provides
