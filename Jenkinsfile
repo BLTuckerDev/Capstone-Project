@@ -6,6 +6,10 @@ node{
 
     sh "./gradlew clean"
 
+    stage 'Setup workspace'
+
+    sh "cp /opt/google-services.json app/"
+
     stage 'Unit Test'
 
     sh "./gradlew test"
