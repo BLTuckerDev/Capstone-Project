@@ -19,6 +19,8 @@ import rx.schedulers.Schedulers;
 
 public class CommentCleaningService extends JobService {
 
+    public static final int JOB_ID = 1;
+
     @Inject
     CommentRepository commentRepository;
 
