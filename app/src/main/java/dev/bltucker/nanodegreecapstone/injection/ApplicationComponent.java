@@ -10,6 +10,7 @@ import dev.bltucker.nanodegreecapstone.readlater.ReadLaterListFragmentModule;
 import dev.bltucker.nanodegreecapstone.storydetail.StoryDetailFragmentComponent;
 import dev.bltucker.nanodegreecapstone.storydetail.StoryDetailFragmentModule;
 import dev.bltucker.nanodegreecapstone.storydetail.data.StoryCommentDownloadService;
+import dev.bltucker.nanodegreecapstone.sync.CommentCleaningService;
 import dev.bltucker.nanodegreecapstone.sync.StorySyncAdapter;
 import dev.bltucker.nanodegreecapstone.topstories.StoryListFragment;
 import dev.bltucker.nanodegreecapstone.topstories.TopStoriesModule;
@@ -22,6 +23,7 @@ public interface ApplicationComponent {
     void inject(StoryListFragment fragment);
     void inject(GeofenceTransitionsIntentService geofenceTransitionsIntentService);
     void inject(StoryCommentDownloadService storyCommentDownloadService);//TODO consider its own scoped component
+    void inject(CommentCleaningService commentCleaningService);
 
     GeofenceCreationIntentServiceComponent geofenceCreationIntentServiceComponent(GeofenceCreationIntentServiceModule module);
     ReadLaterComponent readLaterComponent(ReadLaterListFragmentModule module);

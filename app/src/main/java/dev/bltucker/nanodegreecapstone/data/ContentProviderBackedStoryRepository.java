@@ -69,10 +69,10 @@ public class ContentProviderBackedStoryRepository implements StoryRepository {
     @Override
     public void saveStories(List<Story> stories) {
         int deletedStories = contentResolver.delete(SchematicContentProviderGenerator.StoryPaths.ALL_STORIES, null, null);
-        int deletedComments = contentResolver.delete(SchematicContentProviderGenerator.CommentRefs.ALL_COMMENT_REFS, null, null);
+        int deletedCommentRefs = contentResolver.delete(SchematicContentProviderGenerator.CommentRefs.ALL_COMMENT_REFS, null, null);
 
         Timber.d("Deleted %d stories", deletedStories);
-        Timber.d("Deleted %d comment references", deletedComments);
+        Timber.d("Deleted %d comment references", deletedCommentRefs);
 
         List<ContentValues> storyContentValues = new ArrayList<>(stories.size());
         List<ContentValues> commentRefsContentValuesList = new ArrayList<>();

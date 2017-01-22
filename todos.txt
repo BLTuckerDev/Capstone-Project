@@ -1,6 +1,7 @@
 
 
 Next:
++ more tests for the action that deletes comments.
 + eliminate old comments periodically from the database.
 + update story provider tests to perform crud integration on all tables
 + StoryDetailViewPresenter tests

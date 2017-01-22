@@ -23,6 +23,7 @@ import dev.bltucker.nanodegreecapstone.R;
 import dev.bltucker.nanodegreecapstone.data.CommentRepository;
 import dev.bltucker.nanodegreecapstone.data.ContentProviderBackedStoryRepository;
 import dev.bltucker.nanodegreecapstone.data.HackerNewsApiService;
+import dev.bltucker.nanodegreecapstone.data.StoryDatabase;
 import dev.bltucker.nanodegreecapstone.data.StoryRepository;
 import dev.bltucker.nanodegreecapstone.events.EventBus;
 import dev.bltucker.nanodegreecapstone.models.Comment;
@@ -40,6 +41,12 @@ public class ApplicationResourcesModule {
 
     public ApplicationResourcesModule(CapstoneApplication application) {
         this.application = application;
+    }
+
+    @Provides
+    @ApplicationScope
+    public StoryDatabase provideStoryDatabase(){
+        return StoryDatabase.getInstance(application);
     }
 
     @Provides

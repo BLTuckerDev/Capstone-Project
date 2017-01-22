@@ -85,7 +85,6 @@
             android:enabled="true"
             android:exported="false"
             android:permission="android.permission.BIND_REMOTEVIEWS" />
-
         <activity android:name=".readlater.ReadLaterListActivity" />
 
         <meta-data
@@ -94,7 +93,11 @@
 
         <service
             android:name=".storydetail.data.StoryCommentDownloadService"
-            android:exported="false"></service>
+            android:exported="false"/>
+
+        <service android:name=".sync.CommentCleaningService"
+            android:exported="true"
+            android:permission="android.permission.BIND_JOB_SERVICCE"/>
     </application>
 
 </manifest>
