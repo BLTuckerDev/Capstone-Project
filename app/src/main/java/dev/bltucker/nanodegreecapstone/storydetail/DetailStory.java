@@ -11,9 +11,11 @@ import java.util.Observable;
 
 import dev.bltucker.nanodegreecapstone.models.Comment;
 import dev.bltucker.nanodegreecapstone.models.Story;
+import dev.bltucker.nanodegreecapstone.storydetail.events.DetailStoryChangeEvent;
 import timber.log.Timber;
 
 //TODO figure out how to do this with just Rx
+@SuppressWarnings("squid:S1213")
 public class DetailStory extends Observable implements Parcelable {
 
     @Nullable

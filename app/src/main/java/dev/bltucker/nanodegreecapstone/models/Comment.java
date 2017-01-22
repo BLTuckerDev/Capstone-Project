@@ -7,6 +7,7 @@ import android.os.Parcelable;
 
 import dev.bltucker.nanodegreecapstone.storydetail.data.CommentColumns;
 
+@SuppressWarnings({"squid:S1213"})
 public final class Comment implements Parcelable {
 
     public static ContentValues mapToContentValues(Comment aComment) {
@@ -77,6 +78,7 @@ public final class Comment implements Parcelable {
         return this.depth;
     }
 
+    @SuppressWarnings({"squid:S00121", "squid:S00122"})
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

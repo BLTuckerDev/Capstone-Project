@@ -104,8 +104,10 @@ public class ReadLaterListPresenter implements LoaderManager.LoaderCallbacks<Lis
             public void onCompleted() {
                 loaderManager.restartLoader(ReadLaterStoryListLoader.ID, null, ReadLaterListPresenter.this);
             }
+            @SuppressWarnings("squid:S1186")
             @Override
             public void onError(Throwable e) { }
+            @SuppressWarnings("squid:S1186")
             @Override
             public void onNext(Object o) { }
         });

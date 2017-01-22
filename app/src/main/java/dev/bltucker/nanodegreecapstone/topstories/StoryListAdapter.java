@@ -1,15 +1,13 @@
 package dev.bltucker.nanodegreecapstone.topstories;
 
 import android.content.Context;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.inject.Inject;
 
@@ -58,6 +56,9 @@ public class StoryListAdapter extends RecyclerView.Adapter<StoryListAdapter.Stor
 
     class StoryHeadlineViewHolder extends RecyclerView.ViewHolder{
 
+        @Bind(R.id.headline_card_view)
+        CardView headlineCardView;
+
         @Bind(R.id.story_title_textview)
         TextView titleTextView;
 
@@ -75,6 +76,12 @@ public class StoryListAdapter extends RecyclerView.Adapter<StoryListAdapter.Stor
         public StoryHeadlineViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+            headlineCardView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    presenter.onCommentsButtonClick(story);
+                }
+            });
         }
 
         public void setStory(Story story){

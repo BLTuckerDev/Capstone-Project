@@ -2,10 +2,7 @@ package dev.bltucker.nanodegreecapstone.storydetail.data;
 
 import android.support.annotation.VisibleForTesting;
 
-import java.util.List;
-
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
 import dev.bltucker.nanodegreecapstone.data.HackerNewsApiService;
 import dev.bltucker.nanodegreecapstone.injection.ApplicationScope;
@@ -44,7 +41,7 @@ public final class StoryCommentsObservableFactory {
                         public Observable<Comment> call(CommentDto commentDto) {
                             final int childDepth = commentDepth + 1;
                             return Observable.just(new Comment(commentDto.id, commentDto.by, commentDto.text, commentDto.time, commentDto.parent, commentDepth))
-                                    .mergeWith(downloadComments(commentDto.kids, childDepth));
+                                    .concatWith(downloadComments(commentDto.kids, childDepth));
                         }
                     })
                     .filter(new Func1<Comment, Boolean>() {

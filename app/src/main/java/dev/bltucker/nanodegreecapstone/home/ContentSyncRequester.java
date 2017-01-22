@@ -13,6 +13,7 @@ import dev.bltucker.nanodegreecapstone.injection.ApplicationScope;
 @ApplicationScope
 public class ContentSyncRequester {
 
+    @SuppressWarnings("squid:S1186")
     @Inject
     public ContentSyncRequester(){
     }

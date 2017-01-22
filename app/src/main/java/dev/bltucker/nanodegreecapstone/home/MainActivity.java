@@ -10,7 +10,6 @@ import android.view.MenuItem;
 
 import javax.inject.Inject;
 
-import dev.bltucker.nanodegreecapstone.CapstoneApplication;
 import dev.bltucker.nanodegreecapstone.R;
 import dev.bltucker.nanodegreecapstone.injection.DaggerInjector;
 import dev.bltucker.nanodegreecapstone.models.Story;
@@ -78,7 +77,7 @@ public class MainActivity extends AppCompatActivity implements HomeView, StoryLi
 
     @Override
     protected void onDestroy() {
-        homeViewPresenter.onViewDestroyed(this);
+        homeViewPresenter.onViewDestroyed();
         super.onDestroy();
     }
 

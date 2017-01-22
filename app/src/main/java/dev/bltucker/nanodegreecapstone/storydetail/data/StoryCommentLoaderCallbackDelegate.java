@@ -1,4 +1,4 @@
-package dev.bltucker.nanodegreecapstone.storydetail;
+package dev.bltucker.nanodegreecapstone.storydetail.data;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -10,9 +10,10 @@ import java.util.List;
 import javax.inject.Provider;
 
 import dev.bltucker.nanodegreecapstone.models.Comment;
+import dev.bltucker.nanodegreecapstone.storydetail.DetailStory;
 import timber.log.Timber;
 
-class StoryCommentLoaderCallbackDelegate implements LoaderManager.LoaderCallbacks<List<Comment>> {
+public class StoryCommentLoaderCallbackDelegate implements LoaderManager.LoaderCallbacks<List<Comment>> {
 
     private final Provider<StoryCommentsLoader> commentsLoaderProvider;
 
@@ -36,6 +37,7 @@ class StoryCommentLoaderCallbackDelegate implements LoaderManager.LoaderCallback
     public void onLoadFinished(Loader<List<Comment>> loader, final List<Comment> data) {
         Timber.d("Loader Finished");
         if(detailStory != null){
+            Timber.d("Adding comments to detailStory");
             detailStory.addComments(data);
         }
     }

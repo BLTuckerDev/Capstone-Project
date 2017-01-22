@@ -37,7 +37,6 @@ public class ReadLaterStoryListAdapter extends RecyclerView.Adapter<ReadLaterSto
 
     @Override
     public void onBindViewHolder(ReadLaterStoryViewHolder holder, int position) {
-        ReadLaterStory story = stories.get(position);
         holder.setStory(stories.get(position));
     }
 

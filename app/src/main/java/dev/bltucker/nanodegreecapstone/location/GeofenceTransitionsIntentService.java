@@ -13,7 +13,6 @@ import com.google.android.gms.location.GeofencingEvent;
 
 import javax.inject.Inject;
 
-import dev.bltucker.nanodegreecapstone.CapstoneApplication;
 import dev.bltucker.nanodegreecapstone.R;
 import dev.bltucker.nanodegreecapstone.data.SchematicContentProviderGenerator;
 import dev.bltucker.nanodegreecapstone.injection.DaggerInjector;

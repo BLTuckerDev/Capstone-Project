@@ -9,6 +9,7 @@ public class SyncStatusObserver {
 
     private volatile boolean syncInProgress = false;
 
+    @SuppressWarnings("squid:S1186")
     @Inject
     public SyncStatusObserver(){
     }

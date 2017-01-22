@@ -17,7 +17,6 @@ import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
-import dev.bltucker.nanodegreecapstone.CapstoneApplication;
 import dev.bltucker.nanodegreecapstone.injection.DaggerInjector;
 import timber.log.Timber;
 
@@ -25,6 +24,7 @@ import timber.log.Timber;
 public class GeofenceCreationService extends IntentService {
     private static final String ACTION_CREATE_GEO_FENCE = "dev.bltucker.nanodegreecapstone.location.action.CREATE_GEO_FENCE";
     private static final String LOCATION_PARAMETER = "dev.bltucker.nanodegreecapstone.location.extra.LOCATION_STRING";
+    public static final int CONNECTION_WAIT_PERIOD = 10;
 
     @Inject
     Geocoder geocoder;
@@ -66,11 +66,7 @@ public class GeofenceCreationService extends IntentService {
     @Override
     protected void onHandleIntent(Intent intent) {
         Timber.d("onHandleIntent");
-        if(null == intent){
-            return;
-        }
-
-        if(!intent.getAction().equals(ACTION_CREATE_GEO_FENCE) || !intent.getExtras().containsKey(LOCATION_PARAMETER)){
+        if(!isValidIntent(intent)){
             return;
         }
 
@@ -87,7 +83,7 @@ public class GeofenceCreationService extends IntentService {
             Timber.d("Latitude: %f", address.getLatitude());
 
             if(!googleApiClient.isConnected()){
-                ConnectionResult connectionResult = googleApiClient.blockingConnect(10, TimeUnit.SECONDS);
+                ConnectionResult connectionResult = googleApiClient.blockingConnect(CONNECTION_WAIT_PERIOD, TimeUnit.SECONDS);
                 if(!connectionResult.isSuccess()){
                     return;
                 }
@@ -101,6 +97,18 @@ public class GeofenceCreationService extends IntentService {
         } catch (IOException e) {
             Timber.e(e, "Exception while attempting to create a geofence.");
         }
+    }
+
+    private boolean isValidIntent(Intent intent) {
+        if(null == intent){
+            return false;
+        }
+
+        if(!intent.getAction().equals(ACTION_CREATE_GEO_FENCE) || !intent.getExtras().containsKey(LOCATION_PARAMETER)){
+            return false;
+        }
+
+        return true;
     }
 
     private PendingIntent getPendingIntent() {

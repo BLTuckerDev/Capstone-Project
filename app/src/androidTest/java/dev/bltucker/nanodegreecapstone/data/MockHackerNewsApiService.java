@@ -4,7 +4,9 @@ import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import dev.bltucker.nanodegreecapstone.models.Comment;
@@ -19,6 +21,8 @@ public class MockHackerNewsApiService implements HackerNewsApiService {
 
     private List<Story> fakeStories;
 
+    private Map<Long, CommentDto> providedFakeCommentDtos;
+
     public MockHackerNewsApiService(Gson gson) {
         random = new Random(System.currentTimeMillis());
         fakeStories = new ArrayList<>();
@@ -26,6 +30,9 @@ public class MockHackerNewsApiService implements HackerNewsApiService {
         fakeStories.addAll(Arrays.asList(stories));
     }
 
+    public void setFakeCommentDtos(Map<Long, CommentDto> fakeCommentDtos){
+        providedFakeCommentDtos = new HashMap(fakeCommentDtos);
+    }
 
     @Override
     public Observable<List<Long>> getTopStoryIds() {
@@ -46,7 +53,17 @@ public class MockHackerNewsApiService implements HackerNewsApiService {
     @Override
     public Observable<CommentDto> getComment(@Path("commentId") long commentId) {
         //TODO generate some comments with children, but dont generate an endless tree of comments
-        return Observable.just(new CommentDto("Author", 1L, new long[0], 0L, "Text", System.currentTimeMillis()));
+
+        if(providedFakeCommentDtos != null){
+            if (providedFakeCommentDtos.containsKey(commentId)) {
+                return Observable.just(providedFakeCommentDtos.get(commentId));
+            } else {
+                return Observable.empty();
+            }
+        } else {
+            return Observable.just(new CommentDto("Author", 1L, new long[0], 0L, "Text", System.currentTimeMillis()));
+        }
+
     }
 
     public String getRandomAuthor() {

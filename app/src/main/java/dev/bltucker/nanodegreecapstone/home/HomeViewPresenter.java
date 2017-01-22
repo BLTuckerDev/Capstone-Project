@@ -40,7 +40,7 @@ public class HomeViewPresenter {
         view = restoredView;
     }
 
-    public void onViewDestroyed(HomeView destroyedView){
+    public void onViewDestroyed(){
         view = null;
     }
 

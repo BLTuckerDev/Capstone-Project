@@ -6,7 +6,6 @@ import android.appwidget.AppWidgetProvider;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SyncAdapterType;
 import android.support.v4.app.TaskStackBuilder;
 import android.widget.RemoteViews;
 

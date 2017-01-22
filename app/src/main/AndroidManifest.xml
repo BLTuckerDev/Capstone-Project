@@ -91,13 +91,14 @@
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
-        <service
-            android:name=".storydetail.data.StoryCommentDownloadService"
-            android:exported="false"/>
-
         <service android:name=".sync.CommentCleaningService"
             android:exported="true"
             android:permission="android.permission.BIND_JOB_SERVICE"/>
+
+        <service
+            android:name=".storydetail.data.InterruptibleDownloadService"
+            android:enabled="true"
+            android:exported="false"/>
     </application>
 
 </manifest>

@@ -6,6 +6,7 @@ import android.os.Parcelable;
 
 import dev.bltucker.nanodegreecapstone.data.ReadLaterColumns;
 
+@SuppressWarnings({"squid:S1213"})
 public class ReadLaterStory implements Parcelable{
 
     public static ContentValues mapToContentValues(ReadLaterStory readLaterStory){
@@ -54,6 +55,7 @@ public class ReadLaterStory implements Parcelable{
         return url;
     }
 
+    @SuppressWarnings({"squid:S00121", "squid:S00122"})
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

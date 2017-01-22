@@ -13,11 +13,11 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import dev.bltucker.nanodegreecapstone.CapstoneApplication;
 import dev.bltucker.nanodegreecapstone.data.HackerNewsApiService;
 import dev.bltucker.nanodegreecapstone.data.StoryRepository;
 import dev.bltucker.nanodegreecapstone.events.EventBus;
 import dev.bltucker.nanodegreecapstone.events.SyncCompletedEvent;
+import dev.bltucker.nanodegreecapstone.events.SyncStartedEvent;
 import dev.bltucker.nanodegreecapstone.events.SyncStatusObserver;
 import dev.bltucker.nanodegreecapstone.injection.DaggerInjector;
 import dev.bltucker.nanodegreecapstone.injection.StoryMax;
@@ -67,6 +67,7 @@ public final class StorySyncAdapter extends AbstractThreadedSyncAdapter {
 
         observer.setSyncInProgress(true);
         Timber.d("Syncing....");
+        eventBus.publish(new SyncStartedEvent());
         final long startTime = System.currentTimeMillis();
 
         apiService.getTopStoryIds()

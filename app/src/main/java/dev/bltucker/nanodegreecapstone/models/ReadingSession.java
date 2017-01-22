@@ -32,6 +32,7 @@ public class ReadingSession {
         syncAdapterChangeSubscription = eventBus.subscribeTo(SyncCompletedEvent.class)
                 .subscribe(new Subscriber<Object>() {
                     @Override
+                    @SuppressWarnings("squid:S1186")
                     public void onCompleted() {   }
 
                     @Override

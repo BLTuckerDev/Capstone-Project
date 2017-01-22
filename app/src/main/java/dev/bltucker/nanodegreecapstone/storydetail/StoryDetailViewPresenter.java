@@ -8,6 +8,8 @@ import android.support.v4.app.LoaderManager;
 
 import dev.bltucker.nanodegreecapstone.data.SchematicContentProviderGenerator;
 import dev.bltucker.nanodegreecapstone.models.ReadLaterStory;
+import dev.bltucker.nanodegreecapstone.storydetail.data.StoryCommentLoaderCallbackDelegate;
+import dev.bltucker.nanodegreecapstone.storydetail.data.StoryCommentsLoader;
 import rx.Completable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
@@ -129,8 +131,10 @@ public class StoryDetailViewPresenter {
 
                     @Override
                     public void onError(Throwable e) {
+                        Timber.e(e, "Error while attempting to save a read later story.");
                     }
 
+                    @SuppressWarnings("squid:S1186")
                     @Override
                     public void onNext(Object o) {
                     }

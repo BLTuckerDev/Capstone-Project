@@ -60,6 +60,7 @@ public class StoryListLoader extends AsyncTaskLoader<List<Story>> {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<Object>() {
                     @Override
+                    @SuppressWarnings("squid:S1186")
                     public void onCompleted() {   }
 
                     @Override
