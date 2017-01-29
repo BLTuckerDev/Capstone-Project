@@ -2,7 +2,6 @@
 
 Next:
 + update story provider tests to perform crud integration on all tables
-+ use this to do some background work somehwere https://github.com/yigit/android-priority-jobqueue 
 + need loading spinner indicator
 + StoryDetailViewPresenter tests
 + When the user saves a story for later download the comments for that story as it currently stands,
@@ -15,4 +14,3 @@ Next:
 + add some firebase analytics to get some experience with that
 + widget taking you directly to story detail activity
 + shared element transitions
-+ task stack builder for the read later activity

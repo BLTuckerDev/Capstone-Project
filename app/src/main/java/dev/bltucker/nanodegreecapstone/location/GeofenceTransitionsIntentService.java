@@ -7,6 +7,7 @@ import android.app.PendingIntent;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.database.Cursor;
+import android.support.v4.app.TaskStackBuilder;
 
 import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.GeofencingEvent;
@@ -59,7 +60,6 @@ public class GeofenceTransitionsIntentService extends IntentService {
             } else {
                 Timber.d("There were no stories saved for later so no notification will be sent");
             }
-            sendReminderNotification();
         } else {
             Timber.d("geofence event will not result in a transition");
             Timber.d("geofence transition integer: %d", geofenceTransition);
@@ -85,7 +85,12 @@ public class GeofenceTransitionsIntentService extends IntentService {
         notificationBuilder.setContentText(getString(R.string.read_now));
 
         Intent notificationIntent = new Intent(this, ReadLaterListActivity.class);
-        PendingIntent pendingNotificationIntent = PendingIntent.getActivity(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
+        stackBuilder.addParentStack(ReadLaterListActivity.class);
+        stackBuilder.addNextIntent(notificationIntent);
+
+        PendingIntent pendingNotificationIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_CANCEL_CURRENT);
 
         notificationBuilder.setContentIntent(pendingNotificationIntent);
 

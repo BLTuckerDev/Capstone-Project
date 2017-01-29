@@ -48,7 +48,7 @@ app/.sonar_lock
 .idea/dictionaries
 .idea/vcs.xml
 .idea/jsLibraryMappings.xml
-
+.idea/markdown-navigator/*
 
 # Sensitive or high-churn files:
 app/google-services.json

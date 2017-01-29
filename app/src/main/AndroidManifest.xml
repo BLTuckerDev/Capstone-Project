@@ -57,7 +57,8 @@
                 android:resource="@xml/authenticator" />
         </service>
 
-        <activity android:name=".storydetail.StoryDetailActivity" />
+        <activity android:name=".storydetail.StoryDetailActivity"
+                android:parentActivityName=".home.MainActivity"/>
         <activity
             android:name=".settings.SettingsActivity"
             android:label="@string/title_activity_settings" />
@@ -85,7 +86,10 @@
             android:enabled="true"
             android:exported="false"
             android:permission="android.permission.BIND_REMOTEVIEWS" />
-        <activity android:name=".readlater.ReadLaterListActivity" />
+
+
+        <activity android:name=".readlater.ReadLaterListActivity"
+                android:parentActivityName=".home.MainActivity"/>
 
         <meta-data
             android:name="com.google.android.gms.version"
