@@ -30,6 +30,7 @@ class DeleteOrphanCommentsAction implements Action0 {
         int deletedCommentCount = 0;
         recusiveChildDelete(cursor, deletedCommentCount);
         Timber.d("Comment Clean up job removed %d comments", deletedCommentCount);
+        cursor.close();
     }
 
     private void recusiveChildDelete(Cursor cursor, int deletedCommentCount){
@@ -46,5 +47,6 @@ class DeleteOrphanCommentsAction implements Action0 {
             writableDatabase.delete(DatabaseGenerator.COMMENTS, "commentId = ?", new String[]{String.valueOf(commentId)});
             deletedCommentCount++;
         }
+        cursor.close();
     }
 }
