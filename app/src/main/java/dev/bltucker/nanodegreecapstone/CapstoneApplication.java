@@ -1,5 +1,7 @@
 package dev.bltucker.nanodegreecapstone;
 
+import com.google.firebase.crash.FirebaseCrash;
+
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.app.Application;
@@ -12,6 +14,7 @@ import dev.bltucker.nanodegreecapstone.injection.ApplicationComponent;
 import dev.bltucker.nanodegreecapstone.injection.ApplicationResourcesModule;
 import dev.bltucker.nanodegreecapstone.injection.DaggerApplicationComponent;
 import dev.bltucker.nanodegreecapstone.injection.DaggerInjector;
+import dev.bltucker.nanodegreecapstone.logging.FirebaseDebugTree;
 import dev.bltucker.nanodegreecapstone.sync.CommentCleaningService;
 import dev.bltucker.nanodegreecapstone.sync.StorySyncAdapter;
 import rx.Completable;
@@ -26,7 +29,7 @@ public class CapstoneApplication extends Application {
     public void onCreate() {
         super.onCreate();
         if (BuildConfig.DEBUG) {
-            Timber.plant(new Timber.DebugTree());
+            Timber.plant(new FirebaseDebugTree());
         }
         createApplicationComponent();
         createSyncAdapterAccount();
