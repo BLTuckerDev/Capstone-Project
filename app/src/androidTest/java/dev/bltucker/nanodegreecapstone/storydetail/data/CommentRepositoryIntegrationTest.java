@@ -61,6 +61,9 @@ public class CommentRepositoryIntegrationTest extends AndroidTestCase {
         assertEquals(firstAuthorName, firstQuery.getString(firstQuery.getColumnIndex(CommentColumns.AUTHOR_NAME)));
         assertEquals(secondAuthorName, secondQuery.getString(firstQuery.getColumnIndex(CommentColumns.AUTHOR_NAME)));
 
+
+        firstQuery.close();
+        secondQuery.close();
     }
 
 

@@ -1,10 +1,7 @@
 package dev.bltucker.nanodegreecapstone;
 
-import android.test.suitebuilder.annotation.SmallTest;
-
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.MockSettings;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,14 +11,12 @@ import dev.bltucker.nanodegreecapstone.events.SyncCompletedEvent;
 import dev.bltucker.nanodegreecapstone.models.ReadingSession;
 import dev.bltucker.nanodegreecapstone.models.Story;
 import rx.Observable;
-import rx.Subscription;
 
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-@SmallTest
 public class ReadingSessionTest {
 
     public ReadingSession objectUnderTest;

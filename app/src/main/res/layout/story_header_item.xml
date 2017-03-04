@@ -43,7 +43,7 @@
                 android:layout_weight="1"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="8dp"
+                android:layout_marginEnd="8dp"
                 style="@style/Base.TextAppearance.AppCompat.Subhead"
                 android:maxLines="1"
                 android:ellipsize="end"
@@ -62,7 +62,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 style="@style/Widget.AppCompat.Button.Borderless"
-                android:text="READ"/>
+                android:text="@string/read"/>
 
 
         </LinearLayout>

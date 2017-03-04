@@ -9,8 +9,8 @@
     <string name="minutes_ago">%1$d minutes ago</string>
     <string name="less_than_a_minute">less than a minute ago</string>
     <string name="share">Share</string>
-    <string name="loading_stories">Loading Stories...</string>
-    <string name="loading_comments">Loading Comments...</string>
+    <string name="loading_stories">Loading Stories…</string>
+    <string name="loading_comments">Loading Comments…</string>
     <string name="there_are_no_stories_available">There are no stories available :(</string>
     <string name="this_story_does_not_have_any_comments_yet">This story does not have any comments yet.</string>
     <string name="title_activity_settings">Settings</string>
@@ -34,5 +34,7 @@
     <string name="select_a_story_first">You must select a story first</string>
     <string name="new_stories_are_available">New stories are available</string>
     <string name="refresh">Refresh</string>
+    <string name="save">Save</string>
+    <string name="read">READ</string>
 
 </resources>

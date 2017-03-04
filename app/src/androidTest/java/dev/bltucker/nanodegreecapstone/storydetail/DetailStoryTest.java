@@ -67,6 +67,8 @@ public class DetailStoryTest {
         assertEquals(fakeStory.getUrl(), objectUnderTest.getUrl());
         assertArrayEquals(fakeStory.getCommentIds(), objectUnderTest.getCommentIds());
         assertEquals(fakeComments, objectUnderTest.getUnmodifiableCommentList());
+
+        input.recycle();
     }
 
     @Test

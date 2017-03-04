@@ -1,5 +1,7 @@
 package dev.bltucker.nanodegreecapstone.data;
 
+import android.annotation.SuppressLint;
+
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
@@ -30,8 +32,9 @@ public class MockHackerNewsApiService implements HackerNewsApiService {
         fakeStories.addAll(Arrays.asList(stories));
     }
 
+    @SuppressLint("UseSparseArrays")
     public void setFakeCommentDtos(Map<Long, CommentDto> fakeCommentDtos){
-        providedFakeCommentDtos = new HashMap(fakeCommentDtos);
+        providedFakeCommentDtos = new HashMap<>(fakeCommentDtos);
     }
 
     @Override

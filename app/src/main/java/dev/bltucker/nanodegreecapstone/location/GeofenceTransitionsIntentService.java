@@ -67,13 +67,13 @@ public class GeofenceTransitionsIntentService extends IntentService {
     }
 
     private int getReadLaterStoryCount(){
-        Cursor readLaterStoryCursor = contentResolver.query(SchematicContentProviderGenerator.ReadLaterStoryPaths.ALL_READ_LATER_STORIES,
-                null,
-                null,
-                null,
-                null);
-
-        return readLaterStoryCursor != null ? readLaterStoryCursor.getCount() : 0;
+        try (Cursor readLaterStoryCursor = contentResolver.query(SchematicContentProviderGenerator.ReadLaterStoryPaths.ALL_READ_LATER_STORIES,
+            null,
+            null,
+            null,
+            null)) {
+            return readLaterStoryCursor != null ? readLaterStoryCursor.getCount() : 0;
+        }
     }
 
     private void sendReminderNotification() {
