@@ -1,6 +1,7 @@
 
 
 Next:
++ remove butter knife, use databinding everywhere
 + update story provider tests to perform crud integration on all tables
 + need loading spinner indicator
 + StoryDetailViewPresenter tests
