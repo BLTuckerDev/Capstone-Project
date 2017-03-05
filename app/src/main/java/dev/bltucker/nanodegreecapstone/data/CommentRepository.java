@@ -28,7 +28,7 @@ public class CommentRepository {
     }
 
     public Observable<List<Comment>> getStoryComments(final long storyId) {
-        return getChildComments(storyId);
+        return getStoryCommentsByStoryId(storyId);
     }
 
     Long[] getCommentIds(long storyId) {
@@ -66,40 +66,40 @@ public class CommentRepository {
         contentResolver.insert(SchematicContentProviderGenerator.CommentPaths.ALL_COMMENTS, Comment.mapToContentValues(comment));
     }
 
-    private Observable<List<Comment>> getChildComments(final long parentId){
-        Timber.d("Getting child comments for parent id: %d", parentId);
-        Cursor commentCursor = contentResolver.query(SchematicContentProviderGenerator.CommentPaths.withParentId(String.valueOf(parentId)),
-                null,
-                null,
-                null,
-                null);
+    private Observable<List<Comment>> getStoryCommentsByStoryId(final long storyId){
+        Timber.d("Getting comments for story with id %d", storyId);
+        final Cursor commentCursor = contentResolver.query(SchematicContentProviderGenerator.CommentPaths.withStoryId(String.valueOf(storyId)),
+            null,
+            null,
+            null,
+            null);
 
-        if (null == commentCursor) {
-            return Observable.error(new Exception(String.format(Locale.US, "Query for story with id %d comments a null cursor", parentId)));
+        if(null == commentCursor){
+            return Observable.error(new Exception(String.format(Locale.US, "Query for comments for story id: %d returned a null cursor", storyId)));
         }
 
         return Observable.just(commentCursor)
-                .map(new Func1<Cursor, List<Comment>>() {
-                    @Override
-                    public List<Comment> call(Cursor commentCursor) {
-                        List<Comment> commentList = new ArrayList<>(commentCursor.getCount());
+            .map(new Func1<Cursor, List<Comment>>() {
+                @Override
+                public List<Comment> call(Cursor cursor) {
+                    List<Comment> commentList = new ArrayList<>(commentCursor.getCount());
 
-                        while (commentCursor.moveToNext()) {
-                            long commentId = commentCursor.getLong(commentCursor.getColumnIndex(CommentColumns.COMMENT_ID));
-                            String commentAuthor = commentCursor.getString(commentCursor.getColumnIndex(CommentColumns.AUTHOR_NAME));
-                            String commentText = commentCursor.getString(commentCursor.getColumnIndex(CommentColumns.COMMENT_TEXT));
-                            long unixTime = commentCursor.getLong(commentCursor.getColumnIndex(CommentColumns.UNIX_POST_TIME));
-                            long parentId = commentCursor.getLong(commentCursor.getColumnIndex(CommentColumns.PARENT_ID));
-                            int commentDepth = commentCursor.getInt(commentCursor.getColumnIndex(CommentColumns.COMMENT_DEPTH));
+                    while (commentCursor.moveToNext()) {
+                        long storyId = commentCursor.getLong(commentCursor.getColumnIndex(CommentColumns.STORY_ID));
+                        long commentId = commentCursor.getLong(commentCursor.getColumnIndex(CommentColumns.COMMENT_ID));
+                        String commentAuthor = commentCursor.getString(commentCursor.getColumnIndex(CommentColumns.AUTHOR_NAME));
+                        String commentText = commentCursor.getString(commentCursor.getColumnIndex(CommentColumns.COMMENT_TEXT));
+                        long unixTime = commentCursor.getLong(commentCursor.getColumnIndex(CommentColumns.UNIX_POST_TIME));
+                        long parentId = commentCursor.getLong(commentCursor.getColumnIndex(CommentColumns.PARENT_ID));
+                        int commentDepth = commentCursor.getInt(commentCursor.getColumnIndex(CommentColumns.COMMENT_DEPTH));
 
-                            commentList.add(new Comment(commentId, commentAuthor, commentText, unixTime, parentId, commentDepth));
-                            commentList.addAll(getChildComments(commentId).toBlocking().first());
-                        }
-
-                        commentCursor.close();
-                        return commentList;
+                        commentList.add(new Comment(storyId, commentId, commentAuthor, commentText, unixTime, parentId, commentDepth));
                     }
-                });
+
+                    commentCursor.close();
+                    return commentList;
+                }
+            });
 
     }
 }

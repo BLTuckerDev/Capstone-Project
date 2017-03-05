@@ -38,7 +38,8 @@ public class DetailStoryTest {
 
         fakeComments = new ArrayList<>();
         for (int i = 0; i < commentIds.length; i++) {
-            fakeComments.add(new Comment(commentIds[i],
+            fakeComments.add(new Comment(1L,
+                    commentIds[i],
                     "Comment Author " + i,
                     "Comment Text" + i,
                     new Date().getTime(),

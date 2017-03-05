@@ -46,7 +46,7 @@ public class StoryCommentDownloadSubscriberTest {
 
     @Test
     public void testOnNext_ShouldSaveIntoCommentRepository() throws Exception {
-        Comment saveMe = new Comment(1L, "Author", "SOme Text", System.currentTimeMillis(), 20L, 1);
+        Comment saveMe = new Comment(1L, 1L, "Author", "SOme Text", System.currentTimeMillis(), 20L, 1);
         objectUnderTest.onNext(saveMe);
 
         verify(objectUnderTest.commentRepository, times(1)).saveComment(saveMe);
@@ -54,7 +54,7 @@ public class StoryCommentDownloadSubscriberTest {
 
     @Test
     public void testOnNext_WithShouldContinueSetToFalse_ShouldStopDownloading(){
-        Comment saveMe = new Comment(1L, "Author", "SOme Text", System.currentTimeMillis(), 20L, 1);
+        Comment saveMe = new Comment(1L, 1L, "Author", "SOme Text", System.currentTimeMillis(), 20L, 1);
 
         objectUnderTest.shouldContinueDownloadingComments = false;
         objectUnderTest.onNext(saveMe);

@@ -224,7 +224,7 @@ public class StoryProviderTests extends AndroidTestCase {
 
     @Test
     public void testCommentInsert(){
-        Comment testComment = new Comment(1L, "Test CommentAuthor", "This is an insert test", System.currentTimeMillis(), 10L, 0);
+        Comment testComment = new Comment(1L, 1L, "Test CommentAuthor", "This is an insert test", System.currentTimeMillis(), 10L, 0);
 
         final CountDownLatch countDownLatch = new CountDownLatch(1);
 

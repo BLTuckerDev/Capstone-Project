@@ -52,19 +52,19 @@ public class DeleteOrphanCommentsActionTest {
 
         //create a comment linked to that story
         long validStoryCommentId = 101L;
-        Comment validStoryComment = new Comment(validStoryCommentId, "Tester", "Valid", fakeTime, validStoryId, rootDepthCommentDepth);
+        Comment validStoryComment = new Comment(1L, validStoryCommentId, "Tester", "Valid", fakeTime, validStoryId, rootDepthCommentDepth);
         writableDatabase.insert(DatabaseGenerator.COMMENTS, null, Comment.mapToContentValues(validStoryComment));
 
 
         //create comment that is no longer linked to a story in the db
         long invalidStoryCommentId = 102L;
-        Comment invalidStoryComment = new Comment(invalidStoryCommentId, "Tester", "Invalid", fakeTime, invalidStoryId, rootDepthCommentDepth);
+        Comment invalidStoryComment = new Comment(1L, invalidStoryCommentId, "Tester", "Invalid", fakeTime, invalidStoryId, rootDepthCommentDepth);
         writableDatabase.insert(DatabaseGenerator.COMMENTS, null, Comment.mapToContentValues(invalidStoryComment));
 
         //create child comments of the invalid story's parent comment
         for(int i = 1; i < 4; i++){
             long invalidStoryCommentChildId = invalidStoryCommentId + i;
-            Comment invalidStoryCommentChild = new Comment(invalidStoryCommentChildId, "tester", "invalid child", fakeTime, invalidStoryCommentChildId-1, rootDepthCommentDepth+i);
+            Comment invalidStoryCommentChild = new Comment(1L, invalidStoryCommentChildId, "tester", "invalid child", fakeTime, invalidStoryCommentChildId-1, rootDepthCommentDepth+i);
             writableDatabase.insert(DatabaseGenerator.COMMENTS, null, Comment.mapToContentValues(invalidStoryCommentChild));
         }
         
@@ -97,13 +97,13 @@ public class DeleteOrphanCommentsActionTest {
 
         //create a comment linked to that story
         long validStoryCommentId = 101L;
-        Comment validStoryComment = new Comment(validStoryCommentId, "Tester", "Valid", fakeTime, validStoryId, rootDepthCommentDepth);
+        Comment validStoryComment = new Comment(1L, validStoryCommentId, "Tester", "Valid", fakeTime, validStoryId, rootDepthCommentDepth);
         writableDatabase.insert(DatabaseGenerator.COMMENTS, null, Comment.mapToContentValues(validStoryComment));
 
         //create child comments
         for(int i = 1; i < 4; i++){
             long validStoryCommentChildId = validStoryCommentId + i;
-            Comment validStoryChildComment = new Comment(validStoryCommentChildId, "tester", "invalid child", fakeTime, validStoryCommentChildId-1, rootDepthCommentDepth+i);
+            Comment validStoryChildComment = new Comment(1L, validStoryCommentChildId, "tester", "invalid child", fakeTime, validStoryCommentChildId-1, rootDepthCommentDepth+i);
             writableDatabase.insert(DatabaseGenerator.COMMENTS, null, Comment.mapToContentValues(validStoryChildComment));
         }
 

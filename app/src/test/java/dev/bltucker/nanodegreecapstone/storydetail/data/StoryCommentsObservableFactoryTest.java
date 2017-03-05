@@ -43,11 +43,11 @@ public class StoryCommentsObservableFactoryTest {
 
         List<Comment> expectedCommentEmitList = new ArrayList<>();
 
-        expectedCommentEmitList.add(new Comment(fakeCommentOne.id, fakeCommentOne.by, fakeCommentOne.text, fakeCommentOne.time, fakeCommentOne.parent, 0));
-        expectedCommentEmitList.add(new Comment(fakeCommentTwo.id, fakeCommentTwo.by, fakeCommentTwo.text, fakeCommentTwo.time, fakeCommentTwo.parent, 0));
+        expectedCommentEmitList.add(new Comment(1L, fakeCommentOne.id, fakeCommentOne.by, fakeCommentOne.text, fakeCommentOne.time, fakeCommentOne.parent, 0));
+        expectedCommentEmitList.add(new Comment(1L, fakeCommentTwo.id, fakeCommentTwo.by, fakeCommentTwo.text, fakeCommentTwo.time, fakeCommentTwo.parent, 0));
 
 
-        objectUnderTest.get(commentIds)
+        objectUnderTest.get(1L, commentIds)
                 .subscribe(commentTestSubscriber);
 
         commentTestSubscriber.assertReceivedOnNext(expectedCommentEmitList);
@@ -58,7 +58,7 @@ public class StoryCommentsObservableFactoryTest {
         TestSubscriber<Comment> commentTestSubscriber = new TestSubscriber<>();
 
         final long[] commentIds = new long[0];
-        objectUnderTest.get(commentIds)
+        objectUnderTest.get(1L, commentIds)
                 .subscribe(commentTestSubscriber);
 
         commentTestSubscriber.assertNoValues();

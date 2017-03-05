@@ -117,7 +117,7 @@ public class InterruptibleDownloadService extends Service {
 
         eventBus.publish(new StoryCommentsDownloadStartedEvent());
         currentSubscriber = subscriberFactory.get();
-        observableFactory.get(primitiveCommentIds)
+        observableFactory.get(story.getStoryId(), primitiveCommentIds)
                 .subscribe(currentSubscriber);
     }
 

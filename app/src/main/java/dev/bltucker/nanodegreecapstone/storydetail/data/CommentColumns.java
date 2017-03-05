@@ -31,4 +31,6 @@ public interface CommentColumns {
     @DataType(DataType.Type.INTEGER)
     String COMMENT_DEPTH = "commentDepth";
 
+    @DataType(DataType.Type.INTEGER)
+    String STORY_ID = "storyId";
 }
