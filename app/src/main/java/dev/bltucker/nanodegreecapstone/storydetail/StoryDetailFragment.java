@@ -9,7 +9,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.ShareActionProvider;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -17,18 +16,14 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 
 import javax.inject.Inject;
 
-import butterknife.Bind;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
 import dev.bltucker.nanodegreecapstone.R;
+import dev.bltucker.nanodegreecapstone.databinding.FragmentStoryDetailBinding;
 import dev.bltucker.nanodegreecapstone.injection.DaggerInjector;
 import dev.bltucker.nanodegreecapstone.models.Comment;
 import dev.bltucker.nanodegreecapstone.models.Story;
@@ -40,30 +35,6 @@ public class StoryDetailFragment extends Fragment implements StoryDetailView {
     static final String STORY_BUNDLE_KEY = "story";
 
     private static final String DETAIL_STORY_BUNDLE_KEY = "detailStory";
-
-    @Bind(R.id.story_title_textview)
-    TextView storyTitleTextView;
-
-    @Bind(R.id.story_url_textview)
-    TextView storyUrlTextView;
-
-    @Bind(R.id.poster_name_textview)
-    TextView storyPosterTextView;
-
-    @Bind(R.id.score_textview)
-    TextView storyScoreTextView;
-
-    @Bind(R.id.comment_list_recyclerview)
-    RecyclerView recyclerView;
-
-    @Bind(R.id.read_button)
-    Button readButton;
-
-    @Bind(R.id.empty_view_container)
-    View emptyViewContainer;
-
-    @Bind(R.id.detail_header_cardview)
-    View headerView;
 
     @Inject
     StoryCommentsAdapter commentsAdapter;
@@ -78,6 +49,7 @@ public class StoryDetailFragment extends Fragment implements StoryDetailView {
     MenuItem shareMenuItem;
 
     private DetailStory detailStory;
+    private FragmentStoryDetailBinding binding;
 
 
     public StoryDetailFragment() {
@@ -167,17 +139,22 @@ public class StoryDetailFragment extends Fragment implements StoryDetailView {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_story_detail, container, false);
-        ButterKnife.bind(this, rootView);
-        return rootView;
+        binding = FragmentStoryDetailBinding.inflate(inflater, container, false);
+        binding.headerInclude.readButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                presenter.onReadButtonClicked();
+            }
+        });
+        return binding.getRoot();
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        binding.commentListRecyclerview.setLayoutManager(new LinearLayoutManager(getContext()));
         commentsAdapter.setDetailStory(detailStory);
-        recyclerView.setAdapter(commentsAdapter);
+        binding.commentListRecyclerview.setAdapter(commentsAdapter);
         if (null == savedInstanceState) {
             presenter.onViewCreated(this, detailStory);
         } else {
@@ -213,21 +190,15 @@ public class StoryDetailFragment extends Fragment implements StoryDetailView {
             return;
         }
 
-        storyTitleTextView.setText(detailStory.getTitle());
-        storyUrlTextView.setText(detailStory.getUrl());
-        storyPosterTextView.setText(String.format(getString(R.string.by_poster), detailStory.getPosterName()));
-        storyScoreTextView.setText(String.format(getString(R.string.story_score), detailStory.getScore()));
+        binding.headerInclude.storyTitleTextview.setText(detailStory.getTitle());
+        binding.headerInclude.storyUrlTextview.setText(detailStory.getUrl());
+        binding.headerInclude.posterNameTextview.setText(String.format(getString(R.string.by_poster), detailStory.getPosterName()));
+        binding.headerInclude.scoreTextview.setText(String.format(getString(R.string.story_score), detailStory.getScore()));
         if (null == detailStory.getUrl()) {
-            readButton.setVisibility(View.INVISIBLE);
+            binding.headerInclude.readButton.setVisibility(View.INVISIBLE);
         } else {
-            readButton.setVisibility(View.VISIBLE);
+            binding.headerInclude.readButton.setVisibility(View.VISIBLE);
         }
-    }
-
-
-    @OnClick(R.id.read_button)
-    public void onReadButtonClick(View v) {
-        presenter.onReadButtonClicked();
     }
 
     @Override
@@ -245,8 +216,8 @@ public class StoryDetailFragment extends Fragment implements StoryDetailView {
 
     @Override
     public void showEmptyView() {
-        recyclerView.setVisibility(View.INVISIBLE);
-        emptyViewContainer.setVisibility(View.VISIBLE);
-        headerView.setVisibility(View.INVISIBLE);
+        binding.commentListRecyclerview.setVisibility(View.INVISIBLE);
+        binding.emptyViewContainer.setVisibility(View.VISIBLE);
+        binding.headerInclude.detailHeaderCardview.setVisibility(View.INVISIBLE);
     }
 }
