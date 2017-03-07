@@ -1,3 +1,5 @@
+[![Build Status](http://jenkins.bltucker.com/job/Nanodegree%20Pipeline/job/master/badge/icon)](http://jenkins.bltucker.com/job/Nanodegree%20Pipeline/job/master/)
+
 # Capstone-Project
 This project is a simple client for the [hacker news api](https://github.com/HackerNews/API). It is a native android app that
  started out as my [Udacity](https://www.udacity.com/course/android-developer-nanodegree-by-google--nd801?v=ad1) android developer nanodegree capstone project.
