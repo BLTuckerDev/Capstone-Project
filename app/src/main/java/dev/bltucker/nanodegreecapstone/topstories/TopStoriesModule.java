@@ -2,14 +2,11 @@ package dev.bltucker.nanodegreecapstone.topstories;
 
 import android.accounts.Account;
 
-import com.google.android.gms.analytics.Tracker;
-
 import javax.inject.Provider;
 
 import dagger.Module;
 import dagger.Provides;
 import dev.bltucker.nanodegreecapstone.injection.ApplicationScope;
-import dev.bltucker.nanodegreecapstone.injection.StoryMax;
 import dev.bltucker.nanodegreecapstone.models.ReadingSession;
 
 @Module
@@ -33,8 +30,8 @@ public class TopStoriesModule {
 
     @Provides
     @ApplicationScope
-    public StoryListAdapter provideStoryListAdapter(StoryListViewPresenter presenter, @StoryMax int storyMax, ReadingSession readingSession){
-        return new StoryListAdapter(presenter, storyMax, readingSession);
+    public StoryListAdapter provideStoryListAdapter(StoryListViewPresenter presenter, ReadingSession readingSession){
+        return new StoryListAdapter(presenter, readingSession);
     }
 
 
