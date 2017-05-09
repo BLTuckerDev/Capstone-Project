@@ -39,7 +39,8 @@ captures/
 #sonar
 app/.sonar_lock
 .idea/sonarlint.xml
-
+.idea/sonarlint/
+.idea/markdown-navigator.xml
 
 # User-specific stuff:
 .idea/codeStyleSettings.xml
