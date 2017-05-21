@@ -66,14 +66,6 @@ public class ContentProviderBackedStoryRepositoryTest {
                 .thenReturn(mockCursor);
         mockCursorCalls(mockCursor);
 
-        when(mockContentResolver.query(SchematicContentProviderGenerator.CommentRefs.withStoryId(String.valueOf(1L)), null, null, null, null))
-                .thenReturn(mockCommentCursor);
-
-        when(mockCommentCursor.getCount()).thenReturn(1);
-        when(mockCommentCursor.getColumnIndex(CommentRefsColumns._ID)).thenReturn(0);
-        when(mockCommentCursor.getLong(0)).thenReturn(1L);
-        when(mockCommentCursor.moveToNext()).thenReturn(true, false);
-
         when(mockCommentRepository.getCommentIds(anyLong())).thenReturn(new Long[0]);
 
         List<Story> storyList = objectUnderTest.getAllStories().toBlocking().first();
@@ -124,7 +116,7 @@ public class ContentProviderBackedStoryRepositoryTest {
 
         when(Story.mapToContentValues(fakeStory)).thenReturn(mockContentValues);
         PowerMockito.whenNew(ContentValues.class).withAnyArguments().thenReturn(mockContentValues);
-        PowerMockito.doNothing().when(mockContentValues).put(CommentRefsColumns._ID, 1L);
+//        PowerMockito.doNothing().when(mockContentValues).put(CommentRefsColumns._ID, 1L);
         doNothing().when(mockContentValues).put(CommentRefsColumns._ID, 1L);
 
 
