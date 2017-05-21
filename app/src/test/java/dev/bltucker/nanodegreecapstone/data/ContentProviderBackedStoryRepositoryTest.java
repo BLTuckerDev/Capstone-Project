@@ -24,6 +24,7 @@ import static junit.framework.Assert.assertEquals;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyLong;
 import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
@@ -129,8 +130,8 @@ public class ContentProviderBackedStoryRepositoryTest {
 
         objectUnderTest.saveStories(stories);
 
-        verify(mockContentResolver, times(2)).delete(any(Uri.class), anyString(), any(String[].class));
+        verify(mockContentResolver, atLeastOnce()).delete(SchematicContentProviderGenerator.StoryPaths.ALL_STORIES, null, null);
+        verify(mockContentResolver, atLeastOnce()).delete(SchematicContentProviderGenerator.CommentRefs.ALL_COMMENT_REFS, null, null);
         verify(mockContentResolver, times(2)).bulkInsert(any(Uri.class), any(ContentValues[].class));
-
     }
 }
