@@ -11,7 +11,7 @@ android {
         }
     }
     compileSdkVersion 25
-    buildToolsVersion "25.0.2"
+    buildToolsVersion "25.0.3"
     defaultConfig {
         applicationId "dev.bltucker.nanodegreecapstone"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -59,83 +59,111 @@ sonarqube {
     }
 }
 
+final DAGGER_VERSION = "2.10"
+final SUPPORT_VERSION = "25.3.1"
+final SCHEMATIC_VERSION = "0.7.0"
+final GOOGLE_PLAY_SERVICES_VERSION = "10.2.6"
+final FIREBASE_VERSION = "10.2.6"
+final JSR_250_VERSION = "1.0"
+final TIMBER_VERSION = "4.1.1"
+final GSON_VERSION = "2.7"
+final RETROFIT_VERSION = "2.1.0"
+final BUTTER_KNIFE_VERSION = "7.0.1"
+final RX_JAVA_VERSION = "1.1.0"
+final RX_ANDROID_VERSION = "1.1.0"
+final JUNIT_VERSION = "4.12"
+final MOCKITO_CORE_VERSION = "2.8.9"
+final POWERMOCK_API_MOCKITO_2_VERSION = "1.7.0RC4"
+final POWERMOCK_JUNIT_MODULE_VERSION = "1.7.0RC4"
+final GOOGLE_DEXMAKER_MOCKITO_VERSION = "1.2"
+final TEST_RUNNER_VERSION = "0.5"
+final TEST_RULES_VERSION = "0.5"
+final HAMCREST_LIBRARY_VERSION = "1.3"
+final ESPRESSO_VERSION = "2.2.2"
+final UI_AUTOMATOR_VERSION = "2.1.2"
+
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
 
-    annotationProcessor 'com.google.dagger:dagger-compiler:2.1'
-    annotationProcessor 'net.simonvt.schematic:schematic-compiler:0.6.4'
+    annotationProcessor "com.google.dagger:dagger-compiler:${DAGGER_VERSION}"
+    compile "com.google.dagger:dagger:${DAGGER_VERSION}"
 
-    provided 'javax.annotation:jsr250-api:1.0'
+    provided "javax.annotation:jsr250-api:${JSR_250_VERSION}"
 
-    compile 'com.android.support:appcompat-v7:25.2.0'
-    compile 'com.android.support:design:25.2.0'
-    compile 'com.android.support:recyclerview-v7:25.2.0'
-    compile 'com.android.support:support-annotations:25.2.0'
-    compile 'com.android.support:cardview-v7:25.2.0'
-    compile 'com.android.support:support-v4:25.2.0'
-    compile 'com.google.android.gms:play-services-analytics:10.2.0'
-    compile 'com.google.android.gms:play-services-location:10.2.0'
-    compile 'com.google.dagger:dagger:2.1'
-    compile 'com.jakewharton.timber:timber:4.5.1'
-    compile 'com.google.code.gson:gson:2.7'
-    compile 'com.squareup.retrofit2:retrofit:2.1.0'
-    compile 'com.squareup.retrofit2:adapter-rxjava:2.1.0'
-    compile 'com.squareup.retrofit2:converter-gson:2.1.0'
-    compile 'net.simonvt.schematic:schematic:0.6.4'
-    compile 'io.reactivex:rxandroid:1.1.0'
-    compile 'io.reactivex:rxjava:1.1.0'
-    compile 'com.android.support:customtabs:25.2.0'
+    annotationProcessor "net.simonvt.schematic:schematic-compiler:${SCHEMATIC_VERSION}"
+    compile "net.simonvt.schematic:schematic:${SCHEMATIC_VERSION}"
 
-    compile 'com.google.firebase:firebase-core:10.2.0'
-    compile 'com.google.firebase:firebase-crash:10.2.0'
 
-    testCompile 'junit:junit:4.12'
-    testCompile ('org.mockito:mockito-core:1.10.19'){
+    compile "com.android.support:appcompat-v7:${SUPPORT_VERSION}"
+    compile "com.android.support:design:${SUPPORT_VERSION}"
+    compile "com.android.support:recyclerview-v7:${SUPPORT_VERSION}"
+    compile "com.android.support:support-annotations:${SUPPORT_VERSION}"
+    compile "com.android.support:cardview-v7:${SUPPORT_VERSION}"
+    compile "com.android.support:support-v4:${SUPPORT_VERSION}"
+    compile "com.android.support:customtabs:${SUPPORT_VERSION}"
+
+    compile "com.google.android.gms:play-services-analytics:${GOOGLE_PLAY_SERVICES_VERSION}"
+    compile "com.google.android.gms:play-services-location:${GOOGLE_PLAY_SERVICES_VERSION}"
+
+    compile "com.jakewharton.timber:timber:${TIMBER_VERSION}"
+    compile "com.google.code.gson:gson:${GSON_VERSION}"
+
+    compile "com.squareup.retrofit2:retrofit:${RETROFIT_VERSION}"
+    compile "com.squareup.retrofit2:adapter-rxjava:${RETROFIT_VERSION}"
+    compile "com.squareup.retrofit2:converter-gson:${RETROFIT_VERSION}"
+    compile "com.jakewharton:butterknife:${BUTTER_KNIFE_VERSION}"
+    compile "io.reactivex:rxandroid:${RX_ANDROID_VERSION}"
+    compile "io.reactivex:rxjava:${RX_JAVA_VERSION}"
+
+    compile "com.google.firebase:firebase-core:${FIREBASE_VERSION}"
+    compile "com.google.firebase:firebase-crash:${FIREBASE_VERSION}"
+
+    testCompile "junit:junit:${JUNIT_VERSION}"
+
+    testCompile ("org.mockito:mockito-core:${MOCKITO_CORE_VERSION}"){
         exclude module: "hamcrest-core"
     }
 
-    testCompile ('org.powermock:powermock-api-mockito:1.6.5'){
+    testCompile ("org.powermock:powermock-api-mockito2:${POWERMOCK_API_MOCKITO_2_VERSION}"){
         exclude module: "hamcrest-core"
         exclude module: "objenesis"
     }
 
 
-    testCompile ('org.powermock:powermock-module-junit4:1.6.5'){
+    testCompile ("org.powermock:powermock-module-junit4:${POWERMOCK_JUNIT_MODULE_VERSION}"){
         exclude module: "hamcrest-core"
         exclude module: "objenesis"
     }
 
-    androidTestCompile 'com.google.dexmaker:dexmaker-mockito:1.2'
-    androidTestCompile 'com.google.dexmaker:dexmaker:1.2'
+    androidTestCompile "com.google.dexmaker:dexmaker-mockito:${GOOGLE_DEXMAKER_MOCKITO_VERSION}"
+    androidTestCompile "com.google.dexmaker:dexmaker:${GOOGLE_DEXMAKER_MOCKITO_VERSION}"
 
-    androidTestCompile ('com.android.support.test:runner:0.5'){
-        exclude module: 'support-annotations'
+    androidTestCompile ("com.android.support.test:runner:${TEST_RUNNER_VERSION}"){
+        exclude module: "support-annotations"
     }
-    androidTestCompile ('com.android.support.test:rules:0.5'){
-        exclude module: 'support-annotations'
+    androidTestCompile ("com.android.support.test:rules:${TEST_RULES_VERSION}"){
+        exclude module: "support-annotations"
     }
     // Optional -- Hamcrest library
-    androidTestCompile 'org.hamcrest:hamcrest-library:1.3'
+    androidTestCompile "org.hamcrest:hamcrest-library:${HAMCREST_LIBRARY_VERSION}"
     // Optional -- UI testing with Espresso
-    androidTestCompile ('com.android.support.test.espresso:espresso-core:2.2.2'){
-        exclude module: 'support-annotations'
+    androidTestCompile ("com.android.support.test.espresso:espresso-core:${ESPRESSO_VERSION}"){
+        exclude module: "support-annotations"
     }
     // Optional -- UI testing with UI Automator
-    androidTestCompile ('com.android.support.test.uiautomator:uiautomator-v18:2.1.2'){
-        exclude module: 'support-annotations'
+    androidTestCompile ("com.android.support.test.uiautomator:uiautomator-v18:${UI_AUTOMATOR_VERSION}"){
+        exclude module: "support-annotations"
     }
 
-    androidTestCompile ('com.android.support.test.espresso:espresso-contrib:2.2.2'){
-        exclude module: 'support-annotations'
-        exclude module: 'support-v4'
-        exclude module: 'design'
-        exclude module: 'appcompat-v7'
-        exclude module: 'recyclerview-v7'
+    androidTestCompile ("com.android.support.test.espresso:espresso-contrib:${ESPRESSO_VERSION}"){
+        exclude module: "support-annotations"
+        exclude module: "support-v4"
+        exclude module: "design"
+        exclude module: "appcompat-v7"
+        exclude module: "recyclerview-v7"
     }
 
-
-//    androidTestCompile 'com.squareup.okhttp3:logging-interceptor:3.3.1'
 }
 
 
-apply plugin: 'com.google.gms.google-services'
+apply plugin: "com.google.gms.google-services"
