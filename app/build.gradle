@@ -53,7 +53,7 @@ sonarqube {
 final DAGGER_VERSION = "2.10"
 final SUPPORT_VERSION = "25.3.1"
 final SCHEMATIC_VERSION = "0.7.0"
-final GOOGLE_PLAY_SERVICES_VERSION = "10.2.4"
+final GOOGLE_PLAY_SERVICES_VERSION = "11.0.2"
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
@@ -86,8 +86,8 @@ dependencies {
     compile "io.reactivex:rxandroid:1.1.0"
     compile "io.reactivex:rxjava:1.1.0"
 
-    compile "com.google.firebase:firebase-core:10.0.1"
-    compile "com.google.firebase:firebase-crash:10.0.1"
+    compile "com.google.firebase:firebase-core:${GOOGLE_PLAY_SERVICES_VERSION}"
+    compile "com.google.firebase:firebase-crash:${GOOGLE_PLAY_SERVICES_VERSION}"
 
     testCompile "junit:junit:4.12"
     testCompile ("org.mockito:mockito-core:1.10.19"){
