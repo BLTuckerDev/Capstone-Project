@@ -1,76 +1,80 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/headline_card_view"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:padding="8dp"
-    android:foreground="?selectableItemBackground"
-    android:stateListAnimator="@animator/raise"
-    android:layout_marginStart="@dimen/activity_horizontal_margin"
-    android:layout_marginEnd="@dimen/activity_horizontal_margin"
-    android:layout_marginBottom="8dp">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools">
 
-    <LinearLayout
+    <android.support.v7.widget.CardView
+        android:id="@+id/headline_card_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:padding="8dp">
-
-        <TextView
-            android:id="@+id/story_title_textview"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            style="@style/Base.TextAppearance.AppCompat.SearchResult.Title"
-            tools:text="Lorem Ipsum Story"/>
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="@dimen/activity_horizontal_margin"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
+        android:foreground="?selectableItemBackground"
+        android:padding="8dp"
+        android:stateListAnimator="@animator/raise">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:paddingTop="8dp">
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="8dp">
 
             <TextView
-                android:id="@+id/poster_name_textview"
-                android:layout_weight="1"
-                android:layout_width="0dp"
+                android:id="@+id/story_title_textview"
+                style="@style/Base.TextAppearance.AppCompat.SearchResult.Title"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                style="@style/Base.TextAppearance.AppCompat.Subhead"
-                tools:text="by Brett Tucker"/>
+                tools:text="Lorem Ipsum Story"/>
 
-            <TextView
-                android:id="@+id/score_textview"
-                android:layout_gravity="end"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                style="@style/Base.TextAppearance.AppCompat.Subhead"
-                tools:text="128 points"/>
+                android:orientation="horizontal"
+                android:paddingTop="8dp">
+
+                <TextView
+                    android:id="@+id/poster_name_textview"
+                    style="@style/Base.TextAppearance.AppCompat.Subhead"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    tools:text="by Brett Tucker"/>
+
+                <TextView
+                    android:id="@+id/score_textview"
+                    style="@style/Base.TextAppearance.AppCompat.Subhead"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    tools:text="128 points"/>
+
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="8dp">
+
+                <Button
+                    android:id="@+id/comments_button"
+                    style="@style/Widget.AppCompat.Button.Borderless"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:text="@string/comments_button_text"/>
+
+                <Button
+                    android:id="@+id/read_button"
+                    style="@style/Widget.AppCompat.Button.Borderless"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:text="@string/read_button_text"/>
+
+            </RelativeLayout>
 
         </LinearLayout>
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingTop="8dp">
+    </android.support.v7.widget.CardView>
 
-            <Button
-                android:id="@+id/comments_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                style="@style/Widget.AppCompat.Button.Borderless"
-                android:text="@string/comments_button_text"
-                android:layout_alignParentStart="true"/>
-
-            <Button
-                android:id="@+id/read_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                style="@style/Widget.AppCompat.Button.Borderless"
-                android:text="@string/read_button_text"
-                android:layout_alignParentEnd="true"/>
-
-        </RelativeLayout>
-
-    </LinearLayout>
-
-</android.support.v7.widget.CardView>
+</layout>

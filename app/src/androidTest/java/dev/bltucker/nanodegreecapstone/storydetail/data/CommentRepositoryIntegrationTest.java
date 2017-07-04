@@ -34,11 +34,11 @@ public class CommentRepositoryIntegrationTest extends AndroidTestCase {
 
         String firstAuthorName = "Author Name";
         long firstParentId = 1000L;
-        commentList.add(new Comment(1L, firstAuthorName, "Comment Text", System.currentTimeMillis(), firstParentId, 1));
+        commentList.add(new Comment(1L, 1L, firstAuthorName, "Comment Text", System.currentTimeMillis(), firstParentId, 1));
 
         String secondAuthorName = "Another Author Name";
         long secondParentId = 2000L;
-        commentList.add(new Comment(2L, secondAuthorName, "More Comment Text", System.currentTimeMillis(), secondParentId, 1));
+        commentList.add(new Comment(1L, 2L, secondAuthorName, "More Comment Text", System.currentTimeMillis(), secondParentId, 1));
 
         objectUnderTest.saveComments(commentList);
 
@@ -61,6 +61,9 @@ public class CommentRepositoryIntegrationTest extends AndroidTestCase {
         assertEquals(firstAuthorName, firstQuery.getString(firstQuery.getColumnIndex(CommentColumns.AUTHOR_NAME)));
         assertEquals(secondAuthorName, secondQuery.getString(firstQuery.getColumnIndex(CommentColumns.AUTHOR_NAME)));
 
+
+        firstQuery.close();
+        secondQuery.close();
     }
 
 

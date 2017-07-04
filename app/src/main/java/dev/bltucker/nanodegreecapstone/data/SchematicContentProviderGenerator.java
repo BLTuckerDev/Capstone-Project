@@ -25,6 +25,8 @@ public final class SchematicContentProviderGenerator {
 
     public static final String READ_LATER_STORY_PATH = "readLaterStories";
 
+    public static final String ALL_COMMENTS_FOR_STORY_PATH = "storyComments";
+
 
     @TableEndpoint(table = DatabaseGenerator.STORIES)
     public static class StoryPaths {
@@ -74,8 +76,11 @@ public final class SchematicContentProviderGenerator {
         @ContentUri(path = COMMENTS_PATH, type = "vnd.android.cursor.dir/list")
         public static final Uri ALL_COMMENTS = Uri.parse("content://" + AUTHORITY + "/" + COMMENTS_PATH);
 
+        @ContentUri(path = ALL_COMMENTS_FOR_STORY_PATH, type = "vnd.android.cursor.dir/list")
+        public static final Uri ALL_COMMENTS_FOR_STORY_ID = Uri.parse("content://" + AUTHORITY + "/" + ALL_COMMENTS_FOR_STORY_PATH);
+
         @InexactContentUri(path = COMMENTS_PATH + "/*",
-                name = "STORY_ID",
+                name = "PARENT_ID",
                 type = "vnd.android.cursor.dir/list",
                 whereColumn = CommentColumns.PARENT_ID,
                 pathSegment = 1,
@@ -83,6 +88,19 @@ public final class SchematicContentProviderGenerator {
         public static Uri withParentId(String id){
             return Uri.withAppendedPath(ALL_COMMENTS, id);
         }
+
+        @InexactContentUri(
+            path = ALL_COMMENTS_FOR_STORY_PATH + "/*",
+            name = "STORY_ID",
+            type = "vnd.android.cursor.dir/list",
+            whereColumn = CommentColumns.STORY_ID,
+            pathSegment = 1,
+            defaultSort = CommentColumns._ID
+        )
+        public static Uri withStoryId(String storyId){
+            return Uri.withAppendedPath(ALL_COMMENTS_FOR_STORY_ID, storyId);
+        }
+
 
     }
 

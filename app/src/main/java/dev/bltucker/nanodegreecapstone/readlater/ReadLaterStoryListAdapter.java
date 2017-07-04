@@ -1,21 +1,16 @@
 package dev.bltucker.nanodegreecapstone.readlater;
 
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
 
-import butterknife.Bind;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-import dev.bltucker.nanodegreecapstone.R;
+import dev.bltucker.nanodegreecapstone.databinding.ReadLaterStoryItemBinding;
 import dev.bltucker.nanodegreecapstone.models.ReadLaterStory;
 
 public class ReadLaterStoryListAdapter extends RecyclerView.Adapter<ReadLaterStoryListAdapter.ReadLaterStoryViewHolder> {
@@ -31,8 +26,8 @@ public class ReadLaterStoryListAdapter extends RecyclerView.Adapter<ReadLaterSto
 
     @Override
     public ReadLaterStoryViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.read_later_story_item, parent, false);
-        return new ReadLaterStoryViewHolder(itemView);
+        ReadLaterStoryItemBinding binding = ReadLaterStoryItemBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
+        return new ReadLaterStoryViewHolder(binding);
     }
 
     @Override
@@ -55,38 +50,36 @@ public class ReadLaterStoryListAdapter extends RecyclerView.Adapter<ReadLaterSto
         return new ArrayList<>(stories);
     }
 
-    public class ReadLaterStoryViewHolder extends RecyclerView.ViewHolder{
+    class ReadLaterStoryViewHolder extends RecyclerView.ViewHolder{
 
-        @Bind(R.id.read_later_story_item_cardview)
-        CardView cardView;
-
-        @Bind(R.id.story_title_textview)
-        TextView storyTitleTextView;
-
-        @Bind(R.id.poster_name_textview)
-        TextView posterNameTextView;
+        private final ReadLaterStoryItemBinding binding;
 
         private ReadLaterStory story;
 
-        public ReadLaterStoryViewHolder(View itemView) {
-            super(itemView);
-            ButterKnife.bind(this, itemView);
+        ReadLaterStoryViewHolder(ReadLaterStoryItemBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
+
+            binding.readButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    presenter.onReadLaterStoryClicked(story);
+                }
+            });
+
+            binding.deleteButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    presenter.onReadLaterStoryDeleteClicked(story);
+                }
+            });
+
         }
 
         public void setStory(ReadLaterStory story){
             this.story = story;
-            storyTitleTextView.setText(story.getTitle());
-            posterNameTextView.setText(story.getPosterName());
-        }
-
-        @OnClick(R.id.read_button)
-        public void onReadButtonClick(View v){
-            presenter.onReadLaterStoryClicked(story);
-        }
-
-        @OnClick(R.id.delete_button)
-        public void onDeleteButtonClick(View v){
-            presenter.onReadLaterStoryDeleteClicked(story);
+            binding.storyTitleTextview.setText(story.getTitle());
+            binding.posterNameTextview.setText(story.getPosterName());
         }
     }
 }

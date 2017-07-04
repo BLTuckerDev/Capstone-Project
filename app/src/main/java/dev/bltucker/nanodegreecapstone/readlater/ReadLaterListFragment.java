@@ -6,9 +6,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,9 +16,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import butterknife.Bind;
-import butterknife.ButterKnife;
-import dev.bltucker.nanodegreecapstone.R;
+import dev.bltucker.nanodegreecapstone.databinding.FragmentReadLaterListBinding;
 import dev.bltucker.nanodegreecapstone.injection.DaggerInjector;
 import dev.bltucker.nanodegreecapstone.models.ReadLaterStory;
 
@@ -33,21 +29,7 @@ public class ReadLaterListFragment extends Fragment implements ReadLaterListView
 
     @Inject
     ReadLaterStoryListAdapter adapter;
-
-    @Bind(R.id.loading_container)
-    View loadingContainer;
-
-    @Bind(R.id.content_container)
-    View contentContainer;
-
-    @Bind(R.id.empty_view_container)
-    View emptyContainer;
-
-    @Bind(R.id.read_later_story_list_recyclerview)
-    RecyclerView recyclerView;
-
-    @Bind(R.id.swipe_to_refresh_layout)
-    SwipeRefreshLayout swipeRefreshLayout;
+    private FragmentReadLaterListBinding binding;
 
     public ReadLaterListFragment() {
         // Required empty public constructor
@@ -81,12 +63,11 @@ public class ReadLaterListFragment extends Fragment implements ReadLaterListView
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.fragment_read_later_list, container, false);
-        ButterKnife.bind(this, root);
-        swipeRefreshLayout.setOnRefreshListener(presenter);
+        binding = FragmentReadLaterListBinding.inflate(inflater, container, false);
+        binding.swipeToRefreshLayout.setOnRefreshListener(presenter);
 
-        recyclerView.setLayoutManager(new LinearLayoutManager(root.getContext()));
-        recyclerView.setAdapter(adapter);
+        binding.readLaterStoryListRecyclerview.setLayoutManager(new LinearLayoutManager(binding.getRoot().getContext()));
+        binding.readLaterStoryListRecyclerview.setAdapter(adapter);
 
         if(savedInstanceState != null){
             ArrayList<ReadLaterStory> parcelableArrayList = savedInstanceState.getParcelableArrayList(ADAPTER_STORIES_BUNDLE_KEY);
@@ -97,33 +78,33 @@ public class ReadLaterListFragment extends Fragment implements ReadLaterListView
             }
         }
 
-        return root;
+        return binding.getRoot();
     }
 
     @Override
     public void showLoadingSpinner() {
-        contentContainer.setVisibility(View.INVISIBLE);
-        loadingContainer.setVisibility(View.VISIBLE);
+        binding.contentContainer.setVisibility(View.INVISIBLE);
+        binding.loadingContainer.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void hideLoadingSpinner() {
-        loadingContainer.setVisibility(View.INVISIBLE);
-        contentContainer.setVisibility(View.VISIBLE);
+        binding.loadingContainer.setVisibility(View.INVISIBLE);
+        binding.contentContainer.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void showStories(List<ReadLaterStory> data) {
-        swipeRefreshLayout.setRefreshing(false);
-        emptyContainer.setVisibility(View.GONE);
-        swipeRefreshLayout.setVisibility(View.VISIBLE);
+        binding.swipeToRefreshLayout.setRefreshing(false);
+        binding.emptyViewContainer.setVisibility(View.GONE);
+        binding.swipeToRefreshLayout.setVisibility(View.VISIBLE);
         adapter.setStories(data);
     }
 
     @Override
     public void showEmptyView() {
-        emptyContainer.setVisibility(View.VISIBLE);
-        swipeRefreshLayout.setVisibility(View.INVISIBLE);
+        binding.emptyViewContainer.setVisibility(View.VISIBLE);
+        binding.swipeToRefreshLayout.setVisibility(View.INVISIBLE);
     }
 
     @Override

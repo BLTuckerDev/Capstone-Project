@@ -1,41 +1,34 @@
 package dev.bltucker.nanodegreecapstone.topstories;
 
 import android.content.Context;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.TextView;
 
 import javax.inject.Inject;
 
-import butterknife.Bind;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
 import dev.bltucker.nanodegreecapstone.R;
-import dev.bltucker.nanodegreecapstone.injection.StoryMax;
+import dev.bltucker.nanodegreecapstone.databinding.HeadlineItemLayoutBinding;
 import dev.bltucker.nanodegreecapstone.models.ReadingSession;
 import dev.bltucker.nanodegreecapstone.models.Story;
 
 public class StoryListAdapter extends RecyclerView.Adapter<StoryListAdapter.StoryHeadlineViewHolder> {
 
     private final StoryListViewPresenter presenter;
-    private final int maximumStoryCount;
     private final ReadingSession readingSession;
 
     @Inject
-    public StoryListAdapter(StoryListViewPresenter presenter, @StoryMax int maximumStoryCount, ReadingSession readingSession){
+    StoryListAdapter(StoryListViewPresenter presenter, ReadingSession readingSession){
         this.presenter = presenter;
-        this.maximumStoryCount = maximumStoryCount;
         this.readingSession = readingSession;
     }
 
     @Override
     public StoryListAdapter.StoryHeadlineViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.headline_item_layout, parent, false);
-        return new StoryHeadlineViewHolder(itemView);
+        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+        HeadlineItemLayoutBinding binding = HeadlineItemLayoutBinding.inflate(inflater, parent, false);
+        return new StoryHeadlineViewHolder(binding);
     }
 
     @Override
@@ -49,37 +42,38 @@ public class StoryListAdapter extends RecyclerView.Adapter<StoryListAdapter.Stor
         return readingSession.storyCount();
     }
 
-    public void reset(){
+    void reset(){
         notifyDataSetChanged();
     }
 
 
     class StoryHeadlineViewHolder extends RecyclerView.ViewHolder{
 
-        @Bind(R.id.headline_card_view)
-        CardView headlineCardView;
-
-        @Bind(R.id.story_title_textview)
-        TextView titleTextView;
-
-        @Bind(R.id.poster_name_textview)
-        TextView posterNameTextView;
-
-        @Bind(R.id.score_textview)
-        TextView scoreTextView;
-
-        @Bind(R.id.read_button)
-        Button readButton;
+        private final HeadlineItemLayoutBinding binding;
 
         Story story;
 
-        public StoryHeadlineViewHolder(View itemView) {
-            super(itemView);
-            ButterKnife.bind(this, itemView);
-            headlineCardView.setOnClickListener(new View.OnClickListener() {
+        StoryHeadlineViewHolder(HeadlineItemLayoutBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
+            binding.headlineCardView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     presenter.onCommentsButtonClick(story);
+                }
+            });
+
+            binding.commentsButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    presenter.onCommentsButtonClick(story);
+                }
+            });
+
+            binding.readButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    presenter.onReadStoryButtonClick(story);
                 }
             });
         }
@@ -87,24 +81,14 @@ public class StoryListAdapter extends RecyclerView.Adapter<StoryListAdapter.Stor
         public void setStory(Story story){
             this.story = story;
             Context viewContext = itemView.getContext();
-            titleTextView.setText(story.getTitle());
-            posterNameTextView.setText(String.format(viewContext.getString(R.string.by_poster), story.getPosterName()));
-            scoreTextView.setText(String.valueOf(story.getScore()));
+            binding.storyTitleTextview.setText(story.getTitle());
+            binding.posterNameTextview.setText(String.format(viewContext.getString(R.string.by_poster), story.getPosterName()));
+            binding.scoreTextview.setText(String.valueOf(story.getScore()));
             if(null == story.getUrl()){
-                readButton.setVisibility(View.INVISIBLE);
+                binding.readButton.setVisibility(View.INVISIBLE);
             } else {
-                readButton.setVisibility(View.VISIBLE);
+                binding.readButton.setVisibility(View.VISIBLE);
             }
-        }
-
-        @OnClick(R.id.comments_button)
-        public void onCommentsButtonClick(View v){
-            presenter.onCommentsButtonClick(story);
-        }
-
-        @OnClick(R.id.read_button)
-        public void onReadButtonClick(View v){
-            presenter.onReadStoryButtonClick(story);
         }
     }
 }

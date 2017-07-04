@@ -21,11 +21,11 @@ public final class StoryCommentsObservableFactory {
         this.hackerNewsApiService = hackerNewsApiService;
     }
 
-    public Observable<Comment> get(final long[] commentIds) {
-        return downloadComments(commentIds, 0);
+    public Observable<Comment> get(final long storyId, final long[] commentIds) {
+        return downloadComments(storyId, commentIds, 0);
     }
 
-    private Observable<Comment> downloadComments(final long[] commentIds, final int commentDepth) {
+    private Observable<Comment> downloadComments(final long storyId, final long[] commentIds, final int commentDepth) {
         if (commentIds == null || commentIds.length == 0) {
             return Observable.empty();
         } else {
@@ -40,8 +40,8 @@ public final class StoryCommentsObservableFactory {
                         @Override
                         public Observable<Comment> call(CommentDto commentDto) {
                             final int childDepth = commentDepth + 1;
-                            return Observable.just(new Comment(commentDto.id, commentDto.by, commentDto.text, commentDto.time, commentDto.parent, commentDepth))
-                                    .concatWith(downloadComments(commentDto.kids, childDepth));
+                            return Observable.just(new Comment(storyId, commentDto.id, commentDto.by, commentDto.text, commentDto.time, commentDto.parent, commentDepth))
+                                    .concatWith(downloadComments(storyId, commentDto.kids, childDepth));
                         }
                     })
                     .filter(new Func1<Comment, Boolean>() {

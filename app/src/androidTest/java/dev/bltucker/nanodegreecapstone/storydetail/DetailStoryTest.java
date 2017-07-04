@@ -38,7 +38,8 @@ public class DetailStoryTest {
 
         fakeComments = new ArrayList<>();
         for (int i = 0; i < commentIds.length; i++) {
-            fakeComments.add(new Comment(commentIds[i],
+            fakeComments.add(new Comment(1L,
+                    commentIds[i],
                     "Comment Author " + i,
                     "Comment Text" + i,
                     new Date().getTime(),
@@ -67,6 +68,8 @@ public class DetailStoryTest {
         assertEquals(fakeStory.getUrl(), objectUnderTest.getUrl());
         assertArrayEquals(fakeStory.getCommentIds(), objectUnderTest.getCommentIds());
         assertEquals(fakeComments, objectUnderTest.getUnmodifiableCommentList());
+
+        input.recycle();
     }
 
     @Test

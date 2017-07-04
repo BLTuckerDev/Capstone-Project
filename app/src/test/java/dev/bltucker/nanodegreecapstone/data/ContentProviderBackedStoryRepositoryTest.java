@@ -24,6 +24,7 @@ import static junit.framework.Assert.assertEquals;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyLong;
 import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
@@ -64,14 +65,6 @@ public class ContentProviderBackedStoryRepositoryTest {
                 null))
                 .thenReturn(mockCursor);
         mockCursorCalls(mockCursor);
-
-        when(mockContentResolver.query(SchematicContentProviderGenerator.CommentRefs.withStoryId(String.valueOf(1L)), null, null, null, null))
-                .thenReturn(mockCommentCursor);
-
-        when(mockCommentCursor.getCount()).thenReturn(1);
-        when(mockCommentCursor.getColumnIndex(CommentRefsColumns._ID)).thenReturn(0);
-        when(mockCommentCursor.getLong(0)).thenReturn(1L);
-        when(mockCommentCursor.moveToNext()).thenReturn(true, false);
 
         when(mockCommentRepository.getCommentIds(anyLong())).thenReturn(new Long[0]);
 
@@ -123,14 +116,14 @@ public class ContentProviderBackedStoryRepositoryTest {
 
         when(Story.mapToContentValues(fakeStory)).thenReturn(mockContentValues);
         PowerMockito.whenNew(ContentValues.class).withAnyArguments().thenReturn(mockContentValues);
-        PowerMockito.doNothing().when(mockContentValues).put(CommentRefsColumns._ID, 1L);
+//        PowerMockito.doNothing().when(mockContentValues).put(CommentRefsColumns._ID, 1L);
         doNothing().when(mockContentValues).put(CommentRefsColumns._ID, 1L);
 
 
         objectUnderTest.saveStories(stories);
 
-        verify(mockContentResolver, times(2)).delete(any(Uri.class), anyString(), any(String[].class));
+        verify(mockContentResolver, atLeastOnce()).delete(SchematicContentProviderGenerator.StoryPaths.ALL_STORIES, null, null);
+        verify(mockContentResolver, atLeastOnce()).delete(SchematicContentProviderGenerator.CommentRefs.ALL_COMMENT_REFS, null, null);
         verify(mockContentResolver, times(2)).bulkInsert(any(Uri.class), any(ContentValues[].class));
-
     }
 }

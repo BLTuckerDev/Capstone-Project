@@ -107,7 +107,7 @@ public class InterruptibleDownloadServiceTest {
                 null);
 
         assertEquals(expectedCommentCount, commentCursor.getCount());
-
+        commentCursor.close();
     }
 
     @NonNull

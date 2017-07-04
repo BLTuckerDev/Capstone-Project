@@ -10,7 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import java.util.Calendar;
 import java.util.Observable;
@@ -18,9 +17,8 @@ import java.util.Observer;
 
 import javax.inject.Inject;
 
-import butterknife.Bind;
-import butterknife.ButterKnife;
 import dev.bltucker.nanodegreecapstone.R;
+import dev.bltucker.nanodegreecapstone.databinding.StoryCommentLayoutItemBinding;
 import dev.bltucker.nanodegreecapstone.injection.GregorianUTC;
 import dev.bltucker.nanodegreecapstone.models.Comment;
 import dev.bltucker.nanodegreecapstone.storydetail.events.DetailStoryChangeEvent;
@@ -55,11 +53,9 @@ public class StoryCommentsAdapter extends RecyclerView.Adapter<RecyclerView.View
             return new LoadingCommentsViewHolder(itemView);
 
         } else {
-            View itemView = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.story_comment_layout_item, parent, false);
-            View commentContainer = itemView.findViewById(R.id.comment_container);
-            itemView.setTag(R.id.comment_container, commentContainer);
-            return new CommentViewHolder(itemView);
+            StoryCommentLayoutItemBinding binding = StoryCommentLayoutItemBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
+            binding.getRoot().setTag(R.id.comment_container, binding.commentContainer);
+            return new CommentViewHolder(binding, calendar, resources);
         }
     }
 
@@ -84,41 +80,7 @@ public class StoryCommentsAdapter extends RecyclerView.Adapter<RecyclerView.View
         }
 
         CommentViewHolder commentViewHolder = (CommentViewHolder) holder;
-
-        commentViewHolder.authorNameTextView.setText(comment.getAuthorName());
-        commentViewHolder.postTimeTextView.setText(getFormattedCommentTime(comment, holder.itemView.getContext()));
-        commentViewHolder.commentBodyTextView.setText(Html.fromHtml(comment.getCommentText()));
-
-        int commentDepth = comment.getDepth();
-        LinearLayout container = (LinearLayout) holder.itemView.getTag(R.id.comment_container);
-        RecyclerView.LayoutParams layoutParams = (RecyclerView.LayoutParams) container.getLayoutParams();
-        float margin = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, commentDepth * MARGIN_PER_DEPTH, resources.getDisplayMetrics());
-        layoutParams.setMarginStart((int) margin);
-        container.setLayoutParams(layoutParams);
-        container.invalidate();
-
-    }
-
-    @SuppressWarnings("squid:S109")
-    private String getFormattedCommentTime(Comment comment, Context context){
-        long elapsedSeconds = (calendar.getTimeInMillis() / 1000) - comment.getUnixPostTime();
-        long elapsedMinutes = elapsedSeconds / 60;
-        long elapsedHours = elapsedMinutes / 60;
-        long elapsedDays = elapsedHours / 24;
-
-        if(elapsedDays > 0){
-            return String.format(context.getString(R.string.days_ago), elapsedDays);
-        }
-
-        if(elapsedHours > 0){
-            return String.format(context.getString(R.string.hours_ago), elapsedHours);
-        }
-
-        if(elapsedMinutes > 0){
-            return String.format(context.getString(R.string.minutes_ago), elapsedMinutes);
-        }
-
-        return context.getString(R.string.less_than_a_minute);
+        commentViewHolder.bind(comment);
     }
 
     @Override
@@ -141,10 +103,9 @@ public class StoryCommentsAdapter extends RecyclerView.Adapter<RecyclerView.View
         }
     }
 
-    public void setDetailStory(DetailStory detailStory) {
-
-        if(detailStory != null){
-            detailStory.deleteObserver(this);
+    void setDetailStory(DetailStory detailStory) {
+        if(this.detailStory != null){
+            this.detailStory.deleteObserver(this);
         }
 
         this.detailStory = detailStory;
@@ -160,31 +121,65 @@ public class StoryCommentsAdapter extends RecyclerView.Adapter<RecyclerView.View
         diffResult.dispatchUpdatesTo(StoryCommentsAdapter.this);
     }
 
-    public static class CommentViewHolder extends RecyclerView.ViewHolder{
+    static class CommentViewHolder extends RecyclerView.ViewHolder{
 
-        @Bind(R.id.comment_poster_name_textview)
-        TextView authorNameTextView;
+        private final StoryCommentLayoutItemBinding binding;
+        private final Calendar calendar;
+        private final Resources resources;
 
-        @Bind(R.id.comment_post_time_textview)
-        TextView postTimeTextView;
+        CommentViewHolder(StoryCommentLayoutItemBinding binding, Calendar calendar, Resources resources) {
+            super(binding.getRoot());
+            this.binding = binding;
+            this.calendar = calendar;
+            this.resources = resources;
+        }
 
-        @Bind(R.id.comment_body_textview)
-        TextView commentBodyTextView;
+        public void bind(Comment comment) {
+            binding.commentPosterNameTextview.setText(comment.getAuthorName());
+            binding.commentPostTimeTextview.setText(getFormattedCommentTime(comment, binding.getRoot().getContext()));
+            binding.commentBodyTextview.setText(Html.fromHtml(comment.getCommentText()));
 
-        public CommentViewHolder(View itemView) {
-            super(itemView);
-            ButterKnife.bind(this, itemView);
+            int commentDepth = comment.getDepth();
+            LinearLayout container = (LinearLayout) binding.getRoot().getTag(R.id.comment_container);
+            RecyclerView.LayoutParams layoutParams = (RecyclerView.LayoutParams) container.getLayoutParams();
+            float margin = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, commentDepth * MARGIN_PER_DEPTH, resources.getDisplayMetrics());
+            layoutParams.setMarginStart((int) margin);
+            container.setLayoutParams(layoutParams);
+            container.invalidate();
+
+        }
+
+        @SuppressWarnings("squid:S109")
+        private String getFormattedCommentTime(Comment comment, Context context){
+            long elapsedSeconds = (calendar.getTimeInMillis() / 1000) - comment.getUnixPostTime();
+            long elapsedMinutes = elapsedSeconds / 60;
+            long elapsedHours = elapsedMinutes / 60;
+            long elapsedDays = elapsedHours / 24;
+
+            if(elapsedDays > 0){
+                return String.format(context.getString(R.string.days_ago), elapsedDays);
+            }
+
+            if(elapsedHours > 0){
+                return String.format(context.getString(R.string.hours_ago), elapsedHours);
+            }
+
+            if(elapsedMinutes > 0){
+                return String.format(context.getString(R.string.minutes_ago), elapsedMinutes);
+            }
+
+            return context.getString(R.string.less_than_a_minute);
         }
     }
 
-    public static class EmptyCommentsViewHolder extends RecyclerView.ViewHolder{
-        public EmptyCommentsViewHolder(View itemView){
+    private static class EmptyCommentsViewHolder extends RecyclerView.ViewHolder{
+        EmptyCommentsViewHolder(View itemView){
             super(itemView);
         }
     }
 
-    public static class LoadingCommentsViewHolder extends RecyclerView.ViewHolder {
-        public LoadingCommentsViewHolder(View itemView) {
+    private static class LoadingCommentsViewHolder extends RecyclerView.ViewHolder {
+        LoadingCommentsViewHolder(View itemView) {
             super(itemView);
         }
     }

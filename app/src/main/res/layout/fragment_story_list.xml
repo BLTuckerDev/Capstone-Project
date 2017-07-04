@@ -1,81 +1,84 @@
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:animateLayoutChanges="true"
-    tools:context=".topstories.StoryListFragment">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools">
 
-    <LinearLayout
-        android:id="@+id/loading_container"
-        android:visibility="invisible"
+    <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:gravity="center">
+        android:animateLayoutChanges="true"
+        tools:context=".topstories.StoryListFragment">
 
-        <ProgressBar
-            android:id="@+id/loading_spinner"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:indeterminate="true"
-            android:layout_gravity="center"/>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:text="@string/loading_stories"/>
-
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/content_container"
-        android:visibility="visible"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        <LinearLayout
+            android:id="@+id/loading_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            xmlns:tools="http://schemas.android.com/tools"
-            android:id="@+id/empty_view_container"
-            android:visibility="gone"
-            android:padding="16dp">
+            android:gravity="center"
+            android:orientation="vertical"
+            android:visibility="invisible">
+
+            <ProgressBar
+                android:id="@+id/loading_spinner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:indeterminate="true"/>
 
             <TextView
-                android:id="@+id/story_title_textview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:gravity="center"
-                android:layout_gravity="center_horizontal|center_vertical"
-                style="@style/Base.TextAppearance.AppCompat.SearchResult.Title"
-                android:text="@string/there_are_no_stories_available"
-                tools:text="There are no stories available :("/>
+                android:text="@string/loading_stories"/>
 
-        </FrameLayout>
 
-        <android.support.v4.widget.SwipeRefreshLayout
-            android:id="@+id/swipe_to_refresh_layout"
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/content_container"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="visible">
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/story_list_recyclerview"
+            <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                         xmlns:tools="http://schemas.android.com/tools"
+                         android:id="@+id/empty_view_container"
+                         android:layout_width="match_parent"
+                         android:layout_height="match_parent"
+                         android:padding="16dp"
+                         android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/story_title_textview"
+                    style="@style/Base.TextAppearance.AppCompat.SearchResult.Title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal|center_vertical"
+                    android:gravity="center"
+                    android:text="@string/there_are_no_stories_available"
+                    tools:text="There are no stories available :("/>
+
+            </FrameLayout>
+
+            <android.support.v4.widget.SwipeRefreshLayout
+                android:id="@+id/swipe_to_refresh_layout"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:paddingTop="8dp"
-                android:clipToPadding="false"
-                app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+                android:layout_height="match_parent">
 
-        </android.support.v4.widget.SwipeRefreshLayout>
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/story_list_recyclerview"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:clipToPadding="false"
+                    android:paddingTop="8dp"
+                    app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
-    </LinearLayout>
+            </android.support.v4.widget.SwipeRefreshLayout>
 
+        </LinearLayout>
 
-</android.support.design.widget.CoordinatorLayout>
+    </android.support.design.widget.CoordinatorLayout>
+
+</layout>
 
 
