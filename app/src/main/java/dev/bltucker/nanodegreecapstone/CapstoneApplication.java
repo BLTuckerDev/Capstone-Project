@@ -18,6 +18,7 @@ import dev.bltucker.nanodegreecapstone.logging.FirebaseDebugTree;
 import dev.bltucker.nanodegreecapstone.sync.CommentCleaningService;
 import dev.bltucker.nanodegreecapstone.sync.StorySyncAdapter;
 import rx.Completable;
+import rx.CompletableSubscriber;
 import rx.Subscription;
 import rx.functions.Action0;
 import rx.schedulers.Schedulers;
@@ -66,7 +67,7 @@ public class CapstoneApplication extends Application {
             }
         })
             .subscribeOn(Schedulers.computation())
-            .subscribe(new Completable.CompletableSubscriber() {
+            .subscribe(new CompletableSubscriber() {
                 @Override
                 public void onCompleted() {
                 }

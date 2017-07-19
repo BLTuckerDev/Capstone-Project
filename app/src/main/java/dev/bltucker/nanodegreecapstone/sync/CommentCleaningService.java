@@ -9,6 +9,7 @@ import dev.bltucker.nanodegreecapstone.data.CommentRepository;
 import dev.bltucker.nanodegreecapstone.data.StoryDatabase;
 import dev.bltucker.nanodegreecapstone.injection.DaggerInjector;
 import rx.Completable;
+import rx.CompletableSubscriber;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 import timber.log.Timber;
@@ -34,7 +35,7 @@ public class CommentCleaningService extends JobService {
 
         Completable.fromAction(new DeleteOrphanCommentsAction(storyDatabase))
         .subscribeOn(Schedulers.io())
-        .subscribe(new Completable.CompletableSubscriber() {
+        .subscribe(new CompletableSubscriber() {
             @Override
             public void onCompleted() {
                 jobFinished(jobParameters, false);
