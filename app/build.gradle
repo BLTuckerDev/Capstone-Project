@@ -81,8 +81,7 @@ sonarqube {
 final DAGGER_VERSION = "2.10"
 final SUPPORT_VERSION = "26.0.0"
 final SCHEMATIC_VERSION = "0.7.0"
-final GOOGLE_PLAY_SERVICES_VERSION = "11.0.2"
-final FIREBASE_VERSION = "11.0.4"
+final GOOGLE_PLAY_SERVICES_VERSION = "11.0.4"
 final JSR_250_VERSION = "1.0"
 final TIMBER_VERSION = "4.5.1"
 final GSON_VERSION = "2.7"
@@ -142,8 +141,8 @@ dependencies {
     implementation "io.reactivex:rxandroid:${RX_ANDROID_VERSION}"
     implementation "io.reactivex:rxjava:${RX_JAVA_VERSION}"
 
-    implementation "com.google.firebase:firebase-core:${FIREBASE_VERSION}"
-    implementation "com.google.firebase:firebase-crash:${FIREBASE_VERSION}"
+    implementation "com.google.firebase:firebase-core:${GOOGLE_PLAY_SERVICES_VERSION}"
+    implementation "com.google.firebase:firebase-crash:${GOOGLE_PLAY_SERVICES_VERSION}"
 
     testImplementation "junit:junit:${JUNIT_VERSION}"
 
