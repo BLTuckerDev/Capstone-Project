@@ -1,5 +1,7 @@
 package dev.bltucker.nanodegreecapstone.models;
 
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.PrimaryKey;
 import android.content.ContentValues;
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -7,9 +9,10 @@ import android.os.Parcelable;
 import dev.bltucker.nanodegreecapstone.data.ReadLaterColumns;
 
 @SuppressWarnings({"squid:S1213"})
-public class ReadLaterStory implements Parcelable{
+@Entity(tableName = "readLaterStories")
+public class ReadLaterStory implements Parcelable {
 
-    public static ContentValues mapToContentValues(ReadLaterStory readLaterStory){
+    public static ContentValues mapToContentValues(ReadLaterStory readLaterStory) {
         ContentValues cv = new ContentValues();
 
         cv.put(ReadLaterColumns._ID, readLaterStory.getId());
@@ -20,19 +23,23 @@ public class ReadLaterStory implements Parcelable{
         return cv;
     }
 
-    private final long id;
-    private final String posterName;
-    private final String title;
-    private final String url;
+    @PrimaryKey
+    public final long id;
 
-    public ReadLaterStory(long id, String posterName, String title, String url){
+    public final String posterName;
+
+    public final String title;
+
+    public final String url;
+
+    public ReadLaterStory(long id, String posterName, String title, String url) {
         this.id = id;
         this.posterName = posterName;
         this.title = title;
         this.url = url;
     }
 
-    protected ReadLaterStory(Parcel in){
+    protected ReadLaterStory(Parcel in) {
         id = in.readLong();
         posterName = in.readString();
         title = in.readString();
@@ -93,7 +100,7 @@ public class ReadLaterStory implements Parcelable{
     }
 
     public static final Parcelable.Creator<ReadLaterStory> CREATOR =
-            new Parcelable.Creator<ReadLaterStory>(){
+            new Parcelable.Creator<ReadLaterStory>() {
                 @Override
                 public ReadLaterStory createFromParcel(Parcel source) {
                     return new ReadLaterStory(source);

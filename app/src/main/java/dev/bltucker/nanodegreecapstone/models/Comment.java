@@ -1,5 +1,8 @@
 package dev.bltucker.nanodegreecapstone.models;
 
+import android.arch.persistence.room.ColumnInfo;
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.PrimaryKey;
 import android.content.ContentValues;
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -8,6 +11,7 @@ import android.os.Parcelable;
 import dev.bltucker.nanodegreecapstone.storydetail.data.CommentColumns;
 
 @SuppressWarnings({"squid:S1213"})
+@Entity(tableName = "comments")
 public final class Comment implements Parcelable {
 
     public static ContentValues mapToContentValues(Comment aComment) {
@@ -24,32 +28,40 @@ public final class Comment implements Parcelable {
         return cv;
     }
 
-    private final long storyId;
+    @PrimaryKey
+    @ColumnInfo(name = "_id")
+    public final long id;
 
-    private final long id;
+    public final long storyId;
 
-    private final String authorName;
+    public final String authorName;
 
-    private final String commentText;
+    public final String commentText;
 
-    private final long unixPostTime;
+    public final long unixPostTime;
 
-    private final long parentId;
+    public final long parentId;
 
-    private final int depth;
+    public final int depth;
 
-    public Comment(long storyId, long id, String authorName, String commentText,
-                   long unixPostTime, long parentId, int commentDepth){
+
+    public Comment(long id,
+                   long storyId,
+                   String authorName,
+                   String commentText,
+                   long unixPostTime,
+                   long parentId,
+                   int depth) {
         this.storyId = storyId;
         this.id = id;
         this.authorName = authorName != null ? authorName : "";
         this.commentText = commentText != null ? commentText : "";
         this.unixPostTime = unixPostTime;
         this.parentId = parentId;
-        this.depth = commentDepth;
+        this.depth = depth;
     }
 
-    public Comment(Parcel in){
+    public Comment(Parcel in) {
         this.storyId = in.readLong();
         this.id = in.readLong();
         this.authorName = in.readString();
@@ -83,7 +95,7 @@ public final class Comment implements Parcelable {
         return parentId;
     }
 
-    public int getDepth(){
+    public int getDepth() {
         return this.depth;
     }
 

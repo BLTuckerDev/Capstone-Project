@@ -2,6 +2,7 @@ package dev.bltucker.nanodegreecapstone.injection;
 
 import android.accounts.Account;
 import android.app.NotificationManager;
+import android.arch.persistence.room.Room;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.res.Resources;
@@ -21,8 +22,10 @@ import dev.bltucker.nanodegreecapstone.R;
 import dev.bltucker.nanodegreecapstone.data.CommentRepository;
 import dev.bltucker.nanodegreecapstone.data.ContentProviderBackedStoryRepository;
 import dev.bltucker.nanodegreecapstone.data.HackerNewsApiService;
+import dev.bltucker.nanodegreecapstone.data.HackerNewsDatabase;
 import dev.bltucker.nanodegreecapstone.data.StoryDatabase;
 import dev.bltucker.nanodegreecapstone.data.StoryRepository;
+import dev.bltucker.nanodegreecapstone.data.migrations.Version1to2;
 import dev.bltucker.nanodegreecapstone.events.EventBus;
 import dev.bltucker.nanodegreecapstone.models.Comment;
 import dev.bltucker.nanodegreecapstone.models.ReadingSession;
@@ -40,6 +43,15 @@ public class ApplicationResourcesModule {
     public ApplicationResourcesModule(CapstoneApplication application) {
         this.application = application;
     }
+
+    @Provides
+    @ApplicationScope
+    HackerNewsDatabase providesHackerNewsDatabase(){
+        return Room.databaseBuilder(application, HackerNewsDatabase.class, "databaseGenerator.db")
+                .addMigrations(new Version1to2(1, 2))
+                .build();
+    }
+
 
     @Provides
     @ApplicationScope

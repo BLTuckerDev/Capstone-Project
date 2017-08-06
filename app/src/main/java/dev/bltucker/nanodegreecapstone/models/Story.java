@@ -1,5 +1,9 @@
 package dev.bltucker.nanodegreecapstone.models;
 
+import android.arch.persistence.room.ColumnInfo;
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
+import android.arch.persistence.room.PrimaryKey;
 import android.content.ContentValues;
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -11,11 +15,12 @@ import java.util.Arrays;
 import dev.bltucker.nanodegreecapstone.data.StoryColumns;
 
 @SuppressWarnings({"squid:S1213"})
+@Entity(tableName = "stories")
 public class Story implements Parcelable {
 
-    public static ContentValues mapToContentValues(Story aStory){
+    public static ContentValues mapToContentValues(Story aStory) {
 
-        ContentValues  cv = new ContentValues();
+        ContentValues cv = new ContentValues();
 
         cv.put(StoryColumns._ID, aStory.getId());
         cv.put(StoryColumns.POSTER_NAME, aStory.getPosterName());
@@ -29,30 +34,62 @@ public class Story implements Parcelable {
     }
 
 
-    private final long id;
+    @PrimaryKey
+    @ColumnInfo(name = "_id")
+    public final long id;
+
     @SerializedName("by")
-    private final String posterName;
-    private final long score;
+    public final String posterName;
+
+    public final long score;
+
     @SerializedName("time")
-    private final long unixTime;
-    private final String title;
-    private final String url;
+    public final long unixTime;
+
+    public final String title;
+
+    public final String url;
+
     @SerializedName("kids")
-    private final Long[] commentIds;
+    @Ignore
+    public final Long[] commentIds;
 
     private int storyRank = 0;
 
-    public Story(long id, String posterName, long score, long unixTime, String title, String url, Long[] commentIdsParam){
+    public Story(long id,
+                 String posterName,
+                 long score,
+                 long unixTime,
+                 String title,
+                 String url) {
+
+        //For Room
         this.id = id;
         this.posterName = posterName;
         this.score = score;
         this.unixTime = unixTime;
         this.title = title;
         this.url = url;
-        this.commentIds = Arrays.copyOf(commentIdsParam, commentIdsParam.length);
+        this.commentIds = new Long[0];
     }
 
-    protected Story(Parcel input){
+    public Story(long id,
+                 String posterName,
+                 long score,
+                 long unixTime,
+                 String title,
+                 String url,
+                 Long[] commentIds) {
+        this.id = id;
+        this.posterName = posterName;
+        this.score = score;
+        this.unixTime = unixTime;
+        this.title = title;
+        this.url = url;
+        this.commentIds = Arrays.copyOf(commentIds, commentIds.length);
+    }
+
+    protected Story(Parcel input) {
         id = input.readLong();
         posterName = input.readString();
         score = input.readLong();
@@ -97,18 +134,18 @@ public class Story implements Parcelable {
     }
 
     public Long[] getCommentIds() {
-        if(null == commentIds){
+        if (null == commentIds) {
             return new Long[0];
         } else {
             return Arrays.copyOf(commentIds, commentIds.length);
         }
     }
 
-    public void setStoryRank(int rank){
+    public void setStoryRank(int rank) {
         this.storyRank = rank;
     }
 
-    public int getStoryRank(){
+    public int getStoryRank() {
         return this.storyRank;
     }
 
@@ -153,8 +190,8 @@ public class Story implements Parcelable {
 
 
     public static final Parcelable.Creator<Story> CREATOR =
-            new Parcelable.Creator<Story>(){
-                public Story createFromParcel(Parcel in){
+            new Parcelable.Creator<Story>() {
+                public Story createFromParcel(Parcel in) {
                     return new Story(in);
                 }
 
