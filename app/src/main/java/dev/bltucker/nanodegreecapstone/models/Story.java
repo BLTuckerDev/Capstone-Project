@@ -54,7 +54,8 @@ public class Story implements Parcelable {
     @Ignore
     public final Long[] commentIds;
 
-    private int storyRank = 0;
+    @ColumnInfo(name = "rank")
+    public int storyRank = 0;
 
     public Story(long id,
                  String posterName,

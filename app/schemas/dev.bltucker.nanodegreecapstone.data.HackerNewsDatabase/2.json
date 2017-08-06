@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 2,
-    "identityHash": "f44958f499347704e2b17e9912dd3a9e",
+    "identityHash": "b45bde42aa97c36922666256b01b7fd1",
     "entities": [
       {
         "tableName": "stories",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`_id` INTEGER NOT NULL, `posterName` TEXT, `score` INTEGER NOT NULL, `unixTime` INTEGER NOT NULL, `title` TEXT, `url` TEXT, `storyRank` INTEGER NOT NULL, PRIMARY KEY(`_id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`_id` INTEGER NOT NULL, `posterName` TEXT, `score` INTEGER NOT NULL, `unixTime` INTEGER NOT NULL, `title` TEXT, `url` TEXT, `rank` INTEGER NOT NULL, PRIMARY KEY(`_id`))",
         "fields": [
           {
             "fieldPath": "id",
@@ -46,7 +46,7 @@
           },
           {
             "fieldPath": "storyRank",
-            "columnName": "storyRank",
+            "columnName": "rank",
             "affinity": "INTEGER",
             "notNull": true
           }
@@ -198,7 +198,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"f44958f499347704e2b17e9912dd3a9e\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"b45bde42aa97c36922666256b01b7fd1\")"
     ]
   }
 }

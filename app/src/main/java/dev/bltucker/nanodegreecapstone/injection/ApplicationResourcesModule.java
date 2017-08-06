@@ -15,6 +15,8 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.TimeZone;
 
+import javax.inject.Singleton;
+
 import dagger.Module;
 import dagger.Provides;
 import dev.bltucker.nanodegreecapstone.CapstoneApplication;
@@ -25,6 +27,7 @@ import dev.bltucker.nanodegreecapstone.data.HackerNewsApiService;
 import dev.bltucker.nanodegreecapstone.data.HackerNewsDatabase;
 import dev.bltucker.nanodegreecapstone.data.StoryDatabase;
 import dev.bltucker.nanodegreecapstone.data.StoryRepository;
+import dev.bltucker.nanodegreecapstone.data.daos.StoryDao;
 import dev.bltucker.nanodegreecapstone.data.migrations.Version1to2;
 import dev.bltucker.nanodegreecapstone.events.EventBus;
 import dev.bltucker.nanodegreecapstone.models.Comment;
@@ -52,6 +55,11 @@ public class ApplicationResourcesModule {
                 .build();
     }
 
+    @Provides
+    @Singleton
+    StoryDao provideStoryDao(HackerNewsDatabase hackerNewsDatabase){
+        return hackerNewsDatabase.storyDao();
+    }
 
     @Provides
     @ApplicationScope
