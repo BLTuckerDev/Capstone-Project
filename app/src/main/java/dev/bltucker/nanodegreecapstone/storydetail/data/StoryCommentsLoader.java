@@ -9,14 +9,14 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import dev.bltucker.nanodegreecapstone.StoryProvider;
 import dev.bltucker.nanodegreecapstone.data.CommentRepository;
-import dev.bltucker.nanodegreecapstone.data.SchematicContentProviderGenerator;
 import dev.bltucker.nanodegreecapstone.events.EventBus;
 import dev.bltucker.nanodegreecapstone.models.Comment;
 import dev.bltucker.nanodegreecapstone.storydetail.events.StoryCommentsDownloadCompleteEvent;
-import rx.Subscriber;
-import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
 import timber.log.Timber;
 
 public class StoryCommentsLoader extends AsyncTaskLoader<List<Comment>> {
@@ -30,7 +30,7 @@ public class StoryCommentsLoader extends AsyncTaskLoader<List<Comment>> {
     private final EventBus eventBus;
 
     private ModulatedForceLoadContentObserver myContentObserver;
-    private Subscription downloadCompleteEventSubscription;
+    private Disposable downloadCompleteEventSubscription;
 
     @Inject
     public StoryCommentsLoader(Context context, CommentRepository repository, EventBus eventBus){
@@ -46,7 +46,7 @@ public class StoryCommentsLoader extends AsyncTaskLoader<List<Comment>> {
     @Override
     public List<Comment> loadInBackground() {
         Timber.d("StoryCommentsLoader.loadInBackground");
-        List<Comment> comments = commentRepository.getStoryComments(detailStoryId).toBlocking().first();
+        List<Comment> comments = commentRepository.getStoryComments(detailStoryId).blockingFirst();
         Timber.d("StoryCommentsLoader loaded %d comments", comments.size());
         return comments;
     }
@@ -54,18 +54,25 @@ public class StoryCommentsLoader extends AsyncTaskLoader<List<Comment>> {
     @Override
     protected void onStartLoading() {
         Timber.d("StoryCommentsLoader.onStartLoading");
-        getContext().getContentResolver().registerContentObserver(SchematicContentProviderGenerator.CommentPaths.ALL_COMMENTS, true, myContentObserver);
+        getContext().getContentResolver().registerContentObserver(StoryProvider.COMMENTS_URI, true, myContentObserver);
 
-        downloadCompleteEventSubscription = eventBus.subscribeTo(StoryCommentsDownloadCompleteEvent.class)
+        eventBus.subscribeTo(StoryCommentsDownloadCompleteEvent.class)
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<Object>() {
-                    @Override
-                    @SuppressWarnings("squid:S1186")
-                    public void onCompleted() {    }
+                .subscribe(new Observer<Object>() {
 
                     @Override
                     public void onError(Throwable e) {
                         Timber.d(e, "Error while processing a StoryCommentsDownloadCompleteEvent");
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        downloadCompleteEventSubscription = d;
                     }
 
                     @Override
@@ -97,8 +104,8 @@ public class StoryCommentsLoader extends AsyncTaskLoader<List<Comment>> {
         Timber.d("StoryCommentsLoader.onReset");
         getContext().getContentResolver().unregisterContentObserver(myContentObserver);
         myContentObserver.stopPreventingAdditionalChanges();
-        if(downloadCompleteEventSubscription != null && !downloadCompleteEventSubscription.isUnsubscribed()){
-            downloadCompleteEventSubscription.unsubscribe();
+        if(downloadCompleteEventSubscription != null && !downloadCompleteEventSubscription.isDisposed()){
+            downloadCompleteEventSubscription.dispose();
         }
         super.onReset();
     }

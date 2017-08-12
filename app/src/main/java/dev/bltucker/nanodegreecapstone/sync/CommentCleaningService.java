@@ -6,12 +6,12 @@ import android.app.job.JobService;
 import javax.inject.Inject;
 
 import dev.bltucker.nanodegreecapstone.data.CommentRepository;
-import dev.bltucker.nanodegreecapstone.data.StoryDatabase;
+import dev.bltucker.nanodegreecapstone.data.daos.CommentsDao;
 import dev.bltucker.nanodegreecapstone.injection.DaggerInjector;
-import rx.Completable;
-import rx.CompletableSubscriber;
-import rx.Subscription;
-import rx.schedulers.Schedulers;
+import io.reactivex.Completable;
+import io.reactivex.CompletableObserver;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
 
 public class CommentCleaningService extends JobService {
@@ -22,7 +22,7 @@ public class CommentCleaningService extends JobService {
     CommentRepository commentRepository;
 
     @Inject
-    StoryDatabase storyDatabase;
+    CommentsDao commentsDao;
 
     @Override
     public void onCreate() {
@@ -33,11 +33,14 @@ public class CommentCleaningService extends JobService {
     @Override
     public boolean onStartJob(final JobParameters jobParameters) {
 
-        Completable.fromAction(new DeleteOrphanCommentsAction(storyDatabase))
+        Completable.fromAction(new DeleteOrphanCommentsAction(commentsDao))
         .subscribeOn(Schedulers.io())
-        .subscribe(new CompletableSubscriber() {
+        .subscribe(new CompletableObserver() {
             @Override
-            public void onCompleted() {
+            public void onSubscribe(Disposable d) {}
+
+            @Override
+            public void onComplete() {
                 jobFinished(jobParameters, false);
             }
 
@@ -46,9 +49,6 @@ public class CommentCleaningService extends JobService {
                 Timber.e(e, "Error attempting to complete comment clean up");
                 jobFinished(jobParameters, false);
             }
-
-            @Override
-            public void onSubscribe(Subscription d) {  }
         });
 
         //returning true means the job is not done yet.

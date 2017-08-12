@@ -15,7 +15,7 @@ import com.google.android.gms.location.GeofencingEvent;
 import javax.inject.Inject;
 
 import dev.bltucker.nanodegreecapstone.R;
-import dev.bltucker.nanodegreecapstone.data.SchematicContentProviderGenerator;
+import dev.bltucker.nanodegreecapstone.StoryProvider;
 import dev.bltucker.nanodegreecapstone.injection.DaggerInjector;
 import dev.bltucker.nanodegreecapstone.readlater.ReadLaterListActivity;
 import timber.log.Timber;
@@ -67,7 +67,7 @@ public class GeofenceTransitionsIntentService extends IntentService {
     }
 
     private int getReadLaterStoryCount(){
-        try (Cursor readLaterStoryCursor = contentResolver.query(SchematicContentProviderGenerator.ReadLaterStoryPaths.ALL_READ_LATER_STORIES,
+        try (Cursor readLaterStoryCursor = contentResolver.query(StoryProvider.READ_LATER_URI,
             null,
             null,
             null,

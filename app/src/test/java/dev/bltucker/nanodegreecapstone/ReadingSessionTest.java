@@ -10,7 +10,7 @@ import dev.bltucker.nanodegreecapstone.events.EventBus;
 import dev.bltucker.nanodegreecapstone.events.SyncCompletedEvent;
 import dev.bltucker.nanodegreecapstone.models.ReadingSession;
 import dev.bltucker.nanodegreecapstone.models.Story;
-import rx.Observable;
+import io.reactivex.Observable;
 
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertTrue;

@@ -5,8 +5,8 @@ import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
 
-@Entity(indices = {@Index(value = "storyId")})
-class CommentReference {
+@Entity(tableName = "commentRefs", indices = {@Index(value = "storyId")})
+public class CommentReference {
 
     @PrimaryKey
     @ColumnInfo(name = "_id")

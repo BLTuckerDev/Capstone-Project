@@ -7,8 +7,8 @@ import java.util.Map;
 import dev.bltucker.nanodegreecapstone.models.Comment;
 import dev.bltucker.nanodegreecapstone.models.Story;
 import dev.bltucker.nanodegreecapstone.storydetail.data.CommentDto;
+import io.reactivex.Single;
 import retrofit2.http.Path;
-import rx.Observable;
 
 public class FakeHackerNewsApiService implements HackerNewsApiService {
 
@@ -24,17 +24,17 @@ public class FakeHackerNewsApiService implements HackerNewsApiService {
     }
 
     @Override
-    public Observable<List<Long>> getTopStoryIds() {
-        return Observable.just(storyIds);
+    public Single<List<Long>> getTopStoryIds() {
+        return Single.just(storyIds);
     }
 
     @Override
-    public Observable<Story> getStory(@Path("storyId") long storyId) {
-        return Observable.just(stories.get(storyId));
+    public Single<Story> getStory(@Path("storyId") long storyId) {
+        return Single.just(stories.get(storyId));
     }
 
     @Override
-    public Observable<CommentDto> getComment(@Path("commentId") long commentId) {
-        return Observable.empty();
+    public Single<CommentDto> getComment(@Path("commentId") long commentId) {
+        return Single.empty();
     }
 }

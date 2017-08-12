@@ -2,31 +2,14 @@ package dev.bltucker.nanodegreecapstone.models;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
-import android.content.ContentValues;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-
-import dev.bltucker.nanodegreecapstone.storydetail.data.CommentColumns;
-
 @SuppressWarnings({"squid:S1213"})
-@Entity(tableName = "comments")
+@Entity(tableName = "comments", indices = {@Index(value = "storyId")})
 public final class Comment implements Parcelable {
-
-    public static ContentValues mapToContentValues(Comment aComment) {
-        ContentValues cv = new ContentValues();
-
-        cv.put(CommentColumns.STORY_ID, aComment.getStoryId());
-        cv.put(CommentColumns.COMMENT_ID, aComment.getId());
-        cv.put(CommentColumns.AUTHOR_NAME, aComment.getAuthorName());
-        cv.put(CommentColumns.COMMENT_TEXT, aComment.getCommentText());
-        cv.put(CommentColumns.UNIX_POST_TIME, aComment.getUnixPostTime());
-        cv.put(CommentColumns.PARENT_ID, aComment.getParentId());
-        cv.put(CommentColumns.COMMENT_DEPTH, aComment.getDepth());
-
-        return cv;
-    }
 
     @PrimaryKey
     @ColumnInfo(name = "_id")

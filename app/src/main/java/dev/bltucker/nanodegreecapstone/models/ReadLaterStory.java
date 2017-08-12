@@ -1,29 +1,18 @@
 package dev.bltucker.nanodegreecapstone.models;
 
+import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
-import android.content.ContentValues;
 import android.os.Parcel;
 import android.os.Parcelable;
-
-import dev.bltucker.nanodegreecapstone.data.ReadLaterColumns;
 
 @SuppressWarnings({"squid:S1213"})
 @Entity(tableName = "readLaterStories")
 public class ReadLaterStory implements Parcelable {
 
-    public static ContentValues mapToContentValues(ReadLaterStory readLaterStory) {
-        ContentValues cv = new ContentValues();
-
-        cv.put(ReadLaterColumns._ID, readLaterStory.getId());
-        cv.put(ReadLaterColumns.POSTER_NAME, readLaterStory.getPosterName());
-        cv.put(ReadLaterColumns.TITLE, readLaterStory.getTitle());
-        cv.put(ReadLaterColumns.URL, readLaterStory.getUrl());
-
-        return cv;
-    }
 
     @PrimaryKey
+    @ColumnInfo(name = "_id")
     public final long id;
 
     public final String posterName;

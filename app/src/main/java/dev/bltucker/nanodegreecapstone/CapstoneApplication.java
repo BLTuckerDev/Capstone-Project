@@ -1,7 +1,5 @@
 package dev.bltucker.nanodegreecapstone;
 
-import com.google.firebase.crash.FirebaseCrash;
-
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.app.Application;
@@ -17,11 +15,8 @@ import dev.bltucker.nanodegreecapstone.injection.DaggerInjector;
 import dev.bltucker.nanodegreecapstone.logging.FirebaseDebugTree;
 import dev.bltucker.nanodegreecapstone.sync.CommentCleaningService;
 import dev.bltucker.nanodegreecapstone.sync.StorySyncAdapter;
-import rx.Completable;
-import rx.CompletableSubscriber;
-import rx.Subscription;
-import rx.functions.Action0;
-import rx.schedulers.Schedulers;
+import io.reactivex.Completable;
+import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
 
 public class CapstoneApplication extends Application {
@@ -52,34 +47,20 @@ public class CapstoneApplication extends Application {
     }
 
     private void scheduleCommentCleanUpJob() {
-        Completable.fromAction(new Action0() {
-            @Override
-            public void call() {
+        Completable.fromAction(() -> {
+            JobInfo.Builder jobBuilder = new JobInfo.Builder(CommentCleaningService.JOB_ID,
+                new ComponentName(CapstoneApplication.this, CommentCleaningService.class));
 
-                JobInfo.Builder jobBuilder = new JobInfo.Builder(CommentCleaningService.JOB_ID,
-                    new ComponentName(CapstoneApplication.this, CommentCleaningService.class));
+            final long MILLIS_IN_DAY = 1000 * 60 * 60 * 24;
+            jobBuilder.setPeriodic(MILLIS_IN_DAY);
 
-                final long MILLIS_IN_DAY = 1000 * 60 * 60 * 24;
-                jobBuilder.setPeriodic(MILLIS_IN_DAY);
-
-                JobScheduler jobScheduler = (JobScheduler) getSystemService(Context.JOB_SCHEDULER_SERVICE);
-                jobScheduler.schedule(jobBuilder.build());
-            }
+            JobScheduler jobScheduler = (JobScheduler) getSystemService(Context.JOB_SCHEDULER_SERVICE);
+            jobScheduler.schedule(jobBuilder.build());
         })
             .subscribeOn(Schedulers.computation())
-            .subscribe(new CompletableSubscriber() {
-                @Override
-                public void onCompleted() {
-                }
-
-                @Override
-                public void onError(Throwable e) {
-                    Timber.e(e, "Error attempting to start the job scheduler service.");
-                }
-
-                @Override
-                public void onSubscribe(Subscription d) {
-                }
-            });
+            .subscribe(
+                    () -> { },
+                    e -> Timber.e(e, "Error attempting to start the job scheduler service.")
+            );
     }
 }

@@ -1,64 +1,37 @@
 package dev.bltucker.nanodegreecapstone.readlater;
 
-import android.content.ContentResolver;
-import android.content.ContentValues;
-import android.database.Cursor;
+import android.support.annotation.NonNull;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
 
-import dev.bltucker.nanodegreecapstone.data.ReadLaterColumns;
-import dev.bltucker.nanodegreecapstone.data.SchematicContentProviderGenerator;
+import dev.bltucker.nanodegreecapstone.data.daos.ReadLaterStoryDao;
 import dev.bltucker.nanodegreecapstone.models.ReadLaterStory;
-import rx.Observable;
-import rx.Subscriber;
+import io.reactivex.Observable;
 
 public class ContentProviderBackedRepository implements ReadLaterRepository {
 
-    private final ContentResolver contentResolver;
+    @NonNull
+    private final ReadLaterStoryDao readLaterStoryDao;
 
-    @Inject public ContentProviderBackedRepository(ContentResolver contentResolver){
-        this.contentResolver = contentResolver;
+    @Inject
+    public ContentProviderBackedRepository(@NonNull ReadLaterStoryDao readLaterStoryDao){
+        this.readLaterStoryDao = readLaterStoryDao;
     }
 
     @Override
     public void save(ReadLaterStory readLaterStory) {
-        ContentValues contentValues = ReadLaterStory.mapToContentValues(readLaterStory);
-        contentResolver.insert(SchematicContentProviderGenerator.StoryPaths.ALL_STORIES, contentValues);
+        readLaterStoryDao.saveStory(readLaterStory);
     }
 
     @Override
     public void remove(ReadLaterStory readLaterStory) {
-        contentResolver.delete(SchematicContentProviderGenerator.ReadLaterStoryPaths.withStoryId(String.valueOf(readLaterStory.getId())), null, null);
+        readLaterStoryDao.deleteStory(readLaterStory);
     }
 
     @Override
     public Observable<List<ReadLaterStory>> getAll() {
-        return Observable.create(new Observable.OnSubscribe<List<ReadLaterStory>>() {
-            @Override
-            public void call(Subscriber<? super List<ReadLaterStory>> subscriber) {
-                Cursor query = contentResolver.query(SchematicContentProviderGenerator.ReadLaterStoryPaths.ALL_READ_LATER_STORIES,
-                        null,
-                        null,
-                        null,
-                        null);
-
-                List<ReadLaterStory> readLaterStories = new ArrayList<ReadLaterStory>(query.getCount());
-                while(query.moveToNext()){
-                    long storyId = query.getLong(query.getColumnIndex(ReadLaterColumns._ID));
-                    String posterName = query.getString(query.getColumnIndex(ReadLaterColumns.POSTER_NAME));
-                    String title = query.getString(query.getColumnIndex(ReadLaterColumns.TITLE));
-                    String url = query.getString(query.getColumnIndex(ReadLaterColumns.URL));
-
-                    readLaterStories.add(new ReadLaterStory(storyId, posterName, title, url));
-                }
-
-                query.close();
-                subscriber.onNext(readLaterStories);
-                subscriber.onCompleted();
-            }
-        });
+        return readLaterStoryDao.getAllReadLaterStories().toObservable();
     }
 }

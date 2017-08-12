@@ -24,7 +24,7 @@ public class ReadLaterStoryListLoader extends AsyncTaskLoader<List<ReadLaterStor
 
     @Override
     public List<ReadLaterStory> loadInBackground() {
-        return readLaterRepository.getAll().toBlocking().first();
+        return readLaterRepository.getAll().blockingFirst();
     }
 
     @Override

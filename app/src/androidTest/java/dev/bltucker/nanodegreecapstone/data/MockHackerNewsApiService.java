@@ -1,8 +1,8 @@
 package dev.bltucker.nanodegreecapstone.data;
 
-import android.annotation.SuppressLint;
-
 import com.google.gson.Gson;
+
+import android.annotation.SuppressLint;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -11,11 +11,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-import dev.bltucker.nanodegreecapstone.models.Comment;
 import dev.bltucker.nanodegreecapstone.models.Story;
 import dev.bltucker.nanodegreecapstone.storydetail.data.CommentDto;
+import io.reactivex.Single;
 import retrofit2.http.Path;
-import rx.Observable;
 
 public class MockHackerNewsApiService implements HackerNewsApiService {
 
@@ -38,14 +37,14 @@ public class MockHackerNewsApiService implements HackerNewsApiService {
     }
 
     @Override
-    public Observable<List<Long>> getTopStoryIds() {
+    public Single<List<Long>> getTopStoryIds() {
         List<Long> topStoryIds = Arrays.asList(TOP_STORY_IDS);
-        return Observable.just(topStoryIds);
+        return Single.just(topStoryIds);
     }
 
     @Override
-    public Observable<Story> getStory(@Path("storyId") long storyId) {
-        return Observable.just(new Story(storyId, "Random test poster",
+    public Single<Story> getStory(@Path("storyId") long storyId) {
+        return Single.just(new Story(storyId, "Random test poster",
                 getRandomScore(),
                 System.currentTimeMillis(),
                 getRandomTitle(),
@@ -54,17 +53,17 @@ public class MockHackerNewsApiService implements HackerNewsApiService {
     }
 
     @Override
-    public Observable<CommentDto> getComment(@Path("commentId") long commentId) {
+    public Single<CommentDto> getComment(@Path("commentId") long commentId) {
         //TODO generate some comments with children, but dont generate an endless tree of comments
 
         if(providedFakeCommentDtos != null){
             if (providedFakeCommentDtos.containsKey(commentId)) {
-                return Observable.just(providedFakeCommentDtos.get(commentId));
+                return Single.just(providedFakeCommentDtos.get(commentId));
             } else {
-                return Observable.empty();
+                return Single.error(new RuntimeException("No comments found"));
             }
         } else {
-            return Observable.just(new CommentDto("Author", 1L, new long[0], 0L, "Text", System.currentTimeMillis()));
+            return Single.just(new CommentDto("Author", 1L, new long[0], 0L, "Text", System.currentTimeMillis()));
         }
 
     }

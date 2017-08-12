@@ -7,8 +7,9 @@ import android.os.Bundle;
 
 import javax.inject.Inject;
 
-import dev.bltucker.nanodegreecapstone.data.SchematicContentProviderGenerator;
 import dev.bltucker.nanodegreecapstone.injection.ApplicationScope;
+
+import static dev.bltucker.nanodegreecapstone.StoryProvider.AUTHORITY;
 
 @ApplicationScope
 public class ContentSyncRequester {
@@ -22,15 +23,14 @@ public class ContentSyncRequester {
         Bundle bundle = new Bundle();
         bundle.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
         bundle.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
-        ContentResolver.requestSync(account,
-                SchematicContentProviderGenerator.AUTHORITY, bundle);
+        ContentResolver.requestSync(account, AUTHORITY, bundle);
     }
 
     public void requestPeriodicSync(Account account, int syncInterval){
-        ContentResolver.setSyncAutomatically(account, SchematicContentProviderGenerator.AUTHORITY, true);
+        ContentResolver.setSyncAutomatically(account, AUTHORITY, true);
         ContentResolver.addPeriodicSync(
                 account,
-                SchematicContentProviderGenerator.AUTHORITY,
+                AUTHORITY,
                 Bundle.EMPTY,
                 syncInterval);
     }

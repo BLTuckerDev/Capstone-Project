@@ -11,8 +11,7 @@ import android.widget.RemoteViewsService;
 import java.util.Locale;
 
 import dev.bltucker.nanodegreecapstone.R;
-import dev.bltucker.nanodegreecapstone.data.SchematicContentProviderGenerator;
-import dev.bltucker.nanodegreecapstone.data.StoryColumns;
+import dev.bltucker.nanodegreecapstone.StoryProvider;
 import timber.log.Timber;
 
 class MyRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
@@ -37,7 +36,7 @@ class MyRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
         //clear identity since we do not export our content provider
         //this is called from within the app launcher process
         final long identityToken = Binder.clearCallingIdentity();
-        dataCursor = context.getContentResolver().query(SchematicContentProviderGenerator.StoryPaths.ALL_STORIES,
+        dataCursor = context.getContentResolver().query(StoryProvider.STORIES_URI,
                 null,
                 null,
                 null,
@@ -72,7 +71,7 @@ class MyRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 
         RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.story_list_widget_item);
 
-        String storyTitle = dataCursor.getString(dataCursor.getColumnIndex(StoryColumns.TITLE));
+        String storyTitle = dataCursor.getString(dataCursor.getColumnIndex("title"));
         String formattedTitle = String.format(Locale.US, "%d. %s", position + 1, storyTitle);
         remoteViews.setTextViewText(R.id.story_title_textview, formattedTitle);
         //TODO we can have a click intent that will send us straight to the detail activity here+
@@ -97,7 +96,7 @@ class MyRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
     public long getItemId(int position) {
         if(dataCursor != null && dataCursor.moveToPosition(position)){
             try{
-                return Long.valueOf(dataCursor.getString(dataCursor.getColumnIndex(StoryColumns._ID)));
+                return Long.valueOf(dataCursor.getString(dataCursor.getColumnIndex("_id")));
             } catch(NumberFormatException ex){
                 Timber.e(ex, "");
                 return position;

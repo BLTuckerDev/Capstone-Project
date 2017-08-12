@@ -9,6 +9,9 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
+
+    <permission android:name="dev.bltucker.nanodegreecapstone.storyprovider.READ_WRITE"/>
+
     <application
         android:name=".CapstoneApplication"
         android:allowBackup="true"
@@ -27,10 +30,11 @@
         </activity>
 
         <provider
-            android:name=".data.StoryProvider"
+            android:name=".StoryProvider"
             android:authorities="dev.bltucker.nanodegreecapstone.data"
             android:exported="false"
             android:label="Hacker News Reader"
+            android:permission="dev.bltucker.nanodegreecapstone.storyprovider.READ_WRITE"
             android:syncable="true" />
 
         <service

@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import javax.inject.Inject;
 
 import dev.bltucker.nanodegreecapstone.R;
+import dev.bltucker.nanodegreecapstone.data.HackerNewsDatabase;
 import dev.bltucker.nanodegreecapstone.injection.DaggerInjector;
 import dev.bltucker.nanodegreecapstone.models.Story;
 import dev.bltucker.nanodegreecapstone.readlater.ReadLaterListActivity;
@@ -20,6 +21,9 @@ import dev.bltucker.nanodegreecapstone.storydetail.StoryDetailFragment;
 import dev.bltucker.nanodegreecapstone.topstories.StoryListFragment;
 
 public class MainActivity extends AppCompatActivity implements HomeView, StoryListFragment.Delegate {
+
+    @Inject
+    HackerNewsDatabase hackerNewsDatabase;
 
     @Inject
     HomeViewPresenter homeViewPresenter;

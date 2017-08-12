@@ -3,7 +3,7 @@ package dev.bltucker.nanodegreecapstone.readlater;
 import java.util.List;
 
 import dev.bltucker.nanodegreecapstone.models.ReadLaterStory;
-import rx.Observable;
+import io.reactivex.Observable;
 
 public interface ReadLaterRepository {
 

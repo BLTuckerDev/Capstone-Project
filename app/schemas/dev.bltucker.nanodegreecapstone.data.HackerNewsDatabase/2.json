@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 2,
-    "identityHash": "b45bde42aa97c36922666256b01b7fd1",
+    "identityHash": "777ddb6bc484bef4e24ad2fdc3ede027",
     "entities": [
       {
         "tableName": "stories",
@@ -61,7 +61,7 @@
         "foreignKeys": []
       },
       {
-        "tableName": "CommentReference",
+        "tableName": "commentRefs",
         "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`_id` INTEGER NOT NULL, `storyId` INTEGER NOT NULL, `readRank` INTEGER NOT NULL, PRIMARY KEY(`_id`))",
         "fields": [
           {
@@ -91,23 +91,23 @@
         },
         "indices": [
           {
-            "name": "index_CommentReference_storyId",
+            "name": "index_commentRefs_storyId",
             "unique": false,
             "columnNames": [
               "storyId"
             ],
-            "createSql": "CREATE  INDEX `index_CommentReference_storyId` ON `${TABLE_NAME}` (`storyId`)"
+            "createSql": "CREATE  INDEX `index_commentRefs_storyId` ON `${TABLE_NAME}` (`storyId`)"
           }
         ],
         "foreignKeys": []
       },
       {
         "tableName": "readLaterStories",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `posterName` TEXT, `title` TEXT, `url` TEXT, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`_id` INTEGER NOT NULL, `posterName` TEXT, `title` TEXT, `url` TEXT, PRIMARY KEY(`_id`))",
         "fields": [
           {
             "fieldPath": "id",
-            "columnName": "id",
+            "columnName": "_id",
             "affinity": "INTEGER",
             "notNull": true
           },
@@ -132,7 +132,7 @@
         ],
         "primaryKey": {
           "columnNames": [
-            "id"
+            "_id"
           ],
           "autoGenerate": false
         },
@@ -192,13 +192,22 @@
           ],
           "autoGenerate": false
         },
-        "indices": [],
+        "indices": [
+          {
+            "name": "index_comments_storyId",
+            "unique": false,
+            "columnNames": [
+              "storyId"
+            ],
+            "createSql": "CREATE  INDEX `index_comments_storyId` ON `${TABLE_NAME}` (`storyId`)"
+          }
+        ],
         "foreignKeys": []
       }
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"b45bde42aa97c36922666256b01b7fd1\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"777ddb6bc484bef4e24ad2fdc3ede027\")"
     ]
   }
 }

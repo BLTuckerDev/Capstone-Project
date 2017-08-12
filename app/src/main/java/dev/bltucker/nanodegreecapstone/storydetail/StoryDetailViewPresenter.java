@@ -1,33 +1,31 @@
 package dev.bltucker.nanodegreecapstone.storydetail;
 
-import android.content.ContentResolver;
-import android.content.ContentValues;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 
-import dev.bltucker.nanodegreecapstone.data.SchematicContentProviderGenerator;
+import dev.bltucker.nanodegreecapstone.data.daos.ReadLaterStoryDao;
 import dev.bltucker.nanodegreecapstone.models.ReadLaterStory;
 import dev.bltucker.nanodegreecapstone.storydetail.data.StoryCommentLoaderCallbackDelegate;
 import dev.bltucker.nanodegreecapstone.storydetail.data.StoryCommentsLoader;
-import rx.Completable;
-import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action0;
-import rx.schedulers.Schedulers;
+import io.reactivex.Completable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
 
 public class StoryDetailViewPresenter {
-    private final ContentResolver contentResolver;
     private final StoryCommentLoaderCallbackDelegate commentLoaderCallbackDelegate;
 
     private StoryDetailView view;
     private LoaderManager loaderManager;
 
-    public StoryDetailViewPresenter(ContentResolver contentResolver, StoryCommentLoaderCallbackDelegate commentLoaderCallbackDelegate, LoaderManager loaderManager) {
-        this.contentResolver = contentResolver;
+    private final ReadLaterStoryDao readLaterStoryDao;
+
+    public StoryDetailViewPresenter(StoryCommentLoaderCallbackDelegate commentLoaderCallbackDelegate,
+                                    LoaderManager loaderManager,
+                                    ReadLaterStoryDao readLaterStoryDao) {
         this.commentLoaderCallbackDelegate = commentLoaderCallbackDelegate;
         this.loaderManager = loaderManager;
+        this.readLaterStoryDao = readLaterStoryDao;
     }
 
 
@@ -94,50 +92,13 @@ public class StoryDetailViewPresenter {
             return;
         }
 
-        //TODO extract this when we create some tests for this class
         final ReadLaterStory saveMe = new ReadLaterStory(detailStory.getStoryId(), detailStory.getPosterName(), detailStory.getTitle(), detailStory.getUrl());
-        Completable.fromAction(new Action0() {
-            @Override
-            public void call() {
-
-                Cursor query = contentResolver.query(SchematicContentProviderGenerator.ReadLaterStoryPaths.withStoryId(String.valueOf(saveMe.getId())),
-                        null,
-                        null,
-                        null,
-                        null);
-
-                if (null == query) {
-                    return;
-                }
-
-                if (query.getCount() > 0) {
-                    query.close();
-                    return;
-                }
-
-                ContentValues cv = ReadLaterStory.mapToContentValues(saveMe);
-                contentResolver.insert(SchematicContentProviderGenerator.ReadLaterStoryPaths.ALL_READ_LATER_STORIES, cv);
-                query.close();
-            }
-        }).subscribeOn(Schedulers.io())
+        Completable.fromAction(() -> readLaterStoryDao.saveStory(saveMe)).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<Object>() {
-                    @Override
-                    public void onCompleted() {
-                        if (view != null) {
-                            view.showStorySaveConfirmation();
-                        }
+                .subscribe(() -> {
+                    if (view != null) {
+                        view.showStorySaveConfirmation();
                     }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Timber.e(e, "Error while attempting to save a read later story.");
-                    }
-
-                    @SuppressWarnings("squid:S1186")
-                    @Override
-                    public void onNext(Object o) {
-                    }
-                });
+                }, e -> Timber.e(e, "Error while attempting to save a read later story."));
     }
 }

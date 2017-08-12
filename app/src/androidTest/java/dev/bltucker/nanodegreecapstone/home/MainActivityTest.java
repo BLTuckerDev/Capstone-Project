@@ -3,14 +3,11 @@ package dev.bltucker.nanodegreecapstone.home;
 import android.content.Context;
 import android.support.test.espresso.Espresso;
 import android.support.test.espresso.IdlingResource;
-import android.support.test.espresso.contrib.RecyclerViewActions;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
-import android.util.Log;
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,12 +16,12 @@ import dev.bltucker.nanodegreecapstone.CapstoneApplication;
 import dev.bltucker.nanodegreecapstone.R;
 import dev.bltucker.nanodegreecapstone.events.EventBus;
 import dev.bltucker.nanodegreecapstone.events.SyncCompletedEvent;
-import dev.bltucker.nanodegreecapstone.events.SyncStartedEvent;
 import dev.bltucker.nanodegreecapstone.injection.ApplicationComponent;
 import dev.bltucker.nanodegreecapstone.injection.DaggerApplicationComponent;
 import dev.bltucker.nanodegreecapstone.injection.DaggerInjector;
 import dev.bltucker.nanodegreecapstone.injection.TestApplicationResourcesModule;
-import rx.Subscriber;
+import io.reactivex.Observer;
+import io.reactivex.disposables.Disposable;
 import timber.log.Timber;
 
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
@@ -60,12 +57,17 @@ public class MainActivityTest {
         Espresso.registerIdlingResources(idlingResource);
         Timber.d("Registered idling resource");
         eventBus.subscribeTo(SyncCompletedEvent.class)
-                .subscribe(new Subscriber<Object>() {
+                .subscribe(new Observer<Object>() {
                     @Override
-                    public void onCompleted() {       }
+                    public void onComplete() {       }
 
                     @Override
                     public void onError(Throwable e) {   }
+
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
 
                     @Override
                     public void onNext(Object o) {

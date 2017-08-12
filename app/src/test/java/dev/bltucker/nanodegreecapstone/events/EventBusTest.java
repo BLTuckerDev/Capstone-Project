@@ -2,13 +2,12 @@ package dev.bltucker.nanodegreecapstone.events;
 
 import org.junit.Test;
 
-import java.util.concurrent.CountDownLatch;
+import io.reactivex.Observer;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
-import rx.Observable;
-import rx.Subscriber;
-import rx.schedulers.Schedulers;
-
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 public class EventBusTest {
 
@@ -20,15 +19,23 @@ public class EventBusTest {
         final Object fakeEvent = new Object();
 
         objectUnderTest.subscribeTo(fakeEvent.getClass())
-                .subscribeOn(Schedulers.immediate())
-                .observeOn(Schedulers.immediate())
-                .subscribe(new Subscriber<Object>() {
-                    @Override
-                    public void onCompleted() { }
+                .subscribeOn(Schedulers.trampoline())
+                .observeOn(Schedulers.trampoline())
+                .subscribe(new Observer<Object>() {
 
                     @Override
                     public void onError(Throwable e) {
                         fail();
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
                     }
 
                     @Override
@@ -48,15 +55,23 @@ public class EventBusTest {
         final Object fakeEvent = new Object();
 
         objectUnderTest.subscribeTo(Integer.class.getClass())
-                .subscribeOn(Schedulers.immediate())
-                .observeOn(Schedulers.immediate())
-                .subscribe(new Subscriber<Object>() {
-                    @Override
-                    public void onCompleted() { }
+                .subscribeOn(Schedulers.trampoline())
+                .observeOn(Schedulers.trampoline())
+                .subscribe(new Observer<Object>() {
 
                     @Override
                     public void onError(Throwable e) {
                         fail();
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
                     }
 
                     @Override

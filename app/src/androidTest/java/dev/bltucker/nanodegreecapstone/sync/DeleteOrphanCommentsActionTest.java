@@ -11,11 +11,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import dev.bltucker.nanodegreecapstone.data.DatabaseGenerator;
 import dev.bltucker.nanodegreecapstone.data.StoryDatabase;
 import dev.bltucker.nanodegreecapstone.models.Comment;
 import dev.bltucker.nanodegreecapstone.models.Story;
-import dev.bltucker.nanodegreecapstone.storydetail.data.CommentColumns;
 
 import static org.junit.Assert.assertEquals;
 

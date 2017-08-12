@@ -7,8 +7,7 @@ import javax.inject.Inject;
 import dev.bltucker.nanodegreecapstone.data.HackerNewsApiService;
 import dev.bltucker.nanodegreecapstone.injection.ApplicationScope;
 import dev.bltucker.nanodegreecapstone.models.Comment;
-import rx.Observable;
-import rx.functions.Func1;
+import io.reactivex.Observable;
 
 @ApplicationScope
 public final class StoryCommentsObservableFactory {
@@ -30,26 +29,13 @@ public final class StoryCommentsObservableFactory {
             return Observable.empty();
         } else {
             return Observable.range(0, commentIds.length)
-                    .concatMap(new Func1<Integer, Observable<CommentDto>>() {
-                        @Override
-                        public Observable<CommentDto> call(Integer index) {
-                            return hackerNewsApiService.getComment(commentIds[index]);
-                        }
+                    .concatMap(index -> hackerNewsApiService.getComment(commentIds[index]).toObservable())
+                    .concatMap(commentDto -> {
+                        final int childDepth = commentDepth + 1;
+                        return Observable.just(new Comment(storyId, commentDto.id, commentDto.by, commentDto.text, commentDto.time, commentDto.parent, commentDepth))
+                                .concatWith(downloadComments(storyId, commentDto.kids, childDepth));
                     })
-                    .concatMap(new Func1<CommentDto, Observable<Comment>>() {
-                        @Override
-                        public Observable<Comment> call(CommentDto commentDto) {
-                            final int childDepth = commentDepth + 1;
-                            return Observable.just(new Comment(storyId, commentDto.id, commentDto.by, commentDto.text, commentDto.time, commentDto.parent, commentDepth))
-                                    .concatWith(downloadComments(storyId, commentDto.kids, childDepth));
-                        }
-                    })
-                    .filter(new Func1<Comment, Boolean>() {
-                        @Override
-                        public Boolean call(Comment comment) {
-                            return comment.getCommentText().trim().length() > 0;
-                        }
-                    });
+                    .filter(comment -> comment.getCommentText().trim().length() > 0);
         }
     }
 

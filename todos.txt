@@ -1,16 +1,17 @@
 
 
 Next:
-+ Fix errors on launch on a fresh install
-+ Use Room
++ Fix broken tests
++ Rewrite Stoiry Provider Tests
 + Use Lifecycle
-+ Switch to kotlin
 + remove butter knife, use databinding everywhere
 + update job delete service to make use of the new query capabilities
 + update story provider tests to perform crud integration on all tables
 + With Mockito 2 we can move away from Powermock
 + need loading spinner indicator
 + StoryDetailViewPresenter tests
++ Break up the APp resources module
++ make the schedulers injectable, no more statics
 + When the user saves a story for later download the comments for that story as it currently stands,
     also add a way to view those comments in the read later activity
 + main activity UI test to verify the empty message is shown when there are no stories available

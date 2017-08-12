@@ -1,109 +1,65 @@
 package dev.bltucker.nanodegreecapstone.data;
 
-import android.content.ContentResolver;
-import android.content.ContentValues;
-import android.database.Cursor;
-import android.support.annotation.VisibleForTesting;
+import android.support.annotation.NonNull;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
 
+import dev.bltucker.nanodegreecapstone.data.daos.CommentRefsDao;
+import dev.bltucker.nanodegreecapstone.data.daos.StoryDao;
+import dev.bltucker.nanodegreecapstone.injection.ApplicationScope;
 import dev.bltucker.nanodegreecapstone.models.Story;
-import rx.Observable;
-import rx.functions.Func1;
+import io.reactivex.Observable;
 import timber.log.Timber;
 
+@ApplicationScope
 public class ContentProviderBackedStoryRepository implements StoryRepository {
 
-    @VisibleForTesting
-    final ContentResolver contentResolver;
+    @NonNull
+    private final StoryDao storyDao;
 
-    @VisibleForTesting
-    final CommentRepository commentRepository;
+    @NonNull
+    private final CommentRefsDao commentRefsDao;
 
     @Inject
-    public ContentProviderBackedStoryRepository(ContentResolver contentResolver, CommentRepository commentRepository) {
-        this.contentResolver = contentResolver;
-        this.commentRepository = commentRepository;
+    public ContentProviderBackedStoryRepository(@NonNull StoryDao storyDao, @NonNull CommentRefsDao commentRefsDao) {
+        this.storyDao = storyDao;
+        this.commentRefsDao = commentRefsDao;
     }
 
     @Override
     public Observable<List<Story>> getAllStories() {
-
-        Cursor queryCursor = contentResolver.query(SchematicContentProviderGenerator.StoryPaths.ALL_STORIES,
-                null,
-                null,
-                null,
-                null);
-
-        if (null == queryCursor) {
-            return Observable.error(new Exception("Query for all stories returned a null cursor"));
-        }
-
-        return Observable.just(queryCursor)
-                .map(new Func1<Cursor, List<Story>>() {
-                    @Override
-                    public List<Story> call(Cursor cursor) {
-                        List<Story> storyList = new ArrayList<>(cursor.getCount());
-
-                        while (cursor.moveToNext()) {
-                            long storyId = cursor.getLong(cursor.getColumnIndex(StoryColumns._ID));
-                            String storyPoster = cursor.getString(cursor.getColumnIndex(StoryColumns.POSTER_NAME));
-                            long score = cursor.getLong(cursor.getColumnIndex(StoryColumns.SCORE));
-                            String title = cursor.getString(cursor.getColumnIndex(StoryColumns.TITLE));
-                            long unixTime = cursor.getLong(cursor.getColumnIndex(StoryColumns.UNIX_TIME));
-                            String storyUrl = cursor.getString(cursor.getColumnIndex(StoryColumns.URL));
-                            Long[] commentIds = commentRepository.getCommentIds(storyId);
-
-                            storyList.add(new Story(storyId, storyPoster, score, unixTime, title, storyUrl, commentIds));
-                        }
-
-                        cursor.close();
-                        return storyList;
-                    }
-                });
+        return storyDao.getAllStories().toObservable();
     }
 
     @Override
-    public void saveStories(List<Story> stories) {
-        int deletedStories = contentResolver.delete(SchematicContentProviderGenerator.StoryPaths.ALL_STORIES, null, null);
-        int deletedCommentRefs = contentResolver.delete(SchematicContentProviderGenerator.CommentRefs.ALL_COMMENT_REFS, null, null);
+    public void saveStories(Story[] stories) {
+        storyDao.deleteAllStories();
+        commentRefsDao.deleteAllCommentRefs();
 
-        Timber.d("Deleted %d stories", deletedStories);
-        Timber.d("Deleted %d comment references", deletedCommentRefs);
+        List<CommentReference> commentRefsContentValuesList = new ArrayList<>();
 
-        List<ContentValues> storyContentValues = new ArrayList<>(stories.size());
-        List<ContentValues> commentRefsContentValuesList = new ArrayList<>();
-
-        for (int i = 0; i < stories.size(); i++) {
-            Story story = stories.get(i);
-            storyContentValues.add(Story.mapToContentValues(story));
+        for (int i = 0; i < stories.length; i++) {
+            Story story = stories[i];
             commentRefsContentValuesList.addAll(getCommentRefList(story));
         }
 
-        ContentValues[] contentValues = new ContentValues[storyContentValues.size()];
-        int insertedStoryCount = contentResolver.bulkInsert(SchematicContentProviderGenerator.StoryPaths.ALL_STORIES, storyContentValues.toArray(contentValues));
+        storyDao.saveStories(stories);
 
-        Timber.d("Inserted %d stories", insertedStoryCount);
+        CommentReference[] commentRefsContentValuesArray = new CommentReference[commentRefsContentValuesList.size()];
+        commentRefsDao.saveAllRefs(commentRefsContentValuesList.toArray(commentRefsContentValuesArray));
 
-        ContentValues[] commentRefsContentValuesArray = new ContentValues[commentRefsContentValuesList.size()];
-        int commentRefInsertCount = contentResolver.bulkInsert(SchematicContentProviderGenerator.CommentRefs.ALL_COMMENT_REFS, commentRefsContentValuesList.toArray(commentRefsContentValuesArray));
-
-        Timber.d("Inserted %d comment references", commentRefInsertCount);
     }
 
-    private List<ContentValues> getCommentRefList(Story story) {
+    private List<CommentReference> getCommentRefList(Story story) {
         Long[] commentIds = story.getCommentIds();
-        List<ContentValues> contentValues = new ArrayList<>(commentIds.length);
+        List<CommentReference> contentValues = new ArrayList<>(commentIds.length);
 
         for (int i = 0; i < commentIds.length; i++) {
-            ContentValues aContentValue = new ContentValues();
-            aContentValue.put(CommentRefsColumns._ID, commentIds[i]);
-            aContentValue.put(CommentRefsColumns.STORY_ID, story.getId());
-            aContentValue.put(CommentRefsColumns.READ_RANK, i);
-            contentValues.add(aContentValue);
+            CommentReference commentReference = new CommentReference(commentIds[i], story.getId(), i);
+            contentValues.add(commentReference);
         }
 
         return contentValues;

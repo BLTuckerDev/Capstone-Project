@@ -1,37 +1,19 @@
 package dev.bltucker.nanodegreecapstone.models;
 
+import com.google.gson.annotations.SerializedName;
+
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
-import android.content.ContentValues;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.google.gson.annotations.SerializedName;
-
 import java.util.Arrays;
-
-import dev.bltucker.nanodegreecapstone.data.StoryColumns;
 
 @SuppressWarnings({"squid:S1213"})
 @Entity(tableName = "stories")
 public class Story implements Parcelable {
-
-    public static ContentValues mapToContentValues(Story aStory) {
-
-        ContentValues cv = new ContentValues();
-
-        cv.put(StoryColumns._ID, aStory.getId());
-        cv.put(StoryColumns.POSTER_NAME, aStory.getPosterName());
-        cv.put(StoryColumns.SCORE, aStory.getScore());
-        cv.put(StoryColumns.TITLE, aStory.getTitle());
-        cv.put(StoryColumns.UNIX_TIME, aStory.getUnixTime());
-        cv.put(StoryColumns.URL, aStory.getUrl());
-        cv.put(StoryColumns.RANK, aStory.getStoryRank());
-
-        return cv;
-    }
 
 
     @PrimaryKey

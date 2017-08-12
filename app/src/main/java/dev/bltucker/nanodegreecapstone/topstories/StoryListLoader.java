@@ -11,9 +11,9 @@ import dev.bltucker.nanodegreecapstone.data.StoryRepository;
 import dev.bltucker.nanodegreecapstone.events.EventBus;
 import dev.bltucker.nanodegreecapstone.events.SyncCompletedEvent;
 import dev.bltucker.nanodegreecapstone.models.Story;
-import rx.Subscriber;
-import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
 import timber.log.Timber;
 
 public class StoryListLoader extends AsyncTaskLoader<List<Story>> {
@@ -22,7 +22,7 @@ public class StoryListLoader extends AsyncTaskLoader<List<Story>> {
 
     private final StoryRepository storyRepository;
     private final EventBus eventBus;
-    private Subscription syncAdapterChangeSubscription;
+    private Disposable syncAdapterChangeSubscription;
 
     @Inject
     public StoryListLoader(Context context, StoryRepository storyRepository, EventBus eventBus) {
@@ -35,7 +35,7 @@ public class StoryListLoader extends AsyncTaskLoader<List<Story>> {
     @Override
     public List<Story> loadInBackground() {
         Timber.d("StoryListLoader loading in background");
-        return storyRepository.getAllStories().toBlocking().first();
+        return storyRepository.getAllStories().blockingFirst();
     }
 
     @Override
@@ -50,22 +50,29 @@ public class StoryListLoader extends AsyncTaskLoader<List<Story>> {
 
     @Override
     protected void onReset() {
-        syncAdapterChangeSubscription.unsubscribe();
+        syncAdapterChangeSubscription.dispose();
         super.onReset();
     }
 
 
     private void subscribeToSyncEvents(){
-        syncAdapterChangeSubscription = eventBus.subscribeTo(SyncCompletedEvent.class)
+        eventBus.subscribeTo(SyncCompletedEvent.class)
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<Object>() {
-                    @Override
-                    @SuppressWarnings("squid:S1186")
-                    public void onCompleted() {   }
+                .subscribe(new Observer<Object>() {
 
                     @Override
                     public void onError(Throwable e) {
                         Timber.e(e, "Error thrown after a sync complete event handler");
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        syncAdapterChangeSubscription = d;
                     }
 
                     @Override

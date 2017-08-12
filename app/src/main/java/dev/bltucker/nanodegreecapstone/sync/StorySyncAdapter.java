@@ -8,9 +8,6 @@ import android.content.Intent;
 import android.content.SyncResult;
 import android.os.Bundle;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.inject.Inject;
 
 import dev.bltucker.nanodegreecapstone.data.HackerNewsApiService;
@@ -22,10 +19,8 @@ import dev.bltucker.nanodegreecapstone.events.SyncStatusObserver;
 import dev.bltucker.nanodegreecapstone.injection.DaggerInjector;
 import dev.bltucker.nanodegreecapstone.injection.StoryMax;
 import dev.bltucker.nanodegreecapstone.models.Story;
-import rx.Observable;
-import rx.Subscriber;
-import rx.functions.Func1;
-import rx.schedulers.Schedulers;
+import io.reactivex.Observable;
+import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
 
 public final class StorySyncAdapter extends AbstractThreadedSyncAdapter {
@@ -34,7 +29,7 @@ public final class StorySyncAdapter extends AbstractThreadedSyncAdapter {
 
     public static final String ACCOUNT_TYPE = "bltucker.dev";
 
-    public static final String SYNC_COMPLETED_ACTION ="dev.bltucker.nanodegreecapstone.SYNC_COMPLETED";
+    public static final String SYNC_COMPLETED_ACTION = "dev.bltucker.nanodegreecapstone.SYNC_COMPLETED";
 
     @Inject
     SyncStatusObserver observer;
@@ -71,46 +66,34 @@ public final class StorySyncAdapter extends AbstractThreadedSyncAdapter {
         final long startTime = System.currentTimeMillis();
 
         apiService.getTopStoryIds()
-              .concatMap(new Func1<List<Long>, Observable<List<Story>>>() {
-                  @Override
-                  public Observable<List<Story>> call(List<Long> storyIds) {
-                      List<Story> storyList = new ArrayList<>(storyIds.size());
-                      final int maxStories = Math.min(storyIds.size(), maximumStoryCount);
+                .toObservable()
+                .concatMap(storyIdList -> {
+                    final int storyArrayLength = Math.min(storyIdList.size(), maximumStoryCount);
+                    Story[] stories = new Story[storyArrayLength];
 
-                      for (int i = 0; i < maxStories; i++) {
-                          Story story = apiService.getStory(storyIds.get(i)).toBlocking().first();
-                          story.setStoryRank(i);
-                          storyList.add(story);
-                      }
+                    for (int i = 0; i < storyArrayLength; i++) {
+                        Story story = apiService.getStory(storyIdList.get(i)).blockingGet();
+                        story.setStoryRank(i);
+                        stories[i] = story;
+                    }
 
-                      return Observable.just(storyList);
-                  }
-              })
+                    return Observable.just(stories);
+                })
                 .subscribeOn(Schedulers.io())
-              .subscribe(new Subscriber<List<Story>>() {
-                  @Override
-                  public void onCompleted() {
-                      final long stopTime = System.currentTimeMillis();
-                      Timber.d("Sync completed in %d milliseconds", stopTime - startTime);
-                      //notify the application
-                      observer.setSyncInProgress(false);
-                      eventBus.publish(new SyncCompletedEvent());
-                      notifyWidgets();
-                  }
-
-                  @Override
-                  public void onError(Throwable e) {
-                      Timber.e(e, "Error downloading top stories");
-                      //TODO styorSyncErrorEvent and handle appropriately
-                      observer.setSyncInProgress(false);
-                      eventBus.publish(new SyncCompletedEvent());
-                  }
-
-                  @Override
-                  public void onNext(List<Story> stories) {
-                      storyRepository.saveStories(stories);
-                  }
-              });
+                .subscribe(storyRepository::saveStories,
+                        e -> {
+                    Timber.e(e, "Error downloading top stories");
+                    //TODO styorSyncErrorEvent and handle appropriately
+                    observer.setSyncInProgress(false);
+                    eventBus.publish(new SyncCompletedEvent());
+                }, () -> {
+                    final long stopTime = System.currentTimeMillis();
+                    Timber.d("Sync completed in %d milliseconds", stopTime - startTime);
+                    //notify the application
+                    observer.setSyncInProgress(false);
+                    eventBus.publish(new SyncCompletedEvent());
+                    notifyWidgets();
+                });
     }
 
     private void notifyWidgets() {

@@ -8,13 +8,9 @@ import java.util.List;
 
 import dev.bltucker.nanodegreecapstone.data.HackerNewsApiService;
 import dev.bltucker.nanodegreecapstone.models.Comment;
-import rx.Observable;
-import rx.Subscriber;
-import rx.observers.TestSubscriber;
+import io.reactivex.Single;
+import io.reactivex.observers.TestObserver;
 
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertTrue;
-import static junit.framework.Assert.fail;
 import static org.mockito.Matchers.anyLong;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -35,11 +31,11 @@ public class StoryCommentsObservableFactoryTest {
     public void testGet_ShouldReturnListOfComments(){
         CommentDto fakeCommentOne = new CommentDto("Author One", 1L, new long[0], 1000L, "This is the first comment", System.currentTimeMillis());
         CommentDto fakeCommentTwo = new CommentDto("Author Two", 2L, new long[0], 2000L, "This is the second comment", System.currentTimeMillis());
-        when(mockHackerNewsService.getComment(anyLong())).thenReturn(Observable.just(fakeCommentOne), Observable.just(fakeCommentTwo));
+        when(mockHackerNewsService.getComment(anyLong())).thenReturn(Single.just(fakeCommentOne), Single.just(fakeCommentTwo));
 
         final long[] commentIds = new long[]{1L, 2L};
 
-        TestSubscriber<Comment> commentTestSubscriber = new TestSubscriber<>();
+        TestObserver<Comment> commentTestSubscriber = new TestObserver<>();
 
         List<Comment> expectedCommentEmitList = new ArrayList<>();
 
@@ -50,12 +46,12 @@ public class StoryCommentsObservableFactoryTest {
         objectUnderTest.get(1L, commentIds)
                 .subscribe(commentTestSubscriber);
 
-        commentTestSubscriber.assertReceivedOnNext(expectedCommentEmitList);
+        commentTestSubscriber.assertValues(expectedCommentEmitList.get(0), expectedCommentEmitList.get(1));
     }
 
     @Test
     public void testGet_WithEmptyCommentIdArray_ShouldReturnEmptyObservable(){
-        TestSubscriber<Comment> commentTestSubscriber = new TestSubscriber<>();
+        TestObserver<Comment> commentTestSubscriber = new TestObserver<>();
 
         final long[] commentIds = new long[0];
         objectUnderTest.get(1L, commentIds)

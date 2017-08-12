@@ -18,9 +18,12 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import dev.bltucker.nanodegreecapstone.data.daos.CommentRefsDao;
+import dev.bltucker.nanodegreecapstone.data.daos.StoryDao;
 import dev.bltucker.nanodegreecapstone.models.Story;
 
 import static junit.framework.Assert.assertEquals;
+import static org.junit.Assert.fail;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyLong;
 import static org.mockito.Matchers.anyString;
@@ -44,33 +47,36 @@ public class ContentProviderBackedStoryRepositoryTest {
     ContentProviderBackedStoryRepository objectUnderTest;
 
     @Before
-    public void setup(){
+    public void setup() {
         mockContentResolver = mock(ContentResolver.class);
         mockCommentRepository = mock(CommentRepository.class);
-        objectUnderTest = new ContentProviderBackedStoryRepository(mockContentResolver, mockCommentRepository);
+        CommentRefsDao mockCommentRefsDao = mock(CommentRefsDao.class);
+        StoryDao mockStoryDao = mock(StoryDao.class);
+        objectUnderTest = new ContentProviderBackedStoryRepository(mockStoryDao, mockCommentRefsDao);
     }
 
     @Test
     public void testGetAllStories() throws Exception {
-        Cursor mockCursor = mock(Cursor.class);
-        Cursor mockCommentCursor = mock(Cursor.class);
-        Uri mockUri = mock(Uri.class);
-
-        mockStatic(Uri.class);
-        when(Uri.parse(anyString())).thenReturn(mockUri);
-        when(mockContentResolver.query(SchematicContentProviderGenerator.StoryPaths.ALL_STORIES,
-                null,
-                null,
-                null,
-                null))
-                .thenReturn(mockCursor);
-        mockCursorCalls(mockCursor);
-
-        when(mockCommentRepository.getCommentIds(anyLong())).thenReturn(new Long[0]);
-
-        List<Story> storyList = objectUnderTest.getAllStories().toBlocking().first();
-
-        assertEquals(1, storyList.size());
+        fail();
+//        Cursor mockCursor = mock(Cursor.class);
+//        Cursor mockCommentCursor = mock(Cursor.class);
+//        Uri mockUri = mock(Uri.class);
+//
+//        mockStatic(Uri.class);
+//        when(Uri.parse(anyString())).thenReturn(mockUri);
+//        when(mockContentResolver.query(SchematicContentProviderGenerator.StoryPaths.ALL_STORIES,
+//                null,
+//                null,
+//                null,
+//                null))
+//                .thenReturn(mockCursor);
+//        mockCursorCalls(mockCursor);
+//
+//        when(mockCommentRepository.getCommentIds(anyLong())).thenReturn(new Long[0]);
+//
+//        List<Story> storyList = objectUnderTest.getAllStories().toBlocking().first();
+//
+//        assertEquals(1, storyList.size());
     }
 
     private void mockCursorCalls(Cursor mockCursor) {
@@ -98,32 +104,33 @@ public class ContentProviderBackedStoryRepositoryTest {
 
     @Test
     public void testSaveStories() throws Exception {
-        Uri mockUri = mock(Uri.class);
-        ContentValues mockContentValues = mock(ContentValues.class);
-
-        mockStatic(Uri.class);
-        mockStatic(Story.class);
-        mockStatic(ContentValues.class);
-
-        when(Uri.parse(anyString())).thenReturn(mockUri);
-        when(mockContentResolver.delete(mockUri, null, null)).thenReturn(1);
-
-        Long[] commentIds = {1L, 2L, 3L};
-        Story fakeStory = new Story(1L, "Poster", 100, new Date().getTime(), "Post Title", "https://google.com/", commentIds);
-
-        List<Story> stories = new ArrayList<Story>();
-        stories.add(fakeStory);
-
-        when(Story.mapToContentValues(fakeStory)).thenReturn(mockContentValues);
-        PowerMockito.whenNew(ContentValues.class).withAnyArguments().thenReturn(mockContentValues);
-//        PowerMockito.doNothing().when(mockContentValues).put(CommentRefsColumns._ID, 1L);
-        doNothing().when(mockContentValues).put(CommentRefsColumns._ID, 1L);
-
-
-        objectUnderTest.saveStories(stories);
-
-        verify(mockContentResolver, atLeastOnce()).delete(SchematicContentProviderGenerator.StoryPaths.ALL_STORIES, null, null);
-        verify(mockContentResolver, atLeastOnce()).delete(SchematicContentProviderGenerator.CommentRefs.ALL_COMMENT_REFS, null, null);
-        verify(mockContentResolver, times(2)).bulkInsert(any(Uri.class), any(ContentValues[].class));
+        fail();
+//        Uri mockUri = mock(Uri.class);
+//        ContentValues mockContentValues = mock(ContentValues.class);
+//
+//        mockStatic(Uri.class);
+//        mockStatic(Story.class);
+//        mockStatic(ContentValues.class);
+//
+//        when(Uri.parse(anyString())).thenReturn(mockUri);
+//        when(mockContentResolver.delete(mockUri, null, null)).thenReturn(1);
+//
+//        Long[] commentIds = {1L, 2L, 3L};
+//        Story fakeStory = new Story(1L, "Poster", 100, new Date().getTime(), "Post Title", "https://google.com/", commentIds);
+//
+//        List<Story> stories = new ArrayList<Story>();
+//        stories.add(fakeStory);
+//
+//        when(Story.mapToContentValues(fakeStory)).thenReturn(mockContentValues);
+//        PowerMockito.whenNew(ContentValues.class).withAnyArguments().thenReturn(mockContentValues);
+////        PowerMockito.doNothing().when(mockContentValues).put(CommentRefsColumns._ID, 1L);
+//        doNothing().when(mockContentValues).put(CommentRefsColumns._ID, 1L);
+//
+//
+//        objectUnderTest.saveStories(stories);
+//
+//        verify(mockContentResolver, atLeastOnce()).delete(SchematicContentProviderGenerator.StoryPaths.ALL_STORIES, null, null);
+//        verify(mockContentResolver, atLeastOnce()).delete(SchematicContentProviderGenerator.CommentRefs.ALL_COMMENT_REFS, null, null);
+//        verify(mockContentResolver, times(2)).bulkInsert(any(Uri.class), any(ContentValues[].class));
     }
 }

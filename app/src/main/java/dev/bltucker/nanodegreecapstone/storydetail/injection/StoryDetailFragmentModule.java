@@ -1,6 +1,5 @@
 package dev.bltucker.nanodegreecapstone.storydetail.injection;
 
-import android.content.ContentResolver;
 import android.content.res.Resources;
 import android.support.v4.app.LoaderManager;
 
@@ -10,14 +9,15 @@ import javax.inject.Provider;
 
 import dagger.Module;
 import dagger.Provides;
+import dev.bltucker.nanodegreecapstone.data.daos.ReadLaterStoryDao;
 import dev.bltucker.nanodegreecapstone.injection.GregorianUTC;
 import dev.bltucker.nanodegreecapstone.models.ReadingSession;
 import dev.bltucker.nanodegreecapstone.storydetail.DetailStoryProvider;
-import dev.bltucker.nanodegreecapstone.storydetail.data.StoryCommentLoaderCallbackDelegate;
 import dev.bltucker.nanodegreecapstone.storydetail.StoryCommentsAdapter;
-import dev.bltucker.nanodegreecapstone.storydetail.data.StoryCommentsLoader;
 import dev.bltucker.nanodegreecapstone.storydetail.StoryDetailFragment;
 import dev.bltucker.nanodegreecapstone.storydetail.StoryDetailViewPresenter;
+import dev.bltucker.nanodegreecapstone.storydetail.data.StoryCommentLoaderCallbackDelegate;
+import dev.bltucker.nanodegreecapstone.storydetail.data.StoryCommentsLoader;
 
 @Module
 public class StoryDetailFragmentModule {
@@ -42,11 +42,10 @@ public class StoryDetailFragmentModule {
 
     @Provides
     @StoryDetailFragmentScope
-    public StoryDetailViewPresenter provideStoryDetailPresenter(ContentResolver contentResolver,
-                                                                ReadingSession readingSession,
-                                                                StoryCommentLoaderCallbackDelegate commentLoaderCallbackDelegate,
-                                                                LoaderManager loaderManager){
-        return new StoryDetailViewPresenter(contentResolver, commentLoaderCallbackDelegate, loaderManager);
+    public StoryDetailViewPresenter provideStoryDetailPresenter(StoryCommentLoaderCallbackDelegate commentLoaderCallbackDelegate,
+                                                                LoaderManager loaderManager,
+                                                                ReadLaterStoryDao readLaterStoryDao){
+        return new StoryDetailViewPresenter(commentLoaderCallbackDelegate, loaderManager, readLaterStoryDao);
     }
 
     @Provides

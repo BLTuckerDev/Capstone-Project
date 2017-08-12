@@ -1,15 +1,16 @@
 package dev.bltucker.nanodegreecapstone.injection;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import android.accounts.Account;
 import android.app.NotificationManager;
 import android.arch.persistence.room.Room;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.UriMatcher;
 import android.content.res.Resources;
 import android.util.LruCache;
-
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 import java.util.Calendar;
 import java.util.List;
@@ -21,21 +22,30 @@ import dagger.Module;
 import dagger.Provides;
 import dev.bltucker.nanodegreecapstone.CapstoneApplication;
 import dev.bltucker.nanodegreecapstone.R;
-import dev.bltucker.nanodegreecapstone.data.CommentRepository;
+import dev.bltucker.nanodegreecapstone.StoryProvider;
 import dev.bltucker.nanodegreecapstone.data.ContentProviderBackedStoryRepository;
 import dev.bltucker.nanodegreecapstone.data.HackerNewsApiService;
 import dev.bltucker.nanodegreecapstone.data.HackerNewsDatabase;
-import dev.bltucker.nanodegreecapstone.data.StoryDatabase;
 import dev.bltucker.nanodegreecapstone.data.StoryRepository;
+import dev.bltucker.nanodegreecapstone.data.daos.CommentRefsDao;
+import dev.bltucker.nanodegreecapstone.data.daos.CommentsDao;
+import dev.bltucker.nanodegreecapstone.data.daos.ReadLaterStoryDao;
 import dev.bltucker.nanodegreecapstone.data.daos.StoryDao;
 import dev.bltucker.nanodegreecapstone.data.migrations.Version1to2;
-import dev.bltucker.nanodegreecapstone.events.EventBus;
 import dev.bltucker.nanodegreecapstone.models.Comment;
-import dev.bltucker.nanodegreecapstone.models.ReadingSession;
 import dev.bltucker.nanodegreecapstone.sync.StorySyncAdapter;
 import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
+
+import static dev.bltucker.nanodegreecapstone.StoryProvider.ALL_COMMENTS_STORY_PATH_CODE;
+import static dev.bltucker.nanodegreecapstone.StoryProvider.ALL_STORIES_PATH_CODE;
+import static dev.bltucker.nanodegreecapstone.StoryProvider.COMMENTS_PATH_CODE;
+import static dev.bltucker.nanodegreecapstone.StoryProvider.COMMENTS_WITH_PARENT_PATH_CODE;
+import static dev.bltucker.nanodegreecapstone.StoryProvider.COMMENT_REFS_PATH_CODE;
+import static dev.bltucker.nanodegreecapstone.StoryProvider.COMMENT_REFS_PATH_ITEM_CODE;
+import static dev.bltucker.nanodegreecapstone.StoryProvider.READ_LATER_STORIES_PATH_CODE;
+import static dev.bltucker.nanodegreecapstone.StoryProvider.READ_LATER_STORIES_PATH_ITEM_CODE;
 
 @Module
 @ApplicationScope
@@ -56,15 +66,47 @@ public class ApplicationResourcesModule {
     }
 
     @Provides
-    @Singleton
+    @ApplicationScope
     StoryDao provideStoryDao(HackerNewsDatabase hackerNewsDatabase){
         return hackerNewsDatabase.storyDao();
     }
 
     @Provides
     @ApplicationScope
-    public StoryDatabase provideStoryDatabase(){
-        return StoryDatabase.getInstance(application);
+    CommentRefsDao provideCommentRefsDao(HackerNewsDatabase hackerNewsDatabase){
+        return hackerNewsDatabase.commentRefsDao();
+    }
+
+    @Provides
+    @ApplicationScope
+    ReadLaterStoryDao provideReadLaterStoryDao(HackerNewsDatabase hackerNewsDatabase){
+        return hackerNewsDatabase.readLaterStoryDao();
+    }
+
+    @Provides
+    @ApplicationScope
+    CommentsDao provideCommentsDao(HackerNewsDatabase hackerNewsDatabase){
+        return hackerNewsDatabase.commentsDao();
+    }
+
+    @Provides
+    UriMatcher provideContentProviderUriMatcher(){
+        UriMatcher matcher = new UriMatcher(UriMatcher.NO_MATCH);
+
+        matcher.addURI(StoryProvider.AUTHORITY, StoryProvider.ALL_STORIES_PATH, ALL_STORIES_PATH_CODE);
+
+        matcher.addURI(StoryProvider.AUTHORITY, StoryProvider.COMMENT_REFS_PATH, COMMENT_REFS_PATH_CODE);
+        matcher.addURI(StoryProvider.AUTHORITY, StoryProvider.COMMENT_REFS_PATH + "/*", COMMENT_REFS_PATH_ITEM_CODE);
+
+        matcher.addURI(StoryProvider.AUTHORITY, StoryProvider.COMMENTS_PATH, COMMENTS_PATH_CODE);
+        matcher.addURI(StoryProvider.AUTHORITY, StoryProvider.COMMENTS_PATH + "/*", COMMENTS_WITH_PARENT_PATH_CODE);
+        matcher.addURI(StoryProvider.AUTHORITY, StoryProvider.ALL_COMMENTS_FOR_STORY_PATH + "/*", ALL_COMMENTS_STORY_PATH_CODE);
+
+
+        matcher.addURI(StoryProvider.AUTHORITY, StoryProvider.READ_LATER_STORY_PATH, READ_LATER_STORIES_PATH_CODE);
+        matcher.addURI(StoryProvider.AUTHORITY, StoryProvider.READ_LATER_STORY_PATH + "/*", READ_LATER_STORIES_PATH_ITEM_CODE);
+
+        return matcher;
     }
 
     @Provides
@@ -145,7 +187,7 @@ public class ApplicationResourcesModule {
         return new Retrofit.Builder()
                 .baseUrl("https://hacker-news.firebaseio.com/v0/")
                 .addConverterFactory(GsonConverterFactory.create(gson))
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build();
     }
 
@@ -157,19 +199,7 @@ public class ApplicationResourcesModule {
 
     @Provides
     @ApplicationScope
-    public StoryRepository provideStoryRepository(ContentResolver contentResolver, CommentRepository commentRepository) {
-        return new ContentProviderBackedStoryRepository(contentResolver, commentRepository);
-    }
-
-    @Provides
-    @ApplicationScope
-    public EventBus provideEventBus() {
-        return new EventBus();
-    }
-
-    @Provides
-    @ApplicationScope
-    public ReadingSession provideReadingSession(@StoryMax int storyMax, EventBus eventBus) {
-        return new ReadingSession(storyMax, eventBus);
+    public StoryRepository provideStoryRepository(ContentProviderBackedStoryRepository storyRepository) {
+        return storyRepository;
     }
 }

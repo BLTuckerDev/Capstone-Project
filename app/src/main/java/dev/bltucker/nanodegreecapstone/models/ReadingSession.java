@@ -9,17 +9,20 @@ import javax.inject.Inject;
 
 import dev.bltucker.nanodegreecapstone.events.EventBus;
 import dev.bltucker.nanodegreecapstone.events.SyncCompletedEvent;
+import dev.bltucker.nanodegreecapstone.injection.ApplicationScope;
 import dev.bltucker.nanodegreecapstone.injection.StoryMax;
-import rx.Subscriber;
-import rx.Subscription;
+import io.reactivex.Observer;
+import io.reactivex.disposables.Disposable;
 import timber.log.Timber;
 
+@ApplicationScope
 public class ReadingSession {
 
     private final List<Story> userReadingList;
 
     @SuppressWarnings({"unused", "FieldCanBeLocal"})
-    private final Subscription syncAdapterChangeSubscription;
+    private Disposable syncAdapterChangeSubscription;
+
     private boolean storyListIsDirty = false;
 
     private final List<Story> latestSyncStories;
@@ -29,15 +32,20 @@ public class ReadingSession {
         userReadingList = new ArrayList<>(maximumStoryCount);
         latestSyncStories = new ArrayList<>(maximumStoryCount);
 
-        syncAdapterChangeSubscription = eventBus.subscribeTo(SyncCompletedEvent.class)
-                .subscribe(new Subscriber<Object>() {
+        eventBus.subscribeTo(SyncCompletedEvent.class)
+                .subscribe(new Observer<Object>() {
                     @Override
                     @SuppressWarnings("squid:S1186")
-                    public void onCompleted() {   }
+                    public void onComplete() {   }
 
                     @Override
                     public void onError(Throwable e) {
                         Timber.e(e, "Error thrown after a sync complete event handler");
+                    }
+
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        syncAdapterChangeSubscription = d;
                     }
 
                     @Override
