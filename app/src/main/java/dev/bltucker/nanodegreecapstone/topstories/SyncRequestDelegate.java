@@ -4,7 +4,7 @@ import android.accounts.Account;
 import android.content.ContentResolver;
 import android.os.Bundle;
 
-import static dev.bltucker.nanodegreecapstone.StoryProvider.AUTHORITY;
+import static dev.bltucker.nanodegreecapstone.data.StoryProvider.AUTHORITY;
 
 class SyncRequestDelegate {
     private final Account account;

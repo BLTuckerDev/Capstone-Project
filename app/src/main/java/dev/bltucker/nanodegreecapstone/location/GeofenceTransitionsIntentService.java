@@ -15,7 +15,7 @@ import com.google.android.gms.location.GeofencingEvent;
 import javax.inject.Inject;
 
 import dev.bltucker.nanodegreecapstone.R;
-import dev.bltucker.nanodegreecapstone.StoryProvider;
+import dev.bltucker.nanodegreecapstone.data.StoryProvider;
 import dev.bltucker.nanodegreecapstone.injection.DaggerInjector;
 import dev.bltucker.nanodegreecapstone.readlater.ReadLaterListActivity;
 import timber.log.Timber;

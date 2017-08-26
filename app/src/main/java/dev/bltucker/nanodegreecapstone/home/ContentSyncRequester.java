@@ -9,7 +9,7 @@ import javax.inject.Inject;
 
 import dev.bltucker.nanodegreecapstone.injection.ApplicationScope;
 
-import static dev.bltucker.nanodegreecapstone.StoryProvider.AUTHORITY;
+import static dev.bltucker.nanodegreecapstone.data.StoryProvider.AUTHORITY;
 
 @ApplicationScope
 public class ContentSyncRequester {

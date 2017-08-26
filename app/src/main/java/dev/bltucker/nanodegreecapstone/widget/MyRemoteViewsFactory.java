@@ -11,7 +11,7 @@ import android.widget.RemoteViewsService;
 import java.util.Locale;
 
 import dev.bltucker.nanodegreecapstone.R;
-import dev.bltucker.nanodegreecapstone.StoryProvider;
+import dev.bltucker.nanodegreecapstone.data.StoryProvider;
 import timber.log.Timber;
 
 class MyRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {

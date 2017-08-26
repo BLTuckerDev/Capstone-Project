@@ -16,13 +16,11 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.TimeZone;
 
-import javax.inject.Singleton;
-
 import dagger.Module;
 import dagger.Provides;
 import dev.bltucker.nanodegreecapstone.CapstoneApplication;
 import dev.bltucker.nanodegreecapstone.R;
-import dev.bltucker.nanodegreecapstone.StoryProvider;
+import dev.bltucker.nanodegreecapstone.data.StoryProvider;
 import dev.bltucker.nanodegreecapstone.data.ContentProviderBackedStoryRepository;
 import dev.bltucker.nanodegreecapstone.data.HackerNewsApiService;
 import dev.bltucker.nanodegreecapstone.data.HackerNewsDatabase;
@@ -38,20 +36,20 @@ import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-import static dev.bltucker.nanodegreecapstone.StoryProvider.ALL_COMMENTS_STORY_PATH_CODE;
-import static dev.bltucker.nanodegreecapstone.StoryProvider.ALL_STORIES_PATH_CODE;
-import static dev.bltucker.nanodegreecapstone.StoryProvider.COMMENTS_PATH_CODE;
-import static dev.bltucker.nanodegreecapstone.StoryProvider.COMMENTS_WITH_PARENT_PATH_CODE;
-import static dev.bltucker.nanodegreecapstone.StoryProvider.COMMENT_REFS_PATH_CODE;
-import static dev.bltucker.nanodegreecapstone.StoryProvider.COMMENT_REFS_PATH_ITEM_CODE;
-import static dev.bltucker.nanodegreecapstone.StoryProvider.READ_LATER_STORIES_PATH_CODE;
-import static dev.bltucker.nanodegreecapstone.StoryProvider.READ_LATER_STORIES_PATH_ITEM_CODE;
+import static dev.bltucker.nanodegreecapstone.data.StoryProvider.ALL_COMMENTS_STORY_PATH_CODE;
+import static dev.bltucker.nanodegreecapstone.data.StoryProvider.ALL_STORIES_PATH_CODE;
+import static dev.bltucker.nanodegreecapstone.data.StoryProvider.COMMENTS_PATH_CODE;
+import static dev.bltucker.nanodegreecapstone.data.StoryProvider.COMMENTS_WITH_PARENT_PATH_CODE;
+import static dev.bltucker.nanodegreecapstone.data.StoryProvider.COMMENT_REFS_PATH_CODE;
+import static dev.bltucker.nanodegreecapstone.data.StoryProvider.COMMENT_REFS_PATH_ITEM_CODE;
+import static dev.bltucker.nanodegreecapstone.data.StoryProvider.READ_LATER_STORIES_PATH_CODE;
+import static dev.bltucker.nanodegreecapstone.data.StoryProvider.READ_LATER_STORIES_PATH_ITEM_CODE;
 
 @Module
 @ApplicationScope
 public class ApplicationResourcesModule {
 
-    private final CapstoneApplication application;
+    protected final CapstoneApplication application;
 
     public ApplicationResourcesModule(CapstoneApplication application) {
         this.application = application;

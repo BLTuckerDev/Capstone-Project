@@ -11,13 +11,12 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Provider;
 
-import dev.bltucker.nanodegreecapstone.StoryProvider;
+import dev.bltucker.nanodegreecapstone.data.StoryProvider;
 import dev.bltucker.nanodegreecapstone.models.ReadLaterStory;
 import io.reactivex.Completable;
 import io.reactivex.CompletableObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Action;
 import io.reactivex.schedulers.Schedulers;
 
 public class ReadLaterListPresenter implements LoaderManager.LoaderCallbacks<List<ReadLaterStory>>, SwipeRefreshLayout.OnRefreshListener {

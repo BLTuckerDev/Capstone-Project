@@ -30,7 +30,7 @@
         </activity>
 
         <provider
-            android:name=".StoryProvider"
+            android:name=".data.StoryProvider"
             android:authorities="dev.bltucker.nanodegreecapstone.data"
             android:exported="false"
             android:label="Hacker News Reader"

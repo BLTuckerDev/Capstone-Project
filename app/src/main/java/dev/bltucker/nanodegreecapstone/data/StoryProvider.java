@@ -1,4 +1,4 @@
-package dev.bltucker.nanodegreecapstone;
+package dev.bltucker.nanodegreecapstone.data;
 
 import android.content.ContentProvider;
 import android.content.ContentResolver;
@@ -9,14 +9,12 @@ import android.net.Uri;
 import android.support.annotation.Keep;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.VisibleForTesting;
 
 import javax.inject.Inject;
 
-import dev.bltucker.nanodegreecapstone.data.daos.CommentRefsDao;
-import dev.bltucker.nanodegreecapstone.data.daos.CommentsDao;
 import dev.bltucker.nanodegreecapstone.data.daos.ReadLaterStoryDao;
 import dev.bltucker.nanodegreecapstone.data.daos.StoryDao;
-import dev.bltucker.nanodegreecapstone.injection.DaggerApplicationComponent;
 import dev.bltucker.nanodegreecapstone.injection.DaggerInjector;
 
 @Keep
@@ -56,13 +54,9 @@ public class StoryProvider extends ContentProvider {
 
     public static final Uri STORIES_URI = Uri.parse("content://" + AUTHORITY + "/" + ALL_STORIES_PATH);
 
-    public static final Uri COMMENT_REFS_URI = Uri.parse("content://" + AUTHORITY + "/" + COMMENT_REFS_PATH);
-
     public static final Uri COMMENTS_URI = Uri.parse("content://" + AUTHORITY + "/" + COMMENTS_PATH);
 
     public static final Uri READ_LATER_URI = Uri.parse("content://" + AUTHORITY + "/" + READ_LATER_STORY_PATH);
-
-    public static final Uri STORY_COMMENTS_PATH = Uri.parse("content://" + AUTHORITY + "/" + ALL_COMMENTS_FOR_STORY_PATH);
 
 
     private boolean hasBeenInjected = false;
@@ -74,13 +68,7 @@ public class StoryProvider extends ContentProvider {
     StoryDao storyDao;
 
     @Inject
-    CommentRefsDao commentRefsDao;
-
-    @Inject
     ReadLaterStoryDao readLaterStoryDao;
-
-    @Inject
-    CommentsDao commentsDao;
 
     @Inject
     ContentResolver contentResolver;
@@ -118,7 +106,8 @@ public class StoryProvider extends ContentProvider {
         return queryCursor;
     }
 
-    private void inject() {
+    @VisibleForTesting
+    void inject() {
         DaggerInjector.getApplicationComponent().inject(this);
         hasBeenInjected = true;
     }
@@ -156,111 +145,16 @@ public class StoryProvider extends ContentProvider {
     @Nullable
     @Override
     public Uri insert(@NonNull Uri uri, @Nullable ContentValues contentValues) {
-        if(!hasBeenInjected){
-            inject();
-        }
-
-        switch(uriMatcher.match(uri)){
-            case ALL_STORIES_PATH_CODE:
-                break;
-            case COMMENT_REFS_PATH_ITEM_CODE:
-                break;
-            case COMMENT_REFS_PATH_CODE:
-                break;
-
-            case COMMENTS_PATH_CODE:
-                break;
-
-            case COMMENTS_WITH_PARENT_PATH_CODE:
-                break;
-
-            case ALL_COMMENTS_STORY_PATH_CODE:
-                break;
-
-            case READ_LATER_STORIES_PATH_CODE:
-                break;
-
-            case READ_LATER_STORIES_PATH_ITEM_CODE:
-                break;
-
-            default:
-                throw new IllegalArgumentException("Invalid Uri: " + uri);
-        }
-
-        return null;
-
-
+        throw new UnsupportedOperationException("This content provider does not accept inserts");
     }
 
     @Override
     public int delete(@NonNull Uri uri, @Nullable String s, @Nullable String[] strings) {
-        if(!hasBeenInjected){
-            inject();
-        }
-
-        switch(uriMatcher.match(uri)){
-            case ALL_STORIES_PATH_CODE:
-                break;
-            case COMMENT_REFS_PATH_ITEM_CODE:
-                break;
-            case COMMENT_REFS_PATH_CODE:
-                break;
-
-            case COMMENTS_PATH_CODE:
-                break;
-
-            case COMMENTS_WITH_PARENT_PATH_CODE:
-                break;
-
-            case ALL_COMMENTS_STORY_PATH_CODE:
-                break;
-
-            case READ_LATER_STORIES_PATH_CODE:
-                break;
-
-            case READ_LATER_STORIES_PATH_ITEM_CODE:
-                break;
-
-            default:
-                throw new IllegalArgumentException("Invalid Uri: " + uri);
-        }
-
-        return 0;
+        throw new UnsupportedOperationException("This content provider does not accept deletes");
     }
 
     @Override
     public int update(@NonNull Uri uri, @Nullable ContentValues contentValues, @Nullable String s, @Nullable String[] strings) {
-        if(!hasBeenInjected){
-            inject();
-        }
-
-        switch(uriMatcher.match(uri)){
-            case ALL_STORIES_PATH_CODE:
-                break;
-            case COMMENT_REFS_PATH_ITEM_CODE:
-                break;
-            case COMMENT_REFS_PATH_CODE:
-                break;
-
-            case COMMENTS_PATH_CODE:
-                break;
-
-            case COMMENTS_WITH_PARENT_PATH_CODE:
-                break;
-
-            case ALL_COMMENTS_STORY_PATH_CODE:
-                break;
-
-            case READ_LATER_STORIES_PATH_CODE:
-                break;
-
-            case READ_LATER_STORIES_PATH_ITEM_CODE:
-                break;
-
-            default:
-                throw new IllegalArgumentException("Invalid Uri: " + uri);
-        }
-
-        return 0;
+        throw new UnsupportedOperationException("This content provider does not accept updates");
     }
 }

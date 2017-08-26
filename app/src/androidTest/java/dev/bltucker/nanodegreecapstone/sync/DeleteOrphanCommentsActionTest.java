@@ -1,8 +1,6 @@
 package dev.bltucker.nanodegreecapstone.sync;
 
-import android.content.ContentValues;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
+import android.arch.persistence.room.Room;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 
@@ -11,112 +9,75 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import dev.bltucker.nanodegreecapstone.data.StoryDatabase;
+import dev.bltucker.nanodegreecapstone.data.HackerNewsDatabase;
+import dev.bltucker.nanodegreecapstone.data.daos.CommentsDao;
+import dev.bltucker.nanodegreecapstone.data.daos.StoryDao;
 import dev.bltucker.nanodegreecapstone.models.Comment;
 import dev.bltucker.nanodegreecapstone.models.Story;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 @RunWith(AndroidJUnit4.class)
 public class DeleteOrphanCommentsActionTest {
 
-    private StoryDatabase storyDatabase;
-    private SQLiteDatabase writableDatabase;
     private DeleteOrphanCommentsAction objectUnderTest;
+    private CommentsDao commentsDao;
+    private HackerNewsDatabase hackerNewsDatabase;
+    private StoryDao storyDao;
 
     @Before
     public void setUp() throws Exception {
-        storyDatabase = StoryDatabase.getInstance(InstrumentationRegistry.getContext());
-        writableDatabase = storyDatabase.getWritableDatabase();
-        objectUnderTest = new DeleteOrphanCommentsAction(storyDatabase);
+        hackerNewsDatabase = Room.inMemoryDatabaseBuilder(InstrumentationRegistry.getContext(), HackerNewsDatabase.class).build();
+        commentsDao = hackerNewsDatabase.commentsDao();
+        storyDao = hackerNewsDatabase.storyDao();
+        objectUnderTest = new DeleteOrphanCommentsAction(commentsDao);
     }
 
     @After
     public void tearDown(){
-        InstrumentationRegistry.getContext().deleteDatabase(storyDatabase.getDatabaseName());
+        hackerNewsDatabase.close();
     }
 
     @Test
     public void testWithOrphanCommentsShouldDeleteJustTheOrphans() throws Exception {
-        final long fakeTime = System.currentTimeMillis();
-        final long validStoryId = 2000L;
-        final long invalidStoryId = validStoryId + 10;
-        final int rootDepthCommentDepth = 0;
+        //create orphan comments
+        commentsDao.save(new Comment(1, 2, "author", "comment Text", System.currentTimeMillis(), -1, 0));
+        commentsDao.save(new Comment(2, 2, "author", "comment Text", System.currentTimeMillis(), -1, 0));
+        commentsDao.save(new Comment(3, 2, "author", "comment Text", System.currentTimeMillis(), -1, 0));
+        commentsDao.save(new Comment(4, 2, "author", "comment Text", System.currentTimeMillis(), -1, 0));
 
-        //create a story
-        Story story = new Story(validStoryId, "Tester", 100L, fakeTime, "A Test Story", "https://google.com/", new Long[0]);
-        ContentValues contentValues = Story.mapToContentValues(story);
-        writableDatabase.insert(DatabaseGenerator.STORIES, null, contentValues);
+        Comment[] beforeTaskArray = commentsDao.getRootOrphanComments();
 
-        //create a comment linked to that story
-        long validStoryCommentId = 101L;
-        Comment validStoryComment = new Comment(1L, validStoryCommentId, "Tester", "Valid", fakeTime, validStoryId, rootDepthCommentDepth);
-        writableDatabase.insert(DatabaseGenerator.COMMENTS, null, Comment.mapToContentValues(validStoryComment));
+        objectUnderTest.run();
 
+        Comment[] afterTakeArray = commentsDao.getRootOrphanComments();
 
-        //create comment that is no longer linked to a story in the db
-        long invalidStoryCommentId = 102L;
-        Comment invalidStoryComment = new Comment(1L, invalidStoryCommentId, "Tester", "Invalid", fakeTime, invalidStoryId, rootDepthCommentDepth);
-        writableDatabase.insert(DatabaseGenerator.COMMENTS, null, Comment.mapToContentValues(invalidStoryComment));
+        assertTrue(beforeTaskArray.length > 0);
+        assertTrue(afterTakeArray.length == 0);
 
-        //create child comments of the invalid story's parent comment
-        for(int i = 1; i < 4; i++){
-            long invalidStoryCommentChildId = invalidStoryCommentId + i;
-            Comment invalidStoryCommentChild = new Comment(1L, invalidStoryCommentChildId, "tester", "invalid child", fakeTime, invalidStoryCommentChildId-1, rootDepthCommentDepth+i);
-            writableDatabase.insert(DatabaseGenerator.COMMENTS, null, Comment.mapToContentValues(invalidStoryCommentChild));
-        }
-        
-        Cursor beforeCursor = writableDatabase.rawQuery("SELECT * FROM " + DatabaseGenerator.COMMENTS, new String[0]);
-
-        assertEquals(5, beforeCursor.getCount());
-
-        objectUnderTest.call();
-
-        Cursor afterCursor = writableDatabase.rawQuery("SELECT * FROM " + DatabaseGenerator.COMMENTS, new String[0]);
-
-        assertEquals(1, afterCursor.getCount());
-        afterCursor.moveToNext();
-        assertEquals(validStoryCommentId, afterCursor.getLong(afterCursor.getColumnIndex(CommentColumns.COMMENT_ID)));
-
-        beforeCursor.close();
-        afterCursor.close();
     }
 
     @Test
     public void testWithNoOrphanCommentsShouldNotDeleteAnyComments(){
-        final long fakeTime = System.currentTimeMillis();
-        final long validStoryId = 2000L;
-        final int rootDepthCommentDepth = 0;
+        int storyId = 2;
+        Story[] stories = new Story[]{ new Story(storyId, "some poster", 100, System.currentTimeMillis(), "A Title", "https://blog.abnormallydriven.com/")};
 
-        //create a story
-        Story story = new Story(validStoryId, "Tester", 100L, fakeTime, "A Test Story", "https://google.com/", new Long[0]);
-        ContentValues contentValues = Story.mapToContentValues(story);
-        writableDatabase.insert(DatabaseGenerator.STORIES, null, contentValues);
+        storyDao.saveStories(stories);
 
-        //create a comment linked to that story
-        long validStoryCommentId = 101L;
-        Comment validStoryComment = new Comment(1L, validStoryCommentId, "Tester", "Valid", fakeTime, validStoryId, rootDepthCommentDepth);
-        writableDatabase.insert(DatabaseGenerator.COMMENTS, null, Comment.mapToContentValues(validStoryComment));
+        commentsDao.save(new Comment(1, 2, "author", "comment Text", System.currentTimeMillis(), storyId, 0));
+        commentsDao.save(new Comment(2, 2, "author", "comment Text", System.currentTimeMillis(), storyId, 0));
+        commentsDao.save(new Comment(3, 2, "author", "comment Text", System.currentTimeMillis(), storyId, 0));
+        commentsDao.save(new Comment(4, 2, "author", "comment Text", System.currentTimeMillis(), storyId, 0));
 
-        //create child comments
-        for(int i = 1; i < 4; i++){
-            long validStoryCommentChildId = validStoryCommentId + i;
-            Comment validStoryChildComment = new Comment(1L, validStoryCommentChildId, "tester", "invalid child", fakeTime, validStoryCommentChildId-1, rootDepthCommentDepth+i);
-            writableDatabase.insert(DatabaseGenerator.COMMENTS, null, Comment.mapToContentValues(validStoryChildComment));
-        }
+        Comment[] beforeTaskArray = commentsDao.getRootOrphanComments();
 
-        Cursor beforeCursor = writableDatabase.rawQuery("SELECT * FROM " + DatabaseGenerator.COMMENTS, new String[0]);
+        objectUnderTest.run();
 
-        assertEquals(4, beforeCursor.getCount());
+        Comment[] afterTaskArray = commentsDao.getRootOrphanComments();
 
-        objectUnderTest.call();
+        assertTrue(beforeTaskArray.length == 0);
+        assertTrue(afterTaskArray.length == 0);
+        assertTrue(commentsDao.getChildComments(storyId).length == 4);
 
-        Cursor afterCursor = writableDatabase.rawQuery("SELECT * FROM " + DatabaseGenerator.COMMENTS, new String[0]);
-
-        assertEquals(4, afterCursor.getCount());
-        afterCursor.moveToNext();
-
-        beforeCursor.close();
-        afterCursor.close();
     }
 }
