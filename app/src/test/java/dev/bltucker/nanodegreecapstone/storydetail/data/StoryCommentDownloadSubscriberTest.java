@@ -16,13 +16,16 @@ import org.powermock.modules.junit4.PowerMockRunnerDelegate;
 import dev.bltucker.nanodegreecapstone.data.CommentRepository;
 import dev.bltucker.nanodegreecapstone.events.EventBus;
 import dev.bltucker.nanodegreecapstone.models.Comment;
+import io.reactivex.disposables.Disposable;
 import timber.log.Timber;
 
 import static junit.framework.Assert.assertTrue;
 import static org.mockito.Matchers.anyObject;
 import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import static org.powermock.api.mockito.PowerMockito.mock;
 import static org.powermock.api.mockito.PowerMockito.mockStatic;
 
@@ -55,7 +58,12 @@ public class StoryCommentDownloadSubscriberTest {
     @Test
     public void testOnNext_WithShouldContinueSetToFalse_ShouldStopDownloading(){
         Comment saveMe = new Comment(1L, 1L, "Author", "SOme Text", System.currentTimeMillis(), 20L, 1);
+        Disposable mockDisposable = mock(Disposable.class);
 
+        doNothing().when(mockDisposable).dispose();
+        when(mockDisposable.isDisposed()).thenReturn(true);
+
+        objectUnderTest.onSubscribe(mockDisposable);
         objectUnderTest.shouldContinueDownloadingComments = false;
         objectUnderTest.onNext(saveMe);
 
@@ -69,7 +77,7 @@ public class StoryCommentDownloadSubscriberTest {
 
         PowerMockito.doNothing().when(Timber.class, "d", anyString());
 
-        objectUnderTest.onCompleted();
+        objectUnderTest.onComplete();
 
         verify(mockEventBus, times(1)).publish(anyObject());
     }

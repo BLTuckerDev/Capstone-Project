@@ -50,7 +50,7 @@ class StoryCommentDownloadSubscriber implements Observer<Comment> {
     @Override
     public void onNext(Comment comment) {
         commentRepository.saveComment(comment);
-        if(!shouldContinueDownloadingComments){
+        if(!shouldContinueDownloadingComments && subscription != null){
             subscription.dispose();
         }
     }

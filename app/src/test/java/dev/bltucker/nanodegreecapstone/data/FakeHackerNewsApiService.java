@@ -35,6 +35,6 @@ public class FakeHackerNewsApiService implements HackerNewsApiService {
 
     @Override
     public Single<CommentDto> getComment(@Path("commentId") long commentId) {
-        return Single.empty();
+        return Single.never();
     }
 }
