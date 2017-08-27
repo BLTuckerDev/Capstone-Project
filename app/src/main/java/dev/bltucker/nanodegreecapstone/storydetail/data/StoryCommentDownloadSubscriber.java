@@ -49,7 +49,11 @@ class StoryCommentDownloadSubscriber implements Observer<Comment> {
 
     @Override
     public void onNext(Comment comment) {
-        commentRepository.saveComment(comment);
+        try{
+            commentRepository.saveComment(comment);
+        } catch(Exception ex){
+            Timber.d("commentDownloader", "Error attempting to save comment: " + comment.toString(), ", Exception Message: " + ex.getMessage());
+        }
         if(!shouldContinueDownloadingComments && subscription != null){
             subscription.dispose();
         }

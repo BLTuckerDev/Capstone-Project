@@ -35,8 +35,8 @@ public final class Comment implements Parcelable {
                    long unixPostTime,
                    long parentId,
                    int depth) {
-        this.storyId = storyId;
         this.id = id;
+        this.storyId = storyId;
         this.authorName = authorName != null ? authorName : "";
         this.commentText = commentText != null ? commentText : "";
         this.unixPostTime = unixPostTime;

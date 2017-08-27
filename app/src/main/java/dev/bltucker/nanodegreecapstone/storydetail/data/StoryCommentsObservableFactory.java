@@ -32,7 +32,7 @@ public final class StoryCommentsObservableFactory {
                     .concatMap(index -> hackerNewsApiService.getComment(commentIds[index]).toObservable())
                     .concatMap(commentDto -> {
                         final int childDepth = commentDepth + 1;
-                        return Observable.just(new Comment(storyId, commentDto.id, commentDto.by, commentDto.text, commentDto.time, commentDto.parent, commentDepth))
+                        return Observable.just(new Comment(commentDto.id, storyId, commentDto.by, commentDto.text, commentDto.time, commentDto.parent, commentDepth))
                                 .concatWith(downloadComments(storyId, commentDto.kids, childDepth));
                     })
                     .filter(comment -> comment.getCommentText().trim().length() > 0);

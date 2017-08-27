@@ -20,7 +20,7 @@ public class CommentRepository {
     }
 
     public Observable<List<Comment>> getStoryComments(final long storyId) {
-        return Observable.fromArray(commentsDao.getChildComments(storyId)).toList().toObservable();
+        return Observable.fromArray(commentsDao.getStoryComments(storyId)).toList().toObservable();
     }
 
     public void saveComment(Comment comment){

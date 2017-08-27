@@ -49,16 +49,10 @@ public class InterruptibleDownloadService extends Service {
     @VisibleForTesting
     EventBus eventBus;
 
-
     public static void startDownload(Context context, DetailStory story) {
         Intent intent = new Intent(context, InterruptibleDownloadService.class);
         intent.putExtra(STORY_PARAM, story);
         context.startService(intent);
-    }
-
-    @SuppressWarnings("squid:S1213")
-    public InterruptibleDownloadService() {
-        DaggerInjector.getApplicationComponent().interruptibleDownloadServiceComponent(new InterruptibleDownloadServiceModule(this)).inject(this);
     }
 
     @Override
@@ -69,6 +63,7 @@ public class InterruptibleDownloadService extends Service {
 
     @Override
     public void onCreate() {
+        DaggerInjector.getApplicationComponent().interruptibleDownloadServiceComponent(new InterruptibleDownloadServiceModule(this)).inject(this);
         super.onCreate();
         Timber.d("Service.onCreate");
     }
@@ -129,11 +124,5 @@ public class InterruptibleDownloadService extends Service {
         }
 
         return primitiveCommentIds;
-    }
-
-    @Override
-    public void onDestroy() {
-        Timber.d("Service.onDestroy");
-        super.onDestroy();
     }
 }

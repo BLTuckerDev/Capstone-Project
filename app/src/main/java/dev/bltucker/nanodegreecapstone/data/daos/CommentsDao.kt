@@ -18,6 +18,9 @@ interface CommentsDao {
     @Query("SELECT * FROM comments t1 where parentId NOT IN (SELECT _id FROM stories) AND depth = 0")
     fun getRootOrphanComments() : Array<Comment>
 
+    @Query("SELECT * FROM comments where storyId = :storyId")
+    fun getStoryComments(storyId: Long): Array<Comment>
+
     @Query("SELECT * from comments where parentId = :parentCommentId")
     fun getChildComments(parentCommentId : Long) : Array<Comment>
 
