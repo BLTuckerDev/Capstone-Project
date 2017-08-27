@@ -40,7 +40,7 @@ public class CommentRepositoryTest {
                 new Comment(3, storyId, "Random Poster", "Randomness", System.currentTimeMillis(), storyId, 1),
         };
 
-        when(mockCommentsDao.getChildComments(storyId)).thenReturn(fakeComments);
+        when(mockCommentsDao.getStoryComments(storyId)).thenReturn(fakeComments);
 
         List<Comment> storyComments = objectUnderTest.getStoryComments(storyId).blockingFirst();
 
@@ -54,7 +54,7 @@ public class CommentRepositoryTest {
     public void testGetStoryCommentsWithInvalidStoryIdShouldReturnEmptyList(){
         int storyId = -1;
 
-        when(mockCommentsDao.getChildComments(storyId)).thenReturn(new Comment[0]);
+        when(mockCommentsDao.getStoryComments(storyId)).thenReturn(new Comment[0]);
 
         List<Comment> storyComments = objectUnderTest.getStoryComments(storyId).blockingFirst();
 

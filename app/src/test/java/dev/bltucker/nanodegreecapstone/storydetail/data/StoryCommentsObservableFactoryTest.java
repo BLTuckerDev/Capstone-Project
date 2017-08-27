@@ -39,8 +39,8 @@ public class StoryCommentsObservableFactoryTest {
 
         List<Comment> expectedCommentEmitList = new ArrayList<>();
 
-        expectedCommentEmitList.add(new Comment(1L, fakeCommentOne.id, fakeCommentOne.by, fakeCommentOne.text, fakeCommentOne.time, fakeCommentOne.parent, 0));
-        expectedCommentEmitList.add(new Comment(1L, fakeCommentTwo.id, fakeCommentTwo.by, fakeCommentTwo.text, fakeCommentTwo.time, fakeCommentTwo.parent, 0));
+        expectedCommentEmitList.add(new Comment(fakeCommentOne.id, 1L, fakeCommentOne.by, fakeCommentOne.text, fakeCommentOne.time, fakeCommentOne.parent, 0));
+        expectedCommentEmitList.add(new Comment(fakeCommentTwo.id, 1L, fakeCommentTwo.by, fakeCommentTwo.text, fakeCommentTwo.time, fakeCommentTwo.parent, 0));
 
 
         objectUnderTest.get(1L, commentIds)

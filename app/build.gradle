@@ -1,7 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android'
-apply plugin: 'org.sonarqube'
+//apply plugin: 'org.sonarqube'
 
 repositories {
     maven {
@@ -64,25 +64,25 @@ android {
 }
 
 
-sonarqube {
-    properties {
-        // required metadata
-        property "sonar.projectKey", "Nanodegree-Capstone"
-        property "sonar.projectName", "Nanodegree-Capstone"
-        property "sonar.projectVersion", "${version}"
-
-        // path to source directories (required)
-        property "sonar.sources", "src"
-        property "sonar.test", "src/androidTest/java, src/test"
-        property "sonar.exclusions", "build/**/*.*, src/androidTest/**/*.java, src/test/**/*.java"
-
-        // other configs
-        property "sonar.java.source", "8"
-
-        // Android Lint
-        property "sonar.android.lint.report", "build/outputs/lint-results.xml"
-    }
-}
+//sonarqube {
+//    properties {
+//        // required metadata
+//        property "sonar.projectKey", "Nanodegree-Capstone"
+//        property "sonar.projectName", "Nanodegree-Capstone"
+//        property "sonar.projectVersion", "${version}"
+//
+//        // path to source directories (required)
+//        property "sonar.sources", "src"
+//        property "sonar.test", "src/androidTest/java, src/test"
+//        property "sonar.exclusions", "build/**/*.*, src/androidTest/**/*.java, src/test/**/*.java"
+//
+//        // other configs
+//        property "sonar.java.source", "8"
+//
+//        // Android Lint
+//        property "sonar.android.lint.report", "build/outputs/lint-results.xml"
+//    }
+//}
 
 final DAGGER_VERSION = "2.10"
 final SUPPORT_VERSION = "26.0.1"
