@@ -61,6 +61,8 @@ android {
     dataBinding {
         enabled = true
     }
+
+    kapt { generateStubs = true }
 }
 
 
@@ -106,6 +108,7 @@ final ESPRESSO_VERSION = "2.2.2"
 final UI_AUTOMATOR_VERSION = "2.1.2"
 final ROOM_VERSION = "1.0.0-alpha9"
 final RX_RELAY_VERSION = "2.0.0"
+final OKHTTP_VERSION = "3.8.1"
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
@@ -136,6 +139,9 @@ dependencies {
 
     implementation "com.jakewharton.timber:timber:${TIMBER_VERSION}"
     implementation "com.google.code.gson:gson:${GSON_VERSION}"
+
+    implementation "com.squareup.okhttp3:logging-interceptor:${OKHTTP_VERSION}"
+    implementation "com.squareup.okhttp3:okhttp:${OKHTTP_VERSION}"
 
     implementation "com.squareup.retrofit2:retrofit:${RETROFIT_VERSION}"
     implementation "com.squareup.retrofit2:adapter-rxjava2:${RETROFIT_VERSION}"

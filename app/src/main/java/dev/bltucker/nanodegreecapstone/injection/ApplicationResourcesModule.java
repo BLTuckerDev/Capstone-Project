@@ -32,6 +32,8 @@ import dev.bltucker.nanodegreecapstone.data.daos.StoryDao;
 import dev.bltucker.nanodegreecapstone.data.migrations.Version1to2;
 import dev.bltucker.nanodegreecapstone.models.Comment;
 import dev.bltucker.nanodegreecapstone.sync.StorySyncAdapter;
+import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -181,8 +183,17 @@ public class ApplicationResourcesModule {
 
     @Provides
     @ApplicationScope
-    public Retrofit provideRetrofitClient(Gson gson) {
+    public OkHttpClient okHttpClient(){
+        return new OkHttpClient.Builder()
+                .addInterceptor(new HttpLoggingInterceptor())
+                .build();
+    }
+
+    @Provides
+    @ApplicationScope
+    public Retrofit provideRetrofitClient(Gson gson, OkHttpClient okHttpClient) {
         return new Retrofit.Builder()
+                .client(okHttpClient)
                 .baseUrl("https://hacker-news.firebaseio.com/v0/")
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())

@@ -1,18 +1,15 @@
 package dev.bltucker.nanodegreecapstone.data.daos
 
-import android.arch.persistence.room.Dao
-import android.arch.persistence.room.Delete
-import android.arch.persistence.room.Insert
-import android.arch.persistence.room.Query
+import android.arch.persistence.room.*
 import dev.bltucker.nanodegreecapstone.models.Comment
 
 @Dao
 interface CommentsDao {
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun save(comment: Comment)
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun saveAll(comments: List<Comment>)
 
     @Query("SELECT * FROM comments t1 where parentId NOT IN (SELECT _id FROM stories) AND depth = 0")

@@ -5,14 +5,15 @@ import android.database.ContentObserver;
 import android.os.Handler;
 import android.support.v4.content.AsyncTaskLoader;
 
+import java.util.Arrays;
 import java.util.List;
 
 import javax.inject.Inject;
 
 import dev.bltucker.nanodegreecapstone.data.StoryProvider;
-import dev.bltucker.nanodegreecapstone.data.CommentRepository;
 import dev.bltucker.nanodegreecapstone.events.EventBus;
 import dev.bltucker.nanodegreecapstone.models.Comment;
+import dev.bltucker.nanodegreecapstone.storydetail.CommentRepository;
 import dev.bltucker.nanodegreecapstone.storydetail.events.StoryCommentsDownloadCompleteEvent;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -46,7 +47,7 @@ public class StoryCommentsLoader extends AsyncTaskLoader<List<Comment>> {
     @Override
     public List<Comment> loadInBackground() {
         Timber.d("StoryCommentsLoader.loadInBackground");
-        List<Comment> comments = commentRepository.getStoryComments(detailStoryId).blockingFirst();
+        List<Comment> comments = Arrays.asList(commentRepository.getCommentsForStoryId(detailStoryId).blockingFirst());
         Timber.d("StoryCommentsLoader loaded %d comments", comments.size());
         return comments;
     }

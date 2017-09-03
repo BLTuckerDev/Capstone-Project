@@ -3,8 +3,6 @@ package dev.bltucker.nanodegreecapstone.storydetail.data;
 import android.arch.persistence.room.Room;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
-import android.support.test.runner.AndroidJUnitRunner;
-import android.test.AndroidTestCase;
 
 import org.junit.After;
 import org.junit.Before;
@@ -12,17 +10,15 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-import java.util.function.Predicate;
 
-import dev.bltucker.nanodegreecapstone.data.CommentRepository;
 import dev.bltucker.nanodegreecapstone.data.HackerNewsDatabase;
 import dev.bltucker.nanodegreecapstone.data.daos.CommentsDao;
 import dev.bltucker.nanodegreecapstone.models.Comment;
+import dev.bltucker.nanodegreecapstone.storydetail.CommentRepository;
 import io.reactivex.observers.TestObserver;
-import io.reactivex.subscribers.TestSubscriber;
 
-import static junit.framework.Assert.assertTrue;
 
 @RunWith(AndroidJUnit4.class)
 public class CommentRepositoryIntegrationTest {
@@ -37,7 +33,7 @@ public class CommentRepositoryIntegrationTest {
     public void setup() {
         hackerNewsDatabase = Room.inMemoryDatabaseBuilder(InstrumentationRegistry.getContext(), HackerNewsDatabase.class).build();
         commentsDao = hackerNewsDatabase.commentsDao();
-        objectUnderTest = new CommentRepository(commentsDao);
+        objectUnderTest = new CommentRepository(commentsDao, new FakeHackerNewsApiService());
     }
 
     @After
@@ -57,11 +53,11 @@ public class CommentRepositoryIntegrationTest {
 
         commentsDao.saveAll(fakeComments);
 
-        TestObserver<List<Comment>> testSubscriber = new TestObserver<>();
+        TestObserver<Comment[]> testSubscriber = new TestObserver<>();
 
-        objectUnderTest.getStoryComments(1).subscribe(testSubscriber);
+        objectUnderTest.getCommentsForStoryId(1).subscribe(testSubscriber);
 
-        testSubscriber.assertValue(comments -> comments.size() == 3 && comments.containsAll(fakeComments));
+        testSubscriber.assertValue(comments -> comments.length == 3 && Arrays.asList(comments).containsAll(fakeComments));
 
         testSubscriber.dispose();
     }
@@ -69,11 +65,11 @@ public class CommentRepositoryIntegrationTest {
     @Test
     public void testGetStoryCommentsWithInvalidStoryShouldReturnEmptyCommentList() {
 
-        TestObserver<List<Comment>> testSubscriber = new TestObserver<>();
+        TestObserver<Comment[]> testSubscriber = new TestObserver<>();
 
-        objectUnderTest.getStoryComments(-1).subscribe(testSubscriber);
+        objectUnderTest.getCommentsForStoryId(-1).subscribe(testSubscriber);
 
-        testSubscriber.assertValue(comments -> comments.isEmpty());
+        testSubscriber.assertValue(comments -> comments.length == 0);
 
         testSubscriber.dispose();
     }
@@ -82,21 +78,21 @@ public class CommentRepositoryIntegrationTest {
     public void testSaveComment() {
         Comment testComment = new Comment(1, 1, "Some Author", "Comment Text", System.currentTimeMillis(), 1, 0);
 
-        TestObserver<List<Comment>> beforeSubscriber = new TestObserver<>();
+        TestObserver<Comment[]> beforeSubscriber = new TestObserver<>();
 
-        objectUnderTest.getStoryComments(1).subscribe(beforeSubscriber);
+        objectUnderTest.getCommentsForStoryId(1).subscribe(beforeSubscriber);
 
-        beforeSubscriber.assertValue(comments -> comments.isEmpty());
+        beforeSubscriber.assertValue(comments -> comments.length == 0);
 
         beforeSubscriber.dispose();
 
         objectUnderTest.saveComment(testComment);
 
-        TestObserver<List<Comment>> afterSubscriber = new TestObserver<>();
+        TestObserver<Comment[]> afterSubscriber = new TestObserver<>();
 
-        objectUnderTest.getStoryComments(1).subscribe(afterSubscriber);
+        objectUnderTest.getCommentsForStoryId(1).subscribe(afterSubscriber);
 
-        afterSubscriber.assertValue(comments -> comments.contains(testComment));
+        afterSubscriber.assertValue(comments -> Arrays.asList(comments).contains(testComment));
 
         afterSubscriber.dispose();
     }

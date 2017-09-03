@@ -1,4 +1,4 @@
-package dev.bltucker.nanodegreecapstone.data;
+package dev.bltucker.nanodegreecapstone.storydetail;
 
 import android.annotation.SuppressLint;
 import android.content.ContentResolver;
@@ -6,8 +6,10 @@ import android.content.ContentResolver;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.Arrays;
 import java.util.List;
 
+import dev.bltucker.nanodegreecapstone.data.FakeHackerNewsApiService;
 import dev.bltucker.nanodegreecapstone.data.daos.CommentsDao;
 import dev.bltucker.nanodegreecapstone.models.Comment;
 
@@ -27,11 +29,11 @@ public class CommentRepositoryTest {
     @Before
     public void setUp() throws Exception {
         mockCommentsDao = mock(CommentsDao.class);
-        objectUnderTest = new CommentRepository(mockCommentsDao);
+        objectUnderTest = new CommentRepository(mockCommentsDao, new FakeHackerNewsApiService());
     }
 
     @Test
-    public void testGetStoryComments_WithValidStoryId_ShouldReturnCommentList(){
+    public void testGetStoryComments_WithValidStoryId_ShouldReturnCommentList() {
         int storyId = 1;
 
         Comment[] fakeComments = new Comment[]{
@@ -41,8 +43,7 @@ public class CommentRepositoryTest {
         };
 
         when(mockCommentsDao.getStoryComments(storyId)).thenReturn(fakeComments);
-
-        List<Comment> storyComments = objectUnderTest.getStoryComments(storyId).blockingFirst();
+        List<Comment> storyComments = Arrays.asList(objectUnderTest.getCommentsForStoryId(storyId).blockingFirst());
 
         assertEquals(3, storyComments.size());
         assertTrue(storyComments.contains(fakeComments[0]));
@@ -51,12 +52,12 @@ public class CommentRepositoryTest {
     }
 
     @Test
-    public void testGetStoryCommentsWithInvalidStoryIdShouldReturnEmptyList(){
+    public void testGetStoryCommentsWithInvalidStoryIdShouldReturnEmptyList() {
         int storyId = -1;
 
         when(mockCommentsDao.getStoryComments(storyId)).thenReturn(new Comment[0]);
 
-        List<Comment> storyComments = objectUnderTest.getStoryComments(storyId).blockingFirst();
+        List<Comment> storyComments = Arrays.asList(objectUnderTest.getCommentsForStoryId(storyId).blockingFirst());
 
         assertTrue(storyComments.isEmpty());
     }

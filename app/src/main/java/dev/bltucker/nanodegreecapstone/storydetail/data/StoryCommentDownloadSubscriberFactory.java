@@ -2,9 +2,9 @@ package dev.bltucker.nanodegreecapstone.storydetail.data;
 
 import javax.inject.Inject;
 
-import dev.bltucker.nanodegreecapstone.data.CommentRepository;
 import dev.bltucker.nanodegreecapstone.events.EventBus;
 import dev.bltucker.nanodegreecapstone.injection.ApplicationScope;
+import dev.bltucker.nanodegreecapstone.storydetail.CommentRepository;
 
 @ApplicationScope
 class StoryCommentDownloadSubscriberFactory  {

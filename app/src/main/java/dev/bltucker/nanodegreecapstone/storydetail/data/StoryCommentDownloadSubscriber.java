@@ -4,8 +4,8 @@ import android.support.annotation.Nullable;
 import android.support.annotation.VisibleForTesting;
 
 
-import dev.bltucker.nanodegreecapstone.data.CommentRepository;
 import dev.bltucker.nanodegreecapstone.events.EventBus;
+import dev.bltucker.nanodegreecapstone.storydetail.CommentRepository;
 import dev.bltucker.nanodegreecapstone.storydetail.events.StoryCommentsDownloadCompleteEvent;
 import dev.bltucker.nanodegreecapstone.models.Comment;
 import io.reactivex.Observer;

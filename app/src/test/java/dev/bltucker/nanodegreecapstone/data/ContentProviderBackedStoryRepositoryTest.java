@@ -11,6 +11,7 @@ import java.util.List;
 import dev.bltucker.nanodegreecapstone.data.daos.CommentRefsDao;
 import dev.bltucker.nanodegreecapstone.data.daos.StoryDao;
 import dev.bltucker.nanodegreecapstone.models.Story;
+import dev.bltucker.nanodegreecapstone.storydetail.CommentRepository;
 import io.reactivex.Flowable;
 import io.reactivex.observers.TestObserver;
 

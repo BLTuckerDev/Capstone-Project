@@ -1,27 +1,19 @@
 package dev.bltucker.nanodegreecapstone.storydetail;
 
 import android.support.annotation.NonNull;
-import android.support.v4.util.Pair;
 import android.util.Log;
-
-import java.util.Arrays;
-import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import dev.bltucker.nanodegreecapstone.data.HackerNewsApiService;
 import dev.bltucker.nanodegreecapstone.data.daos.CommentsDao;
+import dev.bltucker.nanodegreecapstone.injection.ApplicationScope;
 import dev.bltucker.nanodegreecapstone.models.Comment;
-import dev.bltucker.nanodegreecapstone.storydetail.data.CommentDto;
 import io.reactivex.Observable;
-import io.reactivex.ObservableSource;
 import io.reactivex.Single;
-import io.reactivex.SingleSource;
-import io.reactivex.functions.Consumer;
-import io.reactivex.functions.Function;
 
-@Singleton
+@ApplicationScope
 public class CommentRepository {
 
     @NonNull
@@ -39,6 +31,10 @@ public class CommentRepository {
 
     public Observable<Comment[]> getCommentsForStoryId(long storyId){
         return Observable.concat(getLocalComments(storyId), getRemoteComments(storyId));
+    }
+
+    public void saveComment(Comment comment){
+        commentsDao.save(comment);
     }
 
     private Observable<Comment[]> getRemoteComments(final long storyId) {
