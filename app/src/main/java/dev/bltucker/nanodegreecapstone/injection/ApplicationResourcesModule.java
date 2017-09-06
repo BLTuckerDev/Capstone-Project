@@ -30,6 +30,7 @@ import dev.bltucker.nanodegreecapstone.data.daos.CommentsDao;
 import dev.bltucker.nanodegreecapstone.data.daos.ReadLaterStoryDao;
 import dev.bltucker.nanodegreecapstone.data.daos.StoryDao;
 import dev.bltucker.nanodegreecapstone.data.migrations.Version1to2;
+import dev.bltucker.nanodegreecapstone.data.migrations.Version2to3;
 import dev.bltucker.nanodegreecapstone.models.Comment;
 import dev.bltucker.nanodegreecapstone.sync.StorySyncAdapter;
 import okhttp3.OkHttpClient;
@@ -62,6 +63,7 @@ public class ApplicationResourcesModule {
     HackerNewsDatabase providesHackerNewsDatabase(){
         return Room.databaseBuilder(application, HackerNewsDatabase.class, "databaseGenerator.db")
                 .addMigrations(new Version1to2(1, 2))
+                .addMigrations(new Version2to3(2,3))
                 .build();
     }
 

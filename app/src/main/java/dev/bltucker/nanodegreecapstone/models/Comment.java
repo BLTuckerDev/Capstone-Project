@@ -8,12 +8,15 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 @SuppressWarnings({"squid:S1213"})
-@Entity(tableName = "comments", indices = {@Index(value = "storyId")})
+@Entity(tableName = "comments", indices = {@Index(value = "storyId"), @Index(value = "commentId", unique = true)})
 public final class Comment implements Parcelable {
 
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "_id")
-    public final long id;
+    public long id;
+
+    @ColumnInfo()
+    public final long commentId;
 
     public final long storyId;
 
@@ -28,14 +31,14 @@ public final class Comment implements Parcelable {
     public final int depth;
 
 
-    public Comment(long id,
+    public Comment(long commentId,
                    long storyId,
                    String authorName,
                    String commentText,
                    long unixPostTime,
                    long parentId,
                    int depth) {
-        this.id = id;
+        this.commentId = commentId;
         this.storyId = storyId;
         this.authorName = authorName != null ? authorName : "";
         this.commentText = commentText != null ? commentText : "";
@@ -45,8 +48,9 @@ public final class Comment implements Parcelable {
     }
 
     public Comment(Parcel in) {
-        this.storyId = in.readLong();
         this.id = in.readLong();
+        this.storyId = in.readLong();
+        this.commentId = in.readLong();
         this.authorName = in.readString();
         this.commentText = in.readString();
         this.unixPostTime = in.readLong();
@@ -58,8 +62,8 @@ public final class Comment implements Parcelable {
         return storyId;
     }
 
-    public long getId() {
-        return id;
+    public long getCommentId() {
+        return commentId;
     }
 
     public String getAuthorName() {
@@ -90,13 +94,13 @@ public final class Comment implements Parcelable {
 
         Comment comment = (Comment) o;
 
-        return id == comment.id;
+        return commentId == comment.commentId;
 
     }
 
     @Override
     public int hashCode() {
-        return (int) (id ^ (id >>> 32));
+        return (int) (commentId ^ (commentId >>> 32));
     }
 
     @Override
@@ -106,8 +110,9 @@ public final class Comment implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(id);
         dest.writeLong(this.storyId);
-        dest.writeLong(this.id);
+        dest.writeLong(this.commentId);
         dest.writeString(this.authorName);
         dest.writeString(this.commentText);
         dest.writeLong(this.unixPostTime);

@@ -41,7 +41,7 @@ public class CommentRepository {
         return hackerNewsApiService.getStory(storyId)
                 .toObservable()
                 .flatMap(story -> Observable.just(story.commentIds))
-                .flatMap(topLevelCommentIds -> {
+                .concatMap(topLevelCommentIds -> {
                     long[] commentIds = new long[topLevelCommentIds.length];
                     for (int i = 0; i < commentIds.length; i++) {
                         commentIds[i] = topLevelCommentIds[i];
@@ -68,7 +68,7 @@ public class CommentRepository {
                     .concatMap(commentDto -> {
                         final int childDepth = commentDepth + 1;
                         return Observable.just(new Comment(commentDto.id, storyId, commentDto.by, commentDto.text, commentDto.time, commentDto.parent, commentDepth))
-                                .concatWith(downloadComments(storyId, commentDto.kids, childDepth));
+                                .mergeWith(downloadComments(storyId, commentDto.kids, childDepth));
                     })
                     .filter(comment -> comment.getCommentText().trim().length() > 0);
         }

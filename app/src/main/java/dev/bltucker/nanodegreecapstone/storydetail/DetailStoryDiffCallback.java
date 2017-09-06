@@ -30,7 +30,7 @@ class DetailStoryDiffCallback extends DiffUtil.Callback{
         Comment oldComment = oldComments.get(oldItemPosition);
         Comment newComment = commentList.get(newItemPosition);
 
-        return oldComment.getId() == newComment.getId();
+        return oldComment.getCommentId() == newComment.getCommentId();
     }
 
     @Override
