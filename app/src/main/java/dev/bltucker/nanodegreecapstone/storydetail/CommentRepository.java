@@ -75,7 +75,9 @@ public class CommentRepository {
     }
 
     private Observable<Comment[]> getLocalComments(long storyId) {
-        return Observable.just(commentsDao.getStoryComments(storyId));
+        //noinspection Convert2MethodRef
+        return Observable.just(commentsDao.getStoryComments(storyId))
+                .filter(comments -> comments != null);
     }
 
 }

@@ -26,7 +26,7 @@ android {
         }
     }
     compileSdkVersion 26
-    buildToolsVersion "26.0.0"
+    buildToolsVersion "26.0.1"
     defaultConfig {
         applicationId "dev.bltucker.nanodegreecapstone"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"

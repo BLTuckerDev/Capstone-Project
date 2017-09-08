@@ -13,10 +13,12 @@ import android.support.annotation.VisibleForTesting;
 import javax.inject.Inject;
 
 import dev.bltucker.nanodegreecapstone.events.EventBus;
+import dev.bltucker.nanodegreecapstone.storydetail.CommentRepository;
 import dev.bltucker.nanodegreecapstone.storydetail.events.StoryCommentsDownloadStartedEvent;
 import dev.bltucker.nanodegreecapstone.injection.DaggerInjector;
 import dev.bltucker.nanodegreecapstone.storydetail.DetailStory;
 import dev.bltucker.nanodegreecapstone.storydetail.injection.InterruptibleDownloadServiceModule;
+import io.reactivex.Observable;
 import timber.log.Timber;
 
 
@@ -35,10 +37,6 @@ public class InterruptibleDownloadService extends Service {
 
     @Inject
     @VisibleForTesting
-    StoryCommentsObservableFactory observableFactory;
-
-    @Inject
-    @VisibleForTesting
     StoryCommentDownloadSubscriberFactory subscriberFactory;
 
     @Inject
@@ -48,6 +46,9 @@ public class InterruptibleDownloadService extends Service {
     @Inject
     @VisibleForTesting
     EventBus eventBus;
+
+    @Inject
+    CommentRepository commentRepository;
 
     public static void startDownload(Context context, DetailStory story) {
         Intent intent = new Intent(context, InterruptibleDownloadService.class);
@@ -112,7 +113,8 @@ public class InterruptibleDownloadService extends Service {
 
         eventBus.publish(new StoryCommentsDownloadStartedEvent());
         currentSubscriber = subscriberFactory.get();
-        observableFactory.get(story.getStoryId(), primitiveCommentIds)
+        commentRepository.getCommentsForStoryId(story.getStoryId())
+        .concatMap(Observable::fromArray)
                 .subscribeWith(currentSubscriber);
     }
 
