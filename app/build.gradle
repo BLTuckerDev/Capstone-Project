@@ -65,7 +65,7 @@ android {
     kapt { generateStubs = true }
 }
 
-
+//https://jira.sonarsource.com/browse/SONARGRADL-41
 //sonarqube {
 //    properties {
 //        // required metadata
@@ -120,6 +120,12 @@ dependencies {
     implementation "android.arch.persistence.room:rxjava2:${ROOM_VERSION}"
 
     androidTestImplementation "android.arch.core:core-testing:${ROOM_VERSION}"
+
+    implementation "android.arch.lifecycle:runtime:${ROOM_VERSION}"
+    implementation "android.arch.lifecycle:extensions:${ROOM_VERSION}"
+    annotationProcessor "android.arch.lifecycle:compiler:${ROOM_VERSION}"
+    kapt "android.arch.lifecycle:compiler:${ROOM_VERSION}"
+
 
     kapt "com.google.dagger:dagger-compiler:${DAGGER_VERSION}"
     annotationProcessor "com.google.dagger:dagger-compiler:${DAGGER_VERSION}"
