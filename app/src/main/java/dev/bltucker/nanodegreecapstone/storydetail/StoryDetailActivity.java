@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import dev.bltucker.nanodegreecapstone.R;
 import dev.bltucker.nanodegreecapstone.models.Story;
 import dev.bltucker.nanodegreecapstone.settings.SettingsActivity;
+import dev.bltucker.nanodegreecapstone.storydetail.injection.StoryDetailFragmentModule;
 import timber.log.Timber;
 
 public class StoryDetailActivity extends AppCompatActivity {
@@ -54,12 +55,12 @@ public class StoryDetailActivity extends AppCompatActivity {
             return;
         }
 
-        if(!bundle.containsKey(StoryDetailFragment.STORY_BUNDLE_KEY)){
+        if(!bundle.containsKey(StoryDetailFragmentModule.STORY_BUNDLE_KEY)){
             Timber.e("StoryDetailActivity bundle is missing the story position");
             return;
         }
 
-        Story story = bundle.getParcelable(StoryDetailFragment.STORY_BUNDLE_KEY);
+        Story story = bundle.getParcelable(StoryDetailFragmentModule.STORY_BUNDLE_KEY);
         Fragment storyDetailFragment = StoryDetailFragment.newInstance(story);
 
         getSupportFragmentManager().beginTransaction()
@@ -70,7 +71,7 @@ public class StoryDetailActivity extends AppCompatActivity {
 
     public static void launch(Activity activity, @Nullable Story story) {
         Intent launchIntent = new Intent(activity, StoryDetailActivity.class);
-        launchIntent.putExtra(StoryDetailFragment.STORY_BUNDLE_KEY, story);
+        launchIntent.putExtra(StoryDetailFragmentModule.STORY_BUNDLE_KEY, story);
         ActivityCompat.startActivity(activity, launchIntent, ActivityOptions.makeSceneTransitionAnimation(activity).toBundle());
     }
 }

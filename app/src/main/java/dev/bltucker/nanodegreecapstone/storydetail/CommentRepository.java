@@ -51,7 +51,11 @@ public class CommentRepository {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<Comment>() {
                     @Override
-                    public void onSubscribe(Disposable d) { }
+                    public void onSubscribe(Disposable d) {
+                        if(d != null && !d.isDisposed()){
+                            d.dispose();
+                        }
+                    }
 
                     @Override
                     public void onNext(Comment comment) {

@@ -5,6 +5,7 @@ import android.arch.lifecycle.LifecycleObserver
 import android.arch.lifecycle.OnLifecycleEvent
 import dev.bltucker.nanodegreecapstone.data.HackerNewsApiService
 import dev.bltucker.nanodegreecapstone.models.Comment
+import dev.bltucker.nanodegreecapstone.models.Story
 import dev.bltucker.nanodegreecapstone.storydetail.data.CommentDto
 import dev.bltucker.nanodegreecapstone.storydetail.injection.StoryDetailFragmentScope
 import io.reactivex.Observable
@@ -13,26 +14,26 @@ import io.reactivex.disposables.Disposable
 import javax.inject.Inject
 
 @StoryDetailFragmentScope
-class StoryCommentsSyncer @Inject constructor(val hackerNewsApiService: HackerNewsApiService,
-                                              val commentRepository: CommentRepository,
-                                              val detailStory: DetailStory) : LifecycleObserver {
+class StoryCommentsSyncer @Inject constructor(private val hackerNewsApiService: HackerNewsApiService,
+                                              private val commentRepository: CommentRepository,
+                                              private val story: Story?) : LifecycleObserver {
 
     lateinit var commentLoaderSubscription: Disposable
 
     @OnLifecycleEvent(Lifecycle.Event.ON_START)
     fun onStart() {
-        if(!detailStory.hasStory()){
+        if(story == null){
             return
         }
 
-        hackerNewsApiService.getStory(detailStory.storyId)
+        hackerNewsApiService.getStory(story.id)
                 .flatMapObservable { story -> Observable.just(story.commentIds) }
                 .concatMap { topLevelCommentIds ->
                     val commentIds = LongArray(topLevelCommentIds.size)
                     for (i in commentIds.indices) {
                         commentIds[i] = topLevelCommentIds[i]
                     }
-                    downloadComments(detailStory.storyId, commentIds, 0)
+                    downloadComments(story.id, commentIds, 0)
                 }
                 .filter { comment -> !comment.getCommentText().isNullOrBlank() }
                 .subscribe(object : Observer<Comment> {
@@ -54,7 +55,7 @@ class StoryCommentsSyncer @Inject constructor(val hackerNewsApiService: HackerNe
 
     @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
     fun onStop() {
-        if(!detailStory.hasStory()){
+        if(story == null){
             return
         }
 
