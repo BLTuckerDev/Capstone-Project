@@ -185,9 +185,19 @@ public class ApplicationResourcesModule {
 
     @Provides
     @ApplicationScope
-    public OkHttpClient okHttpClient(){
+    public HttpLoggingInterceptor provideHttpLoggingInterceptor(){
+        HttpLoggingInterceptor httpLoggingInterceptor = new HttpLoggingInterceptor();
+
+        httpLoggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+
+        return httpLoggingInterceptor;
+    }
+
+    @Provides
+    @ApplicationScope
+    public OkHttpClient okHttpClient(HttpLoggingInterceptor interceptor){
         return new OkHttpClient.Builder()
-                .addInterceptor(new HttpLoggingInterceptor())
+                .addInterceptor(interceptor)
                 .build();
     }
 

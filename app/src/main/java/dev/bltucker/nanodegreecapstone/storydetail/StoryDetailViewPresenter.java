@@ -1,31 +1,38 @@
 package dev.bltucker.nanodegreecapstone.storydetail;
 
-import android.os.Bundle;
-import android.support.v4.app.LoaderManager;
+import android.support.annotation.NonNull;
+import android.util.Log;
+
+import java.util.Arrays;
+
+import javax.inject.Inject;
 
 import dev.bltucker.nanodegreecapstone.data.daos.ReadLaterStoryDao;
+import dev.bltucker.nanodegreecapstone.models.Comment;
 import dev.bltucker.nanodegreecapstone.models.ReadLaterStory;
-import dev.bltucker.nanodegreecapstone.storydetail.data.StoryCommentLoaderCallbackDelegate;
-import dev.bltucker.nanodegreecapstone.storydetail.data.StoryCommentsLoader;
+import dev.bltucker.nanodegreecapstone.storydetail.injection.StoryDetailFragmentScope;
 import io.reactivex.Completable;
+import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
 
+@StoryDetailFragmentScope
 public class StoryDetailViewPresenter {
-    private final StoryCommentLoaderCallbackDelegate commentLoaderCallbackDelegate;
 
     private StoryDetailView view;
-    private LoaderManager loaderManager;
 
     private final ReadLaterStoryDao readLaterStoryDao;
 
-    public StoryDetailViewPresenter(StoryCommentLoaderCallbackDelegate commentLoaderCallbackDelegate,
-                                    LoaderManager loaderManager,
-                                    ReadLaterStoryDao readLaterStoryDao) {
-        this.commentLoaderCallbackDelegate = commentLoaderCallbackDelegate;
-        this.loaderManager = loaderManager;
+    @NonNull
+    private final CommentRepository commentRepository;
+
+    @Inject
+    public StoryDetailViewPresenter(@NonNull ReadLaterStoryDao readLaterStoryDao,
+                                    @NonNull CommentRepository commentRepository) {
         this.readLaterStoryDao = readLaterStoryDao;
+        this.commentRepository = commentRepository;
     }
 
 
@@ -35,7 +42,7 @@ public class StoryDetailViewPresenter {
 
         if (detailStory.hasStory()) {
             view.showStory();
-            initializeCommentLoader(detailStory);
+            loadComments(detailStory);
         } else {
             view.showEmptyView();
         }
@@ -47,18 +54,39 @@ public class StoryDetailViewPresenter {
 
         if (detailStory.hasStory()) {
             view.showStory();
-            initializeCommentLoader(detailStory);
+            loadComments(detailStory);
         } else {
             view.showEmptyView();
         }
     }
 
-    private void initializeCommentLoader(DetailStory story) {
-        Timber.d("initializeCommentLoader");
-        Bundle loaderBundle = new Bundle();
-        loaderBundle.putParcelable(StoryCommentsLoader.SELECTED_DETAIL_STORY, story);
-        commentLoaderCallbackDelegate.setDetailStory(story);
-        this.loaderManager.initLoader(StoryCommentsLoader.STORY_COMMENT_LOADER, loaderBundle, commentLoaderCallbackDelegate);
+    private void loadComments(DetailStory story){
+        commentRepository.syncLatestStoryComments(story.getStoryId());
+        commentRepository.getCommentsForStoryId(story.getStoryId())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<Comment[]>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(Comment[] comments) {
+                        Log.d("comments", "comments loadded to the presenter: " + comments.length);
+                        story.addComments(Arrays.asList(comments));
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.d("comments", "onError" + e.getMessage() + ", " + e.getClass().getSimpleName());
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        Log.d("comments", "onComplete!");
+                    }
+                });
     }
 
     private void trackScreenView() {

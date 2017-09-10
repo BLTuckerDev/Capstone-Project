@@ -1,8 +1,8 @@
 
 
 Next:
-+ Fix Comment saving and loading
-+ Use Lifecycle
++ injectable schedulers
++ Use Lifecycle, for example: create a story comment sync'er that kicks off in onStart for a given activity
 + remove butter knife, use databinding everywhere
 + update job delete service to make use of the new query capabilities
 + With Mockito 2 we can move away from Powermock

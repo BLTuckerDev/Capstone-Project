@@ -11,8 +11,6 @@ import dev.bltucker.nanodegreecapstone.location.GeofenceTransitionsIntentService
 import dev.bltucker.nanodegreecapstone.readlater.ReadLaterComponent;
 import dev.bltucker.nanodegreecapstone.readlater.ReadLaterListFragmentModule;
 import dev.bltucker.nanodegreecapstone.sync.CommentCleaningService;
-import dev.bltucker.nanodegreecapstone.storydetail.injection.InterruptibleDownloadServiceComponent;
-import dev.bltucker.nanodegreecapstone.storydetail.injection.InterruptibleDownloadServiceModule;
 import dev.bltucker.nanodegreecapstone.storydetail.injection.StoryDetailFragmentComponent;
 import dev.bltucker.nanodegreecapstone.storydetail.injection.StoryDetailFragmentModule;
 import dev.bltucker.nanodegreecapstone.sync.StorySyncAdapter;
@@ -35,6 +33,5 @@ public interface ApplicationComponent {
     GeofenceCreationIntentServiceComponent geofenceCreationIntentServiceComponent(GeofenceCreationIntentServiceModule module);
     ReadLaterComponent readLaterComponent(ReadLaterListFragmentModule module);
     StoryDetailFragmentComponent storyDetailComponent(StoryDetailFragmentModule module);
-    InterruptibleDownloadServiceComponent interruptibleDownloadServiceComponent(InterruptibleDownloadServiceModule module);
 
 }

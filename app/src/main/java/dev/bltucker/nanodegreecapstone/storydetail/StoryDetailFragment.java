@@ -27,7 +27,6 @@ import dev.bltucker.nanodegreecapstone.databinding.FragmentStoryDetailBinding;
 import dev.bltucker.nanodegreecapstone.injection.DaggerInjector;
 import dev.bltucker.nanodegreecapstone.models.Comment;
 import dev.bltucker.nanodegreecapstone.models.Story;
-import dev.bltucker.nanodegreecapstone.storydetail.data.InterruptibleDownloadService;
 import dev.bltucker.nanodegreecapstone.storydetail.injection.StoryDetailFragmentModule;
 
 public class StoryDetailFragment extends Fragment implements StoryDetailView {
@@ -126,7 +125,7 @@ public class StoryDetailFragment extends Fragment implements StoryDetailView {
         } else {
             detailStory = detailStoryProvider.getDetailStory((Story) getArguments().getParcelable(STORY_BUNDLE_KEY), new ArrayList<Comment>());
             if(detailStory.hasStory()){
-                InterruptibleDownloadService.startDownload(getContext(), detailStory);
+                //TODO kick off comment sync?
             }
         }
     }
