@@ -11,6 +11,7 @@ import dev.bltucker.nanodegreecapstone.data.HackerNewsApiService;
 import dev.bltucker.nanodegreecapstone.data.HackerNewsDatabase;
 import dev.bltucker.nanodegreecapstone.data.MockHackerNewsApiService;
 import dev.bltucker.nanodegreecapstone.data.migrations.Version1to2;
+import dev.bltucker.nanodegreecapstone.data.migrations.Version2to3;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
@@ -28,7 +29,9 @@ public class TestApplicationResourcesModule extends ApplicationResourcesModule {
     @ApplicationScope
     HackerNewsDatabase providesHackerNewsDatabase(){
         return Room.inMemoryDatabaseBuilder(application, HackerNewsDatabase.class)
+                .allowMainThreadQueries()
                 .addMigrations(new Version1to2(1, 2))
+                .addMigrations(new Version2to3(2,3))
                 .build();
     }
 
