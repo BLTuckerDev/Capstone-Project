@@ -2,6 +2,7 @@ package dev.bltucker.nanodegreecapstone.data.daos
 
 import android.arch.persistence.room.*
 import dev.bltucker.nanodegreecapstone.models.Comment
+import io.reactivex.Flowable
 
 @Dao
 interface CommentsDao {
@@ -17,6 +18,9 @@ interface CommentsDao {
 
     @Query("SELECT * FROM comments where storyId = :storyId")
     fun getStoryComments(storyId: Long): Array<Comment>
+
+    @Query("SELECT * FROM comments where storyId = :storyId")
+    fun getStoryCommentsFlowable(storyId: Long): Flowable<Array<Comment>>
 
     @Query("SELECT * from comments where parentId = :parentCommentId")
     fun getChildComments(parentCommentId : Long) : Array<Comment>

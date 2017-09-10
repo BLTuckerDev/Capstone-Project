@@ -16,6 +16,7 @@ import dev.bltucker.nanodegreecapstone.data.FakeHackerNewsApiService;
 import dev.bltucker.nanodegreecapstone.data.daos.CommentsDao;
 import dev.bltucker.nanodegreecapstone.models.Comment;
 import dev.bltucker.nanodegreecapstone.models.Story;
+import io.reactivex.Flowable;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertTrue;
@@ -65,7 +66,7 @@ public class CommentRepositoryTest {
 
         hackerNewsApiService.addFakeData(storyIdList, storyMap, commentsMap);
 
-        when(mockCommentsDao.getStoryComments(storyId)).thenReturn(fakeComments);
+        when(mockCommentsDao.getStoryCommentsFlowable(storyId)).thenReturn(Flowable.just(fakeComments));
         List<Comment> storyComments = Arrays.asList(objectUnderTest.getCommentsForStoryId(storyId).blockingFirst());
 
         assertEquals(3, storyComments.size());
@@ -78,7 +79,7 @@ public class CommentRepositoryTest {
     public void testGetStoryCommentsWithInvalidStoryIdShouldReturnEmptyList() {
         int storyId = -1;
 
-        when(mockCommentsDao.getStoryComments(storyId)).thenReturn(new Comment[0]);
+        when(mockCommentsDao.getStoryCommentsFlowable(storyId)).thenReturn(Flowable.just(new Comment[0]));
 
         List<Comment> storyComments = Arrays.asList(objectUnderTest.getCommentsForStoryId(storyId).blockingFirst());
 

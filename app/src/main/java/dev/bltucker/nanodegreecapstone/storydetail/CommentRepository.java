@@ -1,17 +1,17 @@
 package dev.bltucker.nanodegreecapstone.storydetail;
 
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
 import dev.bltucker.nanodegreecapstone.data.HackerNewsApiService;
 import dev.bltucker.nanodegreecapstone.data.daos.CommentsDao;
 import dev.bltucker.nanodegreecapstone.injection.ApplicationScope;
 import dev.bltucker.nanodegreecapstone.models.Comment;
 import io.reactivex.Observable;
-import io.reactivex.Single;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
 
 @ApplicationScope
 public class CommentRepository {
@@ -30,17 +30,16 @@ public class CommentRepository {
     }
 
     public Observable<Comment[]> getCommentsForStoryId(long storyId){
-        return Observable.concat(getLocalComments(storyId), getRemoteComments(storyId));
+        return getLocalComments(storyId);
     }
 
     public void saveComment(Comment comment){
         commentsDao.save(comment);
     }
 
-    private Observable<Comment[]> getRemoteComments(final long storyId) {
-        return hackerNewsApiService.getStory(storyId)
-                .toObservable()
-                .flatMap(story -> Observable.just(story.commentIds))
+    public void syncLatestStoryComments(final long storyId){
+        hackerNewsApiService.getStory(storyId)
+                .flatMapObservable(story -> Observable.just(story.commentIds))
                 .concatMap(topLevelCommentIds -> {
                     long[] commentIds = new long[topLevelCommentIds.length];
                     for (int i = 0; i < commentIds.length; i++) {
@@ -49,14 +48,22 @@ public class CommentRepository {
                     return downloadComments(storyId, commentIds, 0);
                 })
                 .filter(comment -> comment.getCommentText().trim().length() > 0)
-                .toList()
-                .doOnSuccess(comments -> {
-                    Log.d("comments", "Saving the comments!");
-                    //TODO make sure that we have onConflict replace set for comments
-                    commentsDao.saveAll(comments);
-                })
-                .flatMap(comments -> Single.just(comments.toArray(new Comment[0])))
-                .toObservable();
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<Comment>() {
+                    @Override
+                    public void onSubscribe(Disposable d) { }
+
+                    @Override
+                    public void onNext(Comment comment) {
+                        commentsDao.save(comment);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) { }
+
+                    @Override
+                    public void onComplete() { }
+                });
     }
 
     private Observable<Comment> downloadComments( long storyId, long[] commentIds, int commentDepth){
@@ -76,8 +83,10 @@ public class CommentRepository {
 
     private Observable<Comment[]> getLocalComments(long storyId) {
         //noinspection Convert2MethodRef
-        return Observable.just(commentsDao.getStoryComments(storyId))
-                .filter(comments -> comments != null);
+        return commentsDao.getStoryCommentsFlowable(storyId)
+                .onBackpressureDrop()
+                .filter(comments -> comments != null)
+                .toObservable();
     }
 
 }

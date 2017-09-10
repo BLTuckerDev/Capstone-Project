@@ -12,17 +12,18 @@ import org.junit.runner.RunWith;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import dev.bltucker.nanodegreecapstone.data.HackerNewsApiService;
 import dev.bltucker.nanodegreecapstone.data.HackerNewsDatabase;
 import dev.bltucker.nanodegreecapstone.data.daos.CommentsDao;
+import dev.bltucker.nanodegreecapstone.data.migrations.Version1to2;
+import dev.bltucker.nanodegreecapstone.data.migrations.Version2to3;
 import dev.bltucker.nanodegreecapstone.models.Comment;
 import dev.bltucker.nanodegreecapstone.storydetail.CommentRepository;
-import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.reactivex.observers.TestObserver;
 
-import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyLong;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -40,7 +41,11 @@ public class CommentRepositoryIntegrationTest {
     @Before
     public void setup() {
         mockHackerNewsService = mock(HackerNewsApiService.class);
-        hackerNewsDatabase = Room.inMemoryDatabaseBuilder(InstrumentationRegistry.getContext(), HackerNewsDatabase.class).build();
+        hackerNewsDatabase = Room.inMemoryDatabaseBuilder(InstrumentationRegistry.getContext(), HackerNewsDatabase.class)
+                .allowMainThreadQueries()
+                .addMigrations(new Version1to2(1, 2))
+                .addMigrations(new Version2to3(2,3))
+                .build();
         commentsDao = hackerNewsDatabase.commentsDao();
         objectUnderTest = new CommentRepository(commentsDao, mockHackerNewsService);
     }
@@ -52,7 +57,7 @@ public class CommentRepositoryIntegrationTest {
 
 
     @Test
-    public void testGetStoryCommentsShouldReturnListofComments() {
+    public void testGetStoryCommentsShouldReturnListofComments() throws InterruptedException {
         final int storyId = 1;
 
         when(mockHackerNewsService.getStory(storyId)).thenReturn(Single.never());
@@ -69,13 +74,15 @@ public class CommentRepositoryIntegrationTest {
 
         objectUnderTest.getCommentsForStoryId(storyId).subscribe(testSubscriber);
 
+        testSubscriber.await(3, TimeUnit.SECONDS);
+
         testSubscriber.assertValue(comments -> comments.length == 3 && Arrays.asList(comments).containsAll(fakeComments));
 
         testSubscriber.dispose();
     }
 
     @Test
-    public void testGetStoryCommentsWithInvalidStoryShouldReturnEmptyCommentList() {
+    public void testGetStoryCommentsWithInvalidStoryShouldReturnEmptyCommentList() throws InterruptedException {
 
         when(mockHackerNewsService.getStory(anyLong())).thenReturn(Single.never());
 
@@ -83,35 +90,31 @@ public class CommentRepositoryIntegrationTest {
 
         objectUnderTest.getCommentsForStoryId(-1).subscribe(testSubscriber);
 
+        testSubscriber.await(3, TimeUnit.SECONDS);
+
         testSubscriber.assertValue(comments -> comments.length == 0);
 
         testSubscriber.dispose();
     }
 
     @Test
-    public void testSaveComment() {
+    public void testSaveComment() throws InterruptedException {
         final int storyId = 1;
-        
-        when(mockHackerNewsService.getStory(anyLong())).thenReturn(Single.never());
-
 
         Comment testComment = new Comment(1, storyId, "Some Author", "Comment Text", System.currentTimeMillis(), 1, 0);
-
-        TestObserver<Comment[]> beforeSubscriber = new TestObserver<>();
-
-        objectUnderTest.getCommentsForStoryId(1).subscribe(beforeSubscriber);
-
-        beforeSubscriber.assertValue(comments -> comments.length == 0);
-
-        beforeSubscriber.dispose();
 
         objectUnderTest.saveComment(testComment);
 
         TestObserver<Comment[]> afterSubscriber = new TestObserver<>();
 
-        objectUnderTest.getCommentsForStoryId(1).subscribe(afterSubscriber);
+        objectUnderTest.getCommentsForStoryId(1)
+                .subscribe(afterSubscriber);
 
-        afterSubscriber.assertValue(comments -> Arrays.asList(comments).contains(testComment));
+        afterSubscriber.await(3, TimeUnit.SECONDS);
+
+        afterSubscriber.assertValue(comments -> {
+            return comments[0].commentId == testComment.commentId;
+        });
 
         afterSubscriber.dispose();
     }
