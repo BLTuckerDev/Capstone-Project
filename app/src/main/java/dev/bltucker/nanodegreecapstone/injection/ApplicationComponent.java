@@ -18,7 +18,7 @@ import dev.bltucker.nanodegreecapstone.topstories.StoryListFragment;
 import dev.bltucker.nanodegreecapstone.topstories.TopStoriesModule;
 
 @ApplicationScope
-@Component(modules = { ApplicationResourcesModule.class, TopStoriesModule.class})
+@Component(modules = { ApplicationResourcesModule.class, TopStoriesModule.class, ViewModelModule.class})
 public interface ApplicationComponent {
     void inject(MainActivity mainActivity);
     void inject(StorySyncAdapter syncAdapter);
