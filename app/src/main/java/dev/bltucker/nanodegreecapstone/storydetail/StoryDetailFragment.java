@@ -90,7 +90,7 @@ public class StoryDetailFragment extends Fragment implements LifecycleRegistryOw
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
-        if (shareActionProvider != null) {
+        if (shareActionProvider != null && story != null) {
             setupShareActionProvider();
             shareMenuItem.setVisible(true);
         }
@@ -248,6 +248,7 @@ public class StoryDetailFragment extends Fragment implements LifecycleRegistryOw
     public void showEmptyView() {
         binding.commentListRecyclerview.setVisibility(View.INVISIBLE);
         binding.emptyViewContainer.setVisibility(View.VISIBLE);
+        binding.appBarLayout.setVisibility(View.INVISIBLE);
         binding.headerInclude.detailHeaderCardview.setVisibility(View.INVISIBLE);
     }
 
