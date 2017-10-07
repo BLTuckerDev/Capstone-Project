@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity implements HomeView, StoryLi
     }
 
     private void replaceDetailFragment(Story story) {
-        StoryDetailFragment storyDetailFragment = StoryDetailFragment.newInstance(story);
+        StoryDetailFragment storyDetailFragment = StoryDetailFragment.Companion.newInstance(story);
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.story_detail_fragment_container, storyDetailFragment)
                 .commit();
@@ -95,7 +95,7 @@ public class MainActivity extends AppCompatActivity implements HomeView, StoryLi
         if(twoPaneMode){
             replaceDetailFragment(story);
         } else {
-            StoryDetailActivity.launch(this, story);
+            StoryDetailActivity.Companion.launch(this, story);
         }
     }
 }
