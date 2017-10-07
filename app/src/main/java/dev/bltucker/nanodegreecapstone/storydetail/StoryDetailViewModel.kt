@@ -32,12 +32,10 @@ class StoryDetailViewModel @Inject constructor(private val readLaterStoryDao: Re
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(object : CompletableObserver {
                     override fun onComplete() {
-                        readLaterSaveSuccessPublisher.publish()
+                        readLaterSaveSuccessPublisher.accept(true)
                     }
 
-                    override fun onSubscribe(d: Disposable) {
-                        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-                    }
+                    override fun onSubscribe(d: Disposable) {}
 
                     override fun onError(e: Throwable) {
                         Timber.e(e, "Error while attempting to save a read later story.")
