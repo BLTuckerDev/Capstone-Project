@@ -16,12 +16,9 @@ import dev.bltucker.nanodegreecapstone.databinding.StoryCommentLayoutItemBinding
 import dev.bltucker.nanodegreecapstone.injection.GregorianUTC;
 import dev.bltucker.nanodegreecapstone.models.Comment;
 
-//TODO when we see that the detail story has updated, see if the loading spinner item is visible, if it is notify(), if it isnt maybe we dont notify until it is?
 public class StoryCommentsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private static final int EMPTY_COMMENT_ITEM_TYPE = 1;
     private static final int COMMENT_ITEM_TYPE = 2;
-    private static final int LOADING_COMMENTS_ITEM_TYPE = 3;
 
     private final Resources resources;
     private final Calendar calendar;

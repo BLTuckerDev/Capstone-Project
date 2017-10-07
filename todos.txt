@@ -1,6 +1,7 @@
 
 
 Next:
++ Convert to android injection
 + Test changes on tablets
 + injectable schedulers
 + remove butter knife, use databinding everywhere
