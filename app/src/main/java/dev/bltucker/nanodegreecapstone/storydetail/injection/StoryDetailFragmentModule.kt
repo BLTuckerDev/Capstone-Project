@@ -3,6 +3,7 @@ package dev.bltucker.nanodegreecapstone.storydetail.injection
 import android.arch.lifecycle.LifecycleRegistry
 import android.content.res.Resources
 import android.os.Bundle
+import android.support.annotation.Nullable
 import dagger.Module
 import dagger.Provides
 import dev.bltucker.nanodegreecapstone.injection.GregorianUTC
@@ -23,8 +24,9 @@ class StoryDetailFragmentModule(private val fragment: StoryDetailFragment,
 
     @Provides
     @StoryDetailFragmentScope
-    fun provideStory(): Story {
-        return fragment.arguments.getParcelable<Story>(STORY_BUNDLE_KEY)
+    @Nullable
+    fun provideStory(): Story? {
+        return fragment.arguments.getParcelable<Story?>(STORY_BUNDLE_KEY)
     }
 
     @Provides

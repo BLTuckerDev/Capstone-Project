@@ -42,7 +42,8 @@ class StoryDetailFragment : Fragment() {
     lateinit var applicationViewModelsFactory: ApplicationViewModelsFactory
 
     @Inject
-    lateinit var story: Story
+    @JvmField
+    var story: Story? = null
 
     internal var shareActionProvider: ShareActionProvider? = null
 
