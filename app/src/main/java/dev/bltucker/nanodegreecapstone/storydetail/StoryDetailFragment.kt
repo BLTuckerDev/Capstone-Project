@@ -36,9 +36,6 @@ class StoryDetailFragment : Fragment() {
     lateinit var commentsAdapter: StoryCommentsAdapter
 
     @Inject
-    lateinit var lifecycleRegistry: LifecycleRegistry
-
-    @Inject
     lateinit var storyCommentsSyncer: StoryCommentsSyncer
 
     @Inject
@@ -104,7 +101,7 @@ class StoryDetailFragment : Fragment() {
                 .storyDetailComponent(StoryDetailFragmentModule(this, savedInstanceState))
                 .inject(this)
         storyDetailViewModel = ViewModelProviders.of(this, applicationViewModelsFactory).get(StoryDetailViewModel::class.java)
-        lifecycle!!.addObserver(storyCommentsSyncer)
+        lifecycle.addObserver(storyCommentsSyncer)
     }
 
     override fun onSaveInstanceState(outState: Bundle?) {
@@ -212,10 +209,6 @@ class StoryDetailFragment : Fragment() {
         binding.emptyViewContainer.visibility = View.VISIBLE
         binding.appBarLayout.visibility = View.INVISIBLE
         binding.headerInclude.detailHeaderCardview.visibility = View.INVISIBLE
-    }
-
-    override fun getLifecycle(): LifecycleRegistry? {
-        return lifecycleRegistry
     }
 
     companion object {

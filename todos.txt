@@ -2,21 +2,18 @@
 
 Next:
 + Convert to android injection
++ Story loading should work like comment loading in terms of speed
 + Test changes on tablets
 + injectable schedulers
 + remove butter knife, use databinding everywhere
 + update job delete service to make use of the new query capabilities
 + With Mockito 2 we can move away from Powermock
-+ need loading spinner indicator
 + Break up the APp resources module
-+ make the schedulers injectable, no more statics
 + When the user saves a story for later download the comments for that story as it currently stands,
     also add a way to view those comments in the read later activity
 + main activity UI test to verify the empty message is shown when there are no stories available
 + pull to refresh comment list
 + when no stories are available, but a sync is in progress, let's show a spinner on the home page
-+ consider loading comments for the first 10? top stories pre-emptively if we are on wifi after a
-    story sync?
 + add some firebase analytics to get some experience with that
 + widget taking you directly to story detail activity
 + shared element transitions
