@@ -2,14 +2,10 @@ package dev.bltucker.nanodegreecapstone.storydetail
 
 import javax.inject.Inject
 
-import dev.bltucker.nanodegreecapstone.data.HackerNewsApiService
 import dev.bltucker.nanodegreecapstone.data.daos.CommentsDao
-import dev.bltucker.nanodegreecapstone.injection.ApplicationScope
+import dev.bltucker.nanodegreecapstone.common.injection.ApplicationScope
 import dev.bltucker.nanodegreecapstone.models.Comment
 import io.reactivex.Observable
-import io.reactivex.Observer
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposable
 
 @ApplicationScope
 open class CommentRepository @Inject

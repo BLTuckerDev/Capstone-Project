@@ -2,7 +2,7 @@ package dev.bltucker.nanodegreecapstone.events;
 
 import javax.inject.Inject;
 
-import dev.bltucker.nanodegreecapstone.injection.ApplicationScope;
+import dev.bltucker.nanodegreecapstone.common.injection.ApplicationScope;
 import io.reactivex.Observable;
 import io.reactivex.subjects.PublishSubject;
 import io.reactivex.subjects.Subject;

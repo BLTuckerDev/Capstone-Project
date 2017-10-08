@@ -9,10 +9,9 @@ import javax.inject.Inject;
 
 import dev.bltucker.nanodegreecapstone.data.daos.CommentRefsDao;
 import dev.bltucker.nanodegreecapstone.data.daos.StoryDao;
-import dev.bltucker.nanodegreecapstone.injection.ApplicationScope;
+import dev.bltucker.nanodegreecapstone.common.injection.ApplicationScope;
 import dev.bltucker.nanodegreecapstone.models.Story;
 import io.reactivex.Observable;
-import timber.log.Timber;
 
 @ApplicationScope
 public class ContentProviderBackedStoryRepository implements StoryRepository {

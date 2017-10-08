@@ -10,16 +10,18 @@ import android.os.Bundle;
 
 import javax.inject.Inject;
 
+import dev.bltucker.nanodegreecapstone.common.injection.qualifiers.IO;
 import dev.bltucker.nanodegreecapstone.data.HackerNewsApiService;
 import dev.bltucker.nanodegreecapstone.data.StoryRepository;
 import dev.bltucker.nanodegreecapstone.events.EventBus;
 import dev.bltucker.nanodegreecapstone.events.SyncCompletedEvent;
 import dev.bltucker.nanodegreecapstone.events.SyncStartedEvent;
 import dev.bltucker.nanodegreecapstone.events.SyncStatusObserver;
-import dev.bltucker.nanodegreecapstone.injection.DaggerInjector;
-import dev.bltucker.nanodegreecapstone.injection.StoryMax;
+import dev.bltucker.nanodegreecapstone.common.injection.DaggerInjector;
+import dev.bltucker.nanodegreecapstone.common.injection.qualifiers.StoryMax;
 import dev.bltucker.nanodegreecapstone.models.Story;
 import io.reactivex.Observable;
+import io.reactivex.Scheduler;
 import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
 
@@ -46,6 +48,10 @@ public final class StorySyncAdapter extends AbstractThreadedSyncAdapter {
     @Inject
     @StoryMax
     int maximumStoryCount;
+
+    @Inject
+    @IO
+    Scheduler ioScheduler;
 
     public StorySyncAdapter(Context context, boolean autoInitialize) {
         super(context, autoInitialize);
@@ -79,7 +85,7 @@ public final class StorySyncAdapter extends AbstractThreadedSyncAdapter {
 
                     return Observable.just(stories);
                 })
-                .subscribeOn(Schedulers.io())
+                .subscribeOn(ioScheduler)
                 .subscribe(storyRepository::saveStories,
                         e -> {
                     Timber.e(e, "Error downloading top stories");

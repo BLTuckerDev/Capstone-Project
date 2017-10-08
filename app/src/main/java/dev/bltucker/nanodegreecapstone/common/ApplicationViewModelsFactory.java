@@ -8,7 +8,7 @@ import java.util.Map;
 import javax.inject.Inject;
 import javax.inject.Provider;
 
-import dev.bltucker.nanodegreecapstone.injection.ApplicationScope;
+import dev.bltucker.nanodegreecapstone.common.injection.ApplicationScope;
 
 @ApplicationScope
 public class ApplicationViewModelsFactory implements ViewModelProvider.Factory{

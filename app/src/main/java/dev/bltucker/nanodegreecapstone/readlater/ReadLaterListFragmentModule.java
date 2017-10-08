@@ -1,9 +1,6 @@
 package dev.bltucker.nanodegreecapstone.readlater;
 
-import android.content.ContentResolver;
 import android.support.v4.app.LoaderManager;
-
-import javax.inject.Provider;
 
 import dagger.Module;
 import dagger.Provides;
@@ -21,12 +18,6 @@ public class ReadLaterListFragmentModule {
     @ReadLaterListFragmentScope
     public LoaderManager provideLoaderManager(){
         return fragment.getLoaderManager();
-    }
-
-    @Provides
-    @ReadLaterListFragmentScope
-    public ReadLaterListPresenter providePresenter(ContentResolver contentResolver, LoaderManager loaderManager, Provider<ReadLaterStoryListLoader> loaderProvider){
-        return new ReadLaterListPresenter(contentResolver, loaderManager, loaderProvider);
     }
 
     @Provides

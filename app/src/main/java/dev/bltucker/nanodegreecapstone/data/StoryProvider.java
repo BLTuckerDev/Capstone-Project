@@ -15,7 +15,7 @@ import javax.inject.Inject;
 
 import dev.bltucker.nanodegreecapstone.data.daos.ReadLaterStoryDao;
 import dev.bltucker.nanodegreecapstone.data.daos.StoryDao;
-import dev.bltucker.nanodegreecapstone.injection.DaggerInjector;
+import dev.bltucker.nanodegreecapstone.common.injection.DaggerInjector;
 
 @Keep
 public class StoryProvider extends ContentProvider {

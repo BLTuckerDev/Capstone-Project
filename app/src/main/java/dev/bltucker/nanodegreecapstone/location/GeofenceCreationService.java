@@ -17,7 +17,7 @@ import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
-import dev.bltucker.nanodegreecapstone.injection.DaggerInjector;
+import dev.bltucker.nanodegreecapstone.common.injection.DaggerInjector;
 import timber.log.Timber;
 
 

@@ -6,7 +6,7 @@ import android.os.Bundle
 import android.support.annotation.Nullable
 import dagger.Module
 import dagger.Provides
-import dev.bltucker.nanodegreecapstone.injection.GregorianUTC
+import dev.bltucker.nanodegreecapstone.common.injection.qualifiers.GregorianUTC
 import dev.bltucker.nanodegreecapstone.models.Story
 import dev.bltucker.nanodegreecapstone.storydetail.StoryCommentsAdapter
 import dev.bltucker.nanodegreecapstone.storydetail.StoryDetailFragment

@@ -86,7 +86,7 @@ android {
 //    }
 //}
 
-final DAGGER_VERSION = "2.10"
+final DAGGER_VERSION = "2.11"
 final SUPPORT_VERSION = "26.1.0"
 final GOOGLE_PLAY_SERVICES_VERSION = "11.4.2"
 final JSR_250_VERSION = "1.0"

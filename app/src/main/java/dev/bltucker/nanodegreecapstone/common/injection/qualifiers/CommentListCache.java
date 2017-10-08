@@ -1,4 +1,5 @@
-package dev.bltucker.nanodegreecapstone.injection;
+package dev.bltucker.nanodegreecapstone.common.injection.qualifiers;
+
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
@@ -10,5 +11,5 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Qualifier
 @Documented
 @Retention(RUNTIME)
-public @interface SyncIntervalSeconds {
+public @interface CommentListCache {
 }

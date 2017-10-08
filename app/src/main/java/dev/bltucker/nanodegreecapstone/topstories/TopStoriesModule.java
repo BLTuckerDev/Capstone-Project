@@ -6,7 +6,7 @@ import javax.inject.Provider;
 
 import dagger.Module;
 import dagger.Provides;
-import dev.bltucker.nanodegreecapstone.injection.ApplicationScope;
+import dev.bltucker.nanodegreecapstone.common.injection.ApplicationScope;
 import dev.bltucker.nanodegreecapstone.models.ReadingSession;
 
 @Module

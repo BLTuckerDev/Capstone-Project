@@ -16,7 +16,7 @@ import javax.inject.Inject;
 
 import dev.bltucker.nanodegreecapstone.R;
 import dev.bltucker.nanodegreecapstone.data.StoryProvider;
-import dev.bltucker.nanodegreecapstone.injection.DaggerInjector;
+import dev.bltucker.nanodegreecapstone.common.injection.DaggerInjector;
 import dev.bltucker.nanodegreecapstone.readlater.ReadLaterListActivity;
 import timber.log.Timber;
 

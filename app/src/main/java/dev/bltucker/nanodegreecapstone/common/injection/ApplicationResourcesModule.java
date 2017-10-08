@@ -1,4 +1,4 @@
-package dev.bltucker.nanodegreecapstone.injection;
+package dev.bltucker.nanodegreecapstone.common.injection;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -20,6 +20,12 @@ import dagger.Module;
 import dagger.Provides;
 import dev.bltucker.nanodegreecapstone.CapstoneApplication;
 import dev.bltucker.nanodegreecapstone.R;
+import dev.bltucker.nanodegreecapstone.common.injection.qualifiers.CommentCacheSize;
+import dev.bltucker.nanodegreecapstone.common.injection.qualifiers.CommentListCache;
+import dev.bltucker.nanodegreecapstone.common.injection.qualifiers.GregorianUTC;
+import dev.bltucker.nanodegreecapstone.common.injection.qualifiers.IO;
+import dev.bltucker.nanodegreecapstone.common.injection.qualifiers.StoryMax;
+import dev.bltucker.nanodegreecapstone.common.injection.qualifiers.SyncIntervalSeconds;
 import dev.bltucker.nanodegreecapstone.data.StoryProvider;
 import dev.bltucker.nanodegreecapstone.data.ContentProviderBackedStoryRepository;
 import dev.bltucker.nanodegreecapstone.data.HackerNewsApiService;
@@ -205,12 +211,12 @@ public class ApplicationResourcesModule {
 
     @Provides
     @ApplicationScope
-    public Retrofit provideRetrofitClient(Gson gson, OkHttpClient okHttpClient) {
+    public Retrofit provideRetrofitClient(Gson gson, OkHttpClient okHttpClient, @IO Scheduler ioScheduler) {
         return new Retrofit.Builder()
                 .client(okHttpClient)
                 .baseUrl("https://hacker-news.firebaseio.com/v0/")
                 .addConverterFactory(GsonConverterFactory.create(gson))
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.createWithScheduler(Schedulers.io()))
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.createWithScheduler(ioScheduler))
                 .build();
     }
 

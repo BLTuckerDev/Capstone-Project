@@ -3,13 +3,16 @@ package dev.bltucker.nanodegreecapstone.storydetail
 import android.arch.lifecycle.ViewModel
 import com.jakewharton.rxrelay2.PublishRelay
 import dev.bltucker.nanodegreecapstone.data.daos.ReadLaterStoryDao
-import dev.bltucker.nanodegreecapstone.injection.ApplicationScope
+import dev.bltucker.nanodegreecapstone.common.injection.ApplicationScope
+import dev.bltucker.nanodegreecapstone.common.injection.qualifiers.IO
+import dev.bltucker.nanodegreecapstone.common.injection.qualifiers.UI
 import dev.bltucker.nanodegreecapstone.models.Comment
 import dev.bltucker.nanodegreecapstone.models.ReadLaterStory
 import dev.bltucker.nanodegreecapstone.models.Story
 import io.reactivex.Completable
 import io.reactivex.CompletableObserver
 import io.reactivex.Observable
+import io.reactivex.Scheduler
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
@@ -18,7 +21,9 @@ import javax.inject.Inject
 
 @ApplicationScope
 class StoryDetailViewModel @Inject constructor(private val readLaterStoryDao: ReadLaterStoryDao,
-                                               private val commentsRepository: CommentRepository) : ViewModel() {
+                                               private val commentsRepository: CommentRepository,
+                                               @param:UI private val uiScheduler: Scheduler,
+                                               @param:IO private val ioscheduler: Scheduler) : ViewModel() {
 
     val readLaterSaveSuccessPublisher: PublishRelay<Boolean> = PublishRelay.create()
 
@@ -28,8 +33,8 @@ class StoryDetailViewModel @Inject constructor(private val readLaterStoryDao: Re
         Completable.fromAction({
             readLaterStoryDao.saveStory(readLaterStory)
         })
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(ioscheduler)
+                .observeOn(uiScheduler)
                 .subscribe(object : CompletableObserver {
                     override fun onComplete() {
                         readLaterSaveSuccessPublisher.accept(true)

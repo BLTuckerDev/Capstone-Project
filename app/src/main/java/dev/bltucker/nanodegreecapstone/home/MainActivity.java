@@ -12,7 +12,7 @@ import javax.inject.Inject;
 
 import dev.bltucker.nanodegreecapstone.R;
 import dev.bltucker.nanodegreecapstone.data.HackerNewsDatabase;
-import dev.bltucker.nanodegreecapstone.injection.DaggerInjector;
+import dev.bltucker.nanodegreecapstone.common.injection.DaggerInjector;
 import dev.bltucker.nanodegreecapstone.models.Story;
 import dev.bltucker.nanodegreecapstone.readlater.ReadLaterListActivity;
 import dev.bltucker.nanodegreecapstone.settings.SettingsActivity;

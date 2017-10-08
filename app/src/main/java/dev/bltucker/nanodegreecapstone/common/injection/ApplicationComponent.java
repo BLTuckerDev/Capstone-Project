@@ -1,4 +1,4 @@
-package dev.bltucker.nanodegreecapstone.injection;
+package dev.bltucker.nanodegreecapstone.common.injection;
 
 import dagger.Component;
 import dev.bltucker.nanodegreecapstone.data.StoryProvider;
@@ -18,7 +18,7 @@ import dev.bltucker.nanodegreecapstone.topstories.StoryListFragment;
 import dev.bltucker.nanodegreecapstone.topstories.TopStoriesModule;
 
 @ApplicationScope
-@Component(modules = { ApplicationResourcesModule.class, TopStoriesModule.class, ViewModelModule.class})
+@Component(modules = { ApplicationResourcesModule.class, TopStoriesModule.class, ViewModelModule.class, SchedulersModule.class})
 public interface ApplicationComponent {
     void inject(MainActivity mainActivity);
     void inject(StorySyncAdapter syncAdapter);

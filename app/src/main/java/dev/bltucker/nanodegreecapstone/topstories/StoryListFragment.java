@@ -18,7 +18,7 @@ import javax.inject.Inject;
 import dev.bltucker.nanodegreecapstone.R;
 import dev.bltucker.nanodegreecapstone.databinding.FragmentStoryListBinding;
 import dev.bltucker.nanodegreecapstone.events.SyncStatusObserver;
-import dev.bltucker.nanodegreecapstone.injection.DaggerInjector;
+import dev.bltucker.nanodegreecapstone.common.injection.DaggerInjector;
 import dev.bltucker.nanodegreecapstone.models.ReadingSession;
 import dev.bltucker.nanodegreecapstone.models.Story;
 

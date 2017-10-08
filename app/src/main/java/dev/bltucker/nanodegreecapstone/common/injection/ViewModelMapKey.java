@@ -1,4 +1,4 @@
-package dev.bltucker.nanodegreecapstone.injection;
+package dev.bltucker.nanodegreecapstone.common.injection;
 
 import android.arch.lifecycle.ViewModel;
 

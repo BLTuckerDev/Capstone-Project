@@ -1,17 +1,21 @@
 package dev.bltucker.nanodegreecapstone.topstories;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.v4.content.AsyncTaskLoader;
 
 import java.util.List;
 
 import javax.inject.Inject;
 
+import dev.bltucker.nanodegreecapstone.common.injection.SchedulersModule;
+import dev.bltucker.nanodegreecapstone.common.injection.qualifiers.UI;
 import dev.bltucker.nanodegreecapstone.data.StoryRepository;
 import dev.bltucker.nanodegreecapstone.events.EventBus;
 import dev.bltucker.nanodegreecapstone.events.SyncCompletedEvent;
 import dev.bltucker.nanodegreecapstone.models.Story;
 import io.reactivex.Observer;
+import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import timber.log.Timber;
@@ -20,15 +24,26 @@ public class StoryListLoader extends AsyncTaskLoader<List<Story>> {
 
     public static final int STORY_LIST_LOADER = StoryListLoader.class.hashCode();
 
+    @NonNull
     private final StoryRepository storyRepository;
+
+    @NonNull
     private final EventBus eventBus;
+
+    @NonNull
+    private final Scheduler uiScheduler;
+
     private Disposable syncAdapterChangeSubscription;
 
     @Inject
-    public StoryListLoader(Context context, StoryRepository storyRepository, EventBus eventBus) {
+    public StoryListLoader(@NonNull Context context,
+                           @NonNull StoryRepository storyRepository,
+                           @NonNull EventBus eventBus,
+                           @NonNull @UI Scheduler uiScheduler) {
         super(context);
         this.storyRepository = storyRepository;
         this.eventBus = eventBus;
+        this.uiScheduler = uiScheduler;
         onContentChanged();
     }
 
@@ -57,7 +72,7 @@ public class StoryListLoader extends AsyncTaskLoader<List<Story>> {
 
     private void subscribeToSyncEvents(){
         eventBus.subscribeTo(SyncCompletedEvent.class)
-                .observeOn(AndroidSchedulers.mainThread())
+                .observeOn(uiScheduler)
                 .subscribe(new Observer<Object>() {
 
                     @Override

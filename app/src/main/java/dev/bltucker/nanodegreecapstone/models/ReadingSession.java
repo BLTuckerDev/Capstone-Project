@@ -9,8 +9,8 @@ import javax.inject.Inject;
 
 import dev.bltucker.nanodegreecapstone.events.EventBus;
 import dev.bltucker.nanodegreecapstone.events.SyncCompletedEvent;
-import dev.bltucker.nanodegreecapstone.injection.ApplicationScope;
-import dev.bltucker.nanodegreecapstone.injection.StoryMax;
+import dev.bltucker.nanodegreecapstone.common.injection.ApplicationScope;
+import dev.bltucker.nanodegreecapstone.common.injection.qualifiers.StoryMax;
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
 import timber.log.Timber;

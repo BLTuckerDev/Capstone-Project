@@ -1,6 +1,5 @@
 package dev.bltucker.nanodegreecapstone.storydetail
 
-import android.arch.lifecycle.LifecycleRegistry
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.graphics.Color
@@ -17,7 +16,8 @@ import android.widget.Toast
 import dev.bltucker.nanodegreecapstone.R
 import dev.bltucker.nanodegreecapstone.common.ApplicationViewModelsFactory
 import dev.bltucker.nanodegreecapstone.databinding.FragmentStoryDetailBinding
-import dev.bltucker.nanodegreecapstone.injection.DaggerInjector
+import dev.bltucker.nanodegreecapstone.common.injection.DaggerInjector
+import dev.bltucker.nanodegreecapstone.common.injection.qualifiers.UI
 import dev.bltucker.nanodegreecapstone.models.Comment
 import dev.bltucker.nanodegreecapstone.models.Story
 import dev.bltucker.nanodegreecapstone.storydetail.injection.StoryDetailFragmentModule
@@ -25,7 +25,7 @@ import dev.bltucker.nanodegreecapstone.storydetail.injection.StoryDetailFragment
 import dev.bltucker.nanodegreecapstone.storydetail.injection.StoryDetailFragmentModule.Companion.STORY_BUNDLE_KEY
 
 import io.reactivex.Observer
-import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.Scheduler
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import javax.inject.Inject
@@ -40,6 +40,9 @@ class StoryDetailFragment : Fragment() {
 
     @Inject
     lateinit var applicationViewModelsFactory: ApplicationViewModelsFactory
+
+    @field:[Inject UI]
+    lateinit var uiScheduler : Scheduler
 
     @Inject
     @JvmField
@@ -129,7 +132,7 @@ class StoryDetailFragment : Fragment() {
             showStory()
 
             storyDetailViewModel.getObservableComments(story!!.getId())
-                    .observeOn(AndroidSchedulers.mainThread())
+                    .observeOn(uiScheduler)
                     .subscribe(object : Observer<Array<Comment>> {
                         override fun onSubscribe(d: Disposable) {
                             modelSubscriptions.add(d)
@@ -147,7 +150,7 @@ class StoryDetailFragment : Fragment() {
                     })
 
             storyDetailViewModel.getObservableReadLaterSuccessStatus()
-                    .observeOn(AndroidSchedulers.mainThread())
+                    .observeOn(uiScheduler)
                     .subscribe(object : Observer<Boolean> {
                         override fun onNext(saveSuccess: Boolean) {
                             if (saveSuccess) {

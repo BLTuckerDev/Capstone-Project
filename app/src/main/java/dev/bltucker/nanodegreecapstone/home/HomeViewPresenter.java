@@ -5,8 +5,8 @@ import android.support.annotation.VisibleForTesting;
 
 import javax.inject.Inject;
 
-import dev.bltucker.nanodegreecapstone.injection.ApplicationScope;
-import dev.bltucker.nanodegreecapstone.injection.SyncIntervalSeconds;
+import dev.bltucker.nanodegreecapstone.common.injection.ApplicationScope;
+import dev.bltucker.nanodegreecapstone.common.injection.qualifiers.SyncIntervalSeconds;
 
 @ApplicationScope
 public class HomeViewPresenter {

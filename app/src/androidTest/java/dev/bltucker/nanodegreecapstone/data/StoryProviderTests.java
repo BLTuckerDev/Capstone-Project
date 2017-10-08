@@ -12,10 +12,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import dev.bltucker.nanodegreecapstone.CapstoneApplication;
-import dev.bltucker.nanodegreecapstone.injection.ApplicationComponent;
-import dev.bltucker.nanodegreecapstone.injection.DaggerApplicationComponent;
-import dev.bltucker.nanodegreecapstone.injection.DaggerInjector;
-import dev.bltucker.nanodegreecapstone.injection.TestApplicationResourcesModule;
+import dev.bltucker.nanodegreecapstone.common.injection.ApplicationComponent;
+import dev.bltucker.nanodegreecapstone.common.injection.DaggerApplicationComponent;
+import dev.bltucker.nanodegreecapstone.common.injection.DaggerInjector;
+import dev.bltucker.nanodegreecapstone.common.injection.TestApplicationResourcesModule;
 import dev.bltucker.nanodegreecapstone.models.ReadLaterStory;
 import dev.bltucker.nanodegreecapstone.models.Story;
 

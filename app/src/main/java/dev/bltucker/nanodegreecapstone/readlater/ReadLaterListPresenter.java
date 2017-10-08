@@ -3,6 +3,7 @@ package dev.bltucker.nanodegreecapstone.readlater;
 import android.content.ContentResolver;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 
@@ -11,29 +12,45 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Provider;
 
+import dev.bltucker.nanodegreecapstone.common.injection.qualifiers.IO;
+import dev.bltucker.nanodegreecapstone.common.injection.qualifiers.UI;
 import dev.bltucker.nanodegreecapstone.data.StoryProvider;
 import dev.bltucker.nanodegreecapstone.models.ReadLaterStory;
 import io.reactivex.Completable;
 import io.reactivex.CompletableObserver;
+import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
+@ReadLaterListFragmentScope
 public class ReadLaterListPresenter implements LoaderManager.LoaderCallbacks<List<ReadLaterStory>>, SwipeRefreshLayout.OnRefreshListener {
 
     private final ContentResolver contentResolver;
     private final android.support.v4.app.LoaderManager loaderManager;
     private final Provider<ReadLaterStoryListLoader> readLaterStoryListLoaderProvider;
 
+    @NonNull
+    private final Scheduler uiScheduler;
+
+    @NonNull
+    private final Scheduler ioScheduler;
+
     private ReadLaterListView view;
 
     private boolean initializeLoaderOnRestore = false;
 
     @Inject
-    public ReadLaterListPresenter(ContentResolver contentResolver, android.support.v4.app.LoaderManager loaderManager, Provider<ReadLaterStoryListLoader> readLaterStoryListLoaderProvider) {
+    public ReadLaterListPresenter(ContentResolver contentResolver,
+                                  android.support.v4.app.LoaderManager loaderManager,
+                                  Provider<ReadLaterStoryListLoader> readLaterStoryListLoaderProvider,
+                                  @NonNull @UI Scheduler uiScheduler,
+                                  @NonNull @IO Scheduler ioScheduler) {
         this.contentResolver = contentResolver;
         this.loaderManager = loaderManager;
         this.readLaterStoryListLoaderProvider = readLaterStoryListLoaderProvider;
+        this.uiScheduler = uiScheduler;
+        this.ioScheduler = ioScheduler;
     }
 
     public void onViewCreated(ReadLaterListView listView) {
@@ -93,8 +110,8 @@ public class ReadLaterListPresenter implements LoaderManager.LoaderCallbacks<Lis
 
     public void onReadLaterStoryDeleteClicked(final ReadLaterStory story) {
         Completable.fromAction(() -> contentResolver.delete(Uri.withAppendedPath(StoryProvider.READ_LATER_URI, String.valueOf(story.getId())), null, null))
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(ioScheduler)
+                .observeOn(uiScheduler)
                 .subscribe(new CompletableObserver() {
                     @Override
                     public void onSubscribe(Disposable d) {

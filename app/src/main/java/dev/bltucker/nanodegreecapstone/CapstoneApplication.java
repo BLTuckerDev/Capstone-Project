@@ -8,10 +8,10 @@ import android.app.job.JobScheduler;
 import android.content.ComponentName;
 import android.content.Context;
 
-import dev.bltucker.nanodegreecapstone.injection.ApplicationComponent;
-import dev.bltucker.nanodegreecapstone.injection.ApplicationResourcesModule;
-import dev.bltucker.nanodegreecapstone.injection.DaggerApplicationComponent;
-import dev.bltucker.nanodegreecapstone.injection.DaggerInjector;
+import dev.bltucker.nanodegreecapstone.common.injection.ApplicationComponent;
+import dev.bltucker.nanodegreecapstone.common.injection.ApplicationResourcesModule;
+import dev.bltucker.nanodegreecapstone.common.injection.DaggerApplicationComponent;
+import dev.bltucker.nanodegreecapstone.common.injection.DaggerInjector;
 import dev.bltucker.nanodegreecapstone.logging.FirebaseDebugTree;
 import dev.bltucker.nanodegreecapstone.sync.CommentCleaningService;
 import dev.bltucker.nanodegreecapstone.sync.StorySyncAdapter;

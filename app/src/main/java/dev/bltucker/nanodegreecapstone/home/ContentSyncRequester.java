@@ -7,7 +7,7 @@ import android.os.Bundle;
 
 import javax.inject.Inject;
 
-import dev.bltucker.nanodegreecapstone.injection.ApplicationScope;
+import dev.bltucker.nanodegreecapstone.common.injection.ApplicationScope;
 
 import static dev.bltucker.nanodegreecapstone.data.StoryProvider.AUTHORITY;
 

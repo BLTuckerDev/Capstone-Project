@@ -1,4 +1,4 @@
-package dev.bltucker.nanodegreecapstone.injection;
+package dev.bltucker.nanodegreecapstone.common.injection;
 
 import com.google.gson.Gson;
 

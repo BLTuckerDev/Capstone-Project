@@ -4,7 +4,6 @@ Next:
 + Convert to android injection
 + Story loading should work like comment loading in terms of speed
 + Test changes on tablets
-+ injectable schedulers
 + remove butter knife, use databinding everywhere
 + update job delete service to make use of the new query capabilities
 + With Mockito 2 we can move away from Powermock
