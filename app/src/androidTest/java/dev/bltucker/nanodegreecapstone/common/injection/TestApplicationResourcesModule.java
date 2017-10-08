@@ -7,11 +7,13 @@ import android.arch.persistence.room.Room;
 import dagger.Module;
 import dagger.Provides;
 import dev.bltucker.nanodegreecapstone.CapstoneApplication;
+import dev.bltucker.nanodegreecapstone.common.injection.qualifiers.IO;
 import dev.bltucker.nanodegreecapstone.data.HackerNewsApiService;
 import dev.bltucker.nanodegreecapstone.data.HackerNewsDatabase;
 import dev.bltucker.nanodegreecapstone.data.MockHackerNewsApiService;
 import dev.bltucker.nanodegreecapstone.data.migrations.Version1to2;
 import dev.bltucker.nanodegreecapstone.data.migrations.Version2to3;
+import io.reactivex.Scheduler;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
@@ -38,12 +40,12 @@ public class TestApplicationResourcesModule extends ApplicationResourcesModule {
     @Override
     @Provides
     @ApplicationScope
-    public Retrofit provideRetrofitClient(Gson gson, OkHttpClient okHttpClient) {
+    public Retrofit provideRetrofitClient(Gson gson, OkHttpClient okHttpClient, @IO Scheduler ioScheduler) {
         return new Retrofit.Builder()
                 .client(okHttpClient)
                 .baseUrl("https://hacker-news.firebaseio.com/v0/")
                 .addConverterFactory(GsonConverterFactory.create(gson))
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.createWithScheduler(ioScheduler))
                 .build();
     }
 
