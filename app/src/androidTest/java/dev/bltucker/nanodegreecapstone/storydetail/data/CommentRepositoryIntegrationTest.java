@@ -36,18 +36,16 @@ public class CommentRepositoryIntegrationTest {
     private HackerNewsDatabase hackerNewsDatabase;
 
     private CommentsDao commentsDao;
-    private HackerNewsApiService mockHackerNewsService;
 
     @Before
     public void setup() {
-        mockHackerNewsService = mock(HackerNewsApiService.class);
         hackerNewsDatabase = Room.inMemoryDatabaseBuilder(InstrumentationRegistry.getContext(), HackerNewsDatabase.class)
                 .allowMainThreadQueries()
                 .addMigrations(new Version1to2(1, 2))
                 .addMigrations(new Version2to3(2,3))
                 .build();
         commentsDao = hackerNewsDatabase.commentsDao();
-        objectUnderTest = new CommentRepository(commentsDao, mockHackerNewsService);
+        objectUnderTest = new CommentRepository(commentsDao);
     }
 
     @After
@@ -59,8 +57,6 @@ public class CommentRepositoryIntegrationTest {
     @Test
     public void testGetStoryCommentsShouldReturnListofComments() throws InterruptedException {
         final int storyId = 1;
-
-        when(mockHackerNewsService.getStory(storyId)).thenReturn(Single.never());
 
         List<Comment> fakeComments = new ArrayList<>();
 
@@ -83,8 +79,6 @@ public class CommentRepositoryIntegrationTest {
 
     @Test
     public void testGetStoryCommentsWithInvalidStoryShouldReturnEmptyCommentList() throws InterruptedException {
-
-        when(mockHackerNewsService.getStory(anyLong())).thenReturn(Single.never());
 
         TestObserver<Comment[]> testSubscriber = new TestObserver<>();
 

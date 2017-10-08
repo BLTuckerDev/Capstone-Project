@@ -12,7 +12,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 
 @ApplicationScope
-class CommentRepository @Inject
+open class CommentRepository @Inject
 constructor(private val commentsDao: CommentsDao) {
 
     fun getCommentsForStoryId(storyId: Long): Observable<Array<Comment>> {
@@ -28,5 +28,4 @@ constructor(private val commentsDao: CommentsDao) {
                 .onBackpressureDrop()
                 .toObservable()
     }
-
 }
