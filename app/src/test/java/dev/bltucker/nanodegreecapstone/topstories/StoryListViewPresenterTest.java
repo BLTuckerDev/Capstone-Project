@@ -167,7 +167,6 @@ public class StoryListViewPresenterTest {
     @Test
     public void testOnRefresh() throws Exception {
         doNothing().when(mockSyncRequestDelegate).sendSyncRequest();
-
         objectUnderTest.onRefresh();
 
         verify(mockSyncRequestDelegate, times(1)).sendSyncRequest();

@@ -1,7 +1,5 @@
 package dev.bltucker.nanodegreecapstone.topstories;
 
-import android.accounts.Account;
-
 import javax.inject.Provider;
 
 import dagger.Module;
@@ -12,12 +10,6 @@ import dev.bltucker.nanodegreecapstone.models.ReadingSession;
 @Module
 @ApplicationScope
 public class TopStoriesModule {
-
-    @Provides
-    @ApplicationScope
-    public SyncRequestDelegate provideSyncRequestDelegate(Account account){
-        return new SyncRequestDelegate(account);
-    }
 
     @Provides
     @ApplicationScope
