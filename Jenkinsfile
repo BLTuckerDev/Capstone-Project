@@ -16,7 +16,7 @@ node{
 
     stage "Sonar Analysis"
 
-    echo "Disabled for now"
+    sh "./gradlew sonarqube"
 
     stage 'Build'
 
