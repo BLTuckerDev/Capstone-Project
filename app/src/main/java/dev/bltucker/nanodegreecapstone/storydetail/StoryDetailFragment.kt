@@ -114,8 +114,8 @@ class StoryDetailFragment : Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        binding = FragmentStoryDetailBinding.inflate(inflater, container, false)
-        binding.headerInclude.readButton.setOnClickListener { v -> showStoryPostUrl() }
+        binding = FragmentStoryDetailBinding.inflate(inflater!!, container, false)
+        binding.headerInclude?.readButton?.setOnClickListener { _ -> showStoryPostUrl() }
         return binding.root
     }
 
@@ -190,14 +190,14 @@ class StoryDetailFragment : Fragment() {
             return
         }
 
-        binding.headerInclude.storyTitleTextview.text = story!!.getTitle()
-        binding.headerInclude.storyUrlTextview.text = story!!.getUrl()
-        binding.headerInclude.posterNameTextview.text = String.format(getString(R.string.by_poster), story!!.getPosterName())
-        binding.headerInclude.scoreTextview.text = String.format(getString(R.string.story_score), story!!.getScore())
+        binding.headerInclude?.storyTitleTextview?.text = story!!.getTitle()
+        binding.headerInclude?.storyUrlTextview?.text = story!!.getUrl()
+        binding.headerInclude?.posterNameTextview?.text = String.format(getString(R.string.by_poster), story!!.getPosterName())
+        binding.headerInclude?.scoreTextview?.text = String.format(getString(R.string.story_score), story!!.getScore())
         if (null == story!!.getUrl()) {
-            binding.headerInclude.readButton.visibility = View.INVISIBLE
+            binding.headerInclude?.readButton?.visibility = View.INVISIBLE
         } else {
-            binding.headerInclude.readButton.visibility = View.VISIBLE
+            binding.headerInclude?.readButton?.visibility = View.VISIBLE
         }
     }
 
@@ -212,7 +212,7 @@ class StoryDetailFragment : Fragment() {
         binding.commentListRecyclerview.visibility = View.INVISIBLE
         binding.emptyViewContainer.visibility = View.VISIBLE
         binding.appBarLayout.visibility = View.INVISIBLE
-        binding.headerInclude.detailHeaderCardview.visibility = View.INVISIBLE
+        binding.headerInclude?.detailHeaderCardview?.visibility = View.INVISIBLE
     }
 
     companion object {

@@ -4,13 +4,9 @@ import android.arch.persistence.db.SupportSQLiteDatabase
 import android.arch.persistence.room.migration.Migration
 
 class Version2to3(startVersion: Int, endVersion: Int) : Migration(startVersion, endVersion){
-    override fun migrate(database: SupportSQLiteDatabase?) {
-        //rename the current priamry key column,
-        if(database == null){
-            return;
-        }
+    override fun migrate(database: SupportSQLiteDatabase) {
 
-//        database.beginTransaction()
+        database.beginTransaction()
 
         val alterTableStatement = "ALTER TABLE comments RENAME TO old_comments;"
 
@@ -40,8 +36,7 @@ class Version2to3(startVersion: Int, endVersion: Int) : Migration(startVersion, 
         database.execSQL(dropOldTableStatement)
         database.execSQL(createNewIndex)
 
-
-//        database.endTransaction()
+        database.endTransaction()
 
     }
 
