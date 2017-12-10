@@ -11,15 +11,16 @@ import android.widget.RemoteViews;
 
 import dev.bltucker.nanodegreecapstone.R;
 import dev.bltucker.nanodegreecapstone.home.MainActivity;
-import dev.bltucker.nanodegreecapstone.sync.StorySyncAdapter;
 
 
 public class TopFiveStoriesWidgetProvider extends AppWidgetProvider {
 
+    public static final String SYNC_COMPLETED_ACTION = "dev.bltucker.nanodegreecapstone.SYNC_COMPLETED";
+
     @Override
     public void onReceive(Context context, Intent intent) {
         super.onReceive(context, intent);
-        if(StorySyncAdapter.SYNC_COMPLETED_ACTION.equals(intent.getAction())
+        if(SYNC_COMPLETED_ACTION.equals(intent.getAction())
                 || AppWidgetManager.ACTION_APPWIDGET_UPDATE.equals(intent.getAction())){
             AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
             int[] appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(context, getClass()));

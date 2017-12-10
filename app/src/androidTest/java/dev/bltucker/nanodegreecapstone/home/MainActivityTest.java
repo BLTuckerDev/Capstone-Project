@@ -39,7 +39,7 @@ public class MainActivityTest {
             MainActivity.class,
             true,    // initialTouchMode
             false);  // launchActivity. False to set intent per method
-    private SyncAdapterIdlingResource idlingResource;
+
 
     @Before
     public void setup(){
@@ -53,8 +53,6 @@ public class MainActivityTest {
 
         EventBus eventBus = DaggerInjector.getApplicationComponent().eventBus();
 
-        idlingResource = new SyncAdapterIdlingResource();
-        Espresso.registerIdlingResources(idlingResource);
         Timber.d("Registered idling resource");
         eventBus.subscribeTo(SyncCompletedEvent.class)
                 .subscribe(new Observer<Object>() {
@@ -71,7 +69,6 @@ public class MainActivityTest {
 
                     @Override
                     public void onNext(Object o) {
-                        idlingResource.setIdle(true);
                         Timber.d("Resource is now idle");
                     }
                 });
@@ -80,7 +77,6 @@ public class MainActivityTest {
 
     @After
     public void teardown(){
-        Espresso.unregisterIdlingResources(idlingResource);
     }
 
     @Test

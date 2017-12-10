@@ -31,14 +31,16 @@ public class ContentProviderBackedStoryRepositoryTest {
     ContentProviderBackedStoryRepository objectUnderTest;
     private StoryDao mockStoryDao;
     private CommentRefsDao mockCommentRefsDao;
+    private HackerNewsDatabase mockDatabase;
 
     @Before
     public void setup() {
         mockContentResolver = mock(ContentResolver.class);
         mockCommentRepository = mock(CommentRepository.class);
         mockCommentRefsDao = mock(CommentRefsDao.class);
+        mockDatabase = mock(HackerNewsDatabase.class);
         mockStoryDao = mock(StoryDao.class);
-        objectUnderTest = new ContentProviderBackedStoryRepository(mockStoryDao, mockCommentRefsDao);
+        objectUnderTest = new ContentProviderBackedStoryRepository(mockDatabase, mockStoryDao, mockCommentRefsDao);
     }
 
     @Test

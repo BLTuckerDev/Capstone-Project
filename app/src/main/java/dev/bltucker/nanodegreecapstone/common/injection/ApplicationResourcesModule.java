@@ -3,7 +3,6 @@ package dev.bltucker.nanodegreecapstone.common.injection;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import android.accounts.Account;
 import android.app.NotificationManager;
 import android.arch.persistence.room.Room;
 import android.content.ContentResolver;
@@ -25,11 +24,10 @@ import dev.bltucker.nanodegreecapstone.common.injection.qualifiers.CommentListCa
 import dev.bltucker.nanodegreecapstone.common.injection.qualifiers.GregorianUTC;
 import dev.bltucker.nanodegreecapstone.common.injection.qualifiers.IO;
 import dev.bltucker.nanodegreecapstone.common.injection.qualifiers.StoryMax;
-import dev.bltucker.nanodegreecapstone.common.injection.qualifiers.SyncIntervalSeconds;
-import dev.bltucker.nanodegreecapstone.data.StoryProvider;
 import dev.bltucker.nanodegreecapstone.data.ContentProviderBackedStoryRepository;
 import dev.bltucker.nanodegreecapstone.data.HackerNewsApiService;
 import dev.bltucker.nanodegreecapstone.data.HackerNewsDatabase;
+import dev.bltucker.nanodegreecapstone.data.StoryProvider;
 import dev.bltucker.nanodegreecapstone.data.StoryRepository;
 import dev.bltucker.nanodegreecapstone.data.daos.CommentRefsDao;
 import dev.bltucker.nanodegreecapstone.data.daos.CommentsDao;
@@ -38,9 +36,7 @@ import dev.bltucker.nanodegreecapstone.data.daos.StoryDao;
 import dev.bltucker.nanodegreecapstone.data.migrations.Version1to2;
 import dev.bltucker.nanodegreecapstone.data.migrations.Version2to3;
 import dev.bltucker.nanodegreecapstone.models.Comment;
-import dev.bltucker.nanodegreecapstone.sync.StorySyncAdapter;
 import io.reactivex.Scheduler;
-import io.reactivex.schedulers.Schedulers;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
@@ -146,22 +142,9 @@ public class ApplicationResourcesModule {
 
     @Provides
     @ApplicationScope
-    @SyncIntervalSeconds
-    public int provideSyncIntervalInSeconds(Resources resources) {
-        return resources.getInteger(R.integer.sync_interval_seconds);
-    }
-
-    @Provides
-    @ApplicationScope
     @CommentCacheSize
     public int provideCommentCacheSize(Resources resources){
         return resources.getInteger(R.integer.comment_cache_size);
-    }
-
-    @Provides
-    @ApplicationScope
-    public Account provideAccount() {
-        return new Account(StorySyncAdapter.ACCOUNT, StorySyncAdapter.ACCOUNT_TYPE);
     }
 
     @Provides

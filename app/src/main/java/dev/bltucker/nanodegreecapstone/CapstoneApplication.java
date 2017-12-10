@@ -1,7 +1,5 @@
 package dev.bltucker.nanodegreecapstone;
 
-import android.accounts.Account;
-import android.accounts.AccountManager;
 import android.app.Application;
 import android.app.job.JobInfo;
 import android.app.job.JobScheduler;
@@ -14,7 +12,6 @@ import dev.bltucker.nanodegreecapstone.common.injection.DaggerApplicationCompone
 import dev.bltucker.nanodegreecapstone.common.injection.DaggerInjector;
 import dev.bltucker.nanodegreecapstone.logging.FirebaseDebugTree;
 import dev.bltucker.nanodegreecapstone.sync.CommentCleaningService;
-import dev.bltucker.nanodegreecapstone.sync.StorySyncAdapter;
 import io.reactivex.Completable;
 import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
@@ -41,9 +38,9 @@ public class CapstoneApplication extends Application {
     }
 
     private void createSyncAdapterAccount() {
-        Account newAccount = new Account(StorySyncAdapter.ACCOUNT, StorySyncAdapter.ACCOUNT_TYPE);
-        AccountManager accountManager = (AccountManager) getSystemService(ACCOUNT_SERVICE);
-        accountManager.addAccountExplicitly(newAccount, null, null);
+//        Account newAccount = new Account(StorySyncAdapter.ACCOUNT, StorySyncAdapter.ACCOUNT_TYPE);
+//        AccountManager accountManager = (AccountManager) getSystemService(ACCOUNT_SERVICE);
+//        accountManager.addAccountExplicitly(newAccount, null, null);
     }
 
     private void scheduleCommentCleanUpJob() {

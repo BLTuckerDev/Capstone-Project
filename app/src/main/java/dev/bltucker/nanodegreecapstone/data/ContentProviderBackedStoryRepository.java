@@ -1,6 +1,7 @@
 package dev.bltucker.nanodegreecapstone.data;
 
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,13 +18,18 @@ import io.reactivex.Observable;
 public class ContentProviderBackedStoryRepository implements StoryRepository {
 
     @NonNull
+    private final HackerNewsDatabase hackerNewsDatabase;
+    @NonNull
     private final StoryDao storyDao;
 
     @NonNull
     private final CommentRefsDao commentRefsDao;
 
     @Inject
-    public ContentProviderBackedStoryRepository(@NonNull StoryDao storyDao, @NonNull CommentRefsDao commentRefsDao) {
+    public ContentProviderBackedStoryRepository(@NonNull HackerNewsDatabase hackerNewsDatabase,
+                                                @NonNull StoryDao storyDao,
+                                                @NonNull CommentRefsDao commentRefsDao) {
+        this.hackerNewsDatabase = hackerNewsDatabase;
         this.storyDao = storyDao;
         this.commentRefsDao = commentRefsDao;
     }
@@ -35,21 +41,31 @@ public class ContentProviderBackedStoryRepository implements StoryRepository {
 
     @Override
     public void saveStories(Story[] stories) {
-        storyDao.deleteAllStories();
-        commentRefsDao.deleteAllCommentRefs();
 
-        List<CommentReference> commentRefsContentValuesList = new ArrayList<>();
+        try{
+            hackerNewsDatabase.beginTransaction();
+            storyDao.deleteAllStories();
+            commentRefsDao.deleteAllCommentRefs();
 
-        for (int i = 0; i < stories.length; i++) {
-            Story story = stories[i];
-            commentRefsContentValuesList.addAll(getCommentRefList(story));
+            List<CommentReference> commentRefsContentValuesList = new ArrayList<>();
+
+            for (int i = 0; i < stories.length; i++) {
+                Story story = stories[i];
+                commentRefsContentValuesList.addAll(getCommentRefList(story));
+            }
+
+            storyDao.saveStories(stories);
+
+            CommentReference[] commentRefsContentValuesArray = new CommentReference[commentRefsContentValuesList.size()];
+            commentRefsDao.saveAllRefs(commentRefsContentValuesList.toArray(commentRefsContentValuesArray));
+
+            hackerNewsDatabase.setTransactionSuccessful();
+
+        } catch(Exception ex){
+            Log.d("debug", "ERror saving stories to DB");
+        } finally {
+            hackerNewsDatabase.endTransaction();
         }
-
-        storyDao.saveStories(stories);
-
-        CommentReference[] commentRefsContentValuesArray = new CommentReference[commentRefsContentValuesList.size()];
-        commentRefsDao.saveAllRefs(commentRefsContentValuesList.toArray(commentRefsContentValuesArray));
-
     }
 
     private List<CommentReference> getCommentRefList(Story story) {
