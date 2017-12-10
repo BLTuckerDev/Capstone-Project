@@ -27,6 +27,7 @@ public class MainActivity extends AppCompatActivity implements HomeView, TopStor
 
     @Inject
     HomeViewPresenter homeViewPresenter;
+
     private boolean twoPaneMode;
 
     @Override

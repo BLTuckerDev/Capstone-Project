@@ -36,5 +36,6 @@
     <string name="refresh">Refresh</string>
     <string name="save">Save</string>
     <string name="read">READ</string>
+    <string name="error_loading_stories">The latest stories could not be loaded at this time</string>
 
 </resources>

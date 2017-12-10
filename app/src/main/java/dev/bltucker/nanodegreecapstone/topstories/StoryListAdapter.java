@@ -1,6 +1,7 @@
 package dev.bltucker.nanodegreecapstone.topstories;
 
 import android.content.Context;
+import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -48,10 +49,12 @@ public class StoryListAdapter extends RecyclerView.Adapter<StoryListAdapter.Stor
     }
 
     public void updateStories(List<Story> updatedStories) {
-        //TODO DiffUtil
+
+        DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(new StoryDiffUtilCallback(this.stories, updatedStories));
+
         this.stories.clear();
         this.stories.addAll(updatedStories);
-        notifyDataSetChanged();
+        diffResult.dispatchUpdatesTo(this);
     }
 
 
@@ -83,4 +86,5 @@ public class StoryListAdapter extends RecyclerView.Adapter<StoryListAdapter.Stor
             }
         }
     }
+
 }

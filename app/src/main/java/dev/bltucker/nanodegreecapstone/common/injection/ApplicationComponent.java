@@ -13,14 +13,12 @@ import dev.bltucker.nanodegreecapstone.readlater.ReadLaterListFragmentModule;
 import dev.bltucker.nanodegreecapstone.sync.CommentCleaningService;
 import dev.bltucker.nanodegreecapstone.storydetail.injection.StoryDetailFragmentComponent;
 import dev.bltucker.nanodegreecapstone.storydetail.injection.StoryDetailFragmentModule;
-import dev.bltucker.nanodegreecapstone.sync.StorySyncAdapter;
 import dev.bltucker.nanodegreecapstone.topstories.TopStoriesFragment;
 
 @ApplicationScope
 @Component(modules = { ApplicationResourcesModule.class, ViewModelModule.class, SchedulersModule.class})
 public interface ApplicationComponent {
     void inject(MainActivity mainActivity);
-    void inject(StorySyncAdapter syncAdapter);
     void inject(TopStoriesFragment fragment);
     void inject(GeofenceTransitionsIntentService geofenceTransitionsIntentService);
     void inject(CommentCleaningService commentCleaningService);

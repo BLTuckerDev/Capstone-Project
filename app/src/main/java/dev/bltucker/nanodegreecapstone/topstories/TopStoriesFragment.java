@@ -11,6 +11,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.widget.LinearLayoutManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,9 +49,6 @@ public class TopStoriesFragment extends Fragment {
     private CompositeDisposable clickEventDisposable = new CompositeDisposable();
 
     @Nullable
-    private Disposable refreshEventDispoable;
-
-    @Nullable
     private Disposable modelDisposable;
 
     private TopStoriesViewModel topStoriesViewModel;
@@ -72,7 +70,7 @@ public class TopStoriesFragment extends Fragment {
         super.onCreate(savedInstanceState);
         DaggerInjector.getApplicationComponent().inject(this);
         topStoriesViewModel = ViewModelProviders.of(this, applicationViewModelsFactory).get(TopStoriesViewModel.class);
-        topStoriesViewModel.onRefreshTopStories();
+        topStoriesViewModel.onLoadTopStories();
     }
 
     @Override
@@ -92,78 +90,13 @@ public class TopStoriesFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        topStoriesViewModel.getObservableRefreshEvents()
-                .observeOn(uiScheduler)
-                .subscribe(new Observer<Object>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
-                        refreshEventDispoable = d;
-                    }
-
-                    @Override
-                    public void onNext(Object o) {
-                        binding.swipeToRefreshLayout.setRefreshing(false);
-                        showUpdatedStoriesNotification();
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                    }
-
-                    @Override
-                    public void onComplete() {
-                    }
-                });
-
-        topStoriesViewModel.getObservableModelEvents()
-                .observeOn(uiScheduler)
-                .subscribe(new Observer<TopStoryModel>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
-                        modelDisposable = d;
-                    }
-
-                    @Override
-                    public void onNext(TopStoryModel topStoryModel) {
-                        adapter.updateStories(topStoryModel.getStoryList());
-                       binding.setTopStoryModel(topStoryModel);
-                       binding.executePendingBindings();
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {}
-
-                    @Override
-                    public void onComplete() {}
-                });
-
-
+        observeModelChanges();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        topStoriesViewModel.getObservableClickEvents()
-                .observeOn(uiScheduler)
-                .subscribe(new Observer<TopStoryClickEvent>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
-                        clickEventDisposable.add(d);
-                    }
-
-                    @Override
-                    public void onNext(TopStoryClickEvent topStoryClickEvent) {
-                        topStoryClickEvent.execute(TopStoriesFragment.this);
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                    }
-
-                    @Override
-                    public void onComplete() {
-                    }
-                });
+        observeClickEvents();
     }
 
     @Override
@@ -174,10 +107,6 @@ public class TopStoriesFragment extends Fragment {
 
     @Override
     public void onStop() {
-        if (refreshEventDispoable != null) {
-            refreshEventDispoable.dispose();
-        }
-
         if(modelDisposable != null){
             modelDisposable.dispose();
         }
@@ -214,12 +143,82 @@ public class TopStoriesFragment extends Fragment {
             return;
         }
 
-        //TODO need tohide spinner?
         binding.swipeToRefreshLayout.setRefreshing(false);
 
         Snackbar.make(getView(), R.string.new_stories_are_available, Snackbar.LENGTH_INDEFINITE)
                 .setAction(R.string.refresh, v -> topStoriesViewModel.onShowRefreshedTopStories())
                 .show();
+    }
+
+    private void observeModelChanges() {
+        topStoriesViewModel.getObservableModelEvents()
+                .observeOn(uiScheduler)
+                .subscribe(new Observer<TopStoryModel>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        modelDisposable = d;
+                    }
+
+                    @Override
+                    public void onNext(TopStoryModel topStoryModel) {
+                        Log.d("TopStoryModel", topStoryModel.toString());
+                        if(topStoryModel.isError()){
+                            binding.setTopStoryModel(topStoryModel);
+                            binding.executePendingBindings();
+                            showErrorSnackbar();
+                            return;
+                        }
+
+                        binding.setTopStoryModel(topStoryModel);
+                        binding.executePendingBindings();
+
+                        if(topStoryModel.getWasRefreshing()){
+                            binding.swipeToRefreshLayout.setRefreshing(false);
+                            showUpdatedStoriesNotification();
+                        } else {
+                            adapter.updateStories(topStoryModel.getStoryList());
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {}
+
+                    @Override
+                    public void onComplete() {}
+                });
+    }
+
+    private void showErrorSnackbar() {
+        View view = getView();
+        if(view == null){
+            return;
+        }
+
+        Snackbar.make(getView(), R.string.error_loading_stories, Snackbar.LENGTH_INDEFINITE).show();
+    }
+
+    private void observeClickEvents() {
+        topStoriesViewModel.getObservableClickEvents()
+                .observeOn(uiScheduler)
+                .subscribe(new Observer<TopStoryClickEvent>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        clickEventDisposable.add(d);
+                    }
+
+                    @Override
+                    public void onNext(TopStoryClickEvent topStoryClickEvent) {
+                        topStoryClickEvent.execute(TopStoriesFragment.this);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                    }
+
+                    @Override
+                    public void onComplete() {
+                    }
+                });
     }
 
     public interface Delegate {

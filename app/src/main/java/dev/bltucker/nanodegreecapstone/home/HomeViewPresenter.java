@@ -1,12 +1,10 @@
 package dev.bltucker.nanodegreecapstone.home;
 
-import android.accounts.Account;
 import android.support.annotation.VisibleForTesting;
 
 import javax.inject.Inject;
 
 import dev.bltucker.nanodegreecapstone.common.injection.ApplicationScope;
-import dev.bltucker.nanodegreecapstone.common.injection.qualifiers.SyncIntervalSeconds;
 
 @ApplicationScope
 public class HomeViewPresenter {
@@ -14,26 +12,12 @@ public class HomeViewPresenter {
     @VisibleForTesting
     HomeView view;
 
-    @VisibleForTesting
-    final Account storySyncAccount;
-
-    @VisibleForTesting
-    ContentSyncRequester contentSyncRequester;
-
-    @VisibleForTesting
-    final int syncInterval;
-
     @Inject
-    public HomeViewPresenter(@SyncIntervalSeconds int syncInterval, Account providedAccount, ContentSyncRequester contentSyncRequester){
-        this.syncInterval = syncInterval;
-        this.storySyncAccount = providedAccount;
-        this.contentSyncRequester = contentSyncRequester;
+    public HomeViewPresenter(){
     }
 
     public void onViewCreated(HomeView createdView){
         view = createdView;
-        contentSyncRequester.requestImmediateSync(storySyncAccount);
-        contentSyncRequester.requestPeriodicSync(storySyncAccount, syncInterval);
     }
 
     public void onViewRestored(HomeView restoredView){

@@ -29,7 +29,7 @@
                     android:layout_height="match_parent"
                     android:gravity="center"
                     android:orientation="vertical"
-                    android:visibility="@{topStoryModel.loading ? View.VISIBLE : View.GONE}">
+                    android:visibility="@{topStoryModel.loading &amp;&amp; topStoryModel.storyList.isEmpty() ? View.VISIBLE : View.GONE}">
 
                 <ProgressBar
                         android:id="@+id/loading_spinner"
@@ -68,14 +68,13 @@
 
             </FrameLayout>
 
-
             <android.support.v7.widget.RecyclerView
                     android:id="@+id/story_list_recyclerview"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:clipToPadding="false"
                     android:paddingTop="8dp"
-                    android:visibility="@{!topStoryModel.loading &amp;&amp; !topStoryModel.storyList.isEmpty() ? View.VISIBLE : View.GONE}"
+                    android:visibility="@{!topStoryModel.storyList.isEmpty() ? View.VISIBLE : View.GONE}"
                     app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
 
