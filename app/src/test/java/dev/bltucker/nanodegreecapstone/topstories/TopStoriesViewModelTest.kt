@@ -15,24 +15,10 @@ class TopStoriesViewModelTest {
 
     @Before
     fun setup() {
-        var mockRepository = mock(StoryRepository::class.java)
-        val mockRequestDelegate = mock(SyncRequestDelegate::class.java)
-        objectUnderTest = TopStoriesViewModel(mockRepository, mockRequestDelegate)
-    }
-
-    @Test
-    fun testOnCommentsButtonClickEmits() {
-        val fakeStory = Story(1L, "Fake Poster", 1L, Date().time, "Fake Title", "FakeUrl")
-        val testObserver = TestObserver<Story>()
-        objectUnderTest.getObservableCommentClicks().subscribe(testObserver)
-
-        objectUnderTest.onCommentsButtonClick(fakeStory)
-
-
-        testObserver.assertValue(fakeStory)
-        testObserver.assertValueCount(1)
 
     }
+
+
 
 
 }

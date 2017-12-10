@@ -18,9 +18,9 @@ import dev.bltucker.nanodegreecapstone.readlater.ReadLaterListActivity;
 import dev.bltucker.nanodegreecapstone.settings.SettingsActivity;
 import dev.bltucker.nanodegreecapstone.storydetail.StoryDetailActivity;
 import dev.bltucker.nanodegreecapstone.storydetail.StoryDetailFragment;
-import dev.bltucker.nanodegreecapstone.topstories.StoryListFragment;
+import dev.bltucker.nanodegreecapstone.topstories.TopStoriesFragment;
 
-public class MainActivity extends AppCompatActivity implements HomeView, StoryListFragment.Delegate {
+public class MainActivity extends AppCompatActivity implements HomeView, TopStoriesFragment.Delegate {
 
     @Inject
     HackerNewsDatabase hackerNewsDatabase;

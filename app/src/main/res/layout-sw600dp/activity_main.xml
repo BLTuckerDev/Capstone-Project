@@ -17,7 +17,7 @@
 
         <fragment
             android:id="@+id/story_list_fragment"
-            android:name="dev.bltucker.nanodegreecapstone.topstories.StoryListFragment"
+            android:name="dev.bltucker.nanodegreecapstone.topstories.TopStoriesFragment"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="2" />

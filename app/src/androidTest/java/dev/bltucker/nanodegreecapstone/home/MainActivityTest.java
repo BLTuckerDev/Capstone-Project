@@ -90,7 +90,7 @@ public class MainActivityTest {
 
         onView(withText(activityRule.getActivity().getString(R.string.app_name))).check(matches(isDisplayed()));
 
-        onView(withId(R.id.story_list_recyclerview)).check(matches(isDisplayed()));
+        onView(withId(R.id.empty_view_container)).check(matches(isDisplayed()));
 
     }
 
