@@ -50,7 +50,7 @@ public class GeofenceCreationService extends IntentService {
 
     @Override
     public void onDestroy() {
-        if(googleApiClient.isConnected()){
+        if (googleApiClient.isConnected()) {
             googleApiClient.disconnect();
         }
         super.onDestroy();
@@ -66,7 +66,7 @@ public class GeofenceCreationService extends IntentService {
     @Override
     protected void onHandleIntent(Intent intent) {
         Timber.d("onHandleIntent");
-        if(!isValidIntent(intent)){
+        if (!isValidIntent(intent)) {
             return;
         }
 
@@ -74,7 +74,7 @@ public class GeofenceCreationService extends IntentService {
             String locationString = intent.getStringExtra(LOCATION_PARAMETER);
             List<Address> fromLocationName = geocoder.getFromLocationName(locationString, 1);
 
-            if(fromLocationName.isEmpty()){
+            if (fromLocationName.isEmpty()) {
                 return;
             }
 
@@ -82,9 +82,9 @@ public class GeofenceCreationService extends IntentService {
             Timber.d("Longitude: %f", address.getLongitude());
             Timber.d("Latitude: %f", address.getLatitude());
 
-            if(!googleApiClient.isConnected()){
+            if (!googleApiClient.isConnected()) {
                 ConnectionResult connectionResult = googleApiClient.blockingConnect(CONNECTION_WAIT_PERIOD, TimeUnit.SECONDS);
-                if(!connectionResult.isSuccess()){
+                if (!connectionResult.isSuccess()) {
                     return;
                 }
             }
@@ -100,11 +100,11 @@ public class GeofenceCreationService extends IntentService {
     }
 
     private boolean isValidIntent(Intent intent) {
-        if(null == intent){
+        if (null == intent) {
             return false;
         }
 
-        if(!intent.getAction().equals(ACTION_CREATE_GEO_FENCE) || !intent.getExtras().containsKey(LOCATION_PARAMETER)){
+        if (!intent.getAction().equals(ACTION_CREATE_GEO_FENCE) || !intent.getExtras().containsKey(LOCATION_PARAMETER)) {
             return false;
         }
 

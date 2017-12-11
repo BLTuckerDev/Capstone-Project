@@ -25,7 +25,7 @@ class TopStoryModelFactory @Inject constructor() {
             return TopStoryModel(emptyList(), false, true, false, false)
         }
 
-        return TopStoryModel(lastModel.storyList, false, true,  lastModel.isRefreshing, false)
+        return TopStoryModel(lastModel.storyList, false, true, lastModel.isRefreshing, false)
     }
 
     fun createErrorModel(lastModel: TopStoryModel?): TopStoryModel {
@@ -44,7 +44,7 @@ class TopStoryModelFactory @Inject constructor() {
         return TopStoryModel(stories, false, false, wasRefreshing, false)
     }
 
-    fun createTopStoryModelWithWasRefreshingReset(topStoryModel: TopStoryModel) : TopStoryModel {
+    fun createTopStoryModelWithWasRefreshingReset(topStoryModel: TopStoryModel): TopStoryModel {
         Log.d("Factory", "createTopStoryModelWithWasRefreshingReset with $topStoryModel")
         Log.d("Factory", Log.getStackTraceString(Throwable()))
         return TopStoryModel(topStoryModel.storyList, topStoryModel.isLoading, topStoryModel.isRefreshing, false, topStoryModel.isError)

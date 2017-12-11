@@ -18,7 +18,7 @@ public class SchedulersModule {
     @ApplicationScope
     @NonNull
     @UI
-    public Scheduler provideUiScheduler(){
+    public Scheduler provideUiScheduler() {
         return AndroidSchedulers.mainThread();
     }
 
@@ -26,7 +26,7 @@ public class SchedulersModule {
     @ApplicationScope
     @NonNull
     @IO
-    public Scheduler provideIoScheduler(){
+    public Scheduler provideIoScheduler() {
         return Schedulers.io();
     }
 

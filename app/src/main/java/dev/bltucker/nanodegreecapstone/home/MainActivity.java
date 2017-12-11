@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity implements HomeView, TopStor
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
-        MenuInflater inflater=getMenuInflater();
+        MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_main_activity, menu);
         MenuItem item = menu.findItem(R.id.menu_item_show_read_later);
         DrawableCompat.setTint(item.getIcon(), Color.WHITE);
@@ -42,12 +42,12 @@ public class MainActivity extends AppCompatActivity implements HomeView, TopStor
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId() == R.id.menu_item_show_read_later){
+        if (item.getItemId() == R.id.menu_item_show_read_later) {
             homeViewPresenter.onShowReadLaterMenuClick();
             return true;
         }
 
-        if(item.getItemId() == R.id.menu_item_settings){
+        if (item.getItemId() == R.id.menu_item_settings) {
             SettingsActivity.launch(this);
             return true;
         }
@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity implements HomeView, TopStor
         twoPaneMode = findViewById(R.id.story_detail_fragment_container) != null;
 
         if (null == savedInstanceState) {
-            if(twoPaneMode){
+            if (twoPaneMode) {
                 replaceDetailFragment(null);
             }
             homeViewPresenter.onViewCreated(this);
@@ -93,7 +93,7 @@ public class MainActivity extends AppCompatActivity implements HomeView, TopStor
 
     @Override
     public void showCommentsView(Story story) {
-        if(twoPaneMode){
+        if (twoPaneMode) {
             replaceDetailFragment(story);
         } else {
             StoryDetailActivity.Companion.launch(this, story);

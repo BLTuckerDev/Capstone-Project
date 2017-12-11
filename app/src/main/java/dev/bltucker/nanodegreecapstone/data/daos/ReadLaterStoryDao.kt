@@ -9,15 +9,15 @@ import io.reactivex.Flowable
 interface ReadLaterStoryDao {
 
     @Query("SELECT * FROM readLaterStories order by _id asc")
-    fun getAllReadLaterStories() : Flowable<List<ReadLaterStory>>
+    fun getAllReadLaterStories(): Flowable<List<ReadLaterStory>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun saveStory(readLaterStory : ReadLaterStory)
+    fun saveStory(readLaterStory: ReadLaterStory)
 
     @Delete
     fun deleteStory(readLaterStory: ReadLaterStory)
 
     @Query("SELECT * FROM readLaterStories order by _id asc")
-    fun getAllReadLaterStoriesCursor() : Cursor
+    fun getAllReadLaterStoriesCursor(): Cursor
 
 }

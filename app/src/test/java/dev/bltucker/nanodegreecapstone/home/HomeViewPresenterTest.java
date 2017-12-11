@@ -17,7 +17,7 @@ public class HomeViewPresenterTest {
     HomeView mockView;
 
     @Before
-    public void setup(){
+    public void setup() {
         mockView = mock(HomeView.class);
         objectUnderTest = new HomeViewPresenter();
     }
@@ -56,7 +56,7 @@ public class HomeViewPresenterTest {
     }
 
     @Test
-    public void testOnShowReadLater_WithNullView_ShouldNotExecuteViewCommand(){
+    public void testOnShowReadLater_WithNullView_ShouldNotExecuteViewCommand() {
         objectUnderTest.view = null;
         objectUnderTest.onShowReadLaterMenuClick();
 

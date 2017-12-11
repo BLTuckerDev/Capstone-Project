@@ -42,7 +42,7 @@ public class CommentRepositoryIntegrationTest {
         hackerNewsDatabase = Room.inMemoryDatabaseBuilder(InstrumentationRegistry.getContext(), HackerNewsDatabase.class)
                 .allowMainThreadQueries()
                 .addMigrations(new Version1to2(1, 2))
-                .addMigrations(new Version2to3(2,3))
+                .addMigrations(new Version2to3(2, 3))
                 .build();
         commentsDao = hackerNewsDatabase.commentsDao();
         objectUnderTest = new CommentRepository(commentsDao);

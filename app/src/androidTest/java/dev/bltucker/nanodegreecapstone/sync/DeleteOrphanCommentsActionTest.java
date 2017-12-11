@@ -34,7 +34,7 @@ public class DeleteOrphanCommentsActionTest {
     }
 
     @After
-    public void tearDown(){
+    public void tearDown() {
         hackerNewsDatabase.close();
     }
 
@@ -58,9 +58,9 @@ public class DeleteOrphanCommentsActionTest {
     }
 
     @Test
-    public void testWithNoOrphanCommentsShouldNotDeleteAnyComments(){
+    public void testWithNoOrphanCommentsShouldNotDeleteAnyComments() {
         int storyId = 2;
-        Story[] stories = new Story[]{ new Story(storyId, "some poster", 100, System.currentTimeMillis(), "A Title", "https://blog.abnormallydriven.com/")};
+        Story[] stories = new Story[]{new Story(storyId, "some poster", 100, System.currentTimeMillis(), "A Title", "https://blog.abnormallydriven.com/")};
 
         storyDao.saveStories(stories);
 

@@ -20,8 +20,8 @@ public class TopFiveStoriesWidgetProvider extends AppWidgetProvider {
     @Override
     public void onReceive(Context context, Intent intent) {
         super.onReceive(context, intent);
-        if(SYNC_COMPLETED_ACTION.equals(intent.getAction())
-                || AppWidgetManager.ACTION_APPWIDGET_UPDATE.equals(intent.getAction())){
+        if (SYNC_COMPLETED_ACTION.equals(intent.getAction())
+                || AppWidgetManager.ACTION_APPWIDGET_UPDATE.equals(intent.getAction())) {
             AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
             int[] appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(context, getClass()));
             appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.widget_list);

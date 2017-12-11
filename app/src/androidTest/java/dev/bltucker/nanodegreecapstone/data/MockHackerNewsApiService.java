@@ -32,7 +32,7 @@ public class MockHackerNewsApiService implements HackerNewsApiService {
     }
 
     @SuppressLint("UseSparseArrays")
-    public void setFakeCommentDtos(Map<Long, CommentDto> fakeCommentDtos){
+    public void setFakeCommentDtos(Map<Long, CommentDto> fakeCommentDtos) {
         providedFakeCommentDtos = new HashMap<>(fakeCommentDtos);
     }
 
@@ -56,7 +56,7 @@ public class MockHackerNewsApiService implements HackerNewsApiService {
     public Single<CommentDto> getComment(@Path("commentId") long commentId) {
         //TODO generate some comments with children, but dont generate an endless tree of comments
 
-        if(providedFakeCommentDtos != null){
+        if (providedFakeCommentDtos != null) {
             if (providedFakeCommentDtos.containsKey(commentId)) {
                 return Single.just(providedFakeCommentDtos.get(commentId));
             } else {

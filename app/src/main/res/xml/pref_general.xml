@@ -1,19 +1,19 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
     <EditTextPreference
-        android:capitalize="words"
-        android:defaultValue=""
-        android:inputType="textCapWords"
-        android:key="@string/location_preference"
-        android:maxLines="1"
-        android:selectAllOnFocus="true"
-        android:singleLine="true"
-        android:title="@string/location" />
+            android:capitalize="words"
+            android:defaultValue=""
+            android:inputType="textCapWords"
+            android:key="@string/location_preference"
+            android:maxLines="1"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:title="@string/location"/>
 
     <SwitchPreference
-        android:defaultValue="true"
-        android:key="@string/allow_notifications_preference"
-        android:title="Allow Notifications"
-        />
+            android:defaultValue="true"
+            android:key="@string/allow_notifications_preference"
+            android:title="Allow Notifications"
+            />
 
 </PreferenceScreen>

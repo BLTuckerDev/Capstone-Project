@@ -12,13 +12,13 @@ import dev.bltucker.nanodegreecapstone.models.ReadLaterStory
 import dev.bltucker.nanodegreecapstone.models.Story
 
 @Database(entities = arrayOf(Story::class, CommentReference::class, ReadLaterStory::class, Comment::class), version = 3)
-abstract class HackerNewsDatabase : RoomDatabase(){
+abstract class HackerNewsDatabase : RoomDatabase() {
 
-    abstract fun storyDao() : StoryDao
+    abstract fun storyDao(): StoryDao
 
-    abstract fun commentRefsDao() : CommentRefsDao
+    abstract fun commentRefsDao(): CommentRefsDao
 
-    abstract fun readLaterStoryDao() : ReadLaterStoryDao
+    abstract fun readLaterStoryDao(): ReadLaterStoryDao
 
-    abstract fun commentsDao() : CommentsDao
+    abstract fun commentsDao(): CommentsDao
 }

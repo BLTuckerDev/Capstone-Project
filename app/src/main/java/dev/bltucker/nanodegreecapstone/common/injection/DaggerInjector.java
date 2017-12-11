@@ -4,12 +4,12 @@ public class DaggerInjector {
 
     private static ApplicationComponent applicationComponent;
 
-    public static ApplicationComponent getApplicationComponent(){
+    public static ApplicationComponent getApplicationComponent() {
         return applicationComponent;
     }
 
 
-    public static void initializeInjector(ApplicationComponent applicationComponent){
+    public static void initializeInjector(ApplicationComponent applicationComponent) {
         DaggerInjector.applicationComponent = applicationComponent;
     }
 

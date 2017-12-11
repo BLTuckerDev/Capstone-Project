@@ -25,11 +25,12 @@ class MyRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 
     @SuppressWarnings("squid:S1186")
     @Override
-    public void onCreate() {    }
+    public void onCreate() {
+    }
 
     @Override
     public void onDataSetChanged() {
-        if(dataCursor != null){
+        if (dataCursor != null) {
             dataCursor.close();
         }
 
@@ -47,7 +48,7 @@ class MyRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 
     @Override
     public void onDestroy() {
-        if(dataCursor != null){
+        if (dataCursor != null) {
             dataCursor.close();
             dataCursor = null;
         }
@@ -55,7 +56,7 @@ class MyRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 
     @Override
     public int getCount() {
-        if(null == dataCursor){
+        if (null == dataCursor) {
             return 0;
         }
 
@@ -65,7 +66,7 @@ class MyRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
     @Override
     public RemoteViews getViewAt(int position) {
         boolean invalidPosition = position == AdapterView.INVALID_POSITION;
-        if(invalidPosition || null == dataCursor || !dataCursor.moveToPosition(position)){
+        if (invalidPosition || null == dataCursor || !dataCursor.moveToPosition(position)) {
             return null;
         }
 
@@ -94,10 +95,10 @@ class MyRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 
     @Override
     public long getItemId(int position) {
-        if(dataCursor != null && dataCursor.moveToPosition(position)){
-            try{
+        if (dataCursor != null && dataCursor.moveToPosition(position)) {
+            try {
                 return Long.valueOf(dataCursor.getString(dataCursor.getColumnIndex("_id")));
-            } catch(NumberFormatException ex){
+            } catch (NumberFormatException ex) {
                 Timber.e(ex, "");
                 return position;
             }

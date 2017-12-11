@@ -13,24 +13,25 @@ public class GeofenceCreationIntentServiceModule {
 
     private final GeofenceCreationService service;
 
-    public GeofenceCreationIntentServiceModule(GeofenceCreationService service){
+    public GeofenceCreationIntentServiceModule(GeofenceCreationService service) {
         this.service = service;
     }
 
 
     @Provides
-    public Geocoder provideGeoCoder(){
+    public Geocoder provideGeoCoder() {
         return new Geocoder(service);
     }
 
     @Provides
-    public GoogleApiClient provideGoogleApiClient(){
+    public GoogleApiClient provideGoogleApiClient() {
         return new GoogleApiClient.Builder(service)
                 .addApi(LocationServices.API)
                 .build();
     }
 
-    @Provides GeofencingRequestProvider provideGeofencingRequestProvider(){
+    @Provides
+    GeofencingRequestProvider provideGeofencingRequestProvider() {
         return new GeofencingRequestProvider();
     }
 }

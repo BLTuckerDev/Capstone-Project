@@ -12,7 +12,7 @@ public class GeofencingRequestProvider {
     private static final int LOITER_DELAY_IN_MILLISECONDS = 300000;
     private static final int RESPONSIVENESS_DELAY = 300000;
 
-    public GeofencingRequest getRequest(Address address){
+    public GeofencingRequest getRequest(Address address) {
         Geofence homeGeoFence = new Geofence.Builder()
                 .setRequestId(GEOFENCE_REQUEST_ID)
                 .setCircularRegion(address.getLatitude(),

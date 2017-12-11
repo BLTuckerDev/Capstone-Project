@@ -50,8 +50,6 @@ public class StoryProvider extends ContentProvider {
     public static final int READ_LATER_STORIES_PATH_ITEM_CODE = 7;
 
 
-
-
     public static final Uri STORIES_URI = Uri.parse("content://" + AUTHORITY + "/" + ALL_STORIES_PATH);
 
     public static final Uri COMMENTS_URI = Uri.parse("content://" + AUTHORITY + "/" + COMMENTS_PATH);
@@ -81,13 +79,13 @@ public class StoryProvider extends ContentProvider {
     @Nullable
     @Override
     public Cursor query(@NonNull Uri uri, @Nullable String[] strings, @Nullable String s, @Nullable String[] strings1, @Nullable String s1) {
-        if(!hasBeenInjected){
+        if (!hasBeenInjected) {
             inject();
         }
 
         Cursor queryCursor;
 
-        switch(uriMatcher.match(uri)){
+        switch (uriMatcher.match(uri)) {
             case ALL_STORIES_PATH_CODE:
                 queryCursor = storyDao.getAllStoriesCursor();
                 break;
@@ -115,7 +113,7 @@ public class StoryProvider extends ContentProvider {
     @Nullable
     @Override
     public String getType(@NonNull Uri uri) {
-        switch(uriMatcher.match(uri)){
+        switch (uriMatcher.match(uri)) {
             case ALL_STORIES_PATH_CODE:
                 return "vnd.android.cursor.dir/" + AUTHORITY + "." + "stories";
 

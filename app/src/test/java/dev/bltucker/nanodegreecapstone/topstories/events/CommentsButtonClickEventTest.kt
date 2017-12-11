@@ -5,11 +5,11 @@ import dev.bltucker.nanodegreecapstone.topstories.TopStoriesFragment
 import org.junit.Test
 import org.mockito.Mockito.*
 
-class CommentsButtonClickEventTest{
+class CommentsButtonClickEventTest {
 
     @Test
-    fun testExecuteShowsDetailView(){
-        val mockStory : Story = mock(Story::class.java)
+    fun testExecuteShowsDetailView() {
+        val mockStory: Story = mock(Story::class.java)
         val mockTopStoryFragment = mock(TopStoriesFragment::class.java)
 
         doNothing().`when`(mockTopStoryFragment).showStoryDetailView(mockStory)

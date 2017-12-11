@@ -13,23 +13,23 @@ public class HomeViewPresenter {
     HomeView view;
 
     @Inject
-    public HomeViewPresenter(){
+    public HomeViewPresenter() {
     }
 
-    public void onViewCreated(HomeView createdView){
+    public void onViewCreated(HomeView createdView) {
         view = createdView;
     }
 
-    public void onViewRestored(HomeView restoredView){
+    public void onViewRestored(HomeView restoredView) {
         view = restoredView;
     }
 
-    public void onViewDestroyed(){
+    public void onViewDestroyed() {
         view = null;
     }
 
     public void onShowReadLaterMenuClick() {
-        if(view != null){
+        if (view != null) {
             view.showReadLaterListView();
         }
     }

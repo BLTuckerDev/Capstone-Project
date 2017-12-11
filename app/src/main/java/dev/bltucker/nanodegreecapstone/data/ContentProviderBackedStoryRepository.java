@@ -42,7 +42,7 @@ public class ContentProviderBackedStoryRepository implements StoryRepository {
     @Override
     public void saveStories(Story[] stories) {
 
-        try{
+        try {
             hackerNewsDatabase.beginTransaction();
             storyDao.deleteAllStories();
             commentRefsDao.deleteAllCommentRefs();
@@ -61,7 +61,7 @@ public class ContentProviderBackedStoryRepository implements StoryRepository {
 
             hackerNewsDatabase.setTransactionSuccessful();
 
-        } catch(Exception ex){
+        } catch (Exception ex) {
             Log.d("debug", "ERror saving stories to DB");
         } finally {
             hackerNewsDatabase.endTransaction();

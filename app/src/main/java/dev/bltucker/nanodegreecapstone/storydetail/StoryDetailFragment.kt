@@ -42,7 +42,7 @@ class StoryDetailFragment : Fragment() {
     lateinit var applicationViewModelsFactory: ApplicationViewModelsFactory
 
     @field:[Inject UI]
-    lateinit var uiScheduler : Scheduler
+    lateinit var uiScheduler: Scheduler
 
     @Inject
     @JvmField

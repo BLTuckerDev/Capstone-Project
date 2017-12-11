@@ -1,32 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main_activity_coordinator_layout"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@android:color/white"
-    tools:context=".home.MainActivity">
+                                                 xmlns:tools="http://schemas.android.com/tools"
+                                                 android:id="@+id/main_activity_coordinator_layout"
+                                                 android:layout_width="match_parent"
+                                                 android:layout_height="match_parent"
+                                                 android:background="@android:color/white"
+                                                 tools:context=".home.MainActivity">
 
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:baselineAligned="false"
-        android:orientation="horizontal">
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:baselineAligned="false"
+            android:orientation="horizontal">
 
 
         <fragment
-            android:id="@+id/story_list_fragment"
-            android:name="dev.bltucker.nanodegreecapstone.topstories.TopStoriesFragment"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="2" />
+                android:id="@+id/story_list_fragment"
+                android:name="dev.bltucker.nanodegreecapstone.topstories.TopStoriesFragment"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"/>
 
         <FrameLayout
-            android:id="@+id/story_detail_fragment_container"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="3" />
+                android:id="@+id/story_detail_fragment_container"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="3"/>
 
 
     </LinearLayout>

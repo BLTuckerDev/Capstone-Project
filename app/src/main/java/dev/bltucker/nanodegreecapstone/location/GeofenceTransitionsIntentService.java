@@ -44,7 +44,7 @@ public class GeofenceTransitionsIntentService extends IntentService {
     protected void onHandleIntent(Intent intent) {
         Timber.d("handling a geo fence change intent");
         GeofencingEvent geofencingEvent = GeofencingEvent.fromIntent(intent);
-        if(geofencingEvent.hasError()){
+        if (geofencingEvent.hasError()) {
             Timber.d("geo fence event has error, will fail to handle transition");
             Timber.d("geo fence error code: %d", geofencingEvent.getErrorCode());
             return;
@@ -52,9 +52,9 @@ public class GeofenceTransitionsIntentService extends IntentService {
 
         int geofenceTransition = geofencingEvent.getGeofenceTransition();
 
-        if(geofenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER){
+        if (geofenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER) {
             Timber.d("geofence event transition has occurred");
-            if(getReadLaterStoryCount() > 0){
+            if (getReadLaterStoryCount() > 0) {
                 Timber.d("geofence event transition will result in a notification");
                 sendReminderNotification();
             } else {
@@ -66,12 +66,12 @@ public class GeofenceTransitionsIntentService extends IntentService {
         }
     }
 
-    private int getReadLaterStoryCount(){
+    private int getReadLaterStoryCount() {
         try (Cursor readLaterStoryCursor = contentResolver.query(StoryProvider.READ_LATER_URI,
-            null,
-            null,
-            null,
-            null)) {
+                null,
+                null,
+                null,
+                null)) {
             return readLaterStoryCursor != null ? readLaterStoryCursor.getCount() : 0;
         }
     }

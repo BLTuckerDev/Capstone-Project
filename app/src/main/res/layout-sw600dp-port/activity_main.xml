@@ -1,16 +1,16 @@
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main_activity_coordinator_layout"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@android:color/white"
-    tools:context=".home.MainActivity">
+                                                 xmlns:tools="http://schemas.android.com/tools"
+                                                 android:id="@+id/main_activity_coordinator_layout"
+                                                 android:layout_width="match_parent"
+                                                 android:layout_height="match_parent"
+                                                 android:background="@android:color/white"
+                                                 tools:context=".home.MainActivity">
 
 
     <fragment
-        android:id="@+id/story_list_fragment"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:name="dev.bltucker.nanodegreecapstone.topstories.TopStoriesFragment"/>
+            android:id="@+id/story_list_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:name="dev.bltucker.nanodegreecapstone.topstories.TopStoriesFragment"/>
 
 </android.support.design.widget.CoordinatorLayout>

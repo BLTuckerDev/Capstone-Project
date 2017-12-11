@@ -42,7 +42,7 @@ public class MainActivityTest {
 
 
     @Before
-    public void setup(){
+    public void setup() {
         Context context = getInstrumentation().getTargetContext().getApplicationContext();
 
         final ApplicationComponent applicationComponent = DaggerApplicationComponent.builder()
@@ -57,10 +57,12 @@ public class MainActivityTest {
         eventBus.subscribeTo(SyncCompletedEvent.class)
                 .subscribe(new Observer<Object>() {
                     @Override
-                    public void onComplete() {       }
+                    public void onComplete() {
+                    }
 
                     @Override
-                    public void onError(Throwable e) {   }
+                    public void onError(Throwable e) {
+                    }
 
                     @Override
                     public void onSubscribe(Disposable d) {
@@ -76,11 +78,11 @@ public class MainActivityTest {
     }
 
     @After
-    public void teardown(){
+    public void teardown() {
     }
 
     @Test
-    public void testMainActivity(){
+    public void testMainActivity() {
         activityRule.launchActivity(null);
         Timber.d("Main activity has launched");
 
@@ -96,7 +98,7 @@ public class MainActivityTest {
         private ResourceCallback resourceCallback;
         private volatile boolean isIdle;
 
-        public SyncAdapterIdlingResource(){
+        public SyncAdapterIdlingResource() {
             isIdle = false;
         }
 
@@ -108,7 +110,7 @@ public class MainActivityTest {
 
         @Override
         public boolean isIdleNow() {
-            if(isIdle && resourceCallback != null){
+            if (isIdle && resourceCallback != null) {
                 resourceCallback.onTransitionToIdle();
             }
             return isIdle;

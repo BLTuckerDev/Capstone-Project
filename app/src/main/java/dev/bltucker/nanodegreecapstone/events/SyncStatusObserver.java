@@ -11,14 +11,14 @@ public class SyncStatusObserver {
 
     @SuppressWarnings("squid:S1186")
     @Inject
-    public SyncStatusObserver(){
+    public SyncStatusObserver() {
     }
 
     public boolean isSyncInProgress() {
         return syncInProgress;
     }
 
-    public void setSyncInProgress(boolean status){
+    public void setSyncInProgress(boolean status) {
         syncInProgress = status;
     }
 

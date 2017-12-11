@@ -11,7 +11,7 @@ interface CommentRefsDao {
     fun getCommentRefsForStoryId(storyId: Long): Array<CommentReference>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun saveAllRefs(commentRefs : Array<CommentReference>)
+    fun saveAllRefs(commentRefs: Array<CommentReference>)
 
     @Query("DELETE FROM commentRefs")
     fun deleteAllCommentRefs()

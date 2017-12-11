@@ -16,7 +16,7 @@ public class CommentReference {
 
     public final long readRank;
 
-    public CommentReference(long id, long storyId, long readRank){
+    public CommentReference(long id, long storyId, long readRank) {
         this.id = id;
         this.storyId = storyId;
         this.readRank = readRank;

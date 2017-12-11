@@ -9,15 +9,15 @@ import io.reactivex.Flowable
 interface StoryDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun saveStories(stories : Array<Story>)
+    fun saveStories(stories: Array<Story>)
 
     @Query("SELECT * FROM stories order by rank asc")
-    fun getAllStories() : Flowable<List<Story>>
+    fun getAllStories(): Flowable<List<Story>>
     //Room will automatically do the querying on a background thread, so we only need to worry about observeOn
 
     @Query("DELETE FROM stories")
     fun deleteAllStories()
 
     @Query("SELECT * FROM stories order by rank asc")
-    fun getAllStoriesCursor() : Cursor
+    fun getAllStoriesCursor(): Cursor
 }

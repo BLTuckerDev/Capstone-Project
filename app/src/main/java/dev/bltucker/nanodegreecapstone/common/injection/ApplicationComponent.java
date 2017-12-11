@@ -16,19 +16,26 @@ import dev.bltucker.nanodegreecapstone.storydetail.injection.StoryDetailFragment
 import dev.bltucker.nanodegreecapstone.topstories.TopStoriesFragment;
 
 @ApplicationScope
-@Component(modules = { ApplicationResourcesModule.class, ViewModelModule.class, SchedulersModule.class})
+@Component(modules = {ApplicationResourcesModule.class, ViewModelModule.class, SchedulersModule.class})
 public interface ApplicationComponent {
     void inject(MainActivity mainActivity);
+
     void inject(TopStoriesFragment fragment);
+
     void inject(GeofenceTransitionsIntentService geofenceTransitionsIntentService);
+
     void inject(CommentCleaningService commentCleaningService);
+
     void inject(StoryProvider storyProvider);
 
     HackerNewsApiService hackerNewsApiService();
+
     EventBus eventBus();
 
     GeofenceCreationIntentServiceComponent geofenceCreationIntentServiceComponent(GeofenceCreationIntentServiceModule module);
+
     ReadLaterComponent readLaterComponent(ReadLaterListFragmentModule module);
+
     StoryDetailFragmentComponent storyDetailComponent(StoryDetailFragmentModule module);
 
 }

@@ -29,11 +29,11 @@ public class TestApplicationResourcesModule extends ApplicationResourcesModule {
 
     @Provides
     @ApplicationScope
-    HackerNewsDatabase providesHackerNewsDatabase(){
+    HackerNewsDatabase providesHackerNewsDatabase() {
         return Room.inMemoryDatabaseBuilder(application, HackerNewsDatabase.class)
                 .allowMainThreadQueries()
                 .addMigrations(new Version1to2(1, 2))
-                .addMigrations(new Version2to3(2,3))
+                .addMigrations(new Version2to3(2, 3))
                 .build();
     }
 

@@ -9,7 +9,7 @@ import java.util.concurrent.CountDownLatch;
 
 public class TestContentObserver extends ContentObserver {
 
-    public static TestContentObserver createInstance(CountDownLatch countDownLatch, Context context){
+    public static TestContentObserver createInstance(CountDownLatch countDownLatch, Context context) {
         final HandlerThread ht = new HandlerThread("ContentObserverThread");
         ht.start();
         Handler handler = new Handler(ht.getLooper());
@@ -35,7 +35,7 @@ public class TestContentObserver extends ContentObserver {
     public void onChange(boolean selfChange) {
         super.onChange(selfChange);
         this.countDownLatch.countDown();
-        if(this.countDownLatch.getCount() == 0){
+        if (this.countDownLatch.getCount() == 0) {
             this.ht.quit();
             this.context.getContentResolver().unregisterContentObserver(this);
         }

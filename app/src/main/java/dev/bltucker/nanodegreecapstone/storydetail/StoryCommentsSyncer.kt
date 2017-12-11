@@ -22,7 +22,7 @@ class StoryCommentsSyncer @Inject constructor(private val hackerNewsApiService: 
 
     @OnLifecycleEvent(Lifecycle.Event.ON_START)
     fun onStart() {
-        if(story == null){
+        if (story == null) {
             return
         }
 
@@ -45,7 +45,7 @@ class StoryCommentsSyncer @Inject constructor(private val hackerNewsApiService: 
                         commentRepository.saveComment(comment)
                     }
 
-                    override fun onError(e: Throwable) { }
+                    override fun onError(e: Throwable) {}
 
                     override fun onComplete() {}
                 })
@@ -55,7 +55,7 @@ class StoryCommentsSyncer @Inject constructor(private val hackerNewsApiService: 
 
     @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
     fun onStop() {
-        if(story == null){
+        if (story == null) {
             return
         }
 

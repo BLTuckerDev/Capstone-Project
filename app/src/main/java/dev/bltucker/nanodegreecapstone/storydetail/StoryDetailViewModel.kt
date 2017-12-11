@@ -48,11 +48,11 @@ class StoryDetailViewModel @Inject constructor(private val readLaterStoryDao: Re
                 })
     }
 
-    fun getObservableReadLaterSuccessStatus() : Observable<Boolean>{
+    fun getObservableReadLaterSuccessStatus(): Observable<Boolean> {
         return readLaterSaveSuccessPublisher
     }
 
-    fun getObservableComments(storyId: Long) : Observable<Array<Comment>>{
+    fun getObservableComments(storyId: Long): Observable<Array<Comment>> {
         return commentsRepository.getCommentsForStoryId(storyId)
     }
 }

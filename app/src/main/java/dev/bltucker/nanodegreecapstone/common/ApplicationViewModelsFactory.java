@@ -11,12 +11,12 @@ import javax.inject.Provider;
 import dev.bltucker.nanodegreecapstone.common.injection.ApplicationScope;
 
 @ApplicationScope
-public class ApplicationViewModelsFactory implements ViewModelProvider.Factory{
+public class ApplicationViewModelsFactory implements ViewModelProvider.Factory {
 
     private final Map<Class<? extends ViewModel>, Provider<ViewModel>> creators;
 
     @Inject
-    public ApplicationViewModelsFactory(Map<Class<? extends ViewModel>, Provider<ViewModel>> creators){
+    public ApplicationViewModelsFactory(Map<Class<? extends ViewModel>, Provider<ViewModel>> creators) {
         this.creators = creators;
     }
 

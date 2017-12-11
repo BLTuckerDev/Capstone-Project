@@ -41,14 +41,14 @@ public class CommentRepositoryTest {
     }
 
     @Test
-    public void testSaveCommentSavesToDao(){
+    public void testSaveCommentSavesToDao() {
         Comment fakeComment = new Comment(1, 2, "Fake Author", "FakeCOmments", System.currentTimeMillis(), 100, 0);
         objectUnderTest.saveComment(fakeComment);
         verify(mockCommentsDao, times(1)).save(fakeComment);
     }
 
     @Test
-    public void testGetLocalCommentsComeFromDao(){
+    public void testGetLocalCommentsComeFromDao() {
         final long fakeStoryId = 100;
 
         when(mockCommentsDao.getStoryCommentsFlowable(fakeStoryId)).thenReturn(Flowable.just(getFakeComments()));
@@ -60,7 +60,7 @@ public class CommentRepositoryTest {
     }
 
 
-    private Comment[] getFakeComments(){
+    private Comment[] getFakeComments() {
         final long fakeStoryId = 100;
         Comment[] fakeComments = new Comment[3];
 

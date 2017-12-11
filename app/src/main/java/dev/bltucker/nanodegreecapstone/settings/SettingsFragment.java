@@ -7,7 +7,7 @@ import dev.bltucker.nanodegreecapstone.R;
 
 public class SettingsFragment extends PreferenceFragment {
 
-    public void onCreate(Bundle savedInstanceState){
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.pref_general);
     }

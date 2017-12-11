@@ -19,7 +19,7 @@ public class ReadLaterStoryListAdapter extends RecyclerView.Adapter<ReadLaterSto
     private List<ReadLaterStory> stories;
 
     @Inject
-    public ReadLaterStoryListAdapter(ReadLaterListPresenter presenter){
+    public ReadLaterStoryListAdapter(ReadLaterListPresenter presenter) {
         this.presenter = presenter;
         stories = new ArrayList<>();
     }
@@ -40,17 +40,17 @@ public class ReadLaterStoryListAdapter extends RecyclerView.Adapter<ReadLaterSto
         return stories.size();
     }
 
-    public void setStories(List<ReadLaterStory> newStories){
+    public void setStories(List<ReadLaterStory> newStories) {
         stories.clear();
         stories.addAll(newStories);
         notifyDataSetChanged();
     }
 
-    public List<ReadLaterStory> getStories(){
+    public List<ReadLaterStory> getStories() {
         return new ArrayList<>(stories);
     }
 
-    class ReadLaterStoryViewHolder extends RecyclerView.ViewHolder{
+    class ReadLaterStoryViewHolder extends RecyclerView.ViewHolder {
 
         private final ReadLaterStoryItemBinding binding;
 
@@ -76,7 +76,7 @@ public class ReadLaterStoryListAdapter extends RecyclerView.Adapter<ReadLaterSto
 
         }
 
-        public void setStory(ReadLaterStory story){
+        public void setStory(ReadLaterStory story) {
             this.story = story;
             binding.storyTitleTextview.setText(story.getTitle());
             binding.posterNameTextview.setText(story.getPosterName());

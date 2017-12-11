@@ -10,19 +10,19 @@ public class ReadLaterListFragmentModule {
 
     private final ReadLaterListFragment fragment;
 
-    public ReadLaterListFragmentModule(ReadLaterListFragment fragment){
+    public ReadLaterListFragmentModule(ReadLaterListFragment fragment) {
         this.fragment = fragment;
     }
 
     @Provides
     @ReadLaterListFragmentScope
-    public LoaderManager provideLoaderManager(){
+    public LoaderManager provideLoaderManager() {
         return fragment.getLoaderManager();
     }
 
     @Provides
     @ReadLaterListFragmentScope
-    public ReadLaterRepository provideReadLaterRepository(ContentProviderBackedRepository repository){
+    public ReadLaterRepository provideReadLaterRepository(ContentProviderBackedRepository repository) {
         return repository;
     }
 

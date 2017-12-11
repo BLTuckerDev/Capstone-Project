@@ -64,39 +64,39 @@ public class ApplicationResourcesModule {
 
     @Provides
     @ApplicationScope
-    HackerNewsDatabase providesHackerNewsDatabase(){
+    HackerNewsDatabase providesHackerNewsDatabase() {
         return Room.databaseBuilder(application, HackerNewsDatabase.class, "databaseGenerator.db")
                 .addMigrations(new Version1to2(1, 2))
-                .addMigrations(new Version2to3(2,3))
+                .addMigrations(new Version2to3(2, 3))
                 .build();
     }
 
     @Provides
     @ApplicationScope
-    StoryDao provideStoryDao(HackerNewsDatabase hackerNewsDatabase){
+    StoryDao provideStoryDao(HackerNewsDatabase hackerNewsDatabase) {
         return hackerNewsDatabase.storyDao();
     }
 
     @Provides
     @ApplicationScope
-    CommentRefsDao provideCommentRefsDao(HackerNewsDatabase hackerNewsDatabase){
+    CommentRefsDao provideCommentRefsDao(HackerNewsDatabase hackerNewsDatabase) {
         return hackerNewsDatabase.commentRefsDao();
     }
 
     @Provides
     @ApplicationScope
-    ReadLaterStoryDao provideReadLaterStoryDao(HackerNewsDatabase hackerNewsDatabase){
+    ReadLaterStoryDao provideReadLaterStoryDao(HackerNewsDatabase hackerNewsDatabase) {
         return hackerNewsDatabase.readLaterStoryDao();
     }
 
     @Provides
     @ApplicationScope
-    CommentsDao provideCommentsDao(HackerNewsDatabase hackerNewsDatabase){
+    CommentsDao provideCommentsDao(HackerNewsDatabase hackerNewsDatabase) {
         return hackerNewsDatabase.commentsDao();
     }
 
     @Provides
-    UriMatcher provideContentProviderUriMatcher(){
+    UriMatcher provideContentProviderUriMatcher() {
         UriMatcher matcher = new UriMatcher(UriMatcher.NO_MATCH);
 
         matcher.addURI(StoryProvider.AUTHORITY, StoryProvider.ALL_STORIES_PATH, ALL_STORIES_PATH_CODE);
@@ -143,7 +143,7 @@ public class ApplicationResourcesModule {
     @Provides
     @ApplicationScope
     @CommentCacheSize
-    public int provideCommentCacheSize(Resources resources){
+    public int provideCommentCacheSize(Resources resources) {
         return resources.getInteger(R.integer.comment_cache_size);
     }
 
@@ -157,7 +157,7 @@ public class ApplicationResourcesModule {
     @Provides
     @ApplicationScope
     @CommentListCache
-    public LruCache<Long, List<Comment>> provideLruCache(@CommentCacheSize int cacheSize){
+    public LruCache<Long, List<Comment>> provideLruCache(@CommentCacheSize int cacheSize) {
         return new LruCache<>(cacheSize);
     }
 
@@ -176,7 +176,7 @@ public class ApplicationResourcesModule {
 
     @Provides
     @ApplicationScope
-    public HttpLoggingInterceptor provideHttpLoggingInterceptor(){
+    public HttpLoggingInterceptor provideHttpLoggingInterceptor() {
         HttpLoggingInterceptor httpLoggingInterceptor = new HttpLoggingInterceptor();
 
         httpLoggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
@@ -186,7 +186,7 @@ public class ApplicationResourcesModule {
 
     @Provides
     @ApplicationScope
-    public OkHttpClient okHttpClient(HttpLoggingInterceptor interceptor){
+    public OkHttpClient okHttpClient(HttpLoggingInterceptor interceptor) {
         return new OkHttpClient.Builder()
                 .addInterceptor(interceptor)
                 .build();

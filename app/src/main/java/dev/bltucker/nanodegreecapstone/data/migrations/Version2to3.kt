@@ -3,7 +3,7 @@ package dev.bltucker.nanodegreecapstone.data.migrations
 import android.arch.persistence.db.SupportSQLiteDatabase
 import android.arch.persistence.room.migration.Migration
 
-class Version2to3(startVersion: Int, endVersion: Int) : Migration(startVersion, endVersion){
+class Version2to3(startVersion: Int, endVersion: Int) : Migration(startVersion, endVersion) {
     override fun migrate(database: SupportSQLiteDatabase) {
 
         database.beginTransaction()

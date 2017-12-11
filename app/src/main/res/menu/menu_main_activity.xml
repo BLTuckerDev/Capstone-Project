@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+      xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <item android:id="@+id/menu_item_show_read_later"
-        app:showAsAction="ifRoom"
-        android:icon="@drawable/ic_book_black_24dp"
-        android:title="@string/read_later"   />
+    <item
+            android:id="@+id/menu_item_show_read_later"
+            app:showAsAction="ifRoom"
+            android:icon="@drawable/ic_book_black_24dp"
+            android:title="@string/read_later"/>
 
 
     <item
-        android:id="@+id/menu_item_settings"
-        app:showAsAction="never"
-        android:title="@string/settings"/>
+            android:id="@+id/menu_item_settings"
+            app:showAsAction="never"
+            android:title="@string/settings"/>
 
 </menu>

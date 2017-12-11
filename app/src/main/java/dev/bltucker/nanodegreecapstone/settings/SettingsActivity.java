@@ -66,13 +66,13 @@ public class SettingsActivity extends AppCompatActivity implements SharedPrefere
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if(requestCode != LOCATION_PERMISSION_REQUEST){
+        if (requestCode != LOCATION_PERMISSION_REQUEST) {
             super.onRequestPermissionsResult(requestCode, permissions, grantResults);
             return;
         }
 
         if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            GeofenceCreationService.createGeofence(this, PreferenceManager.getDefaultSharedPreferences(this).getString(locationPreferenceKey,null));
+            GeofenceCreationService.createGeofence(this, PreferenceManager.getDefaultSharedPreferences(this).getString(locationPreferenceKey, null));
         }
     }
 }

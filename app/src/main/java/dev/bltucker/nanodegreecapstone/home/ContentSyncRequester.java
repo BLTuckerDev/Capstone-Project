@@ -16,17 +16,17 @@ public class ContentSyncRequester {
 
     @SuppressWarnings("squid:S1186")
     @Inject
-    public ContentSyncRequester(){
+    public ContentSyncRequester() {
     }
 
-    public void requestImmediateSync(Account account){
+    public void requestImmediateSync(Account account) {
         Bundle bundle = new Bundle();
         bundle.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
         bundle.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
         ContentResolver.requestSync(account, AUTHORITY, bundle);
     }
 
-    public void requestPeriodicSync(Account account, int syncInterval){
+    public void requestPeriodicSync(Account account, int syncInterval) {
         ContentResolver.setSyncAutomatically(account, AUTHORITY, true);
         ContentResolver.addPeriodicSync(
                 account,

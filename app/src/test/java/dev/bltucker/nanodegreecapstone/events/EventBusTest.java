@@ -50,7 +50,7 @@ public class EventBusTest {
     }
 
     @Test
-    public void testPublishWithDifferentClassSubscriptionShouldNotGetEvent(){
+    public void testPublishWithDifferentClassSubscriptionShouldNotGetEvent() {
 
         final Object fakeEvent = new Object();
 

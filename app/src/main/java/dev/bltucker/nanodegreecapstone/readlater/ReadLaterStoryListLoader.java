@@ -16,7 +16,7 @@ public class ReadLaterStoryListLoader extends AsyncTaskLoader<List<ReadLaterStor
     private final ReadLaterRepository readLaterRepository;
 
     @Inject
-    public ReadLaterStoryListLoader(Context context, ReadLaterRepository readLaterRepository){
+    public ReadLaterStoryListLoader(Context context, ReadLaterRepository readLaterRepository) {
         super(context);
         this.readLaterRepository = readLaterRepository;
         onContentChanged();

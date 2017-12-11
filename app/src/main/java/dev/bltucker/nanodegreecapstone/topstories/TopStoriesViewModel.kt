@@ -30,10 +30,10 @@ class TopStoriesViewModel @Inject constructor(private val storyRepository: Story
                                               private val topStoryModelFactory: TopStoryModelFactory,
                                               @IO private val ioScheduler: Scheduler,
                                               @UI private val uiScheduler: Scheduler,
-                                              @StoryMax private val storyMax : Int,
+                                              @StoryMax private val storyMax: Int,
                                               private val clickEventFactory: TopStoryClickEventFactory) : ViewModel() {
 
-    private val modelPublisher : BehaviorRelay<TopStoryModel> = BehaviorRelay.createDefault(topStoryModelFactory.createLoadingModel(null))
+    private val modelPublisher: BehaviorRelay<TopStoryModel> = BehaviorRelay.createDefault(topStoryModelFactory.createLoadingModel(null))
 
     private val clickEventPublisher: PublishRelay<TopStoryClickEvent> = PublishRelay.create()
 
@@ -59,21 +59,21 @@ class TopStoriesViewModel @Inject constructor(private val storyRepository: Story
                         val lastModel = modelPublisher.value
 
                         //if the last thing was null then lets just show an empty view
-                        if(lastModel == null){
+                        if (lastModel == null) {
                             modelPublisher.accept(topStoryModelFactory.createTopStoryModelWithStories(latestStories, false))
                             return
                         }
 
                         //if we were loading and have no stories we want to wait for stories to come in so dont publish
                         //because either we will get stories or an error will be thrown
-                        if(lastModel.isLoading && latestStories.isEmpty()){
+                        if (lastModel.isLoading && latestStories.isEmpty()) {
                             return
                         }
 
                         //if we were not refreshing then we want to publish here
-                        if(!lastModel.isRefreshing){
+                        if (!lastModel.isRefreshing) {
                             modelPublisher.accept(topStoryModelFactory.createTopStoryModelWithStories(latestStories, false))
-                        } else if(lastModel.isRefreshing){
+                        } else if (lastModel.isRefreshing) {
                             modelPublisher.accept(topStoryModelFactory.createTopStoryModelWithStories(latestStories, lastModel.isRefreshing))
                         }
 
@@ -81,7 +81,7 @@ class TopStoriesViewModel @Inject constructor(private val storyRepository: Story
                 })
     }
 
-    fun getObservableModelEvents() : Observable<TopStoryModel>{
+    fun getObservableModelEvents(): Observable<TopStoryModel> {
         return modelPublisher
     }
 
@@ -97,7 +97,7 @@ class TopStoriesViewModel @Inject constructor(private val storyRepository: Story
         clickEventPublisher.accept(clickEventFactory.createReadLaterButtonClickEvent(story))
     }
 
-    fun onLoadTopStories(){
+    fun onLoadTopStories() {
         modelPublisher.accept(topStoryModelFactory.createLoadingModel(modelPublisher.value))
         fetchData()
     }
@@ -112,7 +112,7 @@ class TopStoriesViewModel @Inject constructor(private val storyRepository: Story
                 .toObservable()
                 .concatMap { storyIdList ->
 
-                    if(storyIdList.isEmpty()){
+                    if (storyIdList.isEmpty()) {
                         throw RuntimeException("API Returned no stories to us!")
                     }
 
@@ -147,7 +147,7 @@ class TopStoriesViewModel @Inject constructor(private val storyRepository: Story
 
     fun onShowRefreshedTopStories() {
         val lastModel = modelPublisher.value
-        if(lastModel != null){
+        if (lastModel != null) {
             modelPublisher.accept(topStoryModelFactory.createTopStoryModelWithWasRefreshingReset(lastModel))
         }
     }

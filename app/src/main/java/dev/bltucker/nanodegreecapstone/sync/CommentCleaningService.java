@@ -40,22 +40,23 @@ public class CommentCleaningService extends JobService {
     public boolean onStartJob(final JobParameters jobParameters) {
 
         Completable.fromAction(new DeleteOrphanCommentsAction(commentsDao))
-        .subscribeOn(ioScheduler)
-        .subscribe(new CompletableObserver() {
-            @Override
-            public void onSubscribe(Disposable d) {}
+                .subscribeOn(ioScheduler)
+                .subscribe(new CompletableObserver() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                    }
 
-            @Override
-            public void onComplete() {
-                jobFinished(jobParameters, false);
-            }
+                    @Override
+                    public void onComplete() {
+                        jobFinished(jobParameters, false);
+                    }
 
-            @Override
-            public void onError(Throwable e) {
-                Timber.e(e, "Error attempting to complete comment clean up");
-                jobFinished(jobParameters, false);
-            }
-        });
+                    @Override
+                    public void onError(Throwable e) {
+                        Timber.e(e, "Error attempting to complete comment clean up");
+                        jobFinished(jobParameters, false);
+                    }
+                });
 
         //returning true means the job is not done yet.
         return true;

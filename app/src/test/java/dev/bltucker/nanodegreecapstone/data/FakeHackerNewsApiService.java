@@ -19,14 +19,14 @@ public class FakeHackerNewsApiService implements HackerNewsApiService {
     private Map<Long, Story> stories;
     private Map<Long, Comment> comments;
 
-    public FakeHackerNewsApiService(){
+    public FakeHackerNewsApiService() {
         storyIds = new ArrayList<>();
         stories = new HashMap<>();
         comments = new HashMap<>();
     }
 
 
-    public void addFakeData(List<Long> storyIds, Map<Long, Story> stories, Map<Long,Comment> comments){
+    public void addFakeData(List<Long> storyIds, Map<Long, Story> stories, Map<Long, Comment> comments) {
         this.storyIds = storyIds;
         this.stories = stories;
         this.comments = comments;
@@ -39,7 +39,7 @@ public class FakeHackerNewsApiService implements HackerNewsApiService {
 
     @Override
     public Single<Story> getStory(@Path("storyId") long storyId) {
-        if(stories.containsKey(storyId)){
+        if (stories.containsKey(storyId)) {
             return Single.just(stories.get(storyId));
         } else {
             return Single.error(new Exception("Invalid story id"));

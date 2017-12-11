@@ -31,8 +31,8 @@ public class CapstoneApplication extends Application {
 
     protected void createApplicationComponent() {
         final ApplicationComponent applicationComponent = DaggerApplicationComponent.builder()
-            .applicationResourcesModule(new ApplicationResourcesModule(this))
-            .build();
+                .applicationResourcesModule(new ApplicationResourcesModule(this))
+                .build();
 
         DaggerInjector.initializeInjector(applicationComponent);
     }
@@ -46,7 +46,7 @@ public class CapstoneApplication extends Application {
     private void scheduleCommentCleanUpJob() {
         Completable.fromAction(() -> {
             JobInfo.Builder jobBuilder = new JobInfo.Builder(CommentCleaningService.JOB_ID,
-                new ComponentName(CapstoneApplication.this, CommentCleaningService.class));
+                    new ComponentName(CapstoneApplication.this, CommentCleaningService.class));
 
             final long MILLIS_IN_DAY = 1000 * 60 * 60 * 24;
             jobBuilder.setPeriodic(MILLIS_IN_DAY);
@@ -54,10 +54,11 @@ public class CapstoneApplication extends Application {
             JobScheduler jobScheduler = (JobScheduler) getSystemService(Context.JOB_SCHEDULER_SERVICE);
             jobScheduler.schedule(jobBuilder.build());
         })
-            .subscribeOn(Schedulers.computation())
-            .subscribe(
-                    () -> { },
-                    e -> Timber.e(e, "Error attempting to start the job scheduler service.")
-            );
+                .subscribeOn(Schedulers.computation())
+                .subscribe(
+                        () -> {
+                        },
+                        e -> Timber.e(e, "Error attempting to start the job scheduler service.")
+                );
     }
 }

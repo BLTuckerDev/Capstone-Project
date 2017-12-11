@@ -1,113 +1,116 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="dev.bltucker.nanodegreecapstone">
+          package="dev.bltucker.nanodegreecapstone">
 
-    <uses-permission android:name="android.permission.READ_SYNC_SETTINGS" />
-    <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
-    <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.READ_SYNC_SETTINGS"/>
+    <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS"/>
+    <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 
 
     <permission android:name="dev.bltucker.nanodegreecapstone.storyprovider.READ_WRITE"/>
 
     <application
-        android:name=".CapstoneApplication"
-        android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
-        android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+            android:name=".CapstoneApplication"
+            android:allowBackup="true"
+            android:icon="@mipmap/ic_launcher"
+            android:label="@string/app_name"
+            android:supportsRtl="true"
+            android:theme="@style/AppTheme">
         <activity
-            android:name=".home.MainActivity"
-            android:theme="@style/LauncherTheme">
+                android:name=".home.MainActivity"
+                android:theme="@style/LauncherTheme">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.MAIN"/>
 
-                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
 
         <provider
-            android:name=".data.StoryProvider"
-            android:authorities="dev.bltucker.nanodegreecapstone.data"
-            android:exported="false"
-            android:label="Hacker News Reader"
-            android:permission="dev.bltucker.nanodegreecapstone.storyprovider.READ_WRITE"
-            android:syncable="true" />
+                android:name=".data.StoryProvider"
+                android:authorities="dev.bltucker.nanodegreecapstone.data"
+                android:exported="false"
+                android:label="Hacker News Reader"
+                android:permission="dev.bltucker.nanodegreecapstone.storyprovider.READ_WRITE"
+                android:syncable="true"/>
 
         <service
-            android:name=".sync.StorySyncService"
-            android:exported="true"
-            android:permission="">
+                android:name=".sync.StorySyncService"
+                android:exported="true"
+                android:permission="">
             <intent-filter>
-                <action android:name="android.content.SyncAdapter" />
+                <action android:name="android.content.SyncAdapter"/>
             </intent-filter>
 
             <meta-data
-                android:name="android.content.SyncAdapter"
-                android:resource="@xml/syncadapter" />
+                    android:name="android.content.SyncAdapter"
+                    android:resource="@xml/syncadapter"/>
         </service>
         <service
-            android:name=".sync.AuthenticatorService"
-            android:enabled="true"
-            android:exported="true">
+                android:name=".sync.AuthenticatorService"
+                android:enabled="true"
+                android:exported="true">
             <intent-filter>
-                <action android:name="android.accounts.AccountAuthenticator" />
+                <action android:name="android.accounts.AccountAuthenticator"/>
             </intent-filter>
 
             <meta-data
-                android:name="android.accounts.AccountAuthenticator"
-                android:resource="@xml/authenticator" />
+                    android:name="android.accounts.AccountAuthenticator"
+                    android:resource="@xml/authenticator"/>
         </service>
 
-        <activity android:name=".storydetail.StoryDetailActivity"
+        <activity
+                android:name=".storydetail.StoryDetailActivity"
                 android:parentActivityName=".home.MainActivity"/>
         <activity
-            android:name=".settings.SettingsActivity"
-            android:label="@string/title_activity_settings" />
+                android:name=".settings.SettingsActivity"
+                android:label="@string/title_activity_settings"/>
 
         <service
-            android:name=".location.GeofenceTransitionsIntentService"
-            android:exported="false" />
+                android:name=".location.GeofenceTransitionsIntentService"
+                android:exported="false"/>
         <service
-            android:name=".location.GeofenceCreationService"
-            android:exported="false" />
+                android:name=".location.GeofenceCreationService"
+                android:exported="false"/>
 
         <receiver android:name=".widget.TopFiveStoriesWidgetProvider">
             <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-                <action android:name="dev.bltucker.nanodegreecapstone.SYNC_COMPLETED" />
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
+                <action android:name="dev.bltucker.nanodegreecapstone.SYNC_COMPLETED"/>
             </intent-filter>
 
             <meta-data
-                android:name="android.appwidget.provider"
-                android:resource="@xml/top_five_stories_widget_info" />
+                    android:name="android.appwidget.provider"
+                    android:resource="@xml/top_five_stories_widget_info"/>
         </receiver>
 
         <service
-            android:name=".widget.TopFiveStoriesWidgetRemoteViewService"
-            android:enabled="true"
-            android:exported="false"
-            android:permission="android.permission.BIND_REMOTEVIEWS" />
+                android:name=".widget.TopFiveStoriesWidgetRemoteViewService"
+                android:enabled="true"
+                android:exported="false"
+                android:permission="android.permission.BIND_REMOTEVIEWS"/>
 
 
-        <activity android:name=".readlater.ReadLaterListActivity"
+        <activity
+                android:name=".readlater.ReadLaterListActivity"
                 android:parentActivityName=".home.MainActivity"/>
 
         <meta-data
-            android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version" />
-
-        <service android:name=".sync.CommentCleaningService"
-            android:exported="true"
-            android:permission="android.permission.BIND_JOB_SERVICE"/>
+                android:name="com.google.android.gms.version"
+                android:value="@integer/google_play_services_version"/>
 
         <service
-            android:name=".storydetail.data.InterruptibleDownloadService"
-            android:enabled="true"
-            android:exported="false"/>
+                android:name=".sync.CommentCleaningService"
+                android:exported="true"
+                android:permission="android.permission.BIND_JOB_SERVICE"/>
+
+        <service
+                android:name=".storydetail.data.InterruptibleDownloadService"
+                android:enabled="true"
+                android:exported="false"/>
     </application>
 
 </manifest>

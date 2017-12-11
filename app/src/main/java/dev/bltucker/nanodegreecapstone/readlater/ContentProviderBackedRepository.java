@@ -16,7 +16,7 @@ public class ContentProviderBackedRepository implements ReadLaterRepository {
     private final ReadLaterStoryDao readLaterStoryDao;
 
     @Inject
-    public ContentProviderBackedRepository(@NonNull ReadLaterStoryDao readLaterStoryDao){
+    public ContentProviderBackedRepository(@NonNull ReadLaterStoryDao readLaterStoryDao) {
         this.readLaterStoryDao = readLaterStoryDao;
     }
 

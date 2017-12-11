@@ -48,13 +48,13 @@ public class ReadLaterListFragment extends Fragment implements ReadLaterListView
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putParcelableArrayList(ADAPTER_STORIES_BUNDLE_KEY,new ArrayList<ReadLaterStory>(adapter.getStories()));
+        outState.putParcelableArrayList(ADAPTER_STORIES_BUNDLE_KEY, new ArrayList<ReadLaterStory>(adapter.getStories()));
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        if(null == savedInstanceState){
+        if (null == savedInstanceState) {
             presenter.onViewCreated(this);
         } else {
             presenter.onViewRestored(this);
@@ -69,9 +69,9 @@ public class ReadLaterListFragment extends Fragment implements ReadLaterListView
         binding.readLaterStoryListRecyclerview.setLayoutManager(new LinearLayoutManager(binding.getRoot().getContext()));
         binding.readLaterStoryListRecyclerview.setAdapter(adapter);
 
-        if(savedInstanceState != null){
+        if (savedInstanceState != null) {
             ArrayList<ReadLaterStory> parcelableArrayList = savedInstanceState.getParcelableArrayList(ADAPTER_STORIES_BUNDLE_KEY);
-            if(null == parcelableArrayList || parcelableArrayList.isEmpty()){
+            if (null == parcelableArrayList || parcelableArrayList.isEmpty()) {
                 showEmptyView();
             } else {
                 showStories(parcelableArrayList);

@@ -107,7 +107,7 @@ public class TopStoriesFragment extends Fragment {
 
     @Override
     public void onStop() {
-        if(modelDisposable != null){
+        if (modelDisposable != null) {
             modelDisposable.dispose();
         }
         super.onStop();
@@ -162,7 +162,7 @@ public class TopStoriesFragment extends Fragment {
                     @Override
                     public void onNext(TopStoryModel topStoryModel) {
                         Log.d("TopStoryModel", topStoryModel.toString());
-                        if(topStoryModel.isError()){
+                        if (topStoryModel.isError()) {
                             binding.setTopStoryModel(topStoryModel);
                             binding.executePendingBindings();
                             showErrorSnackbar();
@@ -172,7 +172,7 @@ public class TopStoriesFragment extends Fragment {
                         binding.setTopStoryModel(topStoryModel);
                         binding.executePendingBindings();
 
-                        if(topStoryModel.getWasRefreshing()){
+                        if (topStoryModel.getWasRefreshing()) {
                             binding.swipeToRefreshLayout.setRefreshing(false);
                             showUpdatedStoriesNotification();
                         } else {
@@ -181,16 +181,18 @@ public class TopStoriesFragment extends Fragment {
                     }
 
                     @Override
-                    public void onError(Throwable e) {}
+                    public void onError(Throwable e) {
+                    }
 
                     @Override
-                    public void onComplete() {}
+                    public void onComplete() {
+                    }
                 });
     }
 
     private void showErrorSnackbar() {
         View view = getView();
-        if(view == null){
+        if (view == null) {
             return;
         }
 
