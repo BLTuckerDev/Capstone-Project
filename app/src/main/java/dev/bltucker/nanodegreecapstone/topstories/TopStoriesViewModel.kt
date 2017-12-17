@@ -58,13 +58,13 @@ class TopStoriesViewModel @Inject constructor(private val storyRepository: Story
                     override fun onNext(latestStories: List<Story>) {
                         val lastModel = modelPublisher.value
 
-                        //if the last thing was null then lets just show an empty view
+                        //if the last thing was null then lets just the stories
                         if (lastModel == null) {
-                            modelPublisher.accept(topStoryModelFactory.createTopStoryModelWithStories(latestStories, false))
+                            modelPublisher.accept(topStoryModelFactory.createTopStoryModelWithStories(latestStories))
                             return
                         }
 
-                        //if we were loading and have no stories we want to wait for stories to come in so dont publish
+                        //if we were loading and have no stories we want to wait for stories to come in so don't publish
                         //because either we will get stories or an error will be thrown
                         if (lastModel.isLoading && latestStories.isEmpty()) {
                             return
@@ -72,9 +72,9 @@ class TopStoriesViewModel @Inject constructor(private val storyRepository: Story
 
                         //if we were not refreshing then we want to publish here
                         if (!lastModel.isRefreshing) {
-                            modelPublisher.accept(topStoryModelFactory.createTopStoryModelWithStories(latestStories, false))
+                            modelPublisher.accept(topStoryModelFactory.createTopStoryModelWithStories(latestStories))
                         } else if (lastModel.isRefreshing) {
-                            modelPublisher.accept(topStoryModelFactory.createTopStoryModelWithStories(latestStories, lastModel.isRefreshing))
+                            modelPublisher.accept(topStoryModelFactory.createTopStoryModelWithRefreshedStories(lastModel, latestStories))
                         }
 
                     }
@@ -148,7 +148,7 @@ class TopStoriesViewModel @Inject constructor(private val storyRepository: Story
     fun onShowRefreshedTopStories() {
         val lastModel = modelPublisher.value
         if (lastModel != null) {
-            modelPublisher.accept(topStoryModelFactory.createTopStoryModelWithWasRefreshingReset(lastModel))
+            modelPublisher.accept(topStoryModelFactory.createTopStoryModelWithStories(lastModel.refreshedStoryList))
         }
     }
 
@@ -158,7 +158,7 @@ class TopStoriesViewModel @Inject constructor(private val storyRepository: Story
 
     private fun notifyWidgets() {
         val syncCompletedIntent = Intent()
-        syncCompletedIntent.`package` = applicationContext.getPackageName()
+        syncCompletedIntent.`package` = applicationContext.packageName
         syncCompletedIntent.action = SYNC_COMPLETED_ACTION
         applicationContext.sendBroadcast(syncCompletedIntent)
     }

@@ -162,21 +162,18 @@ public class TopStoriesFragment extends Fragment {
                     @Override
                     public void onNext(TopStoryModel topStoryModel) {
                         Log.d("TopStoryModel", topStoryModel.toString());
-                        if (topStoryModel.isError()) {
-                            binding.setTopStoryModel(topStoryModel);
-                            binding.executePendingBindings();
-                            showErrorSnackbar();
-                            return;
-                        }
-
                         binding.setTopStoryModel(topStoryModel);
                         binding.executePendingBindings();
 
-                        if (topStoryModel.getWasRefreshing()) {
-                            binding.swipeToRefreshLayout.setRefreshing(false);
-                            showUpdatedStoriesNotification();
+                        if (topStoryModel.isError()) {
+                            //When we error show the error snackbar
+                            renderErrorModel(topStoryModel);
+                        } else if(!topStoryModel.getRefreshedStoryList().isEmpty()){
+                            //when we have a model that has refreshed stories available then show the refresh snackbar
+                            renderRefreshedStoriesModel();
                         } else {
-                            adapter.updateStories(topStoryModel.getStoryList());
+                            //update the adapter with the stories in the model for other cases
+                            renderTopStoryModel(topStoryModel);
                         }
                     }
 
@@ -188,6 +185,19 @@ public class TopStoriesFragment extends Fragment {
                     public void onComplete() {
                     }
                 });
+    }
+
+    private void renderTopStoryModel(TopStoryModel topStoryModel) {
+        adapter.updateStories(topStoryModel.getStoryList());
+    }
+
+    private void renderRefreshedStoriesModel() {
+        binding.swipeToRefreshLayout.setRefreshing(false);
+        showUpdatedStoriesNotification();
+    }
+
+    private void renderErrorModel(TopStoryModel topStoryModel) {
+        showErrorSnackbar();
     }
 
     private void showErrorSnackbar() {
