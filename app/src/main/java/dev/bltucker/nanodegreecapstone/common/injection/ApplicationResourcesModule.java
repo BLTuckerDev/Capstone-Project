@@ -188,7 +188,7 @@ public class ApplicationResourcesModule {
     @ApplicationScope
     public OkHttpClient okHttpClient(HttpLoggingInterceptor interceptor) {
         return new OkHttpClient.Builder()
-                .addInterceptor(interceptor)
+                //.addInterceptor(interceptor)
                 .build();
     }
 
