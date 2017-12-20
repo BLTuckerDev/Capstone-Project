@@ -29,6 +29,7 @@ public class ReadLaterListFragment extends Fragment implements ReadLaterListView
 
     @Inject
     ReadLaterStoryListAdapter adapter;
+
     private FragmentReadLaterListBinding binding;
 
     public ReadLaterListFragment() {

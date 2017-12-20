@@ -34,8 +34,7 @@ class TopStoriesFragment : Fragment() {
     @Inject
     lateinit var applicationViewModelsFactory: ApplicationViewModelsFactory
 
-    @Inject
-    @UI
+    @field:[Inject UI]
     lateinit var uiScheduler: Scheduler
 
     private val clickEventDisposable = CompositeDisposable()
