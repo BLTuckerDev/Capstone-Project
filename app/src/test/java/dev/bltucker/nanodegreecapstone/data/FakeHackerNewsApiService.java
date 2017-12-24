@@ -15,25 +15,25 @@ import retrofit2.http.Path;
 
 public class FakeHackerNewsApiService implements HackerNewsApiService {
 
-    private List<Long> storyIds;
+    private Long[] storyIds;
     private Map<Long, Story> stories;
     private Map<Long, Comment> comments;
 
     public FakeHackerNewsApiService() {
-        storyIds = new ArrayList<>();
+        storyIds = new Long[0];
         stories = new HashMap<>();
         comments = new HashMap<>();
     }
 
 
-    public void addFakeData(List<Long> storyIds, Map<Long, Story> stories, Map<Long, Comment> comments) {
-        this.storyIds = storyIds;
+    public void addFakeData(List<Long> storyIdList, Map<Long, Story> stories, Map<Long, Comment> comments) {
+        storyIds = storyIdList.toArray(storyIds);
         this.stories = stories;
         this.comments = comments;
     }
 
     @Override
-    public Single<List<Long>> getTopStoryIds() {
+    public Single<Long[]> getTopStoryIds() {
         return Single.just(storyIds);
     }
 

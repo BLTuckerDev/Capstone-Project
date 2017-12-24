@@ -9,18 +9,15 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.UriMatcher;
 import android.content.res.Resources;
-import android.util.LruCache;
 
 import java.util.Calendar;
-import java.util.List;
 import java.util.TimeZone;
 
 import dagger.Module;
 import dagger.Provides;
+import dev.bltucker.nanodegreecapstone.BuildConfig;
 import dev.bltucker.nanodegreecapstone.CapstoneApplication;
 import dev.bltucker.nanodegreecapstone.R;
-import dev.bltucker.nanodegreecapstone.common.injection.qualifiers.CommentCacheSize;
-import dev.bltucker.nanodegreecapstone.common.injection.qualifiers.CommentListCache;
 import dev.bltucker.nanodegreecapstone.common.injection.qualifiers.GregorianUTC;
 import dev.bltucker.nanodegreecapstone.common.injection.qualifiers.IO;
 import dev.bltucker.nanodegreecapstone.common.injection.qualifiers.StoryMax;
@@ -35,7 +32,6 @@ import dev.bltucker.nanodegreecapstone.data.daos.ReadLaterStoryDao;
 import dev.bltucker.nanodegreecapstone.data.daos.StoryDao;
 import dev.bltucker.nanodegreecapstone.data.migrations.Version1to2;
 import dev.bltucker.nanodegreecapstone.data.migrations.Version2to3;
-import dev.bltucker.nanodegreecapstone.models.Comment;
 import io.reactivex.Scheduler;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -142,23 +138,9 @@ public class ApplicationResourcesModule {
 
     @Provides
     @ApplicationScope
-    @CommentCacheSize
-    public int provideCommentCacheSize(Resources resources) {
-        return resources.getInteger(R.integer.comment_cache_size);
-    }
-
-    @Provides
-    @ApplicationScope
     @GregorianUTC
     public Calendar provideCalendar() {
         return Calendar.getInstance(TimeZone.getTimeZone("UTC"));
-    }
-
-    @Provides
-    @ApplicationScope
-    @CommentListCache
-    public LruCache<Long, List<Comment>> provideLruCache(@CommentCacheSize int cacheSize) {
-        return new LruCache<>(cacheSize);
     }
 
     @Provides
@@ -187,9 +169,13 @@ public class ApplicationResourcesModule {
     @Provides
     @ApplicationScope
     public OkHttpClient okHttpClient(HttpLoggingInterceptor interceptor) {
-        return new OkHttpClient.Builder()
-                //.addInterceptor(interceptor)
-                .build();
+        OkHttpClient.Builder builder = new OkHttpClient.Builder();
+
+        if(BuildConfig.DEBUG){
+//            builder.addInterceptor(interceptor);
+        }
+
+        return builder.build();
     }
 
     @Provides
