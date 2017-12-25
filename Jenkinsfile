@@ -28,6 +28,14 @@ node{
     stage 'Archive'
     step([$class: 'ArtifactArchiver', artifacts: 'app/build/outputs/apk/**/*.apk', fingerprint: true])
     step([$class: 'JUnitResultArchiver', testResults: 'app/build/test-results/**/TEST-*.xml'])
+     publishHTML (target: [
+          allowMissing: false,
+          alwaysLinkToLastBuild: false,
+          keepAll: true,
+          reportDir: 'app/build/reports/coverage/debug',
+          reportFiles: 'index.html',
+          reportName: "Local Unit Test Coverage"
+        ])
 
     stage 'Cloud Test Lab'
 
