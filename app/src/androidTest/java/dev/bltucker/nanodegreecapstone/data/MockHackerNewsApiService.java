@@ -37,9 +37,8 @@ public class MockHackerNewsApiService implements HackerNewsApiService {
     }
 
     @Override
-    public Single<List<Long>> getTopStoryIds() {
-        List<Long> topStoryIds = Arrays.asList(TOP_STORY_IDS);
-        return Single.just(topStoryIds);
+    public Single<Long[]> getTopStoryIds() {
+        return Single.just(TOP_STORY_IDS);
     }
 
     @Override
