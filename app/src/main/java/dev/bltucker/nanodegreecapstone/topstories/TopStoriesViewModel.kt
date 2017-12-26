@@ -3,11 +3,11 @@ package dev.bltucker.nanodegreecapstone.topstories
 import android.arch.lifecycle.ViewModel
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import com.jakewharton.rxrelay2.BehaviorRelay
 import com.jakewharton.rxrelay2.PublishRelay
 import dev.bltucker.nanodegreecapstone.common.injection.ApplicationScope
 import dev.bltucker.nanodegreecapstone.common.injection.qualifiers.IO
-import dev.bltucker.nanodegreecapstone.common.injection.qualifiers.StoryMax
 import dev.bltucker.nanodegreecapstone.common.injection.qualifiers.UI
 import dev.bltucker.nanodegreecapstone.data.HackerNewsApiService
 import dev.bltucker.nanodegreecapstone.data.StoryRepository
@@ -18,6 +18,7 @@ import dev.bltucker.nanodegreecapstone.widget.TopFiveStoriesWidgetProvider.SYNC_
 import io.reactivex.Observable
 import io.reactivex.Observer
 import io.reactivex.Scheduler
+import io.reactivex.SingleObserver
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import timber.log.Timber
@@ -26,11 +27,11 @@ import javax.inject.Inject
 @ApplicationScope
 class TopStoriesViewModel @Inject constructor(private val storyRepository: StoryRepository,
                                               private val applicationContext: Context,
+                                              private val storyIdToStoryTransformer: StoryIdToStoryTransformer,
                                               private val apiService: HackerNewsApiService,
                                               private val topStoryModelFactory: TopStoryModelFactory,
                                               @IO private val ioScheduler: Scheduler,
                                               @UI private val uiScheduler: Scheduler,
-                                              @StoryMax private val storyMax: Int,
                                               private val clickEventFactory: TopStoryClickEventFactory) : ViewModel() {
 
     private val modelPublisher: BehaviorRelay<TopStoryModel> = BehaviorRelay.createDefault(topStoryModelFactory.createLoadingModel(null))
@@ -109,32 +110,19 @@ class TopStoriesViewModel @Inject constructor(private val storyRepository: Story
 
     private fun fetchData() {
         apiService.topStoryIds
-                .toObservable()
-                .concatMap { storyIdList ->
-
-                    if (storyIdList.isEmpty()) {
-                        throw RuntimeException("API Returned no stories to us!")
-                    }
-
-                    val storyArrayLength = Math.min(storyIdList.size, storyMax)
-                    val stories = mutableListOf<Story>()
-
-                    for (i in 0 until storyArrayLength) {
-                        val story = apiService.getStory(storyIdList[i]).blockingGet()
-                        story.setStoryRank(i)
-                        stories.add(story)
-                    }
-
-                    Observable.just<Array<Story>>(stories.toTypedArray())
-                }
+                .compose(storyIdToStoryTransformer)
                 .subscribeOn(ioScheduler)
-                .subscribe(object : Observer<Array<Story>> {
-                    override fun onSubscribe(d: Disposable) {}
+                .subscribe(object : SingleObserver<List<Story>> {
 
-                    override fun onComplete() {}
+                    var startTime : Long = 0
 
-                    override fun onNext(t: Array<Story>) {
-                        storyRepository.saveStories(t)
+                    override fun onSubscribe(d: Disposable) {
+                        startTime = System.currentTimeMillis()
+                    }
+
+                    override fun onSuccess(t: List<Story>) {
+                        Log.d("StoryFetch", "Fetched stories in ${System.currentTimeMillis() - startTime} milliseconds")
+                        storyRepository.saveStories(t.toTypedArray())
                         notifyWidgets()
                     }
 
