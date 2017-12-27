@@ -1,6 +1,7 @@
 
 
 Next:
++ Convert comment cleaning service to firebase job dispatcher
 + Convert to android injection
 + Top story view model tests
 + Test changes on tablets

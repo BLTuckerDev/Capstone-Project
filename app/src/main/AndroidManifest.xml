@@ -9,7 +9,6 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 
-
     <permission android:name="dev.bltucker.nanodegreecapstone.storyprovider.READ_WRITE"/>
 
     <application
@@ -93,7 +92,6 @@
                 android:exported="false"
                 android:permission="android.permission.BIND_REMOTEVIEWS"/>
 
-
         <activity
                 android:name=".readlater.ReadLaterListActivity"
                 android:parentActivityName=".home.MainActivity"/>
@@ -106,11 +104,15 @@
                 android:name=".sync.CommentCleaningService"
                 android:exported="true"
                 android:permission="android.permission.BIND_JOB_SERVICE"/>
-
         <service
                 android:name=".storydetail.data.InterruptibleDownloadService"
                 android:enabled="true"
                 android:exported="false"/>
+        <service
+                android:name=".topstories.TopStoriesUpdateService"
+                android:enabled="true"
+                android:exported="false">
+        </service>
     </application>
 
 </manifest>

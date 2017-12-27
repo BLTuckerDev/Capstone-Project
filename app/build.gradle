@@ -88,7 +88,7 @@ sonarqube {
 
 final DAGGER_VERSION = "2.11"
 final SUPPORT_VERSION = "26.1.0"
-final GOOGLE_PLAY_SERVICES_VERSION = "11.6.2"
+final GOOGLE_PLAY_SERVICES_VERSION = "11.8.0"
 final JSR_250_VERSION = "1.0"
 final TIMBER_VERSION = "4.5.1"
 final GSON_VERSION = "2.7"
@@ -109,6 +109,7 @@ final ROOM_VERSION = "1.0.0"
 final LIFECYCLE_VERSION = "1.0.0"
 final RX_RELAY_VERSION = "2.0.0"
 final OKHTTP_VERSION = "3.8.1"
+final FIREBASE_JOB_DISPATCHER = "0.8.5"
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
@@ -122,6 +123,8 @@ dependencies {
 
     kapt "android.arch.lifecycle:compiler:${LIFECYCLE_VERSION}"
     implementation "android.arch.lifecycle:extensions:${LIFECYCLE_VERSION}"
+
+    implementation "com.firebase:firebase-jobdispatcher:${FIREBASE_JOB_DISPATCHER}"
 
 
     kapt "com.google.dagger:dagger-compiler:${DAGGER_VERSION}"
@@ -204,7 +207,11 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
 
     implementation "com.jakewharton.rxrelay2:rxrelay:$RX_RELAY_VERSION"
+
+    implementation 'com.github.dmstocking:support-optional:1.2'
 }
 
 
 apply plugin: "com.google.gms.google-services"
+
+apply plugin: 'kotlin-android-extensions'

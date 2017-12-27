@@ -10,6 +10,9 @@ import android.content.Context;
 import android.content.UriMatcher;
 import android.content.res.Resources;
 
+import com.firebase.jobdispatcher.FirebaseJobDispatcher;
+import com.firebase.jobdispatcher.GooglePlayDriver;
+
 import java.util.Calendar;
 import java.util.TimeZone;
 
@@ -199,5 +202,11 @@ public class ApplicationResourcesModule {
     @ApplicationScope
     public StoryRepository provideStoryRepository(ContentProviderBackedStoryRepository storyRepository) {
         return storyRepository;
+    }
+
+    @Provides
+    @ApplicationScope
+    public FirebaseJobDispatcher provideFirebaseJobDispatcher(){
+        return new FirebaseJobDispatcher(new GooglePlayDriver(application));
     }
 }

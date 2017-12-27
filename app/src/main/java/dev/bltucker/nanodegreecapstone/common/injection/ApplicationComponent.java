@@ -1,6 +1,9 @@
 package dev.bltucker.nanodegreecapstone.common.injection;
 
+import org.jetbrains.annotations.NotNull;
+
 import dagger.Component;
+import dev.bltucker.nanodegreecapstone.CapstoneApplication;
 import dev.bltucker.nanodegreecapstone.data.StoryProvider;
 import dev.bltucker.nanodegreecapstone.data.HackerNewsApiService;
 import dev.bltucker.nanodegreecapstone.events.EventBus;
@@ -14,10 +17,14 @@ import dev.bltucker.nanodegreecapstone.sync.CommentCleaningService;
 import dev.bltucker.nanodegreecapstone.storydetail.injection.StoryDetailFragmentComponent;
 import dev.bltucker.nanodegreecapstone.storydetail.injection.StoryDetailFragmentModule;
 import dev.bltucker.nanodegreecapstone.topstories.TopStoriesFragment;
+import dev.bltucker.nanodegreecapstone.topstories.TopStoriesUpdateService;
 
 @ApplicationScope
 @Component(modules = {ApplicationResourcesModule.class, ViewModelModule.class, SchedulersModule.class})
 public interface ApplicationComponent {
+
+    void inject(CapstoneApplication capstoneApplication);
+
     void inject(MainActivity mainActivity);
 
     void inject(TopStoriesFragment fragment);
@@ -27,6 +34,8 @@ public interface ApplicationComponent {
     void inject(CommentCleaningService commentCleaningService);
 
     void inject(StoryProvider storyProvider);
+
+    void inject(@NotNull TopStoriesUpdateService topStoriesUpdateService);
 
     HackerNewsApiService hackerNewsApiService();
 
