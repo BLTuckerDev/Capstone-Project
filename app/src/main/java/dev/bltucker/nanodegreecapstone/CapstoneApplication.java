@@ -39,7 +39,6 @@ public class CapstoneApplication extends Application {
             Timber.plant(new FirebaseDebugTree());
         }
         createApplicationComponent();
-        createSyncAdapterAccount();
         scheduleCommentCleanUpJob();
     }
 
@@ -67,12 +66,6 @@ public class CapstoneApplication extends Application {
                 .build();
 
         firebaseJobDispatcher.schedule(jobRequest);
-    }
-
-    private void createSyncAdapterAccount() {
-//        Account newAccount = new Account(StorySyncAdapter.ACCOUNT, StorySyncAdapter.ACCOUNT_TYPE);
-//        AccountManager accountManager = (AccountManager) getSystemService(ACCOUNT_SERVICE);
-//        accountManager.addAccountExplicitly(newAccount, null, null);
     }
 
     private void scheduleCommentCleanUpJob() {

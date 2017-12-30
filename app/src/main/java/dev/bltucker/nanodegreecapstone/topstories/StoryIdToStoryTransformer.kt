@@ -1,5 +1,6 @@
 package dev.bltucker.nanodegreecapstone.topstories
 
+import android.util.Log
 import com.github.dmstocking.optional.java.util.Optional
 import dev.bltucker.nanodegreecapstone.common.injection.ApplicationScope
 import dev.bltucker.nanodegreecapstone.common.injection.qualifiers.StoryMax
@@ -22,18 +23,19 @@ class StoryIdToStoryTransformer @Inject constructor(private val hackerNewsApiSer
                 .filter { storyIds: Array<Long> -> storyIds.isNotEmpty() }
                 .concatMap({ storyIds : Array<Long> -> Observable.fromArray(*storyIds) })
                 .take(storyMax.toLong())
-                .concatMap({ storyId: Long -> hackerNewsApiService.getStory(storyId).toObservable() })
-                .scan(Optional.empty(), { previousStory: Optional<Story>, currentStory: Story ->
-                    if (previousStory.isPresent) {
-                        currentStory.setStoryRank(previousStory.get().storyRank + 1)
-                    } else {
-                        currentStory.setStoryRank(0)
-                    }
-
-                    Optional.of(currentStory)
+                .scan(Pair<Int, Long>(-1,0), {previousPair, storyId ->
+                    return@scan Pair(previousPair.first +1 , storyId)
                 })
-                .filter({ optionalStory -> optionalStory.isPresent})
-                .map { optionalStory: Optional<Story> -> optionalStory.get() }
+                .skip(1)//Skip the fake accumulator pair
+                .flatMap({ storyIdRankPair: Pair<Int,Long> ->
+                    hackerNewsApiService.getStory(storyIdRankPair.second)
+                            .toObservable()
+                            .map { story -> Pair(storyIdRankPair.first, story) }
+                })
+                .map({ storyIdRankPair : Pair<Int, Story> ->
+                    storyIdRankPair.second.storyRank = storyIdRankPair.first
+                    storyIdRankPair.second
+                })
                 .toList()
     }
 }

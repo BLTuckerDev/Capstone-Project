@@ -1,6 +1,5 @@
 package dev.bltucker.nanodegreecapstone.topstories
 
-import android.util.Log
 import dev.bltucker.nanodegreecapstone.common.injection.ApplicationScope
 import dev.bltucker.nanodegreecapstone.models.Story
 import javax.inject.Inject
@@ -9,8 +8,6 @@ import javax.inject.Inject
 class TopStoryModelFactory @Inject constructor() {
 
     fun createLoadingModel(lastModel: TopStoryModel?): TopStoryModel {
-        Log.d("Factory", "createLoadingModel with: $lastModel")
-        Log.d("Factory", Log.getStackTraceString(Throwable()))
         if (lastModel == null) {
             return TopStoryModel(emptyList(), emptyList(), true, false, false)
         }
@@ -19,8 +16,6 @@ class TopStoryModelFactory @Inject constructor() {
     }
 
     fun createRefreshingModel(lastModel: TopStoryModel?): TopStoryModel {
-        Log.d("Factory", "createRefreshingModel with: $lastModel")
-        Log.d("Factory", Log.getStackTraceString(Throwable()))
         if (lastModel == null) {
             return TopStoryModel(emptyList(), emptyList(), false, true, false)
         }
@@ -29,8 +24,6 @@ class TopStoryModelFactory @Inject constructor() {
     }
 
     fun createErrorModel(lastModel: TopStoryModel?): TopStoryModel {
-        Log.d("Factory", "createErrorModel with $lastModel")
-        Log.d("Factory", Log.getStackTraceString(Throwable()))
         if (lastModel == null) {
             return TopStoryModel(emptyList(), emptyList(), false, false, true)
         }
