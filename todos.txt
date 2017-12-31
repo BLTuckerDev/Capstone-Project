@@ -11,7 +11,7 @@ Next:
 + Break up the APp resources module
 + When the user saves a story for later download the comments for that story as it currently stands,
     also add a way to view those comments in the read later activity
-+ main activity UI test to verify the empty message is shown when there are no stories available
++ main activity UI test to verify the empty message is shown when there are no stories available, we'll need to know if a fetch is in progress
 + pull to refresh comment list
 + add some firebase analytics to get some experience with that
 + widget taking you directly to story detail activity
