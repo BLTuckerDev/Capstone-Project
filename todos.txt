@@ -13,7 +13,6 @@ Next:
     also add a way to view those comments in the read later activity
 + main activity UI test to verify the empty message is shown when there are no stories available
 + pull to refresh comment list
-+ when no stories are available, but a sync is in progress, let's show a spinner on the home page
 + add some firebase analytics to get some experience with that
 + widget taking you directly to story detail activity
 + shared element transitions

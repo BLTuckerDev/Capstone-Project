@@ -2,6 +2,9 @@
 *.apk
 *.ap_
 
+#Back up folder
+projectFilesBackup/
+
 # Files for the Dalvik VM
 *.dex
 
