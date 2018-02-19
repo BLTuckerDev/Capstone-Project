@@ -11,6 +11,18 @@ import io.reactivex.Observable
 open class CommentRepository @Inject
 constructor(private val commentsDao: CommentsDao) {
 
+    fun getRootOrphanComments(): Array<Comment> {
+        return commentsDao.getRootOrphanComments()
+    }
+
+    fun getChildComments(parentCommentId: Long): Array<Comment> {
+        return commentsDao.getChildComments(parentCommentId)
+    }
+
+    fun deleteComments(vararg comments: Comment): Int {
+        return commentsDao.deleteComments(*comments)
+    }
+
     fun getCommentsForStoryId(storyId: Long): Observable<Array<Comment>> {
         return getLocalComments(storyId)
     }

@@ -5,9 +5,8 @@ import android.app.job.JobService;
 
 import javax.inject.Inject;
 
-import dev.bltucker.nanodegreecapstone.common.injection.qualifiers.IO;
-import dev.bltucker.nanodegreecapstone.common.data.daos.CommentsDao;
 import dev.bltucker.nanodegreecapstone.common.injection.DaggerInjector;
+import dev.bltucker.nanodegreecapstone.common.injection.qualifiers.IO;
 import dev.bltucker.nanodegreecapstone.storydetail.CommentRepository;
 import io.reactivex.Completable;
 import io.reactivex.CompletableObserver;
@@ -23,9 +22,6 @@ public class CommentCleaningService extends JobService {
     CommentRepository commentRepository;
 
     @Inject
-    CommentsDao commentsDao;
-
-    @Inject
     @IO
     Scheduler ioScheduler;
 
@@ -38,7 +34,7 @@ public class CommentCleaningService extends JobService {
     @Override
     public boolean onStartJob(final JobParameters jobParameters) {
 
-        Completable.fromAction(new DeleteOrphanCommentsAction(commentsDao))
+        Completable.fromAction(new DeleteOrphanCommentsAction(commentRepository))
                 .subscribeOn(ioScheduler)
                 .subscribe(new CompletableObserver() {
                     @Override

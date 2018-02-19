@@ -30,7 +30,7 @@ public class MainActivityTest {
 
     @Rule
     public ActivityTestRule activityRule = new ActivityTestRule<>(
-            MainActivity.class,
+            HomeActivity.class,
             true,    // initialTouchMode
             false);  // launchActivity. False to set intent per method
 

@@ -10,10 +10,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import dev.bltucker.nanodegreecapstone.common.data.HackerNewsDatabase;
-import dev.bltucker.nanodegreecapstone.common.data.daos.CommentsDao;
 import dev.bltucker.nanodegreecapstone.common.data.daos.StoryDao;
 import dev.bltucker.nanodegreecapstone.common.models.Comment;
 import dev.bltucker.nanodegreecapstone.common.models.Story;
+import dev.bltucker.nanodegreecapstone.storydetail.CommentRepository;
 
 import static org.junit.Assert.assertTrue;
 
@@ -21,16 +21,16 @@ import static org.junit.Assert.assertTrue;
 public class DeleteOrphanCommentsActionTest {
 
     private DeleteOrphanCommentsAction objectUnderTest;
-    private CommentsDao commentsDao;
+    private CommentRepository commentRepository;
     private HackerNewsDatabase hackerNewsDatabase;
     private StoryDao storyDao;
 
     @Before
     public void setUp() throws Exception {
         hackerNewsDatabase = Room.inMemoryDatabaseBuilder(InstrumentationRegistry.getContext(), HackerNewsDatabase.class).build();
-        commentsDao = hackerNewsDatabase.commentsDao();
+        commentRepository = new CommentRepository(hackerNewsDatabase.commentsDao());
         storyDao = hackerNewsDatabase.storyDao();
-        objectUnderTest = new DeleteOrphanCommentsAction(commentsDao);
+        objectUnderTest = new DeleteOrphanCommentsAction(commentRepository);
     }
 
     @After
@@ -41,16 +41,16 @@ public class DeleteOrphanCommentsActionTest {
     @Test
     public void testWithOrphanCommentsShouldDeleteJustTheOrphans() throws Exception {
         //create orphan comments
-        commentsDao.save(new Comment(1, 2, "author", "comment Text", System.currentTimeMillis(), -1, 0));
-        commentsDao.save(new Comment(2, 2, "author", "comment Text", System.currentTimeMillis(), -1, 0));
-        commentsDao.save(new Comment(3, 2, "author", "comment Text", System.currentTimeMillis(), -1, 0));
-        commentsDao.save(new Comment(4, 2, "author", "comment Text", System.currentTimeMillis(), -1, 0));
+        commentRepository.saveComment(new Comment(1, 2, "author", "comment Text", System.currentTimeMillis(), -1, 0));
+        commentRepository.saveComment(new Comment(2, 2, "author", "comment Text", System.currentTimeMillis(), -1, 0));
+        commentRepository.saveComment(new Comment(3, 2, "author", "comment Text", System.currentTimeMillis(), -1, 0));
+        commentRepository.saveComment(new Comment(4, 2, "author", "comment Text", System.currentTimeMillis(), -1, 0));
 
-        Comment[] beforeTaskArray = commentsDao.getRootOrphanComments();
+        Comment[] beforeTaskArray = commentRepository.getRootOrphanComments();
 
         objectUnderTest.run();
 
-        Comment[] afterTakeArray = commentsDao.getRootOrphanComments();
+        Comment[] afterTakeArray = commentRepository.getRootOrphanComments();
 
         assertTrue(beforeTaskArray.length > 0);
         assertTrue(afterTakeArray.length == 0);
@@ -64,20 +64,20 @@ public class DeleteOrphanCommentsActionTest {
 
         storyDao.saveStories(stories);
 
-        commentsDao.save(new Comment(1, 2, "author", "comment Text", System.currentTimeMillis(), storyId, 0));
-        commentsDao.save(new Comment(2, 2, "author", "comment Text", System.currentTimeMillis(), storyId, 0));
-        commentsDao.save(new Comment(3, 2, "author", "comment Text", System.currentTimeMillis(), storyId, 0));
-        commentsDao.save(new Comment(4, 2, "author", "comment Text", System.currentTimeMillis(), storyId, 0));
+        commentRepository.saveComment(new Comment(1, 2, "author", "comment Text", System.currentTimeMillis(), storyId, 0));
+        commentRepository.saveComment(new Comment(2, 2, "author", "comment Text", System.currentTimeMillis(), storyId, 0));
+        commentRepository.saveComment(new Comment(3, 2, "author", "comment Text", System.currentTimeMillis(), storyId, 0));
+        commentRepository.saveComment(new Comment(4, 2, "author", "comment Text", System.currentTimeMillis(), storyId, 0));
 
-        Comment[] beforeTaskArray = commentsDao.getRootOrphanComments();
+        Comment[] beforeTaskArray = commentRepository.getRootOrphanComments();
 
         objectUnderTest.run();
 
-        Comment[] afterTaskArray = commentsDao.getRootOrphanComments();
+        Comment[] afterTaskArray = commentRepository.getRootOrphanComments();
 
         assertTrue(beforeTaskArray.length == 0);
         assertTrue(afterTaskArray.length == 0);
-        assertTrue(commentsDao.getChildComments(storyId).length == 4);
+        assertTrue(commentRepository.getChildComments(storyId).length == 4);
 
     }
 }

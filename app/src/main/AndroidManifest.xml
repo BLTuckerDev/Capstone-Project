@@ -19,7 +19,7 @@
             android:supportsRtl="true"
             android:theme="@style/AppTheme">
         <activity
-                android:name=".home.MainActivity"
+                android:name=".home.HomeActivity"
                 android:theme="@style/LauncherTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -36,34 +36,9 @@
                 android:permission="dev.bltucker.nanodegreecapstone.storyprovider.READ_WRITE"
                 android:syncable="true"/>
 
-        <service
-                android:name=".common.sync.StorySyncService"
-                android:exported="true"
-                android:permission="">
-            <intent-filter>
-                <action android:name="android.content.SyncAdapter"/>
-            </intent-filter>
-
-            <meta-data
-                    android:name="android.content.SyncAdapter"
-                    android:resource="@xml/syncadapter"/>
-        </service>
-        <service
-                android:name=".common.sync.AuthenticatorService"
-                android:enabled="true"
-                android:exported="true">
-            <intent-filter>
-                <action android:name="android.accounts.AccountAuthenticator"/>
-            </intent-filter>
-
-            <meta-data
-                    android:name="android.accounts.AccountAuthenticator"
-                    android:resource="@xml/authenticator"/>
-        </service>
-
         <activity
                 android:name=".storydetail.StoryDetailActivity"
-                android:parentActivityName=".home.MainActivity"/>
+                android:parentActivityName=".home.HomeActivity"/>
         <activity
                 android:name=".settings.SettingsActivity"
                 android:label="@string/title_activity_settings"/>
@@ -94,7 +69,7 @@
 
         <activity
                 android:name=".readlater.ReadLaterListActivity"
-                android:parentActivityName=".home.MainActivity"/>
+                android:parentActivityName=".home.HomeActivity"/>
 
         <meta-data
                 android:name="com.google.android.gms.version"
@@ -104,10 +79,6 @@
                 android:name=".common.sync.CommentCleaningService"
                 android:exported="true"
                 android:permission="android.permission.BIND_JOB_SERVICE"/>
-        <service
-                android:name=".storydetail.data.InterruptibleDownloadService"
-                android:enabled="true"
-                android:exported="false"/>
         <service
                 android:name=".topstories.TopStoriesUpdateService"
                 android:enabled="true"

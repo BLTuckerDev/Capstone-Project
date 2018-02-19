@@ -25,7 +25,7 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import javax.inject.Inject
 
-class TopStoriesFragment : Fragment() {
+open class TopStoriesFragment : Fragment() {
 
     @Inject
     lateinit var adapter: StoryListAdapter
@@ -122,7 +122,7 @@ class TopStoriesFragment : Fragment() {
         binding.swipeToRefreshLayout.isRefreshing = false
 
         Snackbar.make(view!!, R.string.new_stories_are_available, Snackbar.LENGTH_INDEFINITE)
-                .setAction(R.string.refresh) { v -> topStoriesViewModel.onShowRefreshedTopStories() }
+                .setAction(R.string.refresh) { _ -> topStoriesViewModel.onShowRefreshedTopStories() }
                 .show()
     }
 

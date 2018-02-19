@@ -4,6 +4,7 @@ import dev.bltucker.nanodegreecapstone.common.models.Story
 import dev.bltucker.nanodegreecapstone.topstories.TopStoriesFragment
 import org.junit.Test
 import org.mockito.Mockito
+import org.mockito.Mockito.`when`
 
 class ReadLaterButtonClickEventTest {
 
@@ -13,6 +14,7 @@ class ReadLaterButtonClickEventTest {
         val fakeUrl = "fakeUrl"
         val mockStory = Story(1, "", 1L, 1L, "", fakeUrl)
         val mockTopStoryFragment = Mockito.mock(TopStoriesFragment::class.java)
+
 
         Mockito.doNothing().`when`(mockTopStoryFragment).showStoryDetailView(mockStory)
 

@@ -1,15 +1,15 @@
 package dev.bltucker.nanodegreecapstone.common.sync;
 
-import dev.bltucker.nanodegreecapstone.common.data.daos.CommentsDao;
 import dev.bltucker.nanodegreecapstone.common.models.Comment;
+import dev.bltucker.nanodegreecapstone.storydetail.CommentRepository;
 import io.reactivex.functions.Action;
 import timber.log.Timber;
 
 class DeleteOrphanCommentsAction implements Action {
 
-    private final CommentsDao commentsDao;
+    private final CommentRepository commentsDao;
 
-    DeleteOrphanCommentsAction(CommentsDao commentsDao) {
+    DeleteOrphanCommentsAction(CommentRepository commentsDao) {
         this.commentsDao = commentsDao;
     }
 

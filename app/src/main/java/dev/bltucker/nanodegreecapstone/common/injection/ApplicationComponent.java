@@ -7,7 +7,7 @@ import dev.bltucker.nanodegreecapstone.CapstoneApplication;
 import dev.bltucker.nanodegreecapstone.common.data.StoryProvider;
 import dev.bltucker.nanodegreecapstone.common.data.HackerNewsApiService;
 import dev.bltucker.nanodegreecapstone.common.events.EventBus;
-import dev.bltucker.nanodegreecapstone.home.MainActivity;
+import dev.bltucker.nanodegreecapstone.home.HomeActivity;
 import dev.bltucker.nanodegreecapstone.location.GeofenceCreationIntentServiceComponent;
 import dev.bltucker.nanodegreecapstone.location.GeofenceCreationIntentServiceModule;
 import dev.bltucker.nanodegreecapstone.location.GeofenceTransitionsIntentService;
@@ -25,7 +25,7 @@ public interface ApplicationComponent {
 
     void inject(CapstoneApplication capstoneApplication);
 
-    void inject(MainActivity mainActivity);
+    void inject(HomeActivity homeActivity);
 
     void inject(TopStoriesFragment fragment);
 

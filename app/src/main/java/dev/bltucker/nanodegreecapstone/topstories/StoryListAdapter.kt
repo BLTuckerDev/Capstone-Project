@@ -52,9 +52,9 @@ internal constructor(private val topStoriesViewModel: TopStoriesViewModel) : Rec
         lateinit var story: Story
 
         init {
-            binding.headlineCardView.setOnClickListener { v -> topStoriesViewModel.onCommentsButtonClick(story) }
-            binding.commentsButton.setOnClickListener { v -> topStoriesViewModel.onCommentsButtonClick(story) }
-            binding.readButton.setOnClickListener { v -> topStoriesViewModel.onReadLaterStoryButtonClick(story) }
+            binding.headlineCardView.setOnClickListener { _ -> topStoriesViewModel.onCommentsButtonClick(story) }
+            binding.commentsButton.setOnClickListener { _ -> topStoriesViewModel.onCommentsButtonClick(story) }
+            binding.readButton.setOnClickListener { _ -> topStoriesViewModel.onReadLaterStoryButtonClick(story) }
         }
 
         fun bindStory(story: Story) {

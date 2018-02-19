@@ -10,7 +10,7 @@ import android.support.v4.app.TaskStackBuilder;
 import android.widget.RemoteViews;
 
 import dev.bltucker.nanodegreecapstone.R;
-import dev.bltucker.nanodegreecapstone.home.MainActivity;
+import dev.bltucker.nanodegreecapstone.home.HomeActivity;
 
 
 public class TopFiveStoriesWidgetProvider extends AppWidgetProvider {
@@ -36,13 +36,13 @@ public class TopFiveStoriesWidgetProvider extends AppWidgetProvider {
 
             RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.story_list_widget);
 
-            Intent intent = new Intent(context, MainActivity.class);
+            Intent intent = new Intent(context, HomeActivity.class);
             PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
             views.setOnClickPendingIntent(R.id.widget, pendingIntent);
             views.setRemoteAdapter(R.id.widget_list, new Intent(context, TopFiveStoriesWidgetRemoteViewService.class));
             views.setEmptyView(R.id.widget_list, R.id.widget_empty);
 
-            Intent clickIntentTemplate = new Intent(context, MainActivity.class);
+            Intent clickIntentTemplate = new Intent(context, HomeActivity.class);
             PendingIntent clickPendingIntentTemplate = TaskStackBuilder.create(context)
                     .addNextIntentWithParentStack(clickIntentTemplate)
                     .getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
