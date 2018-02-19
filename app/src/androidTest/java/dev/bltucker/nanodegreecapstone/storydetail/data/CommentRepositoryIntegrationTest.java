@@ -14,19 +14,15 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import dev.bltucker.nanodegreecapstone.data.HackerNewsApiService;
-import dev.bltucker.nanodegreecapstone.data.HackerNewsDatabase;
-import dev.bltucker.nanodegreecapstone.data.daos.CommentsDao;
-import dev.bltucker.nanodegreecapstone.data.migrations.Version1to2;
-import dev.bltucker.nanodegreecapstone.data.migrations.Version2to3;
-import dev.bltucker.nanodegreecapstone.models.Comment;
+import dev.bltucker.nanodegreecapstone.common.data.HackerNewsDatabase;
+import dev.bltucker.nanodegreecapstone.common.data.daos.CommentsDao;
+import dev.bltucker.nanodegreecapstone.common.data.migrations.Version1to2;
+import dev.bltucker.nanodegreecapstone.common.data.migrations.Version2to3;
+import dev.bltucker.nanodegreecapstone.common.models.Comment;
 import dev.bltucker.nanodegreecapstone.storydetail.CommentRepository;
-import io.reactivex.Single;
 import io.reactivex.observers.TestObserver;
 
-import static org.mockito.Matchers.anyLong;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 @RunWith(AndroidJUnit4.class)
 public class CommentRepositoryIntegrationTest {

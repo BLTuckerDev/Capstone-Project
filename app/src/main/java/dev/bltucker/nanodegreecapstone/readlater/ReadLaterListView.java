@@ -2,7 +2,7 @@ package dev.bltucker.nanodegreecapstone.readlater;
 
 import java.util.List;
 
-import dev.bltucker.nanodegreecapstone.models.ReadLaterStory;
+import dev.bltucker.nanodegreecapstone.common.models.ReadLaterStory;
 
 public interface ReadLaterListView {
     void showLoadingSpinner();

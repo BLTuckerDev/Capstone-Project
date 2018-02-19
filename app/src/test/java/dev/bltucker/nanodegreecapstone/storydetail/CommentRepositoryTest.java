@@ -1,24 +1,14 @@
 package dev.bltucker.nanodegreecapstone.storydetail;
 
 import android.annotation.SuppressLint;
-import android.content.ContentResolver;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import dev.bltucker.nanodegreecapstone.data.FakeHackerNewsApiService;
-import dev.bltucker.nanodegreecapstone.data.daos.CommentsDao;
-import dev.bltucker.nanodegreecapstone.models.Comment;
-import dev.bltucker.nanodegreecapstone.models.Story;
+import dev.bltucker.nanodegreecapstone.common.data.daos.CommentsDao;
+import dev.bltucker.nanodegreecapstone.common.models.Comment;
 import io.reactivex.Flowable;
 import io.reactivex.observers.TestObserver;
-import io.reactivex.subscribers.TestSubscriber;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertTrue;

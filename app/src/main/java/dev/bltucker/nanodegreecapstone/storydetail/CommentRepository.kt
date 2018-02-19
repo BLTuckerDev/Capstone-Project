@@ -2,9 +2,9 @@ package dev.bltucker.nanodegreecapstone.storydetail
 
 import javax.inject.Inject
 
-import dev.bltucker.nanodegreecapstone.data.daos.CommentsDao
+import dev.bltucker.nanodegreecapstone.common.data.daos.CommentsDao
 import dev.bltucker.nanodegreecapstone.common.injection.ApplicationScope
-import dev.bltucker.nanodegreecapstone.models.Comment
+import dev.bltucker.nanodegreecapstone.common.models.Comment
 import io.reactivex.Observable
 
 @ApplicationScope

@@ -2,7 +2,7 @@ package dev.bltucker.nanodegreecapstone.topstories
 
 import android.support.v7.util.DiffUtil
 
-import dev.bltucker.nanodegreecapstone.models.Story
+import dev.bltucker.nanodegreecapstone.common.models.Story
 
 internal class StoryDiffUtilCallback(private val stories: List<Story>,
                                      private val updatedStories: List<Story>) : DiffUtil.Callback() {

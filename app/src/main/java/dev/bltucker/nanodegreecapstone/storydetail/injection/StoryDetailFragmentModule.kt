@@ -7,7 +7,7 @@ import android.support.annotation.Nullable
 import dagger.Module
 import dagger.Provides
 import dev.bltucker.nanodegreecapstone.common.injection.qualifiers.GregorianUTC
-import dev.bltucker.nanodegreecapstone.models.Story
+import dev.bltucker.nanodegreecapstone.common.models.Story
 import dev.bltucker.nanodegreecapstone.storydetail.StoryCommentsAdapter
 import dev.bltucker.nanodegreecapstone.storydetail.StoryDetailFragment
 import java.util.*

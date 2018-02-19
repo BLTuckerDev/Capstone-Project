@@ -9,9 +9,9 @@ import com.jakewharton.rxrelay2.PublishRelay
 import dev.bltucker.nanodegreecapstone.common.injection.ApplicationScope
 import dev.bltucker.nanodegreecapstone.common.injection.qualifiers.IO
 import dev.bltucker.nanodegreecapstone.common.injection.qualifiers.UI
-import dev.bltucker.nanodegreecapstone.data.HackerNewsApiService
-import dev.bltucker.nanodegreecapstone.data.StoryRepository
-import dev.bltucker.nanodegreecapstone.models.Story
+import dev.bltucker.nanodegreecapstone.common.data.HackerNewsApiService
+import dev.bltucker.nanodegreecapstone.common.data.StoryRepository
+import dev.bltucker.nanodegreecapstone.common.models.Story
 import dev.bltucker.nanodegreecapstone.topstories.events.TopStoryClickEvent
 import dev.bltucker.nanodegreecapstone.topstories.events.TopStoryClickEventFactory
 import dev.bltucker.nanodegreecapstone.widget.TopFiveStoriesWidgetProvider.SYNC_COMPLETED_ACTION

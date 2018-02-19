@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import dev.bltucker.nanodegreecapstone.R
 import dev.bltucker.nanodegreecapstone.databinding.StoryCommentLayoutItemBinding
 import dev.bltucker.nanodegreecapstone.common.injection.qualifiers.GregorianUTC
-import dev.bltucker.nanodegreecapstone.models.Comment
+import dev.bltucker.nanodegreecapstone.common.models.Comment
 import java.util.*
 import javax.inject.Inject
 

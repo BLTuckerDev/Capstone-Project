@@ -3,9 +3,9 @@ package dev.bltucker.nanodegreecapstone.storydetail
 import android.arch.lifecycle.Lifecycle
 import android.arch.lifecycle.LifecycleObserver
 import android.arch.lifecycle.OnLifecycleEvent
-import dev.bltucker.nanodegreecapstone.data.HackerNewsApiService
-import dev.bltucker.nanodegreecapstone.models.Comment
-import dev.bltucker.nanodegreecapstone.models.Story
+import dev.bltucker.nanodegreecapstone.common.data.HackerNewsApiService
+import dev.bltucker.nanodegreecapstone.common.models.Comment
+import dev.bltucker.nanodegreecapstone.common.models.Story
 import dev.bltucker.nanodegreecapstone.storydetail.data.CommentDto
 import dev.bltucker.nanodegreecapstone.storydetail.injection.StoryDetailFragmentScope
 import io.reactivex.Observable

@@ -17,7 +17,7 @@ import dev.bltucker.nanodegreecapstone.common.ApplicationViewModelsFactory
 import dev.bltucker.nanodegreecapstone.common.injection.DaggerInjector
 import dev.bltucker.nanodegreecapstone.common.injection.qualifiers.UI
 import dev.bltucker.nanodegreecapstone.databinding.FragmentStoryListBinding
-import dev.bltucker.nanodegreecapstone.models.Story
+import dev.bltucker.nanodegreecapstone.common.models.Story
 import dev.bltucker.nanodegreecapstone.topstories.events.TopStoryClickEvent
 import io.reactivex.Observer
 import io.reactivex.Scheduler

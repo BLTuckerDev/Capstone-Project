@@ -11,7 +11,7 @@ import java.util.Calendar
 
 import dev.bltucker.nanodegreecapstone.R
 import dev.bltucker.nanodegreecapstone.databinding.StoryCommentLayoutItemBinding
-import dev.bltucker.nanodegreecapstone.models.Comment
+import dev.bltucker.nanodegreecapstone.common.models.Comment
 
 internal class CommentViewHolder(private val binding: StoryCommentLayoutItemBinding,
                                  private val calendar: Calendar,

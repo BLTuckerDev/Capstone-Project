@@ -2,20 +2,18 @@ package dev.bltucker.nanodegreecapstone.storydetail
 
 import android.arch.lifecycle.ViewModel
 import com.jakewharton.rxrelay2.PublishRelay
-import dev.bltucker.nanodegreecapstone.data.daos.ReadLaterStoryDao
+import dev.bltucker.nanodegreecapstone.common.data.daos.ReadLaterStoryDao
 import dev.bltucker.nanodegreecapstone.common.injection.ApplicationScope
 import dev.bltucker.nanodegreecapstone.common.injection.qualifiers.IO
 import dev.bltucker.nanodegreecapstone.common.injection.qualifiers.UI
-import dev.bltucker.nanodegreecapstone.models.Comment
-import dev.bltucker.nanodegreecapstone.models.ReadLaterStory
-import dev.bltucker.nanodegreecapstone.models.Story
+import dev.bltucker.nanodegreecapstone.common.models.Comment
+import dev.bltucker.nanodegreecapstone.common.models.ReadLaterStory
+import dev.bltucker.nanodegreecapstone.common.models.Story
 import io.reactivex.Completable
 import io.reactivex.CompletableObserver
 import io.reactivex.Observable
 import io.reactivex.Scheduler
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
 import javax.inject.Inject
 

@@ -11,7 +11,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import dev.bltucker.nanodegreecapstone.databinding.ReadLaterStoryItemBinding;
-import dev.bltucker.nanodegreecapstone.models.ReadLaterStory;
+import dev.bltucker.nanodegreecapstone.common.models.ReadLaterStory;
 
 public class ReadLaterStoryListAdapter extends RecyclerView.Adapter<ReadLaterStoryListAdapter.ReadLaterStoryViewHolder> {
 

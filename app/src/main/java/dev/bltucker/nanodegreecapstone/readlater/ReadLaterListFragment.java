@@ -18,7 +18,7 @@ import javax.inject.Inject;
 
 import dev.bltucker.nanodegreecapstone.databinding.FragmentReadLaterListBinding;
 import dev.bltucker.nanodegreecapstone.common.injection.DaggerInjector;
-import dev.bltucker.nanodegreecapstone.models.ReadLaterStory;
+import dev.bltucker.nanodegreecapstone.common.models.ReadLaterStory;
 
 public class ReadLaterListFragment extends Fragment implements ReadLaterListView {
 

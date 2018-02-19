@@ -1,11 +1,9 @@
 package dev.bltucker.nanodegreecapstone.topstories
 
-import android.util.Log
-import com.github.dmstocking.optional.java.util.Optional
 import dev.bltucker.nanodegreecapstone.common.injection.ApplicationScope
 import dev.bltucker.nanodegreecapstone.common.injection.qualifiers.StoryMax
-import dev.bltucker.nanodegreecapstone.data.HackerNewsApiService
-import dev.bltucker.nanodegreecapstone.models.Story
+import dev.bltucker.nanodegreecapstone.common.data.HackerNewsApiService
+import dev.bltucker.nanodegreecapstone.common.models.Story
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.SingleSource

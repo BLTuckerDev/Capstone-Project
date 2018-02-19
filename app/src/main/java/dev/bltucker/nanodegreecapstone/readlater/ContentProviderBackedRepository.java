@@ -6,8 +6,8 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import dev.bltucker.nanodegreecapstone.data.daos.ReadLaterStoryDao;
-import dev.bltucker.nanodegreecapstone.models.ReadLaterStory;
+import dev.bltucker.nanodegreecapstone.common.data.daos.ReadLaterStoryDao;
+import dev.bltucker.nanodegreecapstone.common.models.ReadLaterStory;
 import io.reactivex.Observable;
 
 public class ContentProviderBackedRepository implements ReadLaterRepository {

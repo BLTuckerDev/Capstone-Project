@@ -1,6 +1,6 @@
 package dev.bltucker.nanodegreecapstone.topstories
 
-import dev.bltucker.nanodegreecapstone.models.Story
+import dev.bltucker.nanodegreecapstone.common.models.Story
 
 class TopStoryModel constructor(val storyList: List<Story>,
                                 val refreshedStoryList: List<Story>,

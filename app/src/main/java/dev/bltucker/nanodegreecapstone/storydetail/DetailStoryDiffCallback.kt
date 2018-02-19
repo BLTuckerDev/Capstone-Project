@@ -2,7 +2,7 @@ package dev.bltucker.nanodegreecapstone.storydetail
 
 import android.support.v7.util.DiffUtil
 
-import dev.bltucker.nanodegreecapstone.models.Comment
+import dev.bltucker.nanodegreecapstone.common.models.Comment
 
 internal class DetailStoryDiffCallback(private val oldComments: Array<Comment>,
                                        private val updatedComments: Array<Comment>) : DiffUtil.Callback() {

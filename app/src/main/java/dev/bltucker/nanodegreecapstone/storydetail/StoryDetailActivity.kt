@@ -10,7 +10,7 @@ import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
 import dev.bltucker.nanodegreecapstone.R
-import dev.bltucker.nanodegreecapstone.models.Story
+import dev.bltucker.nanodegreecapstone.common.models.Story
 import dev.bltucker.nanodegreecapstone.settings.SettingsActivity
 import dev.bltucker.nanodegreecapstone.storydetail.injection.StoryDetailFragmentModule
 import timber.log.Timber

@@ -29,15 +29,15 @@
         </activity>
 
         <provider
-                android:name=".data.StoryProvider"
-                android:authorities="dev.bltucker.nanodegreecapstone.data"
+                android:name="dev.bltucker.nanodegreecapstone.common.data.StoryProvider"
+                android:authorities="dev.bltucker.nanodegreecapstone.common.data"
                 android:exported="false"
                 android:label="Hacker News Reader"
                 android:permission="dev.bltucker.nanodegreecapstone.storyprovider.READ_WRITE"
                 android:syncable="true"/>
 
         <service
-                android:name=".sync.StorySyncService"
+                android:name=".common.sync.StorySyncService"
                 android:exported="true"
                 android:permission="">
             <intent-filter>
@@ -49,7 +49,7 @@
                     android:resource="@xml/syncadapter"/>
         </service>
         <service
-                android:name=".sync.AuthenticatorService"
+                android:name=".common.sync.AuthenticatorService"
                 android:enabled="true"
                 android:exported="true">
             <intent-filter>
@@ -101,7 +101,7 @@
                 android:value="@integer/google_play_services_version"/>
 
         <service
-                android:name=".sync.CommentCleaningService"
+                android:name=".common.sync.CommentCleaningService"
                 android:exported="true"
                 android:permission="android.permission.BIND_JOB_SERVICE"/>
         <service

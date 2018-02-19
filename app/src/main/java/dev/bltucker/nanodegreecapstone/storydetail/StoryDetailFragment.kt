@@ -18,8 +18,8 @@ import dev.bltucker.nanodegreecapstone.common.ApplicationViewModelsFactory
 import dev.bltucker.nanodegreecapstone.databinding.FragmentStoryDetailBinding
 import dev.bltucker.nanodegreecapstone.common.injection.DaggerInjector
 import dev.bltucker.nanodegreecapstone.common.injection.qualifiers.UI
-import dev.bltucker.nanodegreecapstone.models.Comment
-import dev.bltucker.nanodegreecapstone.models.Story
+import dev.bltucker.nanodegreecapstone.common.models.Comment
+import dev.bltucker.nanodegreecapstone.common.models.Story
 import dev.bltucker.nanodegreecapstone.storydetail.injection.StoryDetailFragmentModule
 import dev.bltucker.nanodegreecapstone.storydetail.injection.StoryDetailFragmentModule.Companion.DETAIL_STORY_BUNDLE_KEY
 import dev.bltucker.nanodegreecapstone.storydetail.injection.StoryDetailFragmentModule.Companion.STORY_BUNDLE_KEY

@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import dev.bltucker.nanodegreecapstone.R
 import dev.bltucker.nanodegreecapstone.common.injection.ApplicationScope
 import dev.bltucker.nanodegreecapstone.databinding.HeadlineItemLayoutBinding
-import dev.bltucker.nanodegreecapstone.models.Story
+import dev.bltucker.nanodegreecapstone.common.models.Story
 import java.util.*
 import javax.inject.Inject
 

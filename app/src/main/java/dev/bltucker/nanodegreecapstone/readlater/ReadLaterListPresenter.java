@@ -14,14 +14,12 @@ import javax.inject.Provider;
 
 import dev.bltucker.nanodegreecapstone.common.injection.qualifiers.IO;
 import dev.bltucker.nanodegreecapstone.common.injection.qualifiers.UI;
-import dev.bltucker.nanodegreecapstone.data.StoryProvider;
-import dev.bltucker.nanodegreecapstone.models.ReadLaterStory;
+import dev.bltucker.nanodegreecapstone.common.data.StoryProvider;
+import dev.bltucker.nanodegreecapstone.common.models.ReadLaterStory;
 import io.reactivex.Completable;
 import io.reactivex.CompletableObserver;
 import io.reactivex.Scheduler;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
 
 @ReadLaterListFragmentScope
 public class ReadLaterListPresenter implements LoaderManager.LoaderCallbacks<List<ReadLaterStory>>, SwipeRefreshLayout.OnRefreshListener {

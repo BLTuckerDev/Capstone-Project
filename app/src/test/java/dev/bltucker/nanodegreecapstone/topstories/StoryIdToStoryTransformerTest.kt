@@ -1,10 +1,8 @@
 package dev.bltucker.nanodegreecapstone.topstories
 
-import dev.bltucker.nanodegreecapstone.data.HackerNewsApiService
-import dev.bltucker.nanodegreecapstone.models.Story
-import io.reactivex.Observable
+import dev.bltucker.nanodegreecapstone.common.data.HackerNewsApiService
+import dev.bltucker.nanodegreecapstone.common.models.Story
 import io.reactivex.Single
-import io.reactivex.functions.Function
 import io.reactivex.observers.TestObserver
 import org.junit.Assert.*
 import org.junit.Before

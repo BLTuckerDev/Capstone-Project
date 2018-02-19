@@ -4,9 +4,9 @@ import android.content.Intent
 import com.firebase.jobdispatcher.JobParameters
 import com.firebase.jobdispatcher.JobService
 import dev.bltucker.nanodegreecapstone.common.injection.DaggerInjector
-import dev.bltucker.nanodegreecapstone.data.HackerNewsApiService
-import dev.bltucker.nanodegreecapstone.data.StoryRepository
-import dev.bltucker.nanodegreecapstone.models.Story
+import dev.bltucker.nanodegreecapstone.common.data.HackerNewsApiService
+import dev.bltucker.nanodegreecapstone.common.data.StoryRepository
+import dev.bltucker.nanodegreecapstone.common.models.Story
 import dev.bltucker.nanodegreecapstone.widget.TopFiveStoriesWidgetProvider
 import io.reactivex.SingleObserver
 import io.reactivex.disposables.Disposable

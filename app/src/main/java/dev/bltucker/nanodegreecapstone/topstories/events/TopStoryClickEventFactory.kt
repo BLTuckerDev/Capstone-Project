@@ -1,7 +1,7 @@
 package dev.bltucker.nanodegreecapstone.topstories.events
 
 import dev.bltucker.nanodegreecapstone.common.injection.ApplicationScope
-import dev.bltucker.nanodegreecapstone.models.Story
+import dev.bltucker.nanodegreecapstone.common.models.Story
 import javax.inject.Inject
 
 @ApplicationScope
