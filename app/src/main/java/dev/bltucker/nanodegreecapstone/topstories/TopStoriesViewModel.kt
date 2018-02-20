@@ -101,8 +101,8 @@ class TopStoriesViewModel @Inject constructor(private val storyRepository: Story
     }
 
     fun onRefreshTopStories() {
-        val previousModel = modelPublisher.value
-        modelPublisher.accept(topStoryModelFactory.createRefreshingModel(previousModel.storyList, previousModel.refreshedStoryList))
+        val (storyList :List<Story>, refreshedStoryList : List<Story>) = modelPublisher.value
+        modelPublisher.accept(topStoryModelFactory.createRefreshingModel(storyList, refreshedStoryList))
         fetchData()
     }
 
@@ -126,8 +126,8 @@ class TopStoriesViewModel @Inject constructor(private val storyRepository: Story
 
                     override fun onError(e: Throwable) {
                         Timber.e(e, "Error downloading top stories")
-                        val previousModel = modelPublisher.value
-                        modelPublisher.accept(topStoryModelFactory.createErrorModel(previousModel.storyList, previousModel.refreshedStoryList))
+                        val (storyList :List<Story>, refreshedStoryList : List<Story>) = modelPublisher.value
+                        modelPublisher.accept(topStoryModelFactory.createErrorModel(storyList, refreshedStoryList))
                     }
                 })
     }
