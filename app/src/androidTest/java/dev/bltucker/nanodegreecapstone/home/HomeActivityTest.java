@@ -16,7 +16,6 @@ import dev.bltucker.nanodegreecapstone.common.injection.ApplicationComponent;
 import dev.bltucker.nanodegreecapstone.common.injection.DaggerApplicationComponent;
 import dev.bltucker.nanodegreecapstone.common.injection.DaggerInjector;
 import dev.bltucker.nanodegreecapstone.common.injection.TestApplicationResourcesModule;
-import timber.log.Timber;
 
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.espresso.Espresso.onView;
@@ -26,13 +25,13 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
 @RunWith(AndroidJUnit4.class)
-public class MainActivityTest {
+public class HomeActivityTest {
 
     @Rule
     public ActivityTestRule activityRule = new ActivityTestRule<>(
             HomeActivity.class,
             true,    // initialTouchMode
-            false);  // launchActivity. False to set intent per method
+            true);  // launchActivity. False to set intent per method
 
 
     @Before
@@ -52,8 +51,7 @@ public class MainActivityTest {
 
     @Test
     public void testMainActivity() {
-        activityRule.launchActivity(null);
-        Timber.d("Main activity has launched");
+//        activityRule.launchActivity(null);
 
         onView(withText(activityRule.getActivity().getString(R.string.app_name))).check(matches(isDisplayed()));
 
