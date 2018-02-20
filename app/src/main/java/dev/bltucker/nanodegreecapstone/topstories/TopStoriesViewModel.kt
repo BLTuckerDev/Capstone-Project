@@ -34,7 +34,7 @@ class TopStoriesViewModel @Inject constructor(private val storyRepository: Story
                                               @UI private val uiScheduler: Scheduler,
                                               private val clickEventFactory: TopStoryClickEventFactory) : ViewModel() {
 
-    private val modelPublisher: BehaviorRelay<TopStoryModel> = BehaviorRelay.createDefault(topStoryModelFactory.createLoadingModel(null))
+    private val modelPublisher: BehaviorRelay<TopStoryModel> = BehaviorRelay.createDefault(topStoryModelFactory.createLoadingModel(listOf()))
 
     private val clickEventPublisher: PublishRelay<TopStoryClickEvent> = PublishRelay.create()
 
@@ -42,12 +42,14 @@ class TopStoriesViewModel @Inject constructor(private val storyRepository: Story
 
     init {
         storyRepository.allStories
+                .filter{ stories -> stories.isNotEmpty() }
                 .subscribeOn(ioScheduler)
                 .observeOn(uiScheduler)
                 .subscribe(object : Observer<List<Story>> {
 
                     override fun onError(e: Throwable) {
-                        modelPublisher.accept(topStoryModelFactory.createErrorModel(modelPublisher.value))
+                        val previousModel = modelPublisher.value
+                        modelPublisher.accept(topStoryModelFactory.createErrorModel(previousModel.storyList, previousModel.refreshedStoryList))
                     }
 
                     override fun onSubscribe(d: Disposable) {
@@ -59,15 +61,9 @@ class TopStoriesViewModel @Inject constructor(private val storyRepository: Story
                     override fun onNext(latestStories: List<Story>) {
                         val lastModel = modelPublisher.value
 
-                        //if the last thing was null then lets just the stories
-                        if (lastModel == null) {
+                        //if we had no stories showing, then just show these freshly loaded ones.
+                        if (lastModel.storyList.isEmpty()) {
                             modelPublisher.accept(topStoryModelFactory.createTopStoryModelWithStories(latestStories))
-                            return
-                        }
-
-                        //if we were loading and have no stories we want to wait for stories to come in so don't publish
-                        //because either we will get stories or an error will be thrown
-                        if (lastModel.isLoading && latestStories.isEmpty()) {
                             return
                         }
 
@@ -75,7 +71,8 @@ class TopStoriesViewModel @Inject constructor(private val storyRepository: Story
                         if (!lastModel.isRefreshing) {
                             modelPublisher.accept(topStoryModelFactory.createTopStoryModelWithStories(latestStories))
                         } else if (lastModel.isRefreshing) {
-                            modelPublisher.accept(topStoryModelFactory.createTopStoryModelWithRefreshedStories(lastModel, latestStories))
+                            //we were refreshing so let the user know there are fresh stories to view
+                            modelPublisher.accept(topStoryModelFactory.createTopStoryModelWithRefreshedStories(lastModel.storyList, latestStories))
                         }
 
                     }
@@ -99,12 +96,13 @@ class TopStoriesViewModel @Inject constructor(private val storyRepository: Story
     }
 
     fun onLoadTopStories() {
-        modelPublisher.accept(topStoryModelFactory.createLoadingModel(modelPublisher.value))
+        modelPublisher.accept(topStoryModelFactory.createLoadingModel(modelPublisher.value.storyList))
         fetchData()
     }
 
     fun onRefreshTopStories() {
-        modelPublisher.accept(topStoryModelFactory.createRefreshingModel(modelPublisher.value))
+        val previousModel = modelPublisher.value
+        modelPublisher.accept(topStoryModelFactory.createRefreshingModel(previousModel.storyList, previousModel.refreshedStoryList))
         fetchData()
     }
 
@@ -128,7 +126,8 @@ class TopStoriesViewModel @Inject constructor(private val storyRepository: Story
 
                     override fun onError(e: Throwable) {
                         Timber.e(e, "Error downloading top stories")
-                        modelPublisher.accept(topStoryModelFactory.createErrorModel(modelPublisher.value))
+                        val previousModel = modelPublisher.value
+                        modelPublisher.accept(topStoryModelFactory.createErrorModel(previousModel.storyList, previousModel.refreshedStoryList))
                     }
                 })
     }

@@ -9,6 +9,7 @@ import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
 import android.support.v4.content.res.ResourcesCompat
 import android.support.v7.widget.LinearLayoutManager
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -135,6 +136,7 @@ open class TopStoriesFragment : Fragment() {
                     }
 
                     override fun onNext(topStoryModel: TopStoryModel) {
+                        Log.d("HomeModel", "Model: " + topStoryModel)
                         binding.topStoryModel = topStoryModel
                         binding.executePendingBindings()
 
