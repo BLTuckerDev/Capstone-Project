@@ -108,18 +108,18 @@ class StoryDetailFragment : Fragment() {
         lifecycle.addObserver(storyCommentsSyncer)
     }
 
-    override fun onSaveInstanceState(outState: Bundle?) {
+    override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState!!.putParcelable(DETAIL_STORY_BUNDLE_KEY, story)
     }
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentStoryDetailBinding.inflate(inflater!!, container, false)
         binding.headerInclude?.readButton?.setOnClickListener { _ -> showStoryPostUrl() }
         return binding.root
     }
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.commentListRecyclerview.layoutManager = LinearLayoutManager(view!!.context)
         binding.commentListRecyclerview.adapter = commentsAdapter
@@ -182,9 +182,7 @@ class StoryDetailFragment : Fragment() {
     }
 
     fun showStory() {
-        if (activity != null) {
-            activity.invalidateOptionsMenu()
-        }
+        activity?.invalidateOptionsMenu()
 
         if (null == story) {
             return

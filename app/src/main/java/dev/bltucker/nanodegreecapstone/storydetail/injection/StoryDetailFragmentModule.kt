@@ -26,7 +26,7 @@ class StoryDetailFragmentModule(private val fragment: StoryDetailFragment,
     @StoryDetailFragmentScope
     @Nullable
     fun provideStory(): Story? {
-        return fragment.arguments.getParcelable<Story?>(STORY_BUNDLE_KEY)
+        return fragment.arguments?.getParcelable<Story?>(STORY_BUNDLE_KEY)
     }
 
     @Provides
