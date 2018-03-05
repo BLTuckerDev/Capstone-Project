@@ -5,15 +5,13 @@ import org.jetbrains.annotations.NotNull;
 import dagger.Component;
 import dev.bltucker.nanodegreecapstone.CapstoneApplication;
 import dev.bltucker.nanodegreecapstone.common.data.StoryProvider;
-import dev.bltucker.nanodegreecapstone.common.data.HackerNewsApiService;
-import dev.bltucker.nanodegreecapstone.common.events.EventBus;
+import dev.bltucker.nanodegreecapstone.common.sync.OrphanCommentDeleteJob;
 import dev.bltucker.nanodegreecapstone.home.HomeActivity;
 import dev.bltucker.nanodegreecapstone.location.GeofenceCreationIntentServiceComponent;
 import dev.bltucker.nanodegreecapstone.location.GeofenceCreationIntentServiceModule;
 import dev.bltucker.nanodegreecapstone.location.GeofenceTransitionsIntentService;
 import dev.bltucker.nanodegreecapstone.readlater.ReadLaterComponent;
 import dev.bltucker.nanodegreecapstone.readlater.ReadLaterListFragmentModule;
-import dev.bltucker.nanodegreecapstone.common.sync.CommentCleaningService;
 import dev.bltucker.nanodegreecapstone.storydetail.injection.StoryDetailFragmentComponent;
 import dev.bltucker.nanodegreecapstone.storydetail.injection.StoryDetailFragmentModule;
 import dev.bltucker.nanodegreecapstone.topstories.TopStoriesFragment;
@@ -31,15 +29,11 @@ public interface ApplicationComponent {
 
     void inject(GeofenceTransitionsIntentService geofenceTransitionsIntentService);
 
-    void inject(CommentCleaningService commentCleaningService);
-
     void inject(StoryProvider storyProvider);
 
     void inject(@NotNull TopStoriesUpdateService topStoriesUpdateService);
 
-    HackerNewsApiService hackerNewsApiService();
-
-    EventBus eventBus();
+    void inject(@NotNull OrphanCommentDeleteJob orphanCommentDeleteJob);
 
     GeofenceCreationIntentServiceComponent geofenceCreationIntentServiceComponent(GeofenceCreationIntentServiceModule module);
 

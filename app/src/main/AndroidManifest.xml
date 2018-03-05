@@ -76,13 +76,17 @@
                 android:value="@integer/google_play_services_version"/>
 
         <service
-                android:name=".common.sync.CommentCleaningService"
-                android:exported="true"
-                android:permission="android.permission.BIND_JOB_SERVICE"/>
-        <service
                 android:name=".topstories.TopStoriesUpdateService"
                 android:enabled="true"
                 android:exported="false">
+        </service>
+
+        <service
+                android:exported="false"
+                android:name=".common.sync.OrphanCommentDeleteJob">
+            <intent-filter>
+                <action android:name="com.firebase.jobdispatcher.ACTION_EXECUTE"/>
+            </intent-filter>
         </service>
     </application>
 

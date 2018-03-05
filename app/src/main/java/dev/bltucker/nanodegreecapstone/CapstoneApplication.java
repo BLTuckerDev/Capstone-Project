@@ -1,10 +1,6 @@
 package dev.bltucker.nanodegreecapstone;
 
 import android.app.Application;
-import android.app.job.JobInfo;
-import android.app.job.JobScheduler;
-import android.content.ComponentName;
-import android.content.Context;
 
 import com.firebase.jobdispatcher.Constraint;
 import com.firebase.jobdispatcher.FirebaseJobDispatcher;
@@ -21,10 +17,8 @@ import dev.bltucker.nanodegreecapstone.common.injection.ApplicationResourcesModu
 import dev.bltucker.nanodegreecapstone.common.injection.DaggerApplicationComponent;
 import dev.bltucker.nanodegreecapstone.common.injection.DaggerInjector;
 import dev.bltucker.nanodegreecapstone.common.logging.FirebaseDebugTree;
-import dev.bltucker.nanodegreecapstone.common.sync.CommentCleaningService;
+import dev.bltucker.nanodegreecapstone.common.sync.OrphanCommentDeleteJob;
 import dev.bltucker.nanodegreecapstone.topstories.TopStoriesUpdateService;
-import io.reactivex.Completable;
-import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
 
 public class CapstoneApplication extends Application {
@@ -69,21 +63,19 @@ public class CapstoneApplication extends Application {
     }
 
     private void scheduleCommentCleanUpJob() {
-        Completable.fromAction(() -> {
-            JobInfo.Builder jobBuilder = new JobInfo.Builder(CommentCleaningService.JOB_ID,
-                    new ComponentName(CapstoneApplication.this, CommentCleaningService.class));
+        int periodicity = (int) TimeUnit.HOURS.toSeconds(12);
+        int toleranceWindow = (int) TimeUnit.HOURS.toSeconds(6);
 
-            final long MILLIS_IN_DAY = 1000 * 60 * 60 * 24;
-            jobBuilder.setPeriodic(MILLIS_IN_DAY);
+        Job jobRequest = firebaseJobDispatcher.newJobBuilder()
+                .setService(OrphanCommentDeleteJob.class)
+                .setRecurring(true)
+                .setTag(OrphanCommentDeleteJob.JOB_TAG)
+                .setConstraints(Constraint.DEVICE_IDLE)
+                .setReplaceCurrent(true)
+                .setLifetime(Lifetime.FOREVER)
+                .setTrigger(Trigger.executionWindow(periodicity, periodicity+toleranceWindow))
+                .build();
 
-            JobScheduler jobScheduler = (JobScheduler) getSystemService(Context.JOB_SCHEDULER_SERVICE);
-            jobScheduler.schedule(jobBuilder.build());
-        })
-                .subscribeOn(Schedulers.computation())
-                .subscribe(
-                        () -> {
-                        },
-                        e -> Timber.e(e, "Error attempting to start the job scheduler service.")
-                );
+        firebaseJobDispatcher.schedule(jobRequest);
     }
 }
