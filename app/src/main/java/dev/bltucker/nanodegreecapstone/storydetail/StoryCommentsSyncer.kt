@@ -74,7 +74,7 @@ class StoryCommentsSyncer @Inject constructor(private val hackerNewsApiService: 
                     .concatMap { commentDto ->
                         val childDepth = commentDepth + 1
                         Observable.just(Comment(commentDto.id, storyId, commentDto.by, commentDto.text, commentDto.time, commentDto.parent, commentDepth))
-                                .mergeWith(downloadComments(storyId, commentDto.kids, childDepth))
+                                .concatWith(downloadComments(storyId, commentDto.kids, childDepth))
                     }
                     .filter { comment -> !comment.getCommentText().isNullOrBlank() }
         }
