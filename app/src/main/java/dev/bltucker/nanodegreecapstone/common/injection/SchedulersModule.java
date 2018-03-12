@@ -11,7 +11,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
 @Module
-@ApplicationScope
 public class SchedulersModule {
 
     @Provides

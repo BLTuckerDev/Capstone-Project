@@ -20,7 +20,6 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 @Module
-@ApplicationScope
 public class TestApplicationResourcesModule extends ApplicationResourcesModule {
 
     public TestApplicationResourcesModule(CapstoneApplication application) {

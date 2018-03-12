@@ -52,7 +52,6 @@ import static dev.bltucker.nanodegreecapstone.common.data.StoryProvider.READ_LAT
 import static dev.bltucker.nanodegreecapstone.common.data.StoryProvider.READ_LATER_STORIES_PATH_ITEM_CODE;
 
 @Module
-@ApplicationScope
 public class ApplicationResourcesModule {
 
     protected final CapstoneApplication application;
