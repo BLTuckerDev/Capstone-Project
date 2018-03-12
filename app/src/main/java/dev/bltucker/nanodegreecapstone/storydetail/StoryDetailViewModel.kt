@@ -15,6 +15,7 @@ import io.reactivex.Observable
 import io.reactivex.Scheduler
 import io.reactivex.disposables.Disposable
 import timber.log.Timber
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 @ApplicationScope
@@ -51,6 +52,6 @@ class StoryDetailViewModel @Inject constructor(private val readLaterStoryDao: Re
     }
 
     fun getObservableComments(storyId: Long): Observable<Array<Comment>> {
-        return commentsRepository.getCommentsForStoryId(storyId)
+        return commentsRepository.getCommentsForStoryId(storyId).debounce(250, TimeUnit.MILLISECONDS)
     }
 }
